@@ -28,7 +28,30 @@ function createRSAObject(m, exp, n){
 export default function RSAEncryptionScreen({route, navigation}){
     const myContext = useContext(AppContext);
     
-    
+    console.log(route.params);
+    console.log(myContext.publicKey);
+    const getExpInitialValue = () => {
+        if(route.params === undefined ){
+            return '';
+        } else if (route.params.usePrivateKey) {
+            return myContext.privateKey.exp.toString();
+        } else if (route.params.usePublicKey){
+            return myContext.publicKey.exp.toString();
+        } else {
+            return '';
+        };
+    }
+    // TODO: set Flag in RSAKeyScreen usePublic, usePrivate and choose initial value accordingly (empty string if both are false)
+
+    const getModInitialValues = () => {
+        if(route.params === undefined ){
+            return '';
+        } else if (route.params.usePrivateKey || route.params.usePublicKey) {
+            return myContext.privateKey.mod.toString();
+        } else {
+            return '';
+        };
+    }
 
     const handleRSAEncryption = () =>{
         const {m, exp, n} = myContext.ciphers.rsa;
@@ -47,8 +70,9 @@ export default function RSAEncryptionScreen({route, navigation}){
     values,
     errors,
     touched} = useFormik({
+    enableReinitialize: true,
     validationSchema: RSAEncryptionInputScheme,
-    initialValues: { m: '' , exp: route.params === undefined ? 'something' : route.params.exp.toString(), n: route.params === undefined ? '' : route.params.mod.toString()},
+    initialValues: { m: '' , exp: getExpInitialValue() , n: getModInitialValues()},
     onSubmit: values => {
         const mNumber = messageToNumber(values.m);
         const rsa = {m: mNumber, exp: BigInt(values.exp) ,n:  BigInt(values.n)};
@@ -98,12 +122,11 @@ export default function RSAEncryptionScreen({route, navigation}){
           onBlur={handleBlur('m')}
           error={errors.m}
           touched={touched.m}
-          defaultValue='Default'
         />
         </View>
         <Divider style={{ width: "100%", margin: 10 }} />
       <Text style={{fontSize: 20}}>Key</Text>
-        <RSAKeyInput errors ={errors} touched = {touched} handleChange = {handleChange} handleBlur = {handleBlur} navigation = {navigation} route = {route}/>
+        <RSAKeyInput values = {values} errors ={errors} touched = {touched} handleChange = {handleChange} handleBlur = {handleBlur} navigation = {navigation} route = {route}/>
         <View style={{
             flexDirection: 'row', 
             justifyContent: 'space-between',
@@ -119,7 +142,7 @@ export default function RSAEncryptionScreen({route, navigation}){
         <NumInput
           icon='new-message'
           width = {245}
-          placeholder='Enter message'
+          placeholder='Decrypted message'
           autoCapitalize='none'
           keyboardType='number-pad'
           keyboardAppearance='dark'

@@ -2,10 +2,24 @@ import React, { useContext } from 'react';
 import { View, StyleSheet, Text, TextInput } from 'react-native';
 import NumInput from '../components/NumInput';
 import Button from '../components/Button';
+import { setNestedObjectValues } from 'formik';
+import AppContext from '../components/AppContext';
 
-export default function RSAKeyInput({errors, touched, handleChange, handleBlur, navigation, route}) {
+export default function RSAKeyInput({values, errors, touched, handleChange, handleBlur, navigation, route}) {
     
+    const myContext = useContext(AppContext);
+
+
     const params = route.params;
+
+    /*const getDefaultExp = () => {
+        return '5';
+    };
+    console.log(values);*/
+    
+
+    //const defaultExp = route.params === undefined ? '' : route.params.exp.toString();
+    //const defaultMod = route.params === undefined ? '' : route.params.mod.toString()
     //console.log(params);
     
     return (
@@ -35,7 +49,7 @@ export default function RSAKeyInput({errors, touched, handleChange, handleBlur, 
           onBlur={handleBlur('exp')}
           error={errors.exp}
           touched={touched.exp}
-          defaultValue = {route.params === undefined ? '' : route.params.exp.toString()}/>
+          value = {values.exp}/>
           <View style={{
               marginLeft:10,
               }}>
@@ -64,7 +78,7 @@ export default function RSAKeyInput({errors, touched, handleChange, handleBlur, 
           onBlur={handleBlur('n')}
           error={errors.n}
           touched={touched.n}
-          defaultValue = {route.params === undefined ? '' : route.params.mod.toString()}/>
+          value = {values.n}/>
           <View style={{
               marginLeft:10,
               }}>

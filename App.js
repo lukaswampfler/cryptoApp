@@ -44,7 +44,7 @@ export default function App() {
 
   return (
     <AppContext.Provider value = {userSettings}>
-    {/* <NavigationContainer>
+      <NavigationContainer>
       <RSAStack.Navigator>
       <RSAStack.Screen
        name = "RSAEncryption"
@@ -54,14 +54,19 @@ export default function App() {
               name="RSAKey"
               component={RSAKeyScreen}
             />
+      
+      
          
     </RSAStack.Navigator>
-    </NavigationContainer>*/}
-    <View style={styles.container}>
+    </NavigationContainer>
+
+  {/* <View style={styles.container}>
     <NewTestFormikScreen />
       <StatusBar style="auto" />
-    </View>
+    </View>*/}
+
     </AppContext.Provider>
+
   );
 }
 

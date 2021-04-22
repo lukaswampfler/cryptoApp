@@ -56,7 +56,9 @@ export default function RSAKeyScreen({navigation}) {
         errors,
         touched} = useFormik({
         validationSchema: RSAPrimeInputScheme,
-        initialValues: { p: 'bla', q: '' },
+        initialValues: { 
+          p: 'bla', 
+          q: '' },
         onSubmit: values => {
           myContext.setPrimes({p: values.p, q: values.q})
           alert(`p: ${values.p}, q: ${values.q}`)
@@ -134,8 +136,9 @@ export default function RSAKeyScreen({navigation}) {
           flexDirection: 'row',
             alignItems: 'center',}}>
         <Button label='Save keys' onPress={() =>{} } width={125} />
-          <Button label = 'Use private' onPress= {()=> {navigation.navigate('RSAEncryption', myContext.privateKey)}}width = {70}/>
-          <Button label = 'Use public' onPress= {()=> {navigation.navigate('RSAEncryption', myContext.publicKey)}} width = {70}/>
+          <Button label = 'Use private' onPress= {()=> {navigation.navigate('RSAEncryption', {usePublicKey: false, usePrivateKey: true})}}width = {70}/>
+          <Button label = 'Use public' onPress= {()=> {navigation.navigate('RSAEncryption', {usePublicKey: true, usePrivateKey: false})}} width = {70}/>
+          {/*// TODO use {usePublic: true, usePrivate: false} as Object to pass to RSAEncryption*/}
         </View>
     </View>
    

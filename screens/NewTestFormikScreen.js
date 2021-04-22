@@ -47,7 +47,7 @@ export default function TestFormikScreen(){
                      autoCapitalize = "none"
                      onChangeText = {handleChange('email')}
                      onBlur = {handleBlur('email')}
-                     value = {values.email}/>
+                     value = {(values.email || '')}/>
                     {touched.email && errors.email ? <Text> {errors.email} </Text> : null}
                   
                   <TextInput style = {styles.input}
