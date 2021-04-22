@@ -1,8 +1,9 @@
 import * as Yup from 'yup'
+import {isPrime} from './RSAMath'
 
 const REQUIRED_ERROR_MESSAGE = 'this field is required';
 const INVALID_FORMAT_ERROR_MESSAGE = 'invalid format';
-
+const NOPRIME_MESSAGE = 'not a prime number'
 
 Yup.addMethod(Yup.string, 'isValidRSAInput', isValidRSAInput);
 Yup.addMethod(Yup.string, 'isValidNumber', isValidNumber);

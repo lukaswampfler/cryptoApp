@@ -48,7 +48,7 @@ const NOPRIME_MESSAGE = 'not a prime number'
 
 
 
-export default function RSAKeyScreen() {
+export default function RSAKeyScreen({navigation}) {
     const {handleChange,
         handleSubmit,
         handleBlur,
@@ -56,7 +56,7 @@ export default function RSAKeyScreen() {
         errors,
         touched} = useFormik({
         validationSchema: RSAPrimeInputScheme,
-        initialValues: { p: '', q: '' },
+        initialValues: { p: 'bla', q: '' },
         onSubmit: values => {
           myContext.setPrimes({p: values.p, q: values.q})
           alert(`p: ${values.p}, q: ${values.q}`)
@@ -67,7 +67,8 @@ export default function RSAKeyScreen() {
 
 
   return (
-    <SafeAreaView>
+    <View style={{flex: 1}}>
+    {/*</View><SafeAreaView>*/}
     <ScrollView style = {{flex: 1}}>
     <View
       style={{
@@ -75,11 +76,10 @@ export default function RSAKeyScreen() {
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center'
-      }}
-    >
-      <Text style={{ color: '#223e4b', fontSize: 20, marginBottom: 16 }}>
+      }}>
+      {/*<Text style={{ color: '#223e4b', fontSize: 20, marginBottom: 16 }}>
         RSA: key generation
-      </Text>
+    </Text>*/}
 
       <View style={{ paddingHorizontal: 32, marginBottom: 16, width: '100%' }}>
         <NumInput
@@ -130,11 +130,18 @@ export default function RSAKeyScreen() {
         </Text>
         <Text>Corresponding private key: {JSON.stringify(myContext.privateKey)}
         </Text>
-        <Button label='Save these keys' onPress={() =>{} } width={245} />
+        <View style={{
+          flexDirection: 'row',
+            alignItems: 'center',}}>
+        <Button label='Save keys' onPress={() =>{} } width={125} />
+          <Button label = 'Use private' onPress= {()=> {navigation.navigate('RSAEncryption', myContext.privateKey)}}width = {70}/>
+          <Button label = 'Use public' onPress= {()=> {navigation.navigate('RSAEncryption', myContext.publicKey)}} width = {70}/>
+        </View>
     </View>
    
     </ScrollView>
-    </SafeAreaView>
+    {/*</SafeAreaView>*/}
+    </View>
   );
   
 }

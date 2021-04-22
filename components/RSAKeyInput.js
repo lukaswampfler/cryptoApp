@@ -3,9 +3,11 @@ import { View, StyleSheet, Text, TextInput } from 'react-native';
 import NumInput from '../components/NumInput';
 import Button from '../components/Button';
 
-export default function RSAKeyInput({errors, touched, handleChange, handleBlur}) {
-    console.log("errors", errors);
-    console.log(touched);
+export default function RSAKeyInput({errors, touched, handleChange, handleBlur, navigation, route}) {
+    
+    const params = route.params;
+    //console.log(params);
+    
     return (
         <View
           style={{
@@ -32,11 +34,12 @@ export default function RSAKeyInput({errors, touched, handleChange, handleBlur})
           onChangeText={handleChange('exp')}
           onBlur={handleBlur('exp')}
           error={errors.exp}
-          touched={touched.exp}/>
+          touched={touched.exp}
+          defaultValue = {route.params === undefined ? '' : route.params.exp.toString()}/>
           <View style={{
               marginLeft:10,
               }}>
-          <Button label = 'Generate Key' width ={100} />
+          <Button label = 'Generate Key' width ={100} onPress = {() => navigation.navigate('RSAKey')}/>
           </View>
         </View>
 
@@ -60,7 +63,8 @@ export default function RSAKeyInput({errors, touched, handleChange, handleBlur})
           onChangeText={handleChange('n')}
           onBlur={handleBlur('n')}
           error={errors.n}
-          touched={touched.n}/>
+          touched={touched.n}
+          defaultValue = {route.params === undefined ? '' : route.params.mod.toString()}/>
           <View style={{
               marginLeft:10,
               }}>

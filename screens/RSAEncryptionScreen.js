@@ -25,16 +25,17 @@ function createRSAObject(m, exp, n){
 
 
 
-export default function RSAEncryptionScreen(){
-  
+export default function RSAEncryptionScreen({route, navigation}){
     const myContext = useContext(AppContext);
+    
+    
 
     const handleRSAEncryption = () =>{
         const {m, exp, n} = myContext.ciphers.rsa;
         let ciphers = myContext.ciphers;
         ciphers.rsa['encrypted'] = smartExponentiation(m, exp, n);
         myContext.setCiphers(ciphers);
-        console.log(ciphers);
+        //console.log(ciphers);
         //const rsa = new RSA(m, exp, n); -> this is not working, infinite loop
 
     }
@@ -47,7 +48,7 @@ export default function RSAEncryptionScreen(){
     errors,
     touched} = useFormik({
     validationSchema: RSAEncryptionInputScheme,
-    initialValues: { m: '' , exp: '', n: ''},
+    initialValues: { m: '' , exp: route.params === undefined ? 'something' : route.params.exp.toString(), n: route.params === undefined ? '' : route.params.mod.toString()},
     onSubmit: values => {
         const mNumber = messageToNumber(values.m);
         const rsa = {m: mNumber, exp: BigInt(values.exp) ,n:  BigInt(values.n)};
@@ -63,7 +64,9 @@ export default function RSAEncryptionScreen(){
   });
 
     return (
-    <SafeAreaView>
+     <View style={{flex:1,
+     backgroundColor: '#eee',}}>   
+    {/*<SafeAreaView>*/}
     <ScrollView style = {{
         flex: 1,
     }}>
@@ -75,11 +78,12 @@ export default function RSAEncryptionScreen(){
         justifyContent: 'center'
       }}
     >
-        <Text style={{ color: '#223e4b', fontSize: 25, marginBottom: 16 }}>
+       {/*} <Text style={{ color: '#223e4b', fontSize: 25, marginBottom: 16 }}>
         RSA: encryption
-      </Text>
-      <Divider style={{ width: "100%", margin: 10 }} />
-      <Text style = {{fontSize: 20,}}> Input (10 bit String or number) </Text>
+    </Text>
+      <Divider style={{ width: "100%", margin: 10 }} />*/}
+      <Text style = {{fontSize: 20,
+    marginTop: 20}}> Input (10 bit String or number) </Text>
       <View style={{ paddingHorizontal: 32, marginBottom: 16, width: '100%' }}>
       <NumInput
           icon='new-message'
@@ -99,7 +103,7 @@ export default function RSAEncryptionScreen(){
         </View>
         <Divider style={{ width: "100%", margin: 10 }} />
       <Text style={{fontSize: 20}}>Key</Text>
-        <RSAKeyInput errors ={errors} touched = {touched} handleChange = {handleChange} handleBlur = {handleBlur}/>
+        <RSAKeyInput errors ={errors} touched = {touched} handleChange = {handleChange} handleBlur = {handleBlur} navigation = {navigation} route = {route}/>
         <View style={{
             flexDirection: 'row', 
             justifyContent: 'space-between',
@@ -122,6 +126,7 @@ export default function RSAEncryptionScreen(){
           defaultValue={myContext.ciphers.rsa.isEncrypted ? myContext.ciphers.rsa.encrypted.toString() : ''}
         />
     </ScrollView>
-    </SafeAreaView>
+    {/*</View></SafeAreaView>*/}
+    </View>
     );
 }

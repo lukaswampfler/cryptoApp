@@ -5,10 +5,14 @@ import AppContext from './components/AppContext';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
+
 //import CaesarScreen from './screens/CaesarScreen';
 
 import RSAKeyScreen from './screens/RSAKeyScreen';
 import RSAEncryptionScreen from './screens/RSAEncryptionScreen';
+import TestFormikScreen from './screens/TestFormikScreen';
+import NewTestFormikScreen from './screens/NewTestFormikScreen';
+
 
 
 export default function App() {
@@ -36,13 +40,25 @@ export default function App() {
     setCiphers,
   };
 
-
+  const RSAStack = createStackNavigator();
 
   return (
     <AppContext.Provider value = {userSettings}>
+    {/* <NavigationContainer>
+      <RSAStack.Navigator>
+      <RSAStack.Screen
+       name = "RSAEncryption"
+       component={RSAEncryptionScreen}
+       />   
+      <RSAStack.Screen
+              name="RSAKey"
+              component={RSAKeyScreen}
+            />
+         
+    </RSAStack.Navigator>
+    </NavigationContainer>*/}
     <View style={styles.container}>
-    <RSAEncryptionScreen />
-      {/*<RSAEncryptionScreen />*/}
+    <NewTestFormikScreen />
       <StatusBar style="auto" />
     </View>
     </AppContext.Provider>
