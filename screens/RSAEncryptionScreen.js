@@ -61,15 +61,12 @@ export default function RSAEncryptionScreen({route, navigation}){
     // Submission function 
     const RSASubmit = values => {
         const mNumber = messageToNumber(values.m);
-        console.log("m: ", mNumber);
         const rsa = {m: mNumber.toString(), exp: values.exp, n: values.n};
         let ciphers = myContext.ciphers;
         ciphers.rsa = rsa;
         ciphers.rsa['encrypted'] = smartExponentiation(BigInt(rsa.m), BigInt(rsa.exp), BigInt(rsa.n)).toString();
         ciphers.rsa['isEncrypted'] = true;
         myContext.setCiphers(ciphers);
-        console.log(ciphers);
-        console.log(myContext.privateKey)
     }
 
 
