@@ -10,42 +10,9 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import RandomPrimeRow from '../components/RandomPrimeRow';
 import PublicExponentRow from '../components/PublicExponentRow'
+import ButtonRow from '../components/ButtonRow';
 
 import {isValidPrime, RSAPrimeInputScheme} from '../utils/InputTests';
-
-const REQUIRED_ERROR_MESSAGE = 'this field is required';
-const INVALID_FORMAT_ERROR_MESSAGE = 'invalid format';
-const NOPRIME_MESSAGE = 'not a prime number'
-
-
-
-/*function isValidPrime(message){
-    return this.test("isValidPrime", message, function(value){
-        const {path, createError} = this;
-        if(!value){ // no value given
-            return createError({path ,message: message ?? REQUIRED_ERROR_MESSAGE});
-        }
-        if (!value.match(/^[1-9][0-9]*$/)){ //not a decimal number
-            return createError({path, message: message?? INVALID_FORMAT_ERROR_MESSAGE});
-        }
-        const n = BigInt(value);
-            if (!isPrime(n)){ // not a prime number
-                return createError({path, message: message?? NOPRIME_MESSAGE});
-
-        }
-        return true;
-    });
-}*/
-
-
-
-//Yup.addMethod(Yup.string, 'isValidPrime', isValidPrime);
-
-/*const RSAPrimeInputScheme = Yup.object().shape({
-    p: Yup.string().isValidPrime().required('Required'),
-    q: Yup.string().isValidPrime().notOneOf([Yup.ref('p')], 'q must be different from p').required('Required'),
-  });*/
-
 
 
 export default function RSAKeyScreen({navigation}) {
@@ -61,7 +28,6 @@ export default function RSAKeyScreen({navigation}) {
           q: '' },
         onSubmit: values => {
           myContext.setPrimes({p: values.p, q: values.q})
-          alert(`p: ${values.p}, q: ${values.q}`)
         }
       });
 
@@ -70,7 +36,6 @@ export default function RSAKeyScreen({navigation}) {
 
   return (
     <View style={{flex: 1}}>
-    {/*</View><SafeAreaView>*/}
     <ScrollView style = {{flex: 1}}>
     <View
       style={{
@@ -79,9 +44,6 @@ export default function RSAKeyScreen({navigation}) {
         alignItems: 'center',
         justifyContent: 'center'
       }}>
-      {/*<Text style={{ color: '#223e4b', fontSize: 20, marginBottom: 16 }}>
-        RSA: key generation
-    </Text>*/}
 
       <View style={{ paddingHorizontal: 32, marginBottom: 16, width: '100%' }}>
         <NumInput
@@ -132,19 +94,15 @@ export default function RSAKeyScreen({navigation}) {
         </Text>
         <Text>Corresponding private key: {JSON.stringify(myContext.privateKey)}
         </Text>
-        <View style={{
-          flexDirection: 'row',
-            alignItems: 'center',}}>
-        <Button label='Save keys' onPress={() =>{} } width={125} />
-          <Button label = 'Use private' onPress= {()=> {navigation.navigate('RSAEncryption', {usePublicKey: false, usePrivateKey: true})}}width = {70}/>
-          <Button label = 'Use public' onPress= {()=> {navigation.navigate('RSAEncryption', {usePublicKey: true, usePrivateKey: false})}} width = {70}/>
-          {/*// TODO use {usePublic: true, usePrivate: false} as Object to pass to RSAEncryption*/}
-        </View>
+        
+
     </View>
-   
+    <ButtonRow navigation={navigation}/>
     </ScrollView>
     {/*</SafeAreaView>*/}
     </View>
+
+    
   );
   
 }

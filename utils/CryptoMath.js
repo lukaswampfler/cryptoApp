@@ -1,3 +1,5 @@
+
+
 export function gcd(a, b) {
     if (b > a) {
         [a, b] = [b, a];

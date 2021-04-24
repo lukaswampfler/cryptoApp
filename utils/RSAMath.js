@@ -1,4 +1,5 @@
 export function extendedEuclid(e, f) {
+    // uses extended euclid for calculation of decryption exponent d
     let x1 = BigInt(1), x2 = BigInt(0), x3 = f, y1 = BigInt(0), y2 = BigInt(1), y3 = e;
     while (y3 > 1) {
         let q = x3 / y3; // BigInt-Division is integer division
@@ -20,8 +21,8 @@ export function isPrime(n) {
         return false;
     else if (n < 10000) {
         let nNumber = Number(n); // check for odd divisors of a small n -> type number
-        for (let teiler = 3; teiler <= Math.pow(nNumber, 0.5); teiler += 2) {
-            if (nNumber % teiler == 0)
+        for (let divisor = 3; divisor <= Math.pow(nNumber, 0.5); divisor += 2) {
+            if (nNumber % divisor == 0)
                 return false;
         }
         return true;
@@ -42,6 +43,7 @@ export function generatePrime(exp) {
 
 
 function decomposeOdd(n) {
+    // decomposes an odd number n into n-1 = 2**exp * d, where d is odd
     for (var j = 0, d = n - BigInt(1); d % BigInt(2) === BigInt(0); j++) {
         d = d / BigInt(2);
     }

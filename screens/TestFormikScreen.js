@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 
 import {useFormik} from 'formik';
 
-const initialValues ={ //properties of initial values correspond to names in TextInputs
+const initialValues = { //properties of initial values correspond to names in TextInputs
     email: '', 
     password: ''};
 

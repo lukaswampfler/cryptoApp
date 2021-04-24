@@ -1,3 +1,5 @@
+// so far not used, class for RSA objects
+
 import { smartExponentiation } from "./RSAMath.js";
 
 export default class RSA {

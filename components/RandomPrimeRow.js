@@ -35,7 +35,7 @@ export default function RandomPrimeRow({ width}) {
     initialValues: { exp: 1 },
     onSubmit: values => {
       myContext.setExp(values.exp)
-      alert(`new Exponent: ${values.exp}`)
+      //alert(`new Exponent: ${values.exp}`)
       const p = generatePrime(values.exp);
       const q = generatePrime(values.exp);
       myContext.setPrimes({p: p, q: q});

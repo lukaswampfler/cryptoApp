@@ -23,7 +23,9 @@ export default function App() {
   const [privateKey, setPrivateKey] = useState({exp: 5, mod: 143})
   const [primes, setPrimes] = useState({p: 2, q: 3})
   const [exp, setExp] = useState(3)
-  const [ciphers, setCiphers] = useState({rsa: {isEncrypted: false}, sdes: undefined, caesar: undefined})
+  
+  const rsa = {isEncrypted: false, m: '', exp: '', n: ''};
+  const [ciphers, setCiphers] = useState({rsa , sdes: undefined, caesar: undefined})
   
   const userSettings = {
     name: name,
@@ -49,10 +51,12 @@ export default function App() {
       <RSAStack.Screen
        name = "RSAEncryption"
        component={RSAEncryptionScreen}
+       options={{ title: 'RSA Encryption' }}
        />   
       <RSAStack.Screen
               name="RSAKey"
               component={RSAKeyScreen}
+              options={{ title: 'RSA Key Generation' }}
             />
       
       

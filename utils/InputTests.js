@@ -9,6 +9,8 @@ Yup.addMethod(Yup.string, 'isValidRSAInput', isValidRSAInput);
 Yup.addMethod(Yup.string, 'isValidNumber', isValidNumber);
 Yup.addMethod(Yup.string, 'isValidPrime', isValidPrime);
 
+
+// input schemes for validation 
 export const RSAMessageInputScheme = Yup.object().shape({
     m: Yup.string().isValidRSAInput().required('Required') ,
   });
@@ -27,13 +29,14 @@ export const RSAEncryptionInputScheme = Yup.object().shape({
 
 export function messageToNumber(m){
     // converts a (possibly binary) String message to BigInt
-    if (m.match(/^[0|1]+$/)){
+    if (m.match(/^[0|1]{10}$/)){
         m = '0b'.concat(m);
     }
     return BigInt(m);
     
 }
 
+// checks if input is either 10bit binary string or a string representing a number 
 export function isValidRSAInput(message){
     return this.test("isValidRSAInput", message, function(value){
         const {path, createError} = this;
@@ -49,6 +52,7 @@ export function isValidRSAInput(message){
     });
 }
 
+// checks if string is representing a number
 export function isValidNumber(message){
     return this.test("isValidRSAModulus", message, function(value){
         const {path, createError} = this;
@@ -64,7 +68,7 @@ export function isValidNumber(message){
 }
 
 
-
+// checks if string represents a prime number
 export function isValidPrime(message){
     return this.test("isValidPrime", message, function(value){
         const {path, createError} = this;
