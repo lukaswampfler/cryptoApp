@@ -26,7 +26,7 @@ export default function RandomPrimeRow({ width}) {
            myContext.setPublicKey(pubKey);
         }
         
-        const phi = (BigInt(myContext.primes.p) - 1n) * (BigInt(myContext.primes.q) - 1n);
+        const phi = (BigInt(myContext.primes.p) - BigInt(1)) * (BigInt(myContext.primes.q) - BigInt(1));
         //const n = (BigInt(myContext.primes.p) * BigInt(myContext.primes.q)).toString();
         let { inverse, gcd } = extendedEuclid(BigInt(pubKey.exp), phi);
         if (inverse === undefined){
@@ -43,14 +43,14 @@ export default function RandomPrimeRow({ width}) {
 }
 
     function calculatePublicKey() {
-            const phi = (BigInt(myContext.primes.p) - 1n) * (BigInt(myContext.primes.q) - 1n);
+            const phi = (BigInt(myContext.primes.p) - BigInt(1)) * (BigInt(myContext.primes.q) - BigInt(1));
             const n = (BigInt(myContext.primes.p) * BigInt(myContext.primes.q)).toString();
             let pubKey = {mod: n};
             if (phi > Math.pow(2, 16)){
                 pubKey['exp'] = (Math.pow(2, 16) + 1).toString();
                 
             } else if (phi > 1){
-                   pubKey['exp'] = (phi - 1n).toString();
+                   pubKey['exp'] = (phi - BigInt(1)).toString();
             } // else: error message!
             myContext.setPublicKey(pubKey);
             return pubKey;
@@ -69,9 +69,9 @@ export default function RandomPrimeRow({ width}) {
             }
             //Todo: check if really a number given
             // TODO: replace phi below with the phi from RSA object!
-            const phi = (BigInt(myContext.primes.p)-1n)* (BigInt(myContext.primes.q)-1n);
+            const phi = (BigInt(myContext.primes.p)-BigInt(1))* (BigInt(myContext.primes.q)-BigInt(1));
             console.log(phi);
-            if (gcd(phi, BigInt(value)) > 1n){ // not relatively prime to phiy
+            if (gcd(phi, BigInt(value)) > BigInt(1)){ // not relatively prime to phiy
                 return createError({path, message: message?? NOCOPRIME_MESSAGE});
             }
             return true;
@@ -92,7 +92,7 @@ export default function RandomPrimeRow({ width}) {
         errors,
         touched} = useFormik({
         validationSchema: PublicExponentInputScheme,
-        initialValues: { e : 0n},
+        initialValues: { e : BigInt(0)},
         onSubmit: values => {
           /*const n = BigInt(myContext.primes.p) * BigInt(myContext.primes.q);
           myContext.setPublicKey({exp: values.e.toString(), mod: n.toString()});
