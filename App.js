@@ -13,7 +13,7 @@ import RSAEncryptionScreen from './screens/RSAEncryptionScreen';
 import TestFormikScreen from './screens/TestFormikScreen';
 import NewTestFormikScreen from './screens/NewTestFormikScreen';
 
-
+import {storeData} from './utils/Storage';
 
 export default function App() {
 
@@ -41,6 +41,8 @@ export default function App() {
     setExp,
     setCiphers,
   };
+
+  storeData(rsa);
 
   const RSAStack = createStackNavigator();
 
