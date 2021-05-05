@@ -17,50 +17,47 @@ const NOCOPRIME_MESSAGE = 'gcd(e, phi) > 1';
 export default function RandomPrimeRow({ width}) {
     const myContext = useContext(AppContext);
 
-    function calculatePrivateKey(onlyPrivate = false){
-        
+    function calculatePrivateKey(onlyPrivate = false) {
         const n = BigInt(myContext.primes.p) * BigInt(myContext.primes.q);
         const pubKey = onlyPrivate ? {exp: values.e.toString(), mod: n.toString()} : calculatePublicKey();
         
-        if(onlyPrivate){
+        if(onlyPrivate) {
            myContext.setPublicKey(pubKey);
         }
         
         const phi = (BigInt(myContext.primes.p) - BigInt(1)) * (BigInt(myContext.primes.q) - BigInt(1));
         //const n = (BigInt(myContext.primes.p) * BigInt(myContext.primes.q)).toString();
         let { inverse, gcd } = extendedEuclid(BigInt(pubKey.exp), phi);
-        if (inverse === undefined){
+        if (inverse === undefined) {
             console.log("Not possible to determine private Key: " + "public" + pubKey.exp + "phi: " + phi);
-        } else if (gcd != BigInt(1))
+        } else if (gcd != BigInt(1)) {
             console.log("GCD not equal to 1");
-        else {
+        } else {
             if (inverse < 0){
                 inverse += phi;
             } 
-        myContext.setPrivateKey({ exp: inverse.toString(), mod: pubKey.mod });
-        //console.log("d = " + inverse + " phi = " + this.phi);
+            myContext.setPrivateKey({ exp: inverse.toString(), mod: pubKey.mod });
+            //console.log("d = " + inverse + " phi = " + this.phi);
+        }
     }
-}
 
     function calculatePublicKey() {
-            const phi = (BigInt(myContext.primes.p) - BigInt(1)) * (BigInt(myContext.primes.q) - BigInt(1));
-            const n = (BigInt(myContext.primes.p) * BigInt(myContext.primes.q)).toString();
-            let pubKey = {mod: n};
-            if (phi > Math.pow(2, 16)){
-                pubKey['exp'] = (Math.pow(2, 16) + 1).toString();
-                
-            } else if (phi > 1){
-                   pubKey['exp'] = (phi - BigInt(1)).toString();
-            } // else: error message!
-            myContext.setPublicKey(pubKey);
-            return pubKey;
-        }
+        const phi = (BigInt(myContext.primes.p) - BigInt(1)) * (BigInt(myContext.primes.q) - BigInt(1));
+        const n = (BigInt(myContext.primes.p) * BigInt(myContext.primes.q)).toString();
+        let pubKey = {mod: n};
+        if (phi > Math.pow(2, 16)) {
+            pubKey['exp'] = (Math.pow(2, 16) + 1).toString();
+        } else if (phi > 1) {
+            pubKey['exp'] = (phi - BigInt(1)).toString();
+        } // else: error message!
+        myContext.setPublicKey(pubKey);
+        return pubKey;
+    }
 
     function calculateKeys(){
         calculatePrivateKey();
     }
-        
-  
+
     function isValidPublicExponent(message){
         return this.test("isValidPublicExponent", message, function(value){
             const {path, createError} = this;
@@ -115,26 +112,24 @@ export default function RandomPrimeRow({ width}) {
             padding: 8
           }}
         >
-         <Button label='default' onPress={
-             calculateKeys} width={80} />
-         <NumInput 
-         icon='key'
-         width = {180}
-         placeholder='public exponent e'
-         keyboardType='number-pad'
-         keyboardAppearance='dark'
-         returnKeyType='next'
-         returnKeyLabel='next'
-         onChangeText={handleChange('e')}
-         onBlur={handleBlur('e')}
-         error={errors.e}
-         touched={touched.e}/> 
-    <Button label='use' onPress={
-        handleSubmit
-        //calculateKeys(false)
-    } width={80} />
-
-      </View>
+            <Button label='default' onPress={calculateKeys} width={80} />
+            <NumInput 
+                icon='key'
+                width = {180}
+                placeholder='public exponent e'
+                keyboardType='number-pad'
+                keyboardAppearance='dark'
+                returnKeyType='next'
+                returnKeyLabel='next'
+                onChangeText={handleChange('e')}
+                onBlur={handleBlur('e')}
+                error={errors.e}
+                touched={touched.e}/>
+            <Button label='use' onPress={
+                handleSubmit
+                //calculateKeys(false)
+            } width={80} />
+        </View>
     );    
     
-    }
+}
