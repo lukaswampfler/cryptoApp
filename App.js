@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import AppContext from './components/AppContext';
 import { NavigationContainer } from '@react-navigation/native';
@@ -27,6 +27,13 @@ export default function App() {
   const rsa = {isEncrypted: false, m: '', exp: '', n: ''};
   const [ciphers, setCiphers] = useState({rsa , sdes: undefined, caesar: undefined})
   
+  // hard coding getting keys from the server / database
+  const [keyList, setKeyList] = useState([
+    {name: 'Lukas Wampfler', publicKey: {exp: '66573', mod: '36723678123612'}, id: 1}, 
+    {name: 'Alice Reinert', publicKey: {exp: '66573', mod: '367232378153215678123612'}, id: 2},
+    {name: 'Peter Funke', publicKey: {exp: '66573', mod: '2178123612'}, id: 3}, 
+  ])
+
   const userSettings = {
     name: name,
     publicKey: publicKey,
@@ -34,13 +41,20 @@ export default function App() {
     primes: primes, 
     exp: exp,
     ciphers: ciphers, 
+    keyList: keyList,
     setName,
     setPublicKey,
     setPrivateKey,
     setPrimes,
     setExp,
     setCiphers,
+    setKeyList,
   };
+
+
+  useEffect(() => {
+    console.log("useEffect hook ran");
+  }, [keyList]); 
 
   storeData(rsa);
 

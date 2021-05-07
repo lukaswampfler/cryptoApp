@@ -11,12 +11,19 @@ export default function ButtonRow({navigation}) {
 const myContext = useContext(AppContext);
 
 const saveKeys = () => {
-    const name = 'LW';
-    const keys = {
-        public: myContext.publicKey, 
-        private: myContext.privateKey}
-    storeData({name: name, RSAkeys: keys});
-    console.log('Keys Saved.')
+    
+    let newKeyList = myContext.keyList;
+    console.log(newKeyList);
+    let userItem = newKeyList.filter(item => item.name.indexOf(myContext.name) > -1); // list of items with the user's name
+     
+    if (userItem.length === 0){ // user name not yet in keyList
+        newKeyList = [...newKeyList, {name: myContext.name, publicKey: myContext.publicKey, id: newKeyList.length + 1}];
+    } else {
+        const otherUserItems = newKeyList.filter(item => item.name.indexOf(myContext.name) === -1);
+        userItem.forEach(item => item.publicKey = myContext.publicKey);
+        newKeyList = [...otherUserItems, ...userItem];
+    }
+    myContext.setKeyList(newKeyList);
 };
 
     return(
