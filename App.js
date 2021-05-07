@@ -23,6 +23,7 @@ export default function App() {
   const [privateKey, setPrivateKey] = useState({exp: 5, mod: 143})
   const [primes, setPrimes] = useState({p: 2, q: 3})
   const [exp, setExp] = useState(3)
+  const [RSAInputSwitchisDecimal, setRSAInputSwitchisDecimal] = useState(true);
   
   const rsa = {isEncrypted: false, m: '', exp: '', n: ''};
   const [ciphers, setCiphers] = useState({rsa , sdes: undefined, caesar: undefined})
@@ -33,13 +34,15 @@ export default function App() {
     privateKey: privateKey,
     primes: primes, 
     exp: exp,
-    ciphers: ciphers, 
+    ciphers: ciphers,
+    RSAInputSwitchisDecimal: RSAInputSwitchisDecimal, 
     setName,
     setPublicKey,
     setPrivateKey,
     setPrimes,
     setExp,
     setCiphers,
+    setRSAInputSwitchisDecimal,
   };
 
   const RSAStack = createStackNavigator();

@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { SafeAreaView, ScrollView, Text, View, TextInput} from 'react-native';
+import React, { useContext, useState } from 'react';
+import { SafeAreaView, ScrollView, Text, View, TextInput, Switch} from 'react-native';
 import {Divider} from 'react-native-elements';
 import AppContext from '../components/AppContext';
 import NumInput from '../components/NumInput';
@@ -8,7 +8,8 @@ import ShareButton from '../components/ShareButton';
 import { useFormik } from 'formik';
 import * as Yup from 'yup'
 
-import {RSAEncryptionInputScheme, messageToNumber} from '../utils/InputTests'
+import {RSAEncryptionDecimalInputScheme,
+     RSAEncryptionBinaryInputScheme} from '../utils/InputTests'
 import RSA from '../utils/RSA'
 import RSAKeyInput from '../components/RSAKeyInput';
 import { smartExponentiation } from '../utils/RSAMath';
@@ -28,6 +29,8 @@ function createRSAObject(m, exp, n){
 
 export default function RSAEncryptionScreen({route, navigation}){
     
+
+
     // get the context
     const myContext = useContext(AppContext);
     
@@ -55,13 +58,26 @@ export default function RSAEncryptionScreen({route, navigation}){
     }
     //... and the message
     const getMessageInitialValue = () => {
-        return myContext.ciphers.rsa.m;
+        let m = myContext.ciphers.rsa.m;
+        if (m.indexOf('0b') == 0){
+            return m.slice(2);
+        }
+        return m;
     }
+
+    const toggleRSAInputSwitch = (value) => {
+        //To handle switch toggle
+        myContext.setRSAInputSwitchisDecimal(value);
+        //State changes according to switch
+      };
 
     // Submission function 
     const RSASubmit = values => {
-        const mNumber = messageToNumber(values.m);
-        const rsa = {m: mNumber.toString(), exp: values.exp, n: values.n};
+        let m = values.m
+        if(!myContext.RSAInputSwitchisDecimal) {// binary input
+            m = '0b' + values.m;
+        } 
+        const rsa = {m: m, exp: values.exp, n: values.n};
         let ciphers = myContext.ciphers;
         ciphers.rsa = rsa;
         ciphers.rsa['encrypted'] = smartExponentiation(BigInt(rsa.m), BigInt(rsa.exp), BigInt(rsa.n)).toString();
@@ -78,7 +94,7 @@ export default function RSAEncryptionScreen({route, navigation}){
         errors,
         touched} = useFormik({
         enableReinitialize: true,
-        validationSchema: RSAEncryptionInputScheme,
+        validationSchema: myContext.RSAInputSwitchisDecimal ? RSAEncryptionDecimalInputScheme: RSAEncryptionBinaryInputScheme,
         initialValues: { m: getMessageInitialValue() , exp: getExpInitialValue() , n: getModInitialValues()},
         onSubmit: RSASubmit
       });
@@ -86,7 +102,7 @@ export default function RSAEncryptionScreen({route, navigation}){
     
 
     // do the encryption
-    const handleRSAEncryption = () =>{
+    const handleRSAEncryption = () => {
         const {m, exp, n} = myContext.ciphers.rsa;
         let ciphers = myContext.ciphers;
         ciphers.rsa['encrypted'] = smartExponentiation(m, exp, n);
@@ -94,6 +110,13 @@ export default function RSAEncryptionScreen({route, navigation}){
         
         //const rsa = new RSA(m, exp, n); -> this is not working, causes an infinite loop -> max stack depth reached.
 
+    }
+
+    // Output-Value
+    const getRSAOutputValue = () => {
+        if (myContext.ciphers.rsa.isEncrypted){
+            return myContext.RSAInputSwitchisDecimal? myContext.ciphers.rsa.encrypted : BigInt(myContext.ciphers.rsa.encrypted).toString(2) ; 
+        } else return '';
     }
 
  
@@ -115,8 +138,14 @@ export default function RSAEncryptionScreen({route, navigation}){
     >
  
       <Text style = {{fontSize: 20,
-    marginTop: 20}}> Input (10 bit String or number) </Text>
-      <View style={{ paddingHorizontal: 32, marginBottom: 16, width: '100%' }}>
+    marginTop: 20}}> Input (decimal or binary number) </Text>
+      <View style={{paddingHorizontal: 32, 
+                    marginBottom: 16, 
+                    width: '100%',
+                    flexDirection: 'row', 
+                    justifyContent: 'space-between',
+                    margin: 40
+                }}>
       <NumInput
           icon='new-message'
           width = {245}
@@ -132,6 +161,21 @@ export default function RSAEncryptionScreen({route, navigation}){
           touched={touched.m}
           value = {values.m}
         />
+        <View style={{
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+          <Text>
+          {myContext.RSAInputSwitchisDecimal ? 'decimal' : 'binary'}
+           </Text>
+        <Switch
+          style={{marginTop: 5}}
+          onValueChange={toggleRSAInputSwitch}
+          value={myContext.RSAInputSwitchisDecimal}
+        />
+        </View>
         </View>
         <Divider style={{ width: "100%", margin: 10 }} />
       <Text style={{fontSize: 20}}>Key</Text>
@@ -161,7 +205,7 @@ export default function RSAEncryptionScreen({route, navigation}){
           autoCapitalize='none'
           keyboardType='number-pad'
           keyboardAppearance='dark'
-          defaultValue={myContext.ciphers.rsa.isEncrypted ? myContext.ciphers.rsa.encrypted.toString() : ''}
+          defaultValue={getRSAOutputValue()}
         />
         <ShareButton message = {myContext.ciphers.rsa.isEncrypted ? myContext.ciphers.rsa.encrypted.toString() : 'No Encryption done yet'} />
 
