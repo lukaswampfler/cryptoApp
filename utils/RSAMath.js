@@ -66,7 +66,7 @@ export function smartExponentiation(base, exp, m) {
         }
         base = (base * base) % m;
     }
-    return res;
+    return res.toString();
 }
 function conditionMillerRabin(base, n, odd, exp) {
     // checks whether the necessary condition for prime numbers is fulfilled
