@@ -10,6 +10,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import RSAKeyScreen from './screens/RSAKeyScreen';
 import RSAEncryptionScreen from './screens/RSAEncryptionScreen';
+import UsersListScreen from './screens/UsersListScreen';
 import TestFormikScreen from './screens/TestFormikScreen';
 import NewTestFormikScreen from './screens/NewTestFormikScreen';
 
@@ -52,11 +53,11 @@ export default function App() {
   };
 
 
-  useEffect(() => {
+  /*useEffect(() => {
     console.log("useEffect hook ran");
   }, [keyList]); 
-
-  storeData(rsa);
+*/
+  //storeData(rsa);
 
   const RSAStack = createStackNavigator();
 
@@ -74,7 +75,11 @@ export default function App() {
               component={RSAKeyScreen}
               options={{ title: 'RSA Key Generation' }}
             />
-      
+      <RSAStack.Screen
+              name="UsersList"
+              component={UsersListScreen}
+              options={{ title: 'List of users' }}
+            />
       
          
     </RSAStack.Navigator>

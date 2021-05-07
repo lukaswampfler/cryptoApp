@@ -18,6 +18,9 @@ export default function RSAKeyInput({values, errors, touched, handleChange, hand
       console.log(keys);
     };
 
+
+
+
     const params = route.params;
 
     
@@ -86,7 +89,7 @@ export default function RSAKeyInput({values, errors, touched, handleChange, hand
           <View style={{
               marginLeft:10,
               }}>
-          <Button label = 'Import Key' onPress = {showKeys} width={100} />
+          <Button label = 'Import Key' onPress = {() => {navigation.navigate('UsersList')}} width={100} />
           </View>
         </View>
 
