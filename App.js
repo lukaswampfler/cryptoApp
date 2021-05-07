@@ -44,6 +44,8 @@ export default function App() {
 
   const RSAStack = createStackNavigator();
 
+  if (typeof BigInt === 'undefined') global.BigInt = require('big-integer')
+
   return (
     <AppContext.Provider value = {userSettings}>
       <NavigationContainer>
