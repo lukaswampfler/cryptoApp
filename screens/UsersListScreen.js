@@ -1,24 +1,55 @@
-import React, { useContext } from 'react';
-import { SafeAreaView, ScrollView, Text, View} from 'react-native';
+import React, { useContext, useEffect } from 'react';
+import { SafeAreaView, TouchableOpacity, ScrollView, Text, View} from 'react-native';
 import {Divider} from 'react-native-elements';
+import Button from '../components/Button';
 import AppContext from '../components/AppContext';
+
+import users from "../userData/userList.json";
+import { FlatList } from 'react-native-gesture-handler';
+
+const Item = ({ item, onPress, backgroundColor }) => (
+    <TouchableOpacity onPress={onPress} style={[backgroundColor]}>
+      <Text style={{fontSize: 32, padding: 20}}>{item.name.first} {item.name.last}</Text>
+    </TouchableOpacity>
+  );
+
 
 export default function UsersListScreen({navigation}){
     const myContext = useContext(AppContext);
 
+    console.log(users.results);
+
+    const user = {name: 'Lukas Wampfler', publicKey: {exp: '66573', mod: '36723678123612'}, id: 1};
+
+    
+    // implement renderItem!!
+
+    const renderItem = ({ item }) => {
+        //const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";
+        //const color = item.id === selectedId ? 'white' : 'black';
+    
+        return (
+          <Item
+            item={item}
+            onPress={() => {navigation.navigate('RSAEncryption', {user: item, usePublicKey: false, usePrivateKey: false})}}
+            //onPress={() => setSelectedId(item.id)}
+            backgroundColor="#6e3b6e"
+            //textColor={{ color }}
+          />
+        );
+      };
+    
+
     return (
-        <View style={{flex: 1}}>
-        <ScrollView style = {{flex: 1}}>
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: '#fff',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
-              <Text> dummy text </Text>
-        </View>
-        </ScrollView>
-        </View>
+
+        <SafeAreaView style = {{
+            flex: 1, marginTop:  0}}>
+              <FlatList
+              data = {users.results}
+              renderItem={renderItem}
+              keyExtractor = {(item) => item.login.uuid}
+              />
+
+        </SafeAreaView>
     );
 }

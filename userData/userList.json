@@ -1,0 +1,45 @@
+{
+    "results": [
+      {
+        "name": {"first": "Lukas", "last": "Wampfler" },
+        "publicKey": {
+          "exp": "65537",
+          "mod": "19102828136812638907"
+          },
+        "email": "lukas.wampfler@altekanti.ch",
+        "login": {
+          "uuid": "f2a67e66-c503-4c67-b8c6-152820d82846",
+          "username": "lwampfler",
+          "password": "laurent"
+        }
+    },
+        {
+            "name": {"first": "Alice", "last": "Reinert" },
+            "publicKey": {
+              "exp": "1234",
+              "mod": "1910173512673512828136812638907"
+              },
+            "email": "alice.reinert@stud.altekanti.ch",
+            "login": {
+              "uuid": "f2a67e66-c503-4c67-b8c6-152820d8284e",
+              "username": "areinert",
+              "password": "EVAolga"
+            }
+        },
+            {
+                "name": {"first": "Thiago", "last": "Silva" },
+                "publicKey": {
+                  "exp": "112233",
+                  "mod": "28136812638907"
+                  },
+                "email": "thiago.silva@gmail.com",
+                "login": {
+                  "uuid": "fea67e00-c503-4c67-b8c6-152820d82846",
+                  "username": "tsilva",
+                  "password": "halloWelt"
+                }
+            }
+        ]
+    }
+  
+  

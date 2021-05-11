@@ -30,11 +30,13 @@ export default function RSAEncryptionScreen({route, navigation}){
     
     // get the context
     const myContext = useContext(AppContext);
-    
+    console.log(route.params);
     // get initial values for Form: exponent ...
     const getExpInitialValue = () => {
         if(route.params === undefined ){
             return myContext.ciphers.rsa.exp;
+        }  else if (route.params.user !== undefined ){
+            return route.params.user.publicKey.exp;
         } else if (route.params.usePrivateKey) {
             return myContext.privateKey.exp.toString();
         } else if (route.params.usePublicKey){
@@ -47,6 +49,8 @@ export default function RSAEncryptionScreen({route, navigation}){
     const getModInitialValues = () => {
         if(route.params === undefined ){
             return myContext.ciphers.rsa.n;
+        } else if (route.params.user !== undefined ){
+            return route.params.user.publicKey.mod;
         } else if (route.params.usePrivateKey || route.params.usePublicKey) {
             return myContext.privateKey.mod.toString();
         } else {
