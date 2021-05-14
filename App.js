@@ -29,6 +29,8 @@ export default function App() {
   const rsa = {isEncrypted: false, m: '', exp: '', n: ''};
   const [ciphers, setCiphers] = useState({rsa , sdes: undefined, caesar: undefined})
   
+  const [useBigIntegerLibrary, setUseBigIntegerLibrary] = useState(false);
+
   // hard coding getting keys from the server / database
   const [keyList, setKeyList] = useState([
     {name: 'Lukas Wampfler', publicKey: {exp: '66573', mod: '36723678123612'}, id: 1}, 
@@ -45,6 +47,7 @@ export default function App() {
     ciphers: ciphers, 
     keyList: keyList,
     RSAInputSwitchisDecimal: RSAInputSwitchisDecimal, 
+    useBigIntegerLibrary: useBigIntegerLibrary,
 
     setName,
     setPublicKey,
@@ -54,7 +57,7 @@ export default function App() {
     setCiphers,
     setKeyList,
     setRSAInputSwitchisDecimal,
-
+    setUseBigIntegerLibrary,
   };
 
 
@@ -66,7 +69,12 @@ export default function App() {
 
   const RSAStack = createStackNavigator();
 
-  if (typeof BigInt === 'undefined') global.BigInt = require('big-integer')
+  if (typeof BigInt === 'undefined') {
+      global.BigInt = require('big-integer');
+      setUseBigIntegerLibrary(true);
+  } 
+
+  
 
   return (
     <AppContext.Provider value = {userSettings}>

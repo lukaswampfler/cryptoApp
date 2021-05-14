@@ -14,7 +14,8 @@ import * as Yup from 'yup';
 const REQUIRED_ERROR_MESSAGE = 'this field is required';
 const NOCOPRIME_MESSAGE = 'gcd(e, phi) > 1';
 
-export default function RandomPrimeRow({ width}) {
+//export default function RandomPrimeRow({ width}) {
+export default function PublicExponentRow({ width}) {
     const myContext = useContext(AppContext);
 
     function calculatePrivateKey(onlyPrivate = false) {
@@ -27,7 +28,7 @@ export default function RandomPrimeRow({ width}) {
         
         const phi = (BigInt(myContext.primes.p) - BigInt(1)) * (BigInt(myContext.primes.q) - BigInt(1));
         //const n = (BigInt(myContext.primes.p) * BigInt(myContext.primes.q)).toString();
-        let { inverse, gcd } = extendedEuclid(BigInt(pubKey.exp), phi);
+        let { inverse, gcd } = extendedEuclid(BigInt(pubKey.exp), phi, myContext.useBigIntegerLibrary);
         if (inverse === undefined) {
             console.log("Not possible to determine private Key: " + "public" + pubKey.exp + "phi: " + phi);
         } else if (gcd != BigInt(1)) {
@@ -37,8 +38,10 @@ export default function RandomPrimeRow({ width}) {
                 inverse += phi;
             } 
             myContext.setPrivateKey({ exp: inverse.toString(), mod: pubKey.mod });
-            //console.log("d = " + inverse + " phi = " + this.phi);
+            
         }
+        // android: gcd has value 0
+        alert('update private key: ' + myContext.privateKey.exp);
     }
 
     function calculatePublicKey() {
@@ -68,7 +71,7 @@ export default function RandomPrimeRow({ width}) {
             // TODO: replace phi below with the phi from RSA object!
             const phi = (BigInt(myContext.primes.p)-BigInt(1))* (BigInt(myContext.primes.q)-BigInt(1));
             console.log(phi);
-            if (gcd(phi, BigInt(value)) > BigInt(1)){ // not relatively prime to phiy
+            if (gcd(phi, BigInt(value)) > BigInt(1)){ // not relatively prime to phi
                 return createError({path, message: message?? NOCOPRIME_MESSAGE});
             }
             return true;

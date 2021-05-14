@@ -1,14 +1,24 @@
-export function extendedEuclid(e, f) {
+export function extendedEuclid(e, f, useBigIntegerLibrary) {
+
     // uses extended euclid for calculation of decryption exponent d
-    let x1 = BigInt(1), x2 = BigInt(0), x3 = f, y1 = BigInt(0), y2 = BigInt(1), y3 = e;
+    let x1 = BigInt(1), x2 = BigInt(0), x3 = BigInt(f), y1 = BigInt(0), y2 = BigInt(1), y3 = BigInt(e);
+    let q = BigInt(1);
     while (y3 > 1) {
-        let q = x3 / y3; // BigInt-Division is integer division
+        
+        if (useBigIntegerLibrary){
+            q = x3.divide(y3); // big-integer division without BigInt builtin type
+        } else {
+            q = x3 / y3; // BigInt-Division is integer division
+        }
+        
         [x1, x2, x3, y1, y2, y3] = [y1, y2, y3, x1 - q * y1, x2 - q * y2, x3 - q * y3];
     }
-    if (y3 === BigInt(0))
+    if (y3 === BigInt(0)){
         return { 'inverse': undefined, 'gcd': x3 };
-    else
+    }
+    else {
         return { 'inverse': y2, 'gcd': y3 };
+    }
 }
 // primality test
 export function isPrime(n) {
