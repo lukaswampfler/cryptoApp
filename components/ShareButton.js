@@ -39,7 +39,7 @@ export default function ShareButton({ message}) {
       <Text
         style={{ fontSize: 18, color: 'white', textTransform: 'uppercase' , textAlign: 'center', }}
       >
-        Share
+        Send
       </Text>
     </TouchableOpacity>
     );

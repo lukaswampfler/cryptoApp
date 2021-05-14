@@ -7,9 +7,18 @@ import ButtonRow from '../components/ButtonRow';
 import { setNestedObjectValues } from 'formik';
 import AppContext from '../components/AppContext';
 
+import {getData} from '../utils/Storage';
+
 export default function RSAKeyInput({values, errors, touched, handleChange, handleBlur, navigation, route}) {
     
     const myContext = useContext(AppContext);
+
+    const showKeys = async () => {
+      const keys =  await getData();
+      console.log(keys);
+    };
+
+
 
 
     const params = route.params;
@@ -80,7 +89,7 @@ export default function RSAKeyInput({values, errors, touched, handleChange, hand
           <View style={{
               marginLeft:10,
               }}>
-          <Button label = 'Import Key' width={100} />
+          <Button label = 'Import Key' onPress = {() => {navigation.navigate('UsersList')}} width={100} />
           </View>
         </View>
 

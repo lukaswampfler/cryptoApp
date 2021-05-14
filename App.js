@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import AppContext from './components/AppContext';
 import { NavigationContainer } from '@react-navigation/native';
@@ -10,10 +10,11 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import RSAKeyScreen from './screens/RSAKeyScreen';
 import RSAEncryptionScreen from './screens/RSAEncryptionScreen';
+import UsersListScreen from './screens/UsersListScreen';
 import TestFormikScreen from './screens/TestFormikScreen';
 import NewTestFormikScreen from './screens/NewTestFormikScreen';
 
-
+import {storeData} from './utils/Storage';
 
 export default function App() {
 
@@ -28,22 +29,40 @@ export default function App() {
   const rsa = {isEncrypted: false, m: '', exp: '', n: ''};
   const [ciphers, setCiphers] = useState({rsa , sdes: undefined, caesar: undefined})
   
+  // hard coding getting keys from the server / database
+  const [keyList, setKeyList] = useState([
+    {name: 'Lukas Wampfler', publicKey: {exp: '66573', mod: '36723678123612'}, id: 1}, 
+    {name: 'Alice Reinert', publicKey: {exp: '66573', mod: '367232378153215678123612'}, id: 2},
+    {name: 'Peter Funke', publicKey: {exp: '66573', mod: '2178123612'}, id: 3}, 
+  ])
+
   const userSettings = {
     name: name,
     publicKey: publicKey,
     privateKey: privateKey,
     primes: primes, 
     exp: exp,
-    ciphers: ciphers,
+    ciphers: ciphers, 
+    keyList: keyList,
     RSAInputSwitchisDecimal: RSAInputSwitchisDecimal, 
+
     setName,
     setPublicKey,
     setPrivateKey,
     setPrimes,
     setExp,
     setCiphers,
+    setKeyList,
     setRSAInputSwitchisDecimal,
+
   };
+
+
+  /*useEffect(() => {
+    console.log("useEffect hook ran");
+  }, [keyList]); 
+*/
+  //storeData(rsa);
 
   const RSAStack = createStackNavigator();
 
@@ -63,7 +82,11 @@ export default function App() {
               component={RSAKeyScreen}
               options={{ title: 'RSA Key Generation' }}
             />
-      
+      <RSAStack.Screen
+              name="UsersList"
+              component={UsersListScreen}
+              options={{ title: 'List of users' }}
+            />
       
          
     </RSAStack.Navigator>
