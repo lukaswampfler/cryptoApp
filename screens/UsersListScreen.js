@@ -17,12 +17,7 @@ const Item = ({ item, onPress, backgroundColor }) => (
 export default function UsersListScreen({navigation}){
     const myContext = useContext(AppContext);
 
-    console.log(users.results);
-
     const user = {name: 'Lukas Wampfler', publicKey: {exp: '66573', mod: '36723678123612'}, id: 1};
-
-    
-    // implement renderItem!!
 
     const renderItem = ({ item }) => {
         //const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";
