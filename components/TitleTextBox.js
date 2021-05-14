@@ -10,21 +10,19 @@ export default function TitleTextBox({title, error, touched, ...otherProps}){
             borderRadius: 8,
             padding: 8
           }}
-
         >
-            <View>
-            <Text style ={{color: 'black'}}>{title} </Text>
-            </View>
-            <View style={{ 
-                flex: 1,
-                borderWidth: StyleSheet.hairlineWidth,
-                padding: 8 }}>
-        <RNTextInput
-          placeholderTextColor='rgba(34, 62, 75, 0.7)'
-          {...otherProps}
-        />  
+          <View>
+              <Text style ={{color: 'black'}}>{title} </Text>
+          </View>
+          <View style={{ 
+                  flex: 1,
+                  borderWidth: StyleSheet.hairlineWidth,
+                  padding: 8 }}>
+          <RNTextInput
+              placeholderTextColor='rgba(34, 62, 75, 0.7)'
+              {...otherProps}
+          />  
+          </View>
         </View>
-
-        </View>
-  );
+    );
 }

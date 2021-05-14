@@ -24,6 +24,7 @@ export default function App() {
   const [privateKey, setPrivateKey] = useState({exp: 5, mod: 143})
   const [primes, setPrimes] = useState({p: 2, q: 3})
   const [exp, setExp] = useState(3)
+  const [RSAInputSwitchisDecimal, setRSAInputSwitchisDecimal] = useState(true);
   
   const rsa = {isEncrypted: false, m: '', exp: '', n: ''};
   const [ciphers, setCiphers] = useState({rsa , sdes: undefined, caesar: undefined})
@@ -43,6 +44,8 @@ export default function App() {
     exp: exp,
     ciphers: ciphers, 
     keyList: keyList,
+    RSAInputSwitchisDecimal: RSAInputSwitchisDecimal, 
+
     setName,
     setPublicKey,
     setPrivateKey,
@@ -50,6 +53,8 @@ export default function App() {
     setExp,
     setCiphers,
     setKeyList,
+    setRSAInputSwitchisDecimal,
+
   };
 
 
@@ -60,6 +65,8 @@ export default function App() {
   //storeData(rsa);
 
   const RSAStack = createStackNavigator();
+
+  if (typeof BigInt === 'undefined') global.BigInt = require('big-integer')
 
   return (
     <AppContext.Provider value = {userSettings}>
