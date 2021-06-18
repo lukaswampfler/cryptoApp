@@ -4,12 +4,12 @@ import {isPrime} from './RSAMath'
 const REQUIRED_ERROR_MESSAGE = 'this field is required';
 const INVALID_DECIMAL_FORMAT_ERROR_MESSAGE = 'invalid decimal number';
 const INVALID_BINARY_FORMAT_ERROR_MESSAGE = 'invalid binary number';
-const NOPRIME_MESSAGE = 'not a prime number'
+const INVALID_FORMAT_ERROR_MESSAGE = 'invalid format';
+
 
 Yup.addMethod(Yup.string, 'isValidRSABinaryInput', isValidRSABinaryInput);
 Yup.addMethod(Yup.string, 'isValidRSADecimalInput', isValidRSADecimalInput);
 Yup.addMethod(Yup.string, 'isValidNumber', isValidNumber);
-Yup.addMethod(Yup.string, 'isValidPrime', isValidPrime);
 
 
 
@@ -18,10 +18,6 @@ export const RSAMessageInputScheme = Yup.object().shape({
     m: Yup.string().isValidRSADecimalInput().required('Required') ,
   });
 
-export const RSAPrimeInputScheme = Yup.object().shape({
-    p: Yup.string().isValidPrime().required('Required'),
-    q: Yup.string().isValidPrime().notOneOf([Yup.ref('p')], 'q must be different from p').required('Required'),
-  });
 
 export const RSAEncryptionDecimalInputScheme = Yup.object().shape({
     m: Yup.string().isValidRSADecimalInput().required('Required') ,
@@ -92,21 +88,3 @@ export function isValidNumber(message){
 }
 
 
-// checks if string represents a prime number
-export function isValidPrime(message){
-    return this.test("isValidPrime", message, function(value){
-        const {path, createError} = this;
-        if(!value){ // no value given
-            return createError({path ,message: message ?? REQUIRED_ERROR_MESSAGE});
-        }
-        if (!value.match(/^[1-9][0-9]*$/)){ //not a decimal number
-            return createError({path, message: message?? INVALID_FORMAT_ERROR_MESSAGE});
-        }
-        const n = BigInt(value);
-            if (!isPrime(n)){ // not a prime number
-                return createError({path, message: message?? NOPRIME_MESSAGE});
-
-        }
-        return true;
-    });
-}

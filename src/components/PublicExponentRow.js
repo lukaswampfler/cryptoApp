@@ -5,7 +5,7 @@ import Button from '../components/Button';
 import NumInput from '../components/NumInput';
 
 import {gcd} from '../utils/CryptoMath'
-import {extendedEuclid} from '../utils/RSAMath'
+import {extendedEuclid, isPrime} from '../utils/RSAMath'
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -13,6 +13,13 @@ import * as Yup from 'yup';
 
 const REQUIRED_ERROR_MESSAGE = 'this field is required';
 const NOCOPRIME_MESSAGE = 'gcd(e, phi) > 1';
+
+
+
+
+
+
+
 
 //export default function RandomPrimeRow({ width}) {
 export default function PublicExponentRow({ width}) {
@@ -40,8 +47,7 @@ export default function PublicExponentRow({ width}) {
             myContext.setPrivateKey({ exp: inverse.toString(), mod: pubKey.mod });
             
         }
-        // android: gcd has value 0
-        alert('update private key: ' + myContext.privateKey.exp);
+        
     }
 
     function calculatePublicKey() {
@@ -60,6 +66,11 @@ export default function PublicExponentRow({ width}) {
     function calculateKeys(){
         calculatePrivateKey();
     }
+    
+    
+
+
+    
 
     function isValidPublicExponent(message){
         return this.test("isValidPublicExponent", message, function(value){
@@ -78,27 +89,19 @@ export default function PublicExponentRow({ width}) {
         });
     }
 
-
     Yup.addMethod(Yup.number, 'isValidPublicExponent', isValidPublicExponent);
 
     const PublicExponentInputScheme = Yup.object().shape({
-      e: Yup.number().isValidPublicExponent().required('Required'),
+        e: Yup.number().isValidPublicExponent().required('Required'),
     });
+    
 
-    const {handleChange,
-        handleSubmit,
-        handleBlur,
-        values,
-        errors,
-        touched} = useFormik({
+
+     const formikPublicExponent = useFormik({
         validationSchema: PublicExponentInputScheme,
         initialValues: { e : BigInt(0)},
         onSubmit: values => {
-          /*const n = BigInt(myContext.primes.p) * BigInt(myContext.primes.q);
-          myContext.setPublicKey({exp: values.e.toString(), mod: n.toString()});
-          alert(`e: ${values.e}`);*/
           calculatePrivateKey(true);
-
         }
       });
     
@@ -124,13 +127,12 @@ export default function PublicExponentRow({ width}) {
                 keyboardAppearance='dark'
                 returnKeyType='next'
                 returnKeyLabel='next'
-                onChangeText={handleChange('e')}
-                onBlur={handleBlur('e')}
-                error={errors.e}
-                touched={touched.e}/>
+                onChangeText={formikPublicExponent.handleChange('e')}
+                onBlur={formikPublicExponent.handleBlur('e')}
+                error={formikPublicExponent.errors.e}
+                touched={formikPublicExponent.touched.e}/>
             <Button label='use' onPress={
-                handleSubmit
-                //calculateKeys(false)
+                formikPublicExponent.handleSubmit
             } width={80} />
         </View>
     );    
