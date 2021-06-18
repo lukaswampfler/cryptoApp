@@ -108,6 +108,7 @@ export default function HomeScreen ({navigation})  {
 
  useEffect(()=>{
    console.log("before subscribe: ", userID)
+   myContext.setUserID(userID);
    const subscription = subscribe()
 
    return () => {subscription.unsubscribe()} // return wird ausgeführt beim unmounten.
