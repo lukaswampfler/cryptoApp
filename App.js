@@ -19,6 +19,7 @@ import SignIn from './src/screens/SignIn';
 import SignUp from './src/screens/SignUp';
 import HomeScreen from './src/screens/HomeScreen';
 import ConfirmSignUp from './src/screens/ConfirmSignUp';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 
 
@@ -65,6 +66,7 @@ const AppNavigator = props => {
   );
 };
 
+const HomeTab = createBottomTabNavigator();
 
 const RSANavigator = props => {
   return (

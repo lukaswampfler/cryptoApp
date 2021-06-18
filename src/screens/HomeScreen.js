@@ -59,11 +59,12 @@ export default function HomeScreen ({navigation})  {
 //console.log("inside check for User: ", users);
   //const users = await API.graphql({query:listUsers});
   console.log("userName from Context: ", myContext.userName);
+  console.log("users in checkForUser: ", users);
   const checkUsers = users.filter(user => (user.name === myContext.userName))
   if (checkUsers.length === 0) {
     const userInput = {name: myContext.userName, publicKeyID: "001", privateKeyID: "002"}
     const newUser = await API.graphql({ query: createUser, variables: {input: userInput}});
-    setUserID(newUser.data.createUser.items.userID);
+    setUserID(newUser.data.createUser.id);
   } else{
     console.log("User " + myContext.userName + " already exists");
     //console.log(checkUsers[0]);
