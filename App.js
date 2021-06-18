@@ -13,8 +13,6 @@ import config from './src/aws-exports';
 import RSAKeyScreen from './src/screens/RSAKeyScreen';
 import RSAEncryptionScreen from './src/screens/RSAEncryptionScreen';
 import UsersListScreen from './src/screens/UsersListScreen';
-import TestFormikScreen from './src/screens/TestFormikScreen';
-import NewTestFormikScreen from './src/screens/NewTestFormikScreen';
 import SignIn from './src/screens/SignIn';
 import SignUp from './src/screens/SignUp';
 import HomeScreen from './src/screens/HomeScreen';
@@ -36,6 +34,8 @@ Amplify.configure({
 const AuthenticationStack = createStackNavigator();
 const AppStack = createStackNavigator();
 const RSAStack = createStackNavigator();
+const HomeTab = createBottomTabNavigator();
+
 
 const AuthenticationNavigator = props => {
   return (
@@ -66,7 +66,6 @@ const AppNavigator = props => {
   );
 };
 
-const HomeTab = createBottomTabNavigator();
 
 const RSANavigator = props => {
   return (
@@ -139,10 +138,8 @@ export default function App() {
     primes: primes, 
     exp: exp,
     ciphers: ciphers, 
-    //keyList: keyList,
     RSAInputSwitchisDecimal: RSAInputSwitchisDecimal, 
     useBigIntegerLibrary: useBigIntegerLibrary,
-
     setUserName,
     setUserID,
     setPassword,
@@ -152,7 +149,6 @@ export default function App() {
     setPrimes,
     setExp,
     setCiphers,
-    //setKeyList,
     setRSAInputSwitchisDecimal,
     setUseBigIntegerLibrary,
   };
@@ -193,7 +189,10 @@ async function checkAuthState() {
       <NavigationContainer>
       {isUserLoggedIn === 'initializing' && <Initializing />}
       {isUserLoggedIn === 'loggedIn' && (
-        <AppNavigator updateAuthState={updateAuthState} />
+        <HomeTab.Navigator updateAuthState={updateAuthState}>
+          <HomeTab.Screen name="HomeScreen" component = {HomeScreen} />
+           <HomeTab.Screen name = "RSA" component = {RSANavigator}/> 
+        </HomeTab.Navigator>
       )}
       {isUserLoggedIn === 'loggedOut' && (
         <AuthenticationNavigator updateAuthState={updateAuthState} />

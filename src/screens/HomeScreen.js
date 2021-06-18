@@ -70,6 +70,7 @@ export default function HomeScreen ({navigation})  {
     //console.log(checkUsers[0]);
     setUserID(checkUsers[0].id);
 
+    // maybe set public and private key here??
   }
 }
 
