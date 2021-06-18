@@ -4,7 +4,7 @@ import Loading from './Loading'
 import { listMessages, listUsers, messagesByReceiver} from '../graphql/queries';
 import {createUser} from '../graphql/mutations';
 
-import  { API, Auth, graphqlOperation}from 'aws-amplify'
+import  { API, Auth, graphqlOperation} from 'aws-amplify'
 
 import styles from './styles'
 
@@ -31,13 +31,15 @@ export default function HomeScreen ({navigation})  {
 
   const myContext = useContext(AppContext);
 
+  // here the user name is updated!
+
   const [latestMessage, updateLatestMessage] = useState("No message yet...");
   const [messages, setMessages] = useState(null);
-  const [userID, setUserID] = useState(null);
-  const [users, setUsers] = useState(null);
+
 
   async function signOut() {
     try {
+        myContext.setUserName('');
         await Auth.signOut();
         myContext.setUserLoggedIn('loggedOut');
         console.log("sign out succesful")
@@ -46,34 +48,10 @@ export default function HomeScreen ({navigation})  {
     }
   }
 
-  async function fetchUsers() {
-    try {
-      const usersData = await API.graphql({query: listUsers})
-      const users = usersData.data.listUsers.items
-      setUsers(users)
-    } catch (err) { console.log('error fetching users: ', err) }
-  }
-
-    //check if user with userName aleady exists in database: if not -> create new User.
-  async function checkForUser(users)  {
-//console.log("inside check for User: ", users);
-  //const users = await API.graphql({query:listUsers});
-  console.log("userName from Context: ", myContext.userName);
-  const checkUsers = users.filter(user => (user.name === myContext.userName))
-  if (checkUsers.length === 0) {
-    const userInput = {name: myContext.userName, publicKeyID: "001", privateKeyID: "002"}
-    const newUser = await API.graphql({ query: createUser, variables: {input: userInput}});
-    setUserID(newUser.data.createUser.items.userID);
-  } else{
-    console.log("User " + myContext.userName + " already exists");
-    //console.log(checkUsers[0]);
-    setUserID(checkUsers[0].id);
-
-  }
-}
 
 
-  useEffect(()=>{
+
+  /*useEffect(()=>{
     console.log("User ID from context", myContext.userID);
 
     fetchUsers();
@@ -83,14 +61,14 @@ export default function HomeScreen ({navigation})  {
     checkForUser(users);
     //console.log("after check for User: ", users);
   }, [users])
-
+*/
 
   function subscribe(){
     console.log("subscribe, ID from context: ", myContext.userID)
     const subscription = API.graphql({
      query: onCreateMessageByReceiverID,
      variables: {
-       receiverID: userID
+       receiverID: myContext.userID
      },
    }).subscribe({
      error: err => console.log("error caught in subscribe: ", err),
@@ -105,11 +83,11 @@ export default function HomeScreen ({navigation})  {
  }
 
  useEffect(()=>{
-   console.log("before subscribe: ", userID)
+   //console.log("before subscribe: ", myContext.userID)
    const subscription = subscribe()
 
    return () => {subscription.unsubscribe()} // return wird ausgeführt beim unmounten.
- }, [userID])
+ }, [])
   
 
 
@@ -121,17 +99,19 @@ export default function HomeScreen ({navigation})  {
 
 async function fetchMessages() {
   try {
-    console.log("inside fetchMessages: ", userID);
-    const messagesData = await API.graphql({query: messagesByReceiver, variables: {receiverID: userID, limit: 20}})
+    //console.log("inside fetchMessages: ", myContext.userID);
+    const messagesData = await API.graphql({query: messagesByReceiver, variables: {receiverID: myContext.userID, limit: 20}})
     const messages = messagesData.data.messagesByReceiver.items
     setMessages(messages)
-  } catch (err) { console.log('error fetching messages: ', err) }
+  } catch (err) { 
+    console.log(myContext);
+    console.log('error fetching messages: ', err) }
 }
 
 
 useEffect(() => {
     fetchMessages()
-  }, [userID, latestMessage])
+  }, [ latestMessage])
 
 
 
@@ -144,7 +124,7 @@ useEffect(()=> {
  return (
   <SafeAreaView style={styles.container}>
  <Button onPress = {signOut} title="Sign Out"/>
-{userID? <Text>userID: {userID}</Text> : <Text> no userID set </Text>}
+{myContext.userID? <Text>userID: {myContext.userID}</Text> : <Text> no userID set </Text>}
   {messages        ?  
       <FlatList
         data = {messages}
