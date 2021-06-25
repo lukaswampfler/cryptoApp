@@ -37,13 +37,6 @@ export const createMessage = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        privateKey {
-          id
-          exponent
-          modulus
-          createdAt
-          updatedAt
-        }
         createdAt
         updatedAt
       }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { View, Text, FlatList, Pressable, SafeAreaView, TouchableOpacity, Button } from 'react-native'
+import { Picker } from '@react-native-picker/picker';
 import Loading from './Loading'
 import { listMessages, listUsers, messagesByReceiver } from '../graphql/queries';
 import { createUser, createKey } from '../graphql/mutations';
@@ -26,6 +27,7 @@ export default function HomeScreen({ navigation }) {
   const myContext = useContext(AppContext);
   const [userID, setUserID] = useState(null);
   const [users, setUsers] = useState(null);
+  const [selectedMethod, setSelectedMethod] = useState(null);
 
   async function signOut() {
     try {
@@ -35,6 +37,10 @@ export default function HomeScreen({ navigation }) {
     } catch (error) {
       console.log('error signing out: ', error);
     }
+  }
+
+  function pressSelectButton() {
+    console.log("Method chosen: ", selectedMethod);
   }
 
   async function fetchUsers() {
@@ -109,8 +115,18 @@ export default function HomeScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <Button onPress={signOut} title="Sign Out" />
-      {userID ? <Text>userID: {userID}</Text> : <Text> no userID set </Text>}
+      {/*{userID ? <Text>userID: {userID}</Text> : <Text> no userID set </Text>}*/}
+      <Text style={{ fontSize: 25 }}> Select your encryption method:  </Text>
+      <Picker
+        selectedValue={selectedMethod}
+        onValueChange={(itemValue, itemIndex) =>
+          setSelectedMethod(itemValue)
+        }>
+        <Picker.Item label="RSA" value="rsa" />
+        <Picker.Item label="S-DES" value="sdes" />
+      </Picker>
 
+      <Button onPress={pressSelectButton} title="Select" />
 
     </SafeAreaView>
 
