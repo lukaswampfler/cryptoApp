@@ -3,7 +3,7 @@ import { SafeAreaView, ScrollView, Text, View} from 'react-native';
 import {Divider} from 'react-native-elements';
 import AppContext from '../components/AppContext';
 
-import {isPrime, generatePrime} from  '../utils/RSAMath';
+import {isPrime} from  '../utils/RSAMath';
 import NumInput from '../components/NumInput';
 import Button from '../components/Button';
 import { useFormik } from 'formik';
@@ -12,27 +12,55 @@ import RandomPrimeRow from '../components/RandomPrimeRow';
 import PublicExponentRow from '../components/PublicExponentRow'
 import ButtonRow from '../components/ButtonRow';
 
-import {isValidPrime, RSAPrimeInputScheme} from '../utils/InputTests';
+//import {RSAPrimeInputScheme} from '../components/PublicExponentRow';
+
+const NOPRIME_MESSAGE = 'not a prime number'
+const REQUIRED_ERROR_MESSAGE = 'this field is required';
+
 
 
 export default function RSAKeyScreen({navigation}) {
-    const {handleChange,
-        handleSubmit,
-        handleBlur,
-        values,
-        errors,
-        touched} = useFormik({
-        validationSchema: RSAPrimeInputScheme,
-        initialValues: { 
-          p: 'bla', 
-          q: '' },
-        onSubmit: values => {
-          myContext.setPrimes({p: values.p, q: values.q})
-        }
-      });
-
     const myContext = useContext(AppContext);
+    
+    
+    
+    // checks if string represents a prime number
+    function isValidPrime(message){
+      return this.test("isValidPrime", message, function(value){
+          const {path, createError} = this;
+          if(!value){ // no value given
+              return createError({path ,message: message ?? REQUIRED_ERROR_MESSAGE});
+          }
+          if (!value.match(/^[1-9][0-9]*$/)){ //not a decimal number
+              return createError({path, message: message?? INVALID_FORMAT_ERROR_MESSAGE});
+          }
+          const n = BigInt(value);
+              if (!isPrime(n, myContext.useBigIntegerLibrary)){ // not a prime number
+                  return createError({path, message: message?? NOPRIME_MESSAGE});
 
+          }
+          return true;
+      });
+    }
+    Yup.addMethod(Yup.string, 'isValidPrime', isValidPrime);
+    const RSAPrimeInputScheme = Yup.object().shape({
+      p: Yup.string().isValidPrime().required('Required'),
+      q: Yup.string().isValidPrime().notOneOf([Yup.ref('p')], 'q must be different from p').required('Required'),
+    });
+    const {handleChange,
+      handleSubmit,
+      handleBlur,
+      values,
+      errors,
+      touched} = useFormik({
+      validationSchema: RSAPrimeInputScheme,
+      initialValues: { 
+        p: 'bla', 
+        q: '' },
+      onSubmit: values => {
+        myContext.setPrimes({p: values.p, q: values.q})
+      }
+    });
 
   return (
     <View style={{flex: 1}}>

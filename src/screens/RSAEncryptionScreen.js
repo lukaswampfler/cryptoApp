@@ -28,12 +28,8 @@ function createRSAObject(m, exp, n){
 
 
 export default function RSAEncryptionScreen({route, navigation}){
-    
-
-
     // get the context
     const myContext = useContext(AppContext);
-    console.log(route.params);
     // get initial values for Form: exponent ...
     const getExpInitialValue = () => {
         if(route.params === undefined ){
@@ -84,7 +80,9 @@ export default function RSAEncryptionScreen({route, navigation}){
         const rsa = {m: m, exp: values.exp, n: values.n};
         let ciphers = myContext.ciphers;
         ciphers.rsa = rsa;
-        ciphers.rsa['encrypted'] = smartExponentiation(BigInt(rsa.m), BigInt(rsa.exp), BigInt(rsa.n)).toString();
+        console.log(rsa.m, rsa.exp, rsa.n)
+        console.log(smartExponentiation(BigInt(rsa.m), BigInt(rsa.exp), BigInt(rsa.n), myContext.useBigIntegerLibrary).toString())
+        ciphers.rsa['encrypted'] = smartExponentiation(BigInt(rsa.m), BigInt(rsa.exp), BigInt(rsa.n), myContext.useBigIntegerLibrary).toString();
         ciphers.rsa['isEncrypted'] = true;
         myContext.setCiphers(ciphers);
     }
@@ -109,7 +107,8 @@ export default function RSAEncryptionScreen({route, navigation}){
     const handleRSAEncryption = () => {
         const {m, exp, n} = myContext.ciphers.rsa;
         let ciphers = myContext.ciphers;
-        ciphers.rsa['encrypted'] = smartExponentiation(m, exp, n);
+        console.log(m, exp, n);
+        ciphers.rsa['encrypted'] = smartExponentiation(m, exp, n, myContext.useBigIntegerLibrary).toString();
         myContext.setCiphers(ciphers);
         
         //const rsa = new RSA(m, exp, n); -> this is not working, causes an infinite loop -> max stack depth reached.

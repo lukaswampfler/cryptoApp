@@ -18,8 +18,6 @@ export default function RandomPrimeRow({ width}) {
   
   const myContext = useContext(AppContext);
 
-  
-
   const ExpInputScheme = Yup.object().shape({
     exp: Yup.number().min(1).max(10).required('Required'),
   });
@@ -35,9 +33,8 @@ export default function RandomPrimeRow({ width}) {
     initialValues: { exp: 1 },
     onSubmit: values => {
       myContext.setExp(values.exp)
-      //alert(`new Exponent: ${values.exp}`)
-      const p = generatePrime(values.exp);
-      const q = generatePrime(values.exp);
+      const p = generatePrime(values.exp, myContext.useBigIntegerLibrary);
+      const q = generatePrime(values.exp, myContext.useBigIntegerLibrary);
       myContext.setPrimes({p: p, q: q});
     }
   });

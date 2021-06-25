@@ -1,0 +1,44 @@
+type Message
+  @model
+  @key(
+    name: "messagesByReceiver"
+    fields: ["receiverID", "createdAt"]
+    queryField: "messagesByReceiver"
+  ) {
+  id: ID!
+  senderID: ID!
+  receiverID: ID!
+  sender: User @connection(fields: ["senderID"])
+  receiver: User @connection(fields: ["receiverID"])
+  text: String!
+  method: EncryptionMethod!
+  createdAt: AWSDateTime!
+}
+
+type User @model {
+  id: ID!
+  name: String!
+  publicKeyID: ID!
+  privateKeyID: ID!
+  publicKey: Key @connection(fields: ["publicKeyID"])
+  privateKey: Key @connection(fields: ["privateKeyID"])
+}
+
+type Key @model {
+  id: ID!
+  exponent: String!
+  modulus: String!
+}
+
+enum EncryptionMethod {
+  RSA
+  SDES
+  CAESAR
+  VIGENERE
+  PERMUTATION
+}
+
+type Subscription {
+  onCreateMessageByReceiverID(receiverID: String!): Message
+    @aws_subscribe(mutations: ["createMessage"])
+}
