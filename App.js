@@ -1,11 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import AppContext from './src/components/AppContext';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import Amplify , {Auth, API} from 'aws-amplify';
+import Amplify, { Auth, API } from 'aws-amplify';
 import config from './src/aws-exports';
 
 
@@ -71,20 +71,20 @@ const RSANavigator = props => {
   return (
     <RSAStack.Navigator>
       <RSAStack.Screen
-       name = "RSAEncryption"
-       component={RSAEncryptionScreen}
-       options={{ title: 'RSA Encryption' }}
-       />   
+        name="RSAEncryption"
+        component={RSAEncryptionScreen}
+        options={{ title: 'RSA Encryption' }}
+      />
       <RSAStack.Screen
-              name="RSAKey"
-              component={RSAKeyScreen}
-              options={{ title: 'RSA Key Generation' }}
-            />
+        name="RSAKey"
+        component={RSAKeyScreen}
+        options={{ title: 'RSA Key Generation' }}
+      />
       <RSAStack.Screen
-              name="UsersList"
-              component={UsersListScreen}
-              options={{ title: 'List of users' }}
-            />
+        name="UsersList"
+        component={UsersListScreen}
+        options={{ title: 'List of users' }}
+      />
     </RSAStack.Navigator>
   );
 }
@@ -105,20 +105,20 @@ const Initializing = () => {
 export default function App() {
 
   // use array destructuring to get hold of data and functions to change data
-  const [isUserLoggedIn, setUserLoggedIn] = useState('initializing');  
+  const [isUserLoggedIn, setUserLoggedIn] = useState('initializing');
   const [userName, setUserName] = useState('');
   const [userID, setUserID] = useState('');
   const [password, setPassword] = useState('');
-  const [publicKey, setPublicKey] = useState({exp: 2, mod: 143});
-  const [privateKey, setPrivateKey] = useState({exp: 5, mod: 143})
-  const [primes, setPrimes] = useState({p: 2, q: 3})
+  const [publicKey, setPublicKey] = useState({ exp: 2, mod: 143 });
+  const [privateKey, setPrivateKey] = useState({ exp: 5, mod: 143 })
+  const [primes, setPrimes] = useState({ p: 2, q: 3 })
   const [exp, setExp] = useState(3)
   const [RSAInputSwitchisDecimal, setRSAInputSwitchisDecimal] = useState(true);
-  
-  
-  const rsa = {isEncrypted: false, m: '', exp: '', n: ''};
-  const [ciphers, setCiphers] = useState({rsa , sdes: undefined, caesar: undefined})
-  
+
+
+  const rsa = { isEncrypted: false, m: '', exp: '', n: '' };
+  const [ciphers, setCiphers] = useState({ rsa, sdes: undefined, caesar: undefined, currentMethod: undefined, currentMessage: undefined })
+
   const [useBigIntegerLibrary, setUseBigIntegerLibrary] = useState(false);
 
   // hard coding getting keys from the server / database
@@ -130,15 +130,15 @@ export default function App() {
 
   const userSettings = {
     userName: userName,
-    userID: userID, 
-    password: password, 
+    userID: userID,
+    password: password,
     isUserLoggedIn: isUserLoggedIn,
     publicKey: publicKey,
     privateKey: privateKey,
-    primes: primes, 
+    primes: primes,
     exp: exp,
-    ciphers: ciphers, 
-    RSAInputSwitchisDecimal: RSAInputSwitchisDecimal, 
+    ciphers: ciphers,
+    RSAInputSwitchisDecimal: RSAInputSwitchisDecimal,
     useBigIntegerLibrary: useBigIntegerLibrary,
     setUserName,
     setUserID,
@@ -159,47 +159,47 @@ export default function App() {
   }
 
   useEffect(() => {
-    let token =  Auth.currentSession().then(session => session.getIdToken().getJwtToken())
+    let token = Auth.currentSession().then(session => session.getIdToken().getJwtToken())
     console.log(token);
     checkAuthState();
   }, []);
 
-async function checkAuthState() {
-  try {
-    await Auth.currentAuthenticatedUser();
-    console.log('User is signed in');
-    setUserLoggedIn('loggedIn');
-  } catch (err) {
-    console.log('User is not signed in');
-    setUserLoggedIn('loggedOut');
+  async function checkAuthState() {
+    try {
+      await Auth.currentAuthenticatedUser();
+      console.log('User is signed in');
+      setUserLoggedIn('loggedIn');
+    } catch (err) {
+      console.log('User is not signed in');
+      setUserLoggedIn('loggedOut');
+    }
   }
-}
 
 
 
   if (typeof BigInt === 'undefined') {
-      global.BigInt = require('big-integer');
-      setUseBigIntegerLibrary(true);
-  } 
+    global.BigInt = require('big-integer');
+    setUseBigIntegerLibrary(true);
+  }
 
-  
+
 
   return (
-    <AppContext.Provider value = {userSettings}>
+    <AppContext.Provider value={userSettings}>
       <NavigationContainer>
-      {isUserLoggedIn === 'initializing' && <Initializing />}
-      {isUserLoggedIn === 'loggedIn' && (
-        <HomeTab.Navigator updateAuthState={updateAuthState}>
-          <HomeTab.Screen name="HomeScreen" component = {HomeScreen} />
-           <HomeTab.Screen name = "RSA" component = {RSANavigator}/> 
-        </HomeTab.Navigator>
-      )}
-      {isUserLoggedIn === 'loggedOut' && (
-        <AuthenticationNavigator updateAuthState={updateAuthState} />
-      )}
+        {isUserLoggedIn === 'initializing' && <Initializing />}
+        {isUserLoggedIn === 'loggedIn' && (
+          <HomeTab.Navigator updateAuthState={updateAuthState}>
+            <HomeTab.Screen name="HomeScreen" component={HomeScreen} />
+            <HomeTab.Screen name="RSA" component={RSANavigator} />
+          </HomeTab.Navigator>
+        )}
+        {isUserLoggedIn === 'loggedOut' && (
+          <AuthenticationNavigator updateAuthState={updateAuthState} />
+        )}
 
 
-    </NavigationContainer>
+      </NavigationContainer>
     </AppContext.Provider>
 
   );

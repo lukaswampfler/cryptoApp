@@ -7,40 +7,40 @@ import ButtonRow from '../components/ButtonRow';
 import { setNestedObjectValues } from 'formik';
 import AppContext from '../components/AppContext';
 
-import {getData} from '../utils/Storage';
+import { getData } from '../utils/Storage';
 
-export default function RSAKeyInput({values, errors, touched, handleChange, handleBlur, navigation, route}) {
-    
-    const myContext = useContext(AppContext);
+export default function RSAKeyInput({ values, errors, touched, handleChange, handleBlur, navigation, route }) {
 
-    const showKeys = async () => {
-      const keys =  await getData();
-      console.log(keys);
-    };
+  const myContext = useContext(AppContext);
 
-
+  const showKeys = async () => {
+    const keys = await getData();
+    console.log(keys);
+  };
 
 
-    const params = route.params;
 
-    
-    return (
-        <View
-          style={{
-            flex: 1,
-          }}
-          >
-        <Text> Exponent </Text>
-        <View style={{
-            flexDirection: 'row', 
-            justifyContent: 'space-between',
-            marginTop: 10, 
-            marginBottom: 10,
-        }}>
-        
-        <NumInput 
+
+  const params = route.params;
+
+
+  return (
+    <View
+      style={{
+        flex: 1,
+      }}
+    >
+      <Text> Exponent </Text>
+      <View style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 10,
+        marginBottom: 10,
+      }}>
+
+        <NumInput
           icon='pinterest'
-          width = {200}
+          width={200}
           placeholder='Enter exponent'
           autoCapitalize='none'
           keyboardType='number-pad'
@@ -51,30 +51,30 @@ export default function RSAKeyInput({values, errors, touched, handleChange, hand
           onBlur={handleBlur('exp')}
           error={errors.exp}
           touched={touched.exp}
-          value = {values.exp}/>
-          <View style={{
-              marginLeft:10,
-              }}>
-          <Button label = 'Generate Key' width ={100} onPress = {() => {
-              const ciphers = myContext.ciphers;
-              ciphers.rsa.m = values.m;
-              myContext.setCiphers(ciphers);
-              navigation.navigate('RSAKey');
-            }}/>
-          </View>
-        </View>
-
-        <Text> Modulus </Text>
+          value={values.exp} />
         <View style={{
-            flexDirection: 'row', 
-            justifyContent: 'space-between',
-            marginTop: 10, 
-            marginBottom: 10,
+          marginLeft: 10,
         }}>
-        
-        <NumInput 
+          <Button label='Generate Key' width={100} onPress={() => {
+            const ciphers = myContext.ciphers;
+            ciphers.rsa.m = values.m;
+            myContext.setCiphers(ciphers);
+            navigation.navigate('RSAKey');
+          }} />
+        </View>
+      </View>
+
+      <Text> Modulus </Text>
+      <View style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 10,
+        marginBottom: 10,
+      }}>
+
+        <NumInput
           icon='pinterest'
-          width = {200}
+          width={200}
           placeholder='Enter modulus n'
           autoCapitalize='none'
           keyboardType='number-pad'
@@ -85,17 +85,17 @@ export default function RSAKeyInput({values, errors, touched, handleChange, hand
           onBlur={handleBlur('n')}
           error={errors.n}
           touched={touched.n}
-          value = {values.n}/>
-          <View style={{
-              marginLeft:10,
-              }}>
-          <Button label = 'Import Key' onPress = {() => {navigation.navigate('UsersList')}} width={100} />
-          </View>
+          value={values.n} />
+        <View style={{
+          marginLeft: 10,
+        }}>
+          <Button label='Import Key' onPress={() => { navigation.navigate('UsersList', { toSend: false, toImportKey: true }) }} width={100} />
         </View>
+      </View>
 
-        
-    
-        </View>
-    );
+
+
+    </View>
+  );
 
 }
