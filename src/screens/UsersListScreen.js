@@ -35,6 +35,7 @@ export default function UsersListScreen({ route, navigation }) {
       const usersData = await API.graphql({ query: listUsers })
       const users = usersData.data.listUsers.items
       setUsers(users)
+      console.log(users)
     } catch (err) { console.log('error fetching users: ', err) }
   }
 

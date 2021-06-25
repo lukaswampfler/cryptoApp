@@ -21,17 +21,14 @@ type User @model {
   publicKeyID: ID!
   privateKeyID: ID!
   publicKey: Key @connection(fields: ["publicKeyID"])
-  privateKey: Key 
-  @connection(fields: ["privateKeyID"])
-  @auth(rules: [{allow: owner, ownerField: "name"}])
+  privateKey: Key @connection(fields: ["privateKeyID"])
 }
 
-type Key @model(queries:null) {
+type Key @model {
   id: ID!
   exponent: String!
   modulus: String!
 }
-
 
 enum EncryptionMethod {
   RSA
@@ -40,7 +37,6 @@ enum EncryptionMethod {
   VIGENERE
   PERMUTATION
 }
-
 
 type Subscription {
   onCreateMessageByReceiverID(receiverID: String!): Message

@@ -16,6 +16,7 @@ import UsersListScreen from './src/screens/UsersListScreen';
 import SignIn from './src/screens/SignIn';
 import SignUp from './src/screens/SignUp';
 import HomeScreen from './src/screens/HomeScreen';
+import MessageScreen from './src/screens/MessageScreen';
 import ConfirmSignUp from './src/screens/ConfirmSignUp';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -83,7 +84,7 @@ const RSANavigator = props => {
       <RSAStack.Screen
         name="UsersList"
         component={UsersListScreen}
-        options={{ title: 'List of users' }}
+        options={{ title: 'Users of CryptoApp' }}
       />
     </RSAStack.Navigator>
   );
@@ -110,7 +111,9 @@ export default function App() {
   const [userID, setUserID] = useState('');
   const [password, setPassword] = useState('');
   const [publicKey, setPublicKey] = useState({ exp: 2, mod: 143 });
+  const [publicKeyID, setPublicKeyID] = useState(null);
   const [privateKey, setPrivateKey] = useState({ exp: 5, mod: 143 })
+  const [privateKeyID, setPrivateKeyID] = useState(null)
   const [primes, setPrimes] = useState({ p: 2, q: 3 })
   const [exp, setExp] = useState(3)
   const [RSAInputSwitchisDecimal, setRSAInputSwitchisDecimal] = useState(true);
@@ -121,12 +124,6 @@ export default function App() {
 
   const [useBigIntegerLibrary, setUseBigIntegerLibrary] = useState(false);
 
-  // hard coding getting keys from the server / database
-  /*const [keyList, setKeyList] = useState([
-    {name: 'Lukas Wampfler', publicKey: {exp: '66573', mod: '36723678123612'}, id: 1}, 
-    {name: 'Alice Reinert', publicKey: {exp: '66573', mod: '367232378153215678123612'}, id: 2},
-    {name: 'Peter Funke', publicKey: {exp: '66573', mod: '2178123612'}, id: 3}, 
-  ])*/
 
   const userSettings = {
     userName: userName,
@@ -134,7 +131,9 @@ export default function App() {
     password: password,
     isUserLoggedIn: isUserLoggedIn,
     publicKey: publicKey,
+    publicKeyID: publicKeyID,
     privateKey: privateKey,
+    privateKeyID: privateKeyID,
     primes: primes,
     exp: exp,
     ciphers: ciphers,
@@ -145,7 +144,9 @@ export default function App() {
     setPassword,
     setUserLoggedIn,
     setPublicKey,
+    setPublicKeyID,
     setPrivateKey,
+    setPrivateKeyID,
     setPrimes,
     setExp,
     setCiphers,
@@ -192,6 +193,7 @@ export default function App() {
           <HomeTab.Navigator updateAuthState={updateAuthState}>
             <HomeTab.Screen name="HomeScreen" component={HomeScreen} />
             <HomeTab.Screen name="RSA" component={RSANavigator} />
+            <HomeTab.Screen name="Messages" component={MessageScreen} />
           </HomeTab.Navigator>
         )}
         {isUserLoggedIn === 'loggedOut' && (
