@@ -27,7 +27,7 @@ export default function HomeScreen({ navigation }) {
   const myContext = useContext(AppContext);
   const [userID, setUserID] = useState(null);
   const [users, setUsers] = useState(null);
-  const [selectedMethod, setSelectedMethod] = useState(null);
+  const [selectedMethod, setSelectedMethod] = useState('rsa');
 
   async function signOut() {
     try {
@@ -41,6 +41,13 @@ export default function HomeScreen({ navigation }) {
 
   function pressSelectButton() {
     console.log("Method chosen: ", selectedMethod);
+    if (selectedMethod == 'rsa') {
+      navigation.navigate("RSA");
+    } else if (selectedMethod == 'sdes') {
+      console.log("navigation.navigate(SDES)");
+    } // further else ifs
+
+
   }
 
   async function fetchUsers() {
