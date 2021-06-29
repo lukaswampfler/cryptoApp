@@ -18,6 +18,8 @@ import SignUp from './src/screens/SignUp';
 import HomeScreen from './src/screens/HomeScreen';
 import MessageScreen from './src/screens/MessageScreen';
 import ConfirmSignUp from './src/screens/ConfirmSignUp';
+import SDESScreen from './src/screens/SDESScreen';
+import MethodsHomeScreen from './src/screens/MethodsHomeScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 
@@ -35,6 +37,7 @@ Amplify.configure({
 const AuthenticationStack = createStackNavigator();
 const AppStack = createStackNavigator();
 const RSAStack = createStackNavigator();
+const MethodStack = createStackNavigator();
 const HomeTab = createBottomTabNavigator();
 
 
@@ -66,6 +69,38 @@ const AppNavigator = props => {
     </AppStack.Navigator>
   );
 };
+
+const MethodNavigator = props => {
+  return (
+    <MethodStack.Navigator>
+      <MethodStack.Screen
+        name="MethodsHome"
+        component={MethodsHomeScreen}
+      />
+      <MethodStack.Screen
+        name="RSAEncryption"
+        component={RSAEncryptionScreen}
+        options={{ title: 'RSA Encryption' }}
+      />
+      <MethodStack.Screen
+        name="RSAKey"
+        component={RSAKeyScreen}
+        options={{ title: 'RSA Key Generation' }}
+      />
+      <MethodStack.Screen
+        name="UsersList"
+        component={UsersListScreen}
+        options={{ title: 'Users of CryptoApp' }}
+      />
+      <MethodStack.Screen
+        name="SDESEncryption"
+        component={SDESScreen}
+        options={{ title: 'S-DES Encryption' }}
+      />
+    </MethodStack.Navigator>
+  );
+}
+
 
 
 const RSANavigator = props => {
@@ -120,7 +155,8 @@ export default function App() {
 
 
   const rsa = { isEncrypted: false, m: '', exp: '', n: '' };
-  const [ciphers, setCiphers] = useState({ rsa, sdes: undefined, caesar: undefined, currentMethod: undefined, currentMessage: undefined })
+  const sdes = { keys: undefined }
+  const [ciphers, setCiphers] = useState({ rsa, sdes, caesar: undefined, currentMethod: undefined, currentMessage: undefined })
 
   const [useBigIntegerLibrary, setUseBigIntegerLibrary] = useState(false);
 
@@ -192,7 +228,7 @@ export default function App() {
         {isUserLoggedIn === 'loggedIn' && (
           <HomeTab.Navigator updateAuthState={updateAuthState}>
             <HomeTab.Screen name="HomeScreen" component={HomeScreen} />
-            <HomeTab.Screen name="RSA" component={RSANavigator} />
+            <HomeTab.Screen name="Methods" component={MethodNavigator} />
             <HomeTab.Screen name="Messages" component={MessageScreen} />
           </HomeTab.Navigator>
         )}

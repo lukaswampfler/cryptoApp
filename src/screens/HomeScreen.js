@@ -16,18 +16,12 @@ import AppContext from '../components/AppContext';
 
 
 
-
-
-
-
-
-
 export default function HomeScreen({ navigation }) {
 
   const myContext = useContext(AppContext);
   const [userID, setUserID] = useState(null);
   const [users, setUsers] = useState(null);
-  const [selectedMethod, setSelectedMethod] = useState('rsa');
+  const [choice, setChoice] = useState('methods');
 
   async function signOut() {
     try {
@@ -40,14 +34,14 @@ export default function HomeScreen({ navigation }) {
   }
 
   function pressSelectButton() {
-    console.log("Method chosen: ", selectedMethod);
-    if (selectedMethod == 'rsa') {
-      navigation.navigate("RSA");
-    } else if (selectedMethod == 'sdes') {
-      console.log("navigation.navigate(SDES)");
-    } // further else ifs
-
-
+    console.log("Your choice: ", choice);
+    if (choice == 'methods') {
+      navigation.navigate("Methods");
+    } else if (choice == 'messages') {
+      navigation.navigate("Messages");
+    } else if (choice == 'riddles') {
+      console.log("navigation.navigate(riddles)");
+    }
   }
 
   async function fetchUsers() {
@@ -110,38 +104,22 @@ export default function HomeScreen({ navigation }) {
   }, [userID])
 
 
-
-
-
-  /*useEffect(() => {
-    console.log(messages)
-  },
-    [messages])*/
-
-
   return (
     <SafeAreaView style={styles.container}>
       <Button onPress={signOut} title="Sign Out" />
       {/*{userID ? <Text>userID: {userID}</Text> : <Text> no userID set </Text>}*/}
-      <Text style={{ fontSize: 25 }}> Select your encryption method:  </Text>
+      <Text style={{ fontSize: 25 }}> What would you like to do?  </Text>
       <Picker
-        selectedValue={selectedMethod}
+        selectedValue={choice}
         onValueChange={(itemValue, itemIndex) =>
-          setSelectedMethod(itemValue)
+          setChoice(itemValue)
         }>
-        <Picker.Item label="RSA" value="rsa" />
-        <Picker.Item label="S-DES" value="sdes" />
+        <Picker.Item label="Encryption Methods" value="methods" />
+        <Picker.Item label="Messages" value="messages" />
+        <Picker.Item label="Riddles" value="riddles" />
       </Picker>
-
       <Button onPress={pressSelectButton} title="Select" />
-
     </SafeAreaView>
-
-
-
   )
-
-
-
 }
 

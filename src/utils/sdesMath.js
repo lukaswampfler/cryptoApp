@@ -8,7 +8,7 @@ export function generateSDESKeys(key) {
     ({ first, second } = generateTwoParts(shifted1));
     let shifted2 = shift(first, 2).concat(shift(second, 2));
     let k2 = applyPermutation(shifted2, p8);
-    return { k1, k2 };
+    return { k1: k1.join(""), k2: k2.join("") };
 }
 function shift(array, times = 1) {
     for (let i = 0; i < times; i++) {

@@ -15,11 +15,11 @@ import AppContext from '../components/AppContext';
 
 const MessageItem = ({ message }) => (
     <View style={styles.item}>
-        <TouchableOpacity onPress={() => { console.log("Button pressed.") }}>
-            <Text style={styles.title} ><Text style={{ fontWeight: 'bold', fontSize: 20 }} selectable>{message.text}
-            </Text>
-                from {message.sender.name}</Text>
-        </TouchableOpacity>
+        <Text style={styles.title} selectable >
+            {message.text}<Text style={{ fontWeight: 'bold' }} selectable={false} >
+
+                from {message.sender.name}</Text></Text>
+
     </View>
 );
 
