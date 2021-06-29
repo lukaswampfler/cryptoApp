@@ -30,7 +30,7 @@ export default function MethodsHomeScreen({ navigation }) {
         if (selectedMethod == 'rsa') {
             navigation.navigate("RSAEncryption");
         } else if (selectedMethod == 'sdes') {
-            navigation.navigate("SDESEncryption");
+            navigation.navigate("SDESEncryption", { message: '' });
         } else {
             console.log("Navigating to ...", selectedMethod);
         }

@@ -1,6 +1,7 @@
 export function generateSDESKeys(key) {
     let p10 = [2, 4, 1, 6, 3, 9, 0, 8, 7, 5];
     let p8 = [5, 2, 6, 3, 7, 4, 9, 8];
+    //key = key.split('');
     let keyList = applyPermutation(key, p10);
     let { first, second } = generateTwoParts(keyList);
     let shifted1 = shift(first).concat(shift(second));
@@ -8,21 +9,20 @@ export function generateSDESKeys(key) {
     ({ first, second } = generateTwoParts(shifted1));
     let shifted2 = shift(first, 2).concat(shift(second, 2));
     let k2 = applyPermutation(shifted2, p8);
-    return { k1: k1.join(""), k2: k2.join("") };
+    return { k1, k2 };
 }
-function shift(array, times = 1) {
-    for (let i = 0; i < times; i++) {
-        array.push(array.shift());
-    }
-    return array;
+
+function shift(string, times = 1) {
+    return string.substr(times) + string.substr(0, times);
 }
+
 export function generateTwoParts(l) {
     let middle = Math.floor(l.length / 2);
     let firstPart = l.slice(0, middle);
     let secondPart = l.slice(middle);
     return { 'first': firstPart, 'second': secondPart };
 }
-export function applyRound(s, key) {
+function applyRound(s, key) {
     // works with (binary) string arrays of length 4, keys of length 8
     const EP = [3, 0, 1, 2, 1, 2, 3, 0];
     const afterEP = applyPermutation(s, EP);
@@ -49,7 +49,7 @@ export function applyPermutation(s, perm) {
     }
     return permuted*/
     const permuted = perm.reduce((a, e) => Array.isArray(s) ? a.concat(s[e]) : a.concat(s.charAt(e)), []);
-    return permuted;
+    return permuted.join('');
 }
 // not necessary
 function checkPermutation(candidate) {
@@ -106,6 +106,40 @@ export function inversePermutation(permutation) {
     }
     return inverse;
 }
+
+function divideIntoMultiples(str, size) {
+    const numChunks = Math.ceil(str.length / size)
+    const chunks = new Array(numChunks)
+    for (let i = 0, start = 0; i < numChunks; i++, start += size) {
+        chunks[i] = str.substr(start, size);
+    }
+    return chunks
+}
+
+export function encryptSDESMessage(bitString, keys) {
+    // accepts as input a bitString of length multiple of 8
+    const size = 8
+    const chunks = divideIntoMultiples(bitString, size);
+    const encryptedChunks = new Array(chunks.length);
+    const IP = [1, 5, 2, 0, 3, 7, 4, 6]
+    const IPInverse = [3, 0, 2, 4, 6, 1, 7, 5]
+
+    for (let i = 0; i < chunks.length; i++) {
+        const chunk = applyPermutation(chunks[i], IP);
+        const part1 = chunk.substr(0, 4);
+        const part2 = chunk.substr(4, 4);
+        const part2AfterRound1 = applyRound(part2, keys.k1);
+        const inputRound2Part1 = part2;
+        const inputRound2Part2 = xor(part1, part2AfterRound1);
+        const part2AfterRound2 = applyRound(inputRound2Part2, keys.k2);
+        const lastInput = xor(inputRound2Part1, part2AfterRound2).concat(inputRound2Part2);
+        encryptedChunks[i] = applyPermutation(lastInput, IPInverse)
+    }
+    return encryptedChunks.join('');
+}
+
+
+
 function toNumber(s) {
     // works only with string arrays representing binary representations of numbers
     let exp = 0;
@@ -128,7 +162,61 @@ function toBinary(n) {
     return res;
 }
 
+function stringToBytes(text) {
+    const length = text.length;
+    const result = new Uint8Array(length);
+    for (let i = 0; i < length; i++) {
+        const code = text.charCodeAt(i);
+        const byte = code > 255 ? 32 : code;
+        result[i] = byte;
+    }
+    return result;
+}
+
+function bytesToString(byteArray) {
+    let result = ''
+    for (const byte of byteArray) {
+        const num = parseInt(byte, 2);
+        console.log(byte, num)
+        //TODO: (extended) control characters: num<32 or 0x80 <= num <= ox9F
+        if (num < 32) {// handle non printable characters
+            num += 8032
+        }
+        result += String.fromCharCode(num);
+    }
+    return result
+}
+
+
+function binaryStringToBytesArray(binString) {
+    const size = 8;
+    const length = Math.ceil(binString.length / size);
+    const bytesArray = new Array(length);
+    for (let i = 0, start = 0; i < length; i++, start += size) {
+        bytesArray[i] = binString.substr(start, 8);
+    }
+    return bytesArray
+}
 
 export function encode(text) {
-    return text;
+    console.log(text, stringToBytes(text));
+    return stringToBytes(text);
+}
+
+export function decode(stringArray) {
+    return bytesToString(stringArray);
+}
+
+export function decodeBinaryString(binString) {
+    const bytesArray = binaryStringToBytesArray(binString);
+    return bytesToString(bytesArray);
+}
+
+export function bitsStringFromBytes(byteArray) {
+    let result = ''
+    for (const byte of byteArray) {
+        result += ("00000000" + byte.toString(2)).slice(-8);
+    }
+    console.log(result);
+    return result;
 }

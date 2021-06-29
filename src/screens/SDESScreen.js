@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 import { Divider } from 'react-native-elements';
 import AppContext from '../components/AppContext';
@@ -9,9 +9,8 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup'
 
 
-//import { isValidSDESKey } from '../utils/InputTests';
-import { SDESK12InputScheme, SDESMessageInputScheme } from '../utils/InputTests';
-import { generateSDESKeys } from '../utils/sdesMath';
+import { SDESKeyInputScheme, SDESK12InputScheme, SDESMessageInputScheme } from '../utils/InputTests';
+import { encryptSDESMessage, generateSDESKeys, decodeBinaryString } from '../utils/sdesMath';
 
 
 const INVALID_FORMAT_ERROR_MESSAGE = 'invalid format';
@@ -19,25 +18,28 @@ const REQUIRED_ERROR_MESSAGE = 'this field is required';
 
 
 
-export default function SDESScreen({ navigation }) {
+export default function SDESScreen({ route, navigation }) {
   const myContext = useContext(AppContext);
 
-  function isValidSDESKey(message) {
-    return this.test("isValidSDESKey", message, function (value) {
-      const { path, createError } = this;
-      if (!value) { // no value given
-        return createError({ path, message: message ?? REQUIRED_ERROR_MESSAGE });
-      } else if (!value.match(/^[0|1]{10}$/)) {
-        return createError({ path, message: message ?? INVALID_FORMAT_ERROR_MESSAGE });
-      }
-      return true;
-    });
-  }
-  Yup.addMethod(Yup.string, 'isValidSDESKey', isValidSDESKey);
+  const [isEncrypted, setIsEncrypted] = useState(false);
+  const [isDecrypted, setIsDecrypted] = useState(false);
+  const [keyEntered, setKeyEntered] = useState(false);
+  const [message, setMessage] = useState('');
+  const [encryptedMessage, setEncryptedMessage] = useState('');
+  const [decryptedMessage, setDecryptedMessage] = useState('');
 
-  const SDESKeyInputScheme = Yup.object().shape({
-    key: Yup.string().isValidSDESKey().required('Required'),
-  });
+
+  useEffect(() => {
+    console.log("route params", route);
+    if (route != undefined) {
+      setMessage(route.params.message)
+    }
+  }, [])
+
+  useEffect(() => {
+    console.log(message);
+  }, [message]);
+
 
 
   const getK1InitialValue = () => {
@@ -56,6 +58,14 @@ export default function SDESScreen({ navigation }) {
     }
   }
 
+
+  const getMessageInitialValue = () => {
+    if (route === undefined) {
+      return '';
+    } else {
+      return route.params.message;
+    }
+  }
 
   /*formikKey has properties: handleChange,
       handleSubmit,
@@ -77,7 +87,7 @@ export default function SDESScreen({ navigation }) {
       } else {
         ciphers.sdes.key = values.key;
       }
-      ciphers.sdes.keyEntered = true;
+      setKeyEntered(true);
       ciphers.sdes.keys = generateSDESKeys(values.key);
       myContext.setCiphers(ciphers);
       console.log(myContext.ciphers);
@@ -100,13 +110,19 @@ export default function SDESScreen({ navigation }) {
   const formikMessage = useFormik({
     enableReinitialize: true,
     validationSchema: SDESMessageInputScheme,
-    initialValues: { m: '' },
+    initialValues: { message: getMessageInitialValue() },
     onSubmit: values => {
-      // ToDO: change to something meaningful
       let ciphers = myContext.ciphers;
-      ciphers.sdes.m = values.m;
+      ciphers.sdes.message = values.message;
+      setMessage(values.message);
+      const encrypted = encryptSDESMessage(values.message, myContext.ciphers.sdes.keys)
+      const decryptionKeys = { k1: myContext.ciphers.sdes.keys.k2, k2: myContext.ciphers.sdes.keys.k1 }
+      const decrypted = encryptSDESMessage(values.message, decryptionKeys);
+      ciphers.sdes.encryptedMessage = encrypted;
       myContext.setCiphers(ciphers);
-      console.log(ciphers.sdes);
+      setIsEncrypted(true);
+      setEncryptedMessage(encrypted);
+      setDecryptedMessage(decodeBinaryString(decrypted));
     }
   });
 
@@ -134,8 +150,8 @@ export default function SDESScreen({ navigation }) {
             returnKeyLabel='next'
             onChangeText={formikKey.handleChange('key')}
             onBlur={formikKey.handleBlur('key')}
-            error={formikKey.errors.p}
-            touched={formikKey.touched.p}
+            error={formikKey.errors.key}
+            touched={formikKey.touched.key}
             value={formikKey.values.key}
           />
           <Button label='Generate keys' onPress={formikKey.handleSubmit} />
@@ -144,28 +160,34 @@ export default function SDESScreen({ navigation }) {
           {/*</View>*/}
         </View>
         <Divider style={{ width: "100%", margin: 10 }} />
-        {myContext.ciphers.sdes.keyEntered ?
+        {/*{keyEntered ?
           <View style={{ flex: 1 }}>
             <Text>The above key yields the two keys: </Text>
             <Text>{JSON.stringify(myContext.ciphers.sdes.keys)} </Text>
-          </View> : null}
-        {/* */}
-        <NumInput
-          icon='pinterest'
-          width={245}
-          placeholder='Enter k1'
-          autoCapitalize='none'
-          keyboardType='number-pad'
-          keyboardAppearance='dark'
-          returnKeyType='next'
-          returnKeyLabel='next'
-          onChangeText={formikK12.handleChange('k1')}
-          onBlur={formikK12.handleBlur('k1')}
-          error={formikK12.errors.k1}
-          touched={formikK12.touched.k1}
-          value={formikK12.values.k1}
-        />
-
+        </View> : null}*/}
+        <View style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          marginTop: 10,
+          marginBottom: 10,
+        }}>
+          <NumInput
+            icon='pinterest'
+            width={245}
+            placeholder='Enter k1'
+            autoCapitalize='none'
+            keyboardType='number-pad'
+            keyboardAppearance='dark'
+            returnKeyType='next'
+            returnKeyLabel='next'
+            onChangeText={formikK12.handleChange('k1')}
+            onBlur={formikK12.handleBlur('k1')}
+            error={formikK12.errors.k1}
+            touched={formikK12.touched.k1}
+            value={formikK12.values.k1}
+          />
+          <Button label='RSA encrypt key' onPress={() => { console.log("TODO: navigate to RSA encryption...") }} />
+        </View>
         <NumInput
           icon='pinterest'
           width={245}
@@ -201,15 +223,22 @@ export default function SDESScreen({ navigation }) {
             keyboardAppearance='dark'
             returnKeyType='next'
             returnKeyLabel='next'
-            onChangeText={formikMessage.handleChange('m')}
-            onBlur={formikMessage.handleBlur('m')}
-            error={formikMessage.errors.m}
-            touched={formikMessage.touched.m}
-            value={formikMessage.values.m}
+            onChangeText={formikMessage.handleChange('message')}
+            onBlur={formikMessage.handleBlur('message')}
+            error={formikMessage.errors.message}
+            touched={formikMessage.touched.message}
+            value={formikMessage.values.message}
           />
           <Button label='encode message' onPress={() => { navigation.navigate('SDESEncoding') }} />
         </View>
-
+        <Button label='encrypt/decrypt' onPress={formikMessage.handleSubmit} />
+        {isEncrypted ?
+          <View style={{ flex: 1 }}>
+            <Text style={{ fontSize: 20 }}>Message encrypted </Text>
+            <Text style={{ fontSize: 20 }} selectable> {myContext.ciphers.sdes.encryptedMessage} </Text>
+            <Text style={{ fontSize: 20 }}>Message decrypted </Text>
+            <Text style={{ fontSize: 20 }} selectable> {decryptedMessage} </Text>
+          </View> : null}
 
       </ScrollView>
     </View>

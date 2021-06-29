@@ -4,13 +4,13 @@ import { Divider } from 'react-native-elements';
 import AppContext from '../components/AppContext';
 import Button from '../components/Button';
 import NumInput from '../components/NumInput';
-import { encode } from '../utils/sdesMath';
+import { encode, decode, bitsStringFromBytes } from '../utils/sdesMath';
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup'
 
 
-export default function SDESScreen({ navigation }) {
+export default function SDESEncodingScreen({ navigation }) {
     const myContext = useContext(AppContext);
     const [text, setText] = useState('');
     const [encoded, setEncoded] = useState('');
@@ -20,6 +20,17 @@ export default function SDESScreen({ navigation }) {
         setText(text);
         setEncoded(encode(text));
     }
+
+    const useMessage = () => {
+        const bitString = bitsStringFromBytes(encoded);
+        let ciphers = myContext.ciphers;
+        ciphers.sdes.message = bitString;
+        myContext.setCiphers(ciphers);
+        navigation.navigate('SDESEncryption', { message: bitString })
+    }
+
+
+
 
 
     return (
@@ -41,6 +52,7 @@ export default function SDESScreen({ navigation }) {
                         textAlignVertical='top'
                         placeholder='Enter plain text message'
                         autoCapitalize='none'
+                        autoCorrect={false}
                         style={{ height: 80, borderColor: 'gray', borderWidth: 1 }}
                         keyboardType='default'
                         keyboardAppearance='dark'
@@ -48,11 +60,8 @@ export default function SDESScreen({ navigation }) {
                         returnKeyLabel='next'
                         onChangeText={changeText}
                         onBlur={() => { }}
-                    /*error={formikMessage.errors.m}
-                    touched={formikMessage.touched.m}
-                    value={formikMessage.values.m}*/
                     />
-                    <Button label='encode' onPress={() => { console.log("encode Button pressed") }} />
+                    <Button label='use message' onPress={useMessage} />
                 </View>
                 <View style={{
                     flexDirection: 'row',
@@ -62,12 +71,12 @@ export default function SDESScreen({ navigation }) {
                     marginLeft: 20,
                 }}>
 
-                    <Text style={{ padding: 10, fontSize: 25 }} selectable>
+                    <Text
+                        style={{ padding: 10, fontSize: 25, borderColor: 'gray', borderWidth: 1, width: 280 }}
+                        selectable>
                         {encoded}
                     </Text>
-                    <Button label='decode' onPress={() => { console.log("decode Button pressed") }} />
                 </View>
-
 
 
             </ScrollView>

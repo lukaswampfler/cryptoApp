@@ -11,8 +11,8 @@ Yup.addMethod(Yup.string, 'isValidRSABinaryInput', isValidRSABinaryInput);
 Yup.addMethod(Yup.string, 'isValidRSADecimalInput', isValidRSADecimalInput);
 Yup.addMethod(Yup.string, 'isValidNumber', isValidNumber);
 Yup.addMethod(Yup.string, 'isValidSDESKey', isValidSDESKey);
-//Yup.addMethod(Yup.string, 'isValidSDESShortKey', isValidSDESShortKey);
-//Yup.addMethod(Yup.string, 'isValidSDESMessage', isValidSDESMessage);
+Yup.addMethod(Yup.string, 'isValidSDESShortKey', isValidSDESShortKey);
+Yup.addMethod(Yup.string, 'isValidSDESMessage', isValidSDESMessage);
 
 
 // input schemes for validation 
@@ -38,16 +38,17 @@ export const SDESKeyInputScheme = Yup.object().shape({
     key: Yup.string().isValidSDESKey().required('Required'),
 });
 
-/*
+
 export const SDESK12InputScheme = Yup.object().shape({
-    k1: Yup.string().isValidSDESShortKey().required('Required') ,
-    k2: Yup.string().isValidSDESShortKey().required('Required') ,
-  });  
+    k1: Yup.string().isValidSDESShortKey().required('Required'),
+    k2: Yup.string().isValidSDESShortKey().required('Required'),
+});
+
 
 export const SDESMessageInputScheme = Yup.object().shape({
-    m: Yup.string().isValidSDESMessage().required('Required') ,
-  });  
-*/
+    message: Yup.string().isValidSDESMessage().required('Required'),
+});
+
 
 
 
@@ -132,18 +133,18 @@ function isValidSDESShortKey(message) {
 }
 
 // checks if message is valid (string)
-/*function isValidSDESMessage(message){
-    return this.test("isValidSDESShortMessage", message, function(value){
-        const {path, createError} = this;
-        if(!value){ // no value given
-            return createError({path , message: message ?? REQUIRED_ERROR_MESSAGE});
+function isValidSDESMessage(message) {
+    return this.test("isValidSDESShortMessage", message, function (value) {
+        const { path, createError } = this;
+        if (!value) { // no value given
+            return createError({ path, message: message ?? REQUIRED_ERROR_MESSAGE });
             // TODO: change to accept all ASCII-Strings with more than one character
-        } else if (!value.match(/^[\x20-\x7F]+$/ ){
-            return createError({path, message: message?? INVALID_FORMAT_ERROR_MESSAGE});
+        } else if (!((value.length % 8) === 0 && value.match(/^[0|1]*$/))) {
+            return createError({ path, message: message ?? INVALID_FORMAT_ERROR_MESSAGE });
         }
         return true;
     });
-}*/
+}
 
 
 

@@ -19,6 +19,27 @@ function smartExponentiation(base, exp, m) {
 }
 
 
+function bytesToString(byteArray) {
+    result = ''
+    for (let byte of byteArray) {
+        console.log(byte)
+        if (byte < 32) {// handle non printable characters
+            byte += 8032
+        }
+        result += String.fromCharCode(byte);
+    }
+    return result
+}
+
+
+function applyPermutation(s, perm) {
+    const permuted = perm.reduce((a, e) => Array.isArray(s) ? a.concat(s[e]) : a.concat(s.charAt(e)), []);
+    return permuted.join('');
+}
+
+console.log(applyPermutation(['a', 'b', 'c', 'd'], [0, 2, 1, 3]))
+
+
 let base = BigInt(3);
 let exp = BigInt(63317);
 let mod = BigInt(127382153712531287);
