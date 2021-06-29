@@ -207,7 +207,7 @@ export default function SDESScreen({ navigation }) {
             touched={formikMessage.touched.m}
             value={formikMessage.values.m}
           />
-          <Button label='encrypt' onPress={formikMessage.handleSubmit} />
+          <Button label='encode message' onPress={() => { navigation.navigate('SDESEncoding') }} />
         </View>
 
 

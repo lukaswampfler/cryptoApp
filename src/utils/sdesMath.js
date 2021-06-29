@@ -127,3 +127,8 @@ function toBinary(n) {
     }
     return res;
 }
+
+
+export function encode(text) {
+    return text;
+}

@@ -19,6 +19,8 @@ import HomeScreen from './src/screens/HomeScreen';
 import MessageScreen from './src/screens/MessageScreen';
 import ConfirmSignUp from './src/screens/ConfirmSignUp';
 import SDESScreen from './src/screens/SDESScreen';
+import SDESEncodingScreen from './src/screens/SDESEncodingScreen';
+
 import MethodsHomeScreen from './src/screens/MethodsHomeScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -96,6 +98,11 @@ const MethodNavigator = props => {
         name="SDESEncryption"
         component={SDESScreen}
         options={{ title: 'S-DES Encryption' }}
+      />
+      <MethodStack.Screen
+        name="SDESEncoding"
+        component={SDESEncodingScreen}
+        options={{ title: 'Encoding' }}
       />
     </MethodStack.Navigator>
   );

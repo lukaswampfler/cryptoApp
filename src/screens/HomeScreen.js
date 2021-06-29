@@ -37,6 +37,9 @@ export default function HomeScreen({ navigation }) {
     console.log("Your choice: ", choice);
     if (choice == 'methods') {
       navigation.navigate("Methods");
+
+    } else if (choice == 'analysis') {
+      console.log("navigation.navigate(analysis)");
     } else if (choice == 'messages') {
       navigation.navigate("Messages");
     } else if (choice == 'riddles') {
@@ -115,6 +118,7 @@ export default function HomeScreen({ navigation }) {
           setChoice(itemValue)
         }>
         <Picker.Item label="Encryption Methods" value="methods" />
+        <Picker.Item label="Cryptoanalysis" value="analysis" />
         <Picker.Item label="Messages" value="messages" />
         <Picker.Item label="Riddles" value="riddles" />
       </Picker>
