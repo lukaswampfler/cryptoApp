@@ -22,6 +22,13 @@ export const createMessage = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        privateKey {
+          id
+          exponent
+          modulus
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -31,6 +38,13 @@ export const createMessage = /* GraphQL */ `
         publicKeyID
         privateKeyID
         publicKey {
+          id
+          exponent
+          modulus
+          createdAt
+          updatedAt
+        }
+        privateKey {
           id
           exponent
           modulus

@@ -92,17 +92,16 @@ export default function HomeScreen({ navigation }) {
 
   useEffect(() => {
     console.log("User ID from context", myContext.userID);
-
     fetchUsers();
   }, [])
 
   useEffect(() => {
-    checkForUser(users);
-    //console.log("after check for User: ", users);
+    if (users !== null) {
+      checkForUser(users);
+    }
   }, [users])
 
   useEffect(() => {
-    //console.log("before subscribe: ", userID)
     myContext.setUserID(userID);
   }, [userID])
 

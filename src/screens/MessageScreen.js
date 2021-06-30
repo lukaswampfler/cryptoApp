@@ -58,7 +58,7 @@ export default function MessageScreen({ navigation }) {
         const subscription = subscribe()
 
         return () => { subscription.unsubscribe() } // return wird ausgeführt beim unmounten.
-    }, [myContext.userID])
+    }, [])
 
 
 
@@ -72,15 +72,16 @@ export default function MessageScreen({ navigation }) {
         try {
             //console.log("inside fetchMessages: ", userID);
             const messagesData = await API.graphql({ query: messagesByReceiver, variables: { receiverID: myContext.userID, limit: 20 } })
-            const messages = messagesData.data.messagesByReceiver.items
-            setMessages(messages)
+            //const messages = messagesData.data.messagesByReceiver.items
+            //setMessages(messages)
+            setMessages(messagesData.data.messagesByReceiver.items)
         } catch (err) { console.log('error fetching messages: ', err) }
     }
 
 
     useEffect(() => {
-        fetchMessages()
-    }, [myContext.userID, latestMessage])
+        fetchMessages();
+    }, [])
 
 
 

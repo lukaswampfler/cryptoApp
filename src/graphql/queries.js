@@ -19,6 +19,13 @@ export const getMessage = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        privateKey {
+          id
+          exponent
+          modulus
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -28,6 +35,13 @@ export const getMessage = /* GraphQL */ `
         publicKeyID
         privateKeyID
         publicKey {
+          id
+          exponent
+          modulus
+          createdAt
+          updatedAt
+        }
+        privateKey {
           id
           exponent
           modulus
@@ -94,6 +108,13 @@ export const getUser = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      privateKey {
+        id
+        exponent
+        modulus
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -112,6 +133,13 @@ export const listUsers = /* GraphQL */ `
         publicKeyID
         privateKeyID
         publicKey {
+          id
+          exponent
+          modulus
+          createdAt
+          updatedAt
+        }
+        privateKey {
           id
           exponent
           modulus

@@ -23,6 +23,7 @@ type User @model {
   publicKey: Key @connection(fields: ["publicKeyID"])
   privateKey: Key 
   @connection(fields: ["privateKeyID"])
+  @auth(rules: [{allow: owner, ownerField: "name"}])
 }
 
 type Key @model(queries:null) {
