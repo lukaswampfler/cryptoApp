@@ -22,13 +22,6 @@ export const createMessage = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        privateKey {
-          id
-          exponent
-          modulus
-          createdAt
-          updatedAt
-        }
         createdAt
         updatedAt
       }
@@ -38,13 +31,6 @@ export const createMessage = /* GraphQL */ `
         publicKeyID
         privateKeyID
         publicKey {
-          id
-          exponent
-          modulus
-          createdAt
-          updatedAt
-        }
-        privateKey {
           id
           exponent
           modulus
@@ -82,13 +68,6 @@ export const updateMessage = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        privateKey {
-          id
-          exponent
-          modulus
-          createdAt
-          updatedAt
-        }
         createdAt
         updatedAt
       }
@@ -98,13 +77,6 @@ export const updateMessage = /* GraphQL */ `
         publicKeyID
         privateKeyID
         publicKey {
-          id
-          exponent
-          modulus
-          createdAt
-          updatedAt
-        }
-        privateKey {
           id
           exponent
           modulus
@@ -142,13 +114,6 @@ export const deleteMessage = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        privateKey {
-          id
-          exponent
-          modulus
-          createdAt
-          updatedAt
-        }
         createdAt
         updatedAt
       }
@@ -158,13 +123,6 @@ export const deleteMessage = /* GraphQL */ `
         publicKeyID
         privateKeyID
         publicKey {
-          id
-          exponent
-          modulus
-          createdAt
-          updatedAt
-        }
-        privateKey {
           id
           exponent
           modulus
@@ -198,13 +156,6 @@ export const createUser = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      privateKey {
-        id
-        exponent
-        modulus
-        createdAt
-        updatedAt
-      }
       createdAt
       updatedAt
     }
@@ -227,13 +178,6 @@ export const updateUser = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      privateKey {
-        id
-        exponent
-        modulus
-        createdAt
-        updatedAt
-      }
       createdAt
       updatedAt
     }
@@ -250,13 +194,6 @@ export const deleteUser = /* GraphQL */ `
       publicKeyID
       privateKeyID
       publicKey {
-        id
-        exponent
-        modulus
-        createdAt
-        updatedAt
-      }
-      privateKey {
         id
         exponent
         modulus

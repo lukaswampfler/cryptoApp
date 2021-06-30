@@ -64,7 +64,7 @@ export default function HomeScreen({ navigation }) {
     const checkUsers = users.filter(user => (user.name === myContext.userName))
     if (checkUsers.length === 0) {
       // first generate public and private key
-      const KeyInput = { exponent: '119', modulus: '143' }
+      const KeyInput = { exponent: '4575', modulus: '4717' }
       const newPublicKey = await API.graphql({ query: createKey, variables: { input: KeyInput } });
       const newPrivateKey = await API.graphql({ query: createKey, variables: { input: KeyInput } });
 
@@ -75,8 +75,8 @@ export default function HomeScreen({ navigation }) {
       setUserID(userData.id);
       myContext.setPublicKeyID(userData.publicKeyID);
       myContext.setPrivateKeyID(userData.privateKeyID);
-      alert("New user " + newUser.data.createUser.name + " successfully generated.")
-      alert("New user generated. Attention: If you can factor the number 143, then so can your opponent -> change your RSA-keys!")
+      //alert("New user " + newUser.data.createUser.name + " successfully generated.")
+      alert("New user " + newUser.data.createUser.name + " generated. \n Attention: If you can factor the number " + KeyInput.modulus + ", then so can your opponent -> change your RSA-keys!")
     } else {
       console.log("User " + myContext.userName + " already exists");
       //console.log(checkUsers[0]);

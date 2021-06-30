@@ -19,13 +19,6 @@ export const onCreateMessageByReceiverID = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        privateKey {
-          id
-          exponent
-          modulus
-          createdAt
-          updatedAt
-        }
         createdAt
         updatedAt
       }
@@ -35,13 +28,6 @@ export const onCreateMessageByReceiverID = /* GraphQL */ `
         publicKeyID
         privateKeyID
         publicKey {
-          id
-          exponent
-          modulus
-          createdAt
-          updatedAt
-        }
-        privateKey {
           id
           exponent
           modulus
@@ -76,13 +62,6 @@ export const onCreateMessage = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        privateKey {
-          id
-          exponent
-          modulus
-          createdAt
-          updatedAt
-        }
         createdAt
         updatedAt
       }
@@ -92,13 +71,6 @@ export const onCreateMessage = /* GraphQL */ `
         publicKeyID
         privateKeyID
         publicKey {
-          id
-          exponent
-          modulus
-          createdAt
-          updatedAt
-        }
-        privateKey {
           id
           exponent
           modulus
@@ -133,13 +105,6 @@ export const onUpdateMessage = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        privateKey {
-          id
-          exponent
-          modulus
-          createdAt
-          updatedAt
-        }
         createdAt
         updatedAt
       }
@@ -149,13 +114,6 @@ export const onUpdateMessage = /* GraphQL */ `
         publicKeyID
         privateKeyID
         publicKey {
-          id
-          exponent
-          modulus
-          createdAt
-          updatedAt
-        }
-        privateKey {
           id
           exponent
           modulus
@@ -190,13 +148,6 @@ export const onDeleteMessage = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        privateKey {
-          id
-          exponent
-          modulus
-          createdAt
-          updatedAt
-        }
         createdAt
         updatedAt
       }
@@ -206,13 +157,6 @@ export const onDeleteMessage = /* GraphQL */ `
         publicKeyID
         privateKeyID
         publicKey {
-          id
-          exponent
-          modulus
-          createdAt
-          updatedAt
-        }
-        privateKey {
           id
           exponent
           modulus
@@ -243,13 +187,6 @@ export const onCreateUser = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      privateKey {
-        id
-        exponent
-        modulus
-        createdAt
-        updatedAt
-      }
       createdAt
       updatedAt
     }
@@ -269,13 +206,6 @@ export const onUpdateUser = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      privateKey {
-        id
-        exponent
-        modulus
-        createdAt
-        updatedAt
-      }
       createdAt
       updatedAt
     }
@@ -289,13 +219,6 @@ export const onDeleteUser = /* GraphQL */ `
       publicKeyID
       privateKeyID
       publicKey {
-        id
-        exponent
-        modulus
-        createdAt
-        updatedAt
-      }
-      privateKey {
         id
         exponent
         modulus

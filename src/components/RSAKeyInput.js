@@ -55,7 +55,7 @@ export default function RSAKeyInput({ values, errors, touched, handleChange, han
         <View style={{
           marginLeft: 10,
         }}>
-          <Button label='Generate Key' width={100} onPress={() => {
+          <Button label='Generate / use own Keys' width={130} onPress={() => {
             const ciphers = myContext.ciphers;
             ciphers.rsa.m = values.m;
             myContext.setCiphers(ciphers);
@@ -89,7 +89,7 @@ export default function RSAKeyInput({ values, errors, touched, handleChange, han
         <View style={{
           marginLeft: 10,
         }}>
-          <Button label='Import Key' onPress={() => { navigation.navigate('UsersList', { toSend: false, toImportKey: true }) }} width={100} />
+          <Button label='Import Key' onPress={() => { navigation.navigate('UsersList', { toSend: false, toImportKey: true }) }} width={130} />
         </View>
       </View>
 
