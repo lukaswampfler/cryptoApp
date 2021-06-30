@@ -27,7 +27,7 @@ const MessageItem = ({ message }) => (
 export default function MessageScreen({ navigation }) {
 
 
-    const [messages, setMessages] = useState(null);
+    const [messages, setMessages] = useState([]);
     const [latestMessage, updateLatestMessage] = useState("No message yet...");
 
     const myContext = useContext(AppContext);
@@ -35,7 +35,7 @@ export default function MessageScreen({ navigation }) {
 
     function subscribe() {
         console.log("subscribe, ID from context: ", myContext.userID)
-        const subscription = API.graphql({
+        const sub = API.graphql({
             query: onCreateMessageByReceiverID,
             variables: {
                 receiverID: myContext.userID
@@ -45,20 +45,43 @@ export default function MessageScreen({ navigation }) {
             next: messageData => {
                 alert("Received new message from " + messageData.value.data.onCreateMessageByReceiverID.sender.name)
                 updateLatestMessage(messageData.value.data.onCreateMessageByReceiverID.text)
-                console.log("messageData: ", messageData)
+                console.log("new message: ", messageData.value.data.onCreateMessageByReceiverID.text);
+                const newMessagesData = [...messages, messageData.value.data.onCreateMessageByReceiverID]
+                setMessages(newMessagesData);
+                //TODO: update messages.
             }
         })
 
-        return subscription
+        return sub
+    }
+
+
+    async function fetchMessages() {
+        try {
+            const messagesData = await API.graphql({ query: messagesByReceiver, variables: { receiverID: myContext.userID, limit: 20 } })
+            setMessages(messagesData.data.messagesByReceiver.items)
+        } catch (err) { console.log('error fetching messages: ', err) }
     }
 
     useEffect(() => {
+        console.log("running fetch messages effect ....");
+        fetchMessages();
+        console.log("messages: ", messages)
+        /*const subscription = subscribe()
+
+        return () => { subscription.unsubscribe() }*/
+        //console.log(messages);
+    }, [])
+
+
+    useEffect(() => {
+        console.log("running subscription effect....");
         //console.log("before subscribe: ", userID)
         //myContext.setUserID(userID);
         const subscription = subscribe()
 
         return () => { subscription.unsubscribe() } // return wird ausgeführt beim unmounten.
-    }, [])
+    }, [messages])
 
 
 
@@ -68,20 +91,10 @@ export default function MessageScreen({ navigation }) {
     );
 
 
-    async function fetchMessages() {
-        try {
-            //console.log("inside fetchMessages: ", userID);
-            const messagesData = await API.graphql({ query: messagesByReceiver, variables: { receiverID: myContext.userID, limit: 20 } })
-            //const messages = messagesData.data.messagesByReceiver.items
-            //setMessages(messages)
-            setMessages(messagesData.data.messagesByReceiver.items)
-        } catch (err) { console.log('error fetching messages: ', err) }
-    }
 
 
-    useEffect(() => {
-        fetchMessages();
-    }, [])
+
+
 
 
 
