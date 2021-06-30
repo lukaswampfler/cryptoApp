@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { View, Text, FlatList, Pressable, SafeAreaView, TouchableOpacity, Button } from 'react-native'
+import { Platform, View, Text, FlatList, Pressable, SafeAreaView, TouchableOpacity, Button } from 'react-native'
 import { Picker } from '@react-native-picker/picker';
 
 
@@ -42,16 +42,32 @@ export default function MethodsHomeScreen({ navigation }) {
     return (
         <SafeAreaView style={styles.container}>
             <Text style={{ fontSize: 25 }}> Select your encryption method:  </Text>
-            <Picker
-                selectedValue={selectedMethod}
-                onValueChange={(itemValue, itemIndex) =>
-                    setSelectedMethod(itemValue)
-                }>
-                <Picker.Item label="RSA" value="rsa" />
-                <Picker.Item label="S-DES" value="sdes" />
-                <Picker.Item label="Caesar" value="caesar" />
-                <Picker.Item label="Vigenere" value="vigenere" />
-            </Picker>
+            {(Platform.OS === 'android')
+                && <View style={{ backgroundColor: '#DDD', height: 50 }}>
+                    <Picker style={{ flex: 1, width: 250 }}
+                        selectedValue={selectedMethod}
+                        onValueChange={(itemValue, itemIndex) =>
+                            setSelectedMethod(itemValue)
+                        }
+                        prompt="Please choose">
+                        <Picker.Item label="RSA" value="rsa" />
+                        <Picker.Item label="S-DES" value="sdes" />
+                        <Picker.Item label="Caesar" value="caesar" />
+                        <Picker.Item label="Vigenere" value="vigenere" />
+                    </Picker>
+                </View>}
+            {Boolean(Platform.OS === 'ios') &&
+                <Picker
+                    selectedValue={selectedMethod}
+                    onValueChange={(itemValue, itemIndex) =>
+                        setSelectedMethod(itemValue)
+                    }>
+                    <Picker.Item label="RSA" value="rsa" />
+                    <Picker.Item label="S-DES" value="sdes" />
+                    <Picker.Item label="Caesar" value="caesar" />
+                    <Picker.Item label="Vigenere" value="vigenere" />
+                </Picker>}
+
 
             <Button onPress={pressSelectButton} title="Select" />
 

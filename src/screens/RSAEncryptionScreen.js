@@ -81,9 +81,13 @@ export default function RSAEncryptionScreen({ route, navigation }) {
             m = '0b' + values.m;
         }
         const rsa = { m: m, exp: values.exp, n: values.n };
+        // create warning if message larger than modulus
+        if (BigInt(rsa.m) > BigInt(rsa.n)) {
+            alert("Message value too large!")
+        }
         let ciphers = myContext.ciphers;
         ciphers.rsa = rsa;
-        console.log(rsa.m, rsa.exp, rsa.n)
+        console.log("RSA inputs: ", rsa.m, rsa.exp, rsa.n)
         console.log(smartExponentiation(BigInt(rsa.m), BigInt(rsa.exp), BigInt(rsa.n), myContext.useBigIntegerLibrary).toString())
         const encryptedMessage = smartExponentiation(BigInt(rsa.m), BigInt(rsa.exp), BigInt(rsa.n), myContext.useBigIntegerLibrary).toString();
         ciphers.rsa['encrypted'] = encryptedMessage;
@@ -110,8 +114,11 @@ export default function RSAEncryptionScreen({ route, navigation }) {
 
 
     // do the encryption
-    const handleRSAEncryption = () => {
+    /*const handleRSAEncryption = () => {
         const { m, exp, n } = myContext.ciphers.rsa;
+        if (m >= n) {
+            alert("Message value too large!")
+        }
         let ciphers = myContext.ciphers;
         console.log(m, exp, n);
         ciphers.rsa['encrypted'] = smartExponentiation(m, exp, n, myContext.useBigIntegerLibrary).toString();
@@ -120,6 +127,7 @@ export default function RSAEncryptionScreen({ route, navigation }) {
         //const rsa = new RSA(m, exp, n); -> this is not working, causes an infinite loop -> max stack depth reached.
 
     }
+    */
 
     // Output-Value
     const getRSAOutputValue = () => {

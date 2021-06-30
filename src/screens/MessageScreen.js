@@ -15,10 +15,8 @@ import AppContext from '../components/AppContext';
 
 const MessageItem = ({ message }) => (
     <View style={styles.item}>
-        <Text style={styles.title} selectable >
-            {message.text}<Text style={{ fontWeight: 'bold' }} selectable={false} >
-
-                from {message.sender.name}</Text></Text>
+        <Text style={styles.title} selectable={true} selectionColor='yellow' >
+            {message.text}      from {message.sender.name}</Text>
 
     </View>
 );
@@ -101,28 +99,29 @@ export default function MessageScreen({ navigation }) {
 
     return (
         <SafeAreaView style={styles.container}>
-            {/*<Button onPress={signOut} title="Sign Out" />*/}
-            {myContext.userID ? <Text>userID: {myContext.userID}</Text> : <Text> no userID set </Text>}
-            {/*{messages        ?  
+            <View style={styles.homeScreen}>
+                {/*<Button onPress={signOut} title="Sign Out" />*/}
+                {myContext.userID ? <Text>userID: {myContext.userID}</Text> : <Text> no userID set </Text>}
+                {/*{messages        ?  
             <FlatList
               data = {messages}
               renderItem={renderItem}
               keyExtractor={item => item.createdAt}
         /> : <Loading/> }*/}
-            <View style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                margin: 20
-            }}>
-                {messages ?
-                    <FlatList
-                        data={messages}
-                        renderItem={renderItem}
-                        keyExtractor={item => item.createdAt}
-                    /> : <Loading />}
+                <View style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    margin: 20
+                }}>
+                    {messages ?
+                        <FlatList removeClippedSubviews={false}
+                            data={messages}
+                            renderItem={renderItem}
+                            keyExtractor={item => item.createdAt}
+                        /> : <Loading />}
 
+                </View>
             </View>
-
         </SafeAreaView>
 
 

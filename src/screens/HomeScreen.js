@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { View, Text, FlatList, Pressable, SafeAreaView, TouchableOpacity, Button } from 'react-native'
+import { Platform, View, Text, FlatList, Pressable, SafeAreaView, TouchableOpacity, Button } from 'react-native'
 import { Picker } from '@react-native-picker/picker';
 import Loading from './Loading'
 import { listMessages, listUsers, messagesByReceiver } from '../graphql/queries';
@@ -108,21 +108,51 @@ export default function HomeScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Button onPress={signOut} title="Sign Out" />
-      {/*{userID ? <Text>userID: {userID}</Text> : <Text> no userID set </Text>}*/}
-      <Text style={{ fontSize: 25 }}> What would you like to do?  </Text>
-      <Picker
-        selectedValue={choice}
-        onValueChange={(itemValue, itemIndex) =>
-          setChoice(itemValue)
-        }>
-        <Picker.Item label="Encryption Methods" value="methods" />
-        <Picker.Item label="Cryptoanalysis" value="analysis" />
-        <Picker.Item label="Messages" value="messages" />
-        <Picker.Item label="Riddles" value="riddles" />
-      </Picker>
-      <Button onPress={pressSelectButton} title="Select" />
-    </SafeAreaView>
+      <View style={styles.homeScreen}>
+        <Button onPress={signOut} title="Sign Out" />
+        {/*{userID ? <Text>userID: {userID}</Text> : <Text> no userID set </Text>}*/}
+        <Text style={{ fontSize: 25, marginBottom: 50 }}> What would you like to do?  </Text>
+        {(Platform.OS === 'android')
+          && <View style={{ backgroundColor: '#DDD', height: 50 }}>
+            <Picker style={{ flex: 1, width: 250 }}
+              selectedValue={choice}
+              onValueChange={(itemValue, itemIndex) =>
+                setChoice(itemValue)}
+              prompt="Please choose"
+            >
+              <Picker.Item label="Encryption Methods" value="methods" />
+              <Picker.Item label="Cryptoanalysis" value="analysis" />
+              <Picker.Item label="Messages" value="messages" />
+              <Picker.Item label="Riddles" value="riddles" />
+            </Picker>
+          </View>}
+        {Boolean(Platform.OS === 'ios') &&
+          <Picker
+            selectedValue={choice}
+            onValueChange={(itemValue, itemIndex) =>
+              setChoice(itemValue)}
+          >
+            <Picker.Item label="Encryption Methods" value="methods" />
+            <Picker.Item label="Cryptoanalysis" value="analysis" />
+            <Picker.Item label="Messages" value="messages" />
+            <Picker.Item label="Riddles" value="riddles" />
+          </Picker>}
+        {/*<View style={{ backgroundColor: '#DDD', height: 50 }}>
+          <Picker style={{ flex: 1, width: 250 }}
+            selectedValue={choice}
+            onValueChange={(itemValue, itemIndex) =>
+              setChoice(itemValue)}
+            prompt="Please choose"
+          >
+            <Picker.Item label="Encryption Methods" value="methods" />
+            <Picker.Item label="Cryptoanalysis" value="analysis" />
+            <Picker.Item label="Messages" value="messages" />
+            <Picker.Item label="Riddles" value="riddles" />
+          </Picker>
+            </View>*/}
+        <Button onPress={pressSelectButton} title="Select" />
+      </View>
+    </SafeAreaView >
   )
 }
 

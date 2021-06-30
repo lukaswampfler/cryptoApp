@@ -1,4 +1,9 @@
-import { StyleSheet } from 'react-native'
+import { Platform, StyleSheet } from 'react-native'
+import Constants from 'expo-constants';
+
+const platformVersion = Platform.OS === 'ios'
+  ? parseInt(Platform.Version, 10)
+  : Platform.Version;
 
 export const PINK = '#ff5dc8'
 
@@ -29,4 +34,9 @@ export default StyleSheet.create({
   subheader: {
     paddingTop: 10,
   },
+  homeScreen: {
+    marginTop: Platform.OS === 'android' || platformVersion < 11
+      ? Constants.statusBarHeight
+      : 0
+  }
 })
