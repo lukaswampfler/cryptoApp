@@ -43,7 +43,7 @@ export default function MessageScreen({ navigation }) {
             next: messageData => {
                 alert("Received new message from " + messageData.value.data.onCreateMessageByReceiverID.sender.name)
                 updateLatestMessage(messageData.value.data.onCreateMessageByReceiverID.text)
-                console.log("new message: ", messageData.value.data.onCreateMessageByReceiverID.text);
+                //console.log("new message: ", messageData.value.data.onCreateMessageByReceiverID.text);
                 const newMessagesData = [...messages, messageData.value.data.onCreateMessageByReceiverID]
                 setMessages(newMessagesData);
                 //TODO: update messages.
@@ -64,7 +64,7 @@ export default function MessageScreen({ navigation }) {
     useEffect(() => {
         console.log("running fetch messages effect ....");
         fetchMessages();
-        console.log("messages: ", messages)
+        //console.log("messages: ", messages)
         /*const subscription = subscribe()
 
         return () => { subscription.unsubscribe() }*/

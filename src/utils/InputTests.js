@@ -5,14 +5,17 @@ const INVALID_DECIMAL_FORMAT_ERROR_MESSAGE = 'invalid decimal number';
 const INVALID_BINARY_FORMAT_ERROR_MESSAGE = 'invalid binary number';
 const INVALID_FORMAT_ERROR_MESSAGE = 'invalid format';
 const REQUIRED_ERROR_MESSAGE = 'this field is required';
+const INVALID_LOWER_CASE_STRING_ERROR_MESSAGE = 'only letters allowed'
 
 
 Yup.addMethod(Yup.string, 'isValidRSABinaryInput', isValidRSABinaryInput);
 Yup.addMethod(Yup.string, 'isValidRSADecimalInput', isValidRSADecimalInput);
 Yup.addMethod(Yup.string, 'isValidNumber', isValidNumber);
+Yup.addMethod(Yup.string, 'isValidNumberIncludingZero', isValidNumberIncludingZero);
 Yup.addMethod(Yup.string, 'isValidSDESKey', isValidSDESKey);
 Yup.addMethod(Yup.string, 'isValidSDESShortKey', isValidSDESShortKey);
 Yup.addMethod(Yup.string, 'isValidSDESMessage', isValidSDESMessage);
+Yup.addMethod(Yup.string, 'isValidVigenereInput', isValidVigenereInput);
 
 
 // input schemes for validation 
@@ -49,7 +52,13 @@ export const SDESMessageInputScheme = Yup.object().shape({
     message: Yup.string().isValidSDESMessage().required('Required'),
 });
 
+export const CaesarKeyInputScheme = Yup.object().shape({
+    key: Yup.string().isValidNumberIncludingZero().required('Required'),
+});
 
+export const VigenereKeyInputScheme = Yup.object().shape({
+    key: Yup.string().isValidVigenereInput().required('Required'),
+});
 
 
 /*export function messageToNumber(m){
@@ -107,6 +116,22 @@ export function isValidNumber(message) {
     });
 }
 
+
+export function isValidNumberIncludingZero(message) {
+    return this.test("isValidRSAModulus", message, function (value) {
+        const { path, createError } = this;
+        if (!value) { // no value given
+            return createError({ path, message: message ?? REQUIRED_ERROR_MESSAGE });
+        }
+        const isNumber = value.match(/^-?[0-9][0-9]*$/);
+        if (!isNumber) {
+            return createError({ path, message: message ?? INVALID_FORMAT_ERROR_MESSAGE });
+        }
+        return true;
+    });
+}
+
+
 export function isValidSDESKey(message) {
     return this.test("isValidSDESKey", message, function (value) {
         const { path, createError } = this;
@@ -147,4 +172,17 @@ function isValidSDESMessage(message) {
 }
 
 
+export function isValidVigenereInput(message) {
+    return this.test("isValidRSADecimalInput", message, function (value) {
+        const { path, createError } = this;
+        if (!value) { // no value given
+            return createError({ path, message: message ?? REQUIRED_ERROR_MESSAGE });
+        }
+        const isVigenereInput = value.match(/^[a-zA-Z]+$/);
+        if (!isVigenereInput) { // not a string consisting of all lower case letters
+            return createError({ path, message: message ?? INVALID_LOWER_CASE_STRING_ERROR_MESSAGE });
+        }
+        return true;
+    });
+}
 

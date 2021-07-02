@@ -60,7 +60,7 @@ export default function HomeScreen({ navigation }) {
     //console.log("inside check for User: ", users);
     //const users = await API.graphql({query:listUsers});
     console.log("userName from Context: ", myContext.userName);
-    console.log("users in checkForUser: ", users);
+    //console.log("users in checkForUser: ", users);
     const checkUsers = users.filter(user => (user.name === myContext.userName))
     if (checkUsers.length === 0) {
       // first generate public and private key

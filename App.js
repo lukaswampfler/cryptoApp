@@ -20,9 +20,12 @@ import MessageScreen from './src/screens/MessageScreen';
 import ConfirmSignUp from './src/screens/ConfirmSignUp';
 import SDESScreen from './src/screens/SDESScreen';
 import SDESEncodingScreen from './src/screens/SDESEncodingScreen';
+import CaesarScreen from './src/screens/CaesarScreen';
+import VigenereScreen from './src/screens/VigenereScreen';
 
 import MethodsHomeScreen from './src/screens/MethodsHomeScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 
 
 
@@ -104,13 +107,23 @@ const MethodNavigator = props => {
         component={SDESEncodingScreen}
         options={{ title: 'Encoding' }}
       />
+      <MethodStack.Screen
+        name="Caesar"
+        component={CaesarScreen}
+        options={{ title: 'Caesar Encryption' }}
+      />
+      <MethodStack.Screen
+        name="Vigenere"
+        component={VigenereScreen}
+        options={{ title: 'Vigenere Encryption' }}
+      />
     </MethodStack.Navigator>
   );
 }
 
 
 
-const RSANavigator = props => {
+/*const RSANavigator = props => {
   return (
     <RSAStack.Navigator>
       <RSAStack.Screen
@@ -130,7 +143,7 @@ const RSANavigator = props => {
       />
     </RSAStack.Navigator>
   );
-}
+}*/
 
 
 const Initializing = () => {
@@ -163,7 +176,9 @@ export default function App() {
 
   const rsa = { isEncrypted: false, m: '', exp: '', n: '' };
   const sdes = { keys: undefined }
-  const [ciphers, setCiphers] = useState({ rsa, sdes, caesar: undefined, currentMethod: undefined, currentMessage: undefined })
+  const caesar = { message: '', key: 0 }
+  const vigenere = { message: '', key: '' }
+  const [ciphers, setCiphers] = useState({ rsa, sdes, caesar, vigenere, currentMethod: undefined, currentMessage: undefined })
 
   const [useBigIntegerLibrary, setUseBigIntegerLibrary] = useState(false);
 
@@ -206,13 +221,19 @@ export default function App() {
     let token = Auth.currentSession().then(session => session.getIdToken().getJwtToken())
     console.log(token);
     checkAuthState();
+    //setUserLoggedIn('loggedOut');
   }, []);
 
   async function checkAuthState() {
     try {
-      await Auth.currentAuthenticatedUser();
+      const user = await Auth.currentAuthenticatedUser();
       console.log('User is signed in');
-      setUserLoggedIn('loggedIn');
+      console.log('name', user.username, 'bla')
+      if (user.username === ' ') {
+        setUserLoggedIn('loggedOut');
+      } else {
+        setUserLoggedIn('loggedIn');
+      }
     } catch (err) {
       console.log('User is not signed in');
       setUserLoggedIn('loggedOut');

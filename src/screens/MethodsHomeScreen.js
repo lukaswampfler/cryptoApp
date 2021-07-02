@@ -5,7 +5,7 @@ import { Picker } from '@react-native-picker/picker';
 
 import styles from './styles'
 
-import { onCreateMessageByReceiverID } from '../graphql/subscriptions'
+//import { onCreateMessageByReceiverID } from '../graphql/subscriptions'
 
 import AppContext from '../components/AppContext';
 
@@ -31,6 +31,10 @@ export default function MethodsHomeScreen({ navigation }) {
             navigation.navigate("RSAEncryption");
         } else if (selectedMethod == 'sdes') {
             navigation.navigate("SDESEncryption", { message: '' });
+        } else if (selectedMethod == 'caesar') {
+            navigation.navigate("Caesar");
+        } else if (selectedMethod == 'vigenere') {
+            navigation.navigate("Vigenere");
         } else {
             console.log("Navigating to ...", selectedMethod);
         }
