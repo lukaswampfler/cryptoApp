@@ -2,8 +2,8 @@ import React, { useState, useEffect, useContext } from 'react'
 import { View, Text, FlatList, Pressable, SafeAreaView, TouchableOpacity, Button } from 'react-native'
 import Loading from './Loading'
 import { listMessages, listUsers, messagesByReceiver } from '../graphql/queries';
-import { createUser } from '../graphql/mutations';
-
+//import { createUser } from '../graphql/mutations';
+import { Divider } from 'react-native-elements';
 import { API, Auth, graphqlOperation } from 'aws-amplify'
 
 import styles from './styles'
@@ -12,12 +12,18 @@ import { onCreateMessageByReceiverID } from '../graphql/subscriptions'
 
 import AppContext from '../components/AppContext';
 
-
 const MessageItem = ({ message }) => (
-    <View style={styles.item}>
-        <Text style={styles.title} selectable={true} selectionColor='yellow' >
-            {message.text}      from {message.sender.name}</Text>
-
+    <View style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        borderBottomWidth: 1,
+        marginBottom: 3,
+    }}
+    >
+        <Text style={{ width: 250 }} selectable={true} selectionColor='yellow' >
+            {message.text}  </Text>
+        <Text selectable={false}>  from {message.sender.name}</Text>
+        <Divider width={5} />
     </View>
 );
 

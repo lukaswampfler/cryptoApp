@@ -23,7 +23,7 @@ export default function VigenereScreen({ navigation }) {
 
     const [text, setText] = useState('');
     const [secret, setSecret] = useState('');
-    const [key, setKey] = useState(0);
+    const [key, setKey] = useState('a');
 
 
 
@@ -38,6 +38,7 @@ export default function VigenereScreen({ navigation }) {
         let ciphers = myContext.ciphers;
         ciphers.currentMethod = 'VIGENERE';
         ciphers.currentMessage = secret;
+        myContext.setCiphers(ciphers);
         navigation.navigate('UsersList', { toSend: true, toImportKey: false })
     }
 

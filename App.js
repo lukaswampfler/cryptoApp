@@ -41,7 +41,7 @@ Amplify.configure({
 
 const AuthenticationStack = createStackNavigator();
 const AppStack = createStackNavigator();
-const RSAStack = createStackNavigator();
+//const RSAStack = createStackNavigator();
 const MethodStack = createStackNavigator();
 const HomeTab = createBottomTabNavigator();
 
@@ -228,6 +228,7 @@ export default function App() {
     try {
       const user = await Auth.currentAuthenticatedUser();
       console.log('User is signed in');
+      // TODO: check here!
       console.log('name', user.username, 'bla')
       if (user.username === ' ') {
         setUserLoggedIn('loggedOut');
@@ -257,7 +258,7 @@ export default function App() {
           <HomeTab.Navigator updateAuthState={updateAuthState}>
             <HomeTab.Screen name="HomeScreen" component={HomeScreen} />
             <HomeTab.Screen name="Methods" component={MethodNavigator} />
-            <HomeTab.Screen name="Messages" component={MessageScreen} />
+            <HomeTab.Screen name="Messages" component={MessageScreen} options={{ title: "Your Messages" }} />
           </HomeTab.Navigator>
         )}
         {isUserLoggedIn === 'loggedOut' && (
