@@ -172,11 +172,11 @@ export default function App() {
   const [primes, setPrimes] = useState({ p: 2, q: 3 })
   const [exp, setExp] = useState(3)
   const [RSAInputSwitchisDecimal, setRSAInputSwitchisDecimal] = useState(true);
-
+  const [introVisible, setIntroVisible] = useState(false);
 
   const rsa = { isEncrypted: false, m: '', exp: '', n: '' };
   const sdes = { keys: undefined }
-  const caesar = { message: '', key: 0 }
+  const caesar = { message: '', key: 0, secret: '' }
   const vigenere = { message: '', key: '' }
   const [ciphers, setCiphers] = useState({ rsa, sdes, caesar, vigenere, currentMethod: undefined, currentMessage: undefined })
 
@@ -197,6 +197,7 @@ export default function App() {
     ciphers: ciphers,
     RSAInputSwitchisDecimal: RSAInputSwitchisDecimal,
     useBigIntegerLibrary: useBigIntegerLibrary,
+    introVisible: introVisible,
     setUserName,
     setUserID,
     setPassword,
@@ -210,6 +211,7 @@ export default function App() {
     setCiphers,
     setRSAInputSwitchisDecimal,
     setUseBigIntegerLibrary,
+    setIntroVisible,
   };
 
 

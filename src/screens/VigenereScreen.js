@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, Text, View, TextInput } from 'react-native';
+import { SafeAreaView, ScrollView, Text, View, TextInput, TouchableOpacity, Modal } from 'react-native';
 import { Divider } from 'react-native-elements';
 import AppContext from '../components/AppContext';
 import Button from '../components/Button';
@@ -9,6 +9,9 @@ import { useFormik } from 'formik';
 
 
 import { VigenereKeyInputScheme } from '../utils/InputTests';
+import Modals from '../utils/Modals';
+
+import styles from './styles'
 
 
 const encryptVigenere = () => {
@@ -25,6 +28,59 @@ export default function VigenereScreen({ navigation }) {
     const [secret, setSecret] = useState('');
     const [key, setKey] = useState('a');
 
+    //const [introVisible, setIntroVisible] = useState(false)
+
+    /*const introHeader = (
+        <View style={styles.modalHeader}>
+            <Text style={styles.title}>The Vigenère Cipher</Text>
+            <View style={styles.divider}></View>
+        </View>
+    )*/
+
+    /*const introBody = (text) => {
+        return (
+            <View style={styles.modalBody}>
+                <Text style={styles.bodyText}>{text}Here comes the introduction .....</Text>
+            </View>
+        );
+    }*/
+
+    /*const introFooter = (
+        <View style={styles.modalFooter}>
+            <View style={styles.divider}></View>
+            <View style={{ flexDirection: "row-reverse", margin: 10 }}>
+                <TouchableOpacity style={{ ...styles.actions, backgroundColor: "#db2828" }}
+                    onPress={() => {
+                        setIntroVisible(!introVisible);
+                    }}>
+                    <Text style={styles.actionText}>Close</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+    )*/
+
+    /*const introContainer = (
+        <View style={styles.modalContainer}>
+            {introHeader}
+            {introBody("hello")}
+            {introFooter}
+        </View>
+    )*/
+
+    /*const intro = (
+        <Modal
+            transparent={false}
+            visible={introVisible}
+            onRequestClose={() => {
+                Alert.alert('Introduction has been closed.');
+            }}>
+            <View style={styles.modal}>
+                <View>
+                    {introContainer}
+                </View>
+            </View>
+        </Modal>
+    )*/
 
 
     const changeText = text => {
@@ -73,11 +129,14 @@ export default function VigenereScreen({ navigation }) {
         }
     });
 
+    const introText = "Here comes the introduction to the Vigenere method...";
+
+
     return (
 
         <View style={{ flex: 1 }}>
             <ScrollView style={{ flex: 1 }}>
-
+                <Modals text={introText} method="Vigenere" />
                 <TextInput
                     width={280}
                     multiline={true}
@@ -136,7 +195,13 @@ export default function VigenereScreen({ navigation }) {
                     </Text>
                 </View>
 
-
+                <View style={{
+                    flexDirection: 'center',
+                    justifyContent: 'center', width: 150,
+                    marginTop: 100
+                }}>
+                    <Button label='show introduction' onPress={() => { myContext.setIntroVisible(true) }} />
+                </View>
             </ScrollView>
         </View>
     );
