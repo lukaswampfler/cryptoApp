@@ -19,7 +19,7 @@ export default function Modals({ text, method }) {
     const introHeader = (method) => {
         return (
             <View style={styles.modalHeader}>
-                <Text style={styles.title}>The {method} Cipher</Text>
+                <Text style={styles.title}> {method}</Text>
                 <View style={styles.divider}></View>
             </View>
         );

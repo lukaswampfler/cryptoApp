@@ -4,6 +4,8 @@ import { Divider } from 'react-native-elements';
 import AppContext from '../components/AppContext';
 import Button from '../components/Button';
 import NumInput from '../components/NumInput';
+import Modals from '../utils/Modals';
+
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup'
@@ -127,10 +129,14 @@ export default function SDESScreen({ route, navigation }) {
   });
 
 
+  const introText = "Introduction to the S-DES method ...."
+  const method = "The S-DES cipher."
 
   return (
     <View style={{ flex: 1 }}>
       <ScrollView style={{ flex: 1 }}>
+        <Modals text={introText} method={method} />
+
         <View style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
@@ -239,6 +245,13 @@ export default function SDESScreen({ route, navigation }) {
             <Text style={{ fontSize: 20 }}>Message decrypted </Text>
             <Text style={{ fontSize: 20 }} selectable> {decryptedMessage} </Text>
           </View> : null}
+        <View style={{
+          flexDirection: 'center',
+          justifyContent: 'center', width: 150,
+          marginTop: 100
+        }}>
+          <Button label='show introduction' onPress={() => { myContext.setIntroVisible(true) }} />
+        </View>
 
       </ScrollView>
     </View>

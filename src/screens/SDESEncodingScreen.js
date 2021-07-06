@@ -5,7 +5,7 @@ import AppContext from '../components/AppContext';
 import Button from '../components/Button';
 import NumInput from '../components/NumInput';
 import { encode, decode, bitsStringFromBytes } from '../utils/sdesMath';
-
+import Modals from '../utils/Modals';
 import { useFormik } from 'formik';
 import * as Yup from 'yup'
 
@@ -30,14 +30,19 @@ export default function SDESEncodingScreen({ navigation }) {
     }
 
 
+    const introText = "Here comes the introduction to S-DES encoding ...";
+    const method = "Encoding a message"
 
 
 
     return (
 
         <View style={{ flex: 1 }}>
-            <ScrollView style={{ flex: 1 }}>
 
+
+
+            <ScrollView style={{ flex: 1 }}>
+                <Modals text={introText} method={method} />
                 <View style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
@@ -78,7 +83,13 @@ export default function SDESEncodingScreen({ navigation }) {
                     </Text>
                 </View>
 
-
+                <View style={{
+                    flexDirection: 'center',
+                    justifyContent: 'center', width: 150,
+                    marginTop: 100
+                }}>
+                    <Button label='show explanation' onPress={() => { myContext.setIntroVisible(true) }} />
+                </View>
             </ScrollView>
         </View>
     );

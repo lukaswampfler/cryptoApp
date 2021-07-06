@@ -28,60 +28,6 @@ export default function VigenereScreen({ navigation }) {
     const [secret, setSecret] = useState('');
     const [key, setKey] = useState('a');
 
-    //const [introVisible, setIntroVisible] = useState(false)
-
-    /*const introHeader = (
-        <View style={styles.modalHeader}>
-            <Text style={styles.title}>The Vigenère Cipher</Text>
-            <View style={styles.divider}></View>
-        </View>
-    )*/
-
-    /*const introBody = (text) => {
-        return (
-            <View style={styles.modalBody}>
-                <Text style={styles.bodyText}>{text}Here comes the introduction .....</Text>
-            </View>
-        );
-    }*/
-
-    /*const introFooter = (
-        <View style={styles.modalFooter}>
-            <View style={styles.divider}></View>
-            <View style={{ flexDirection: "row-reverse", margin: 10 }}>
-                <TouchableOpacity style={{ ...styles.actions, backgroundColor: "#db2828" }}
-                    onPress={() => {
-                        setIntroVisible(!introVisible);
-                    }}>
-                    <Text style={styles.actionText}>Close</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
-    )*/
-
-    /*const introContainer = (
-        <View style={styles.modalContainer}>
-            {introHeader}
-            {introBody("hello")}
-            {introFooter}
-        </View>
-    )*/
-
-    /*const intro = (
-        <Modal
-            transparent={false}
-            visible={introVisible}
-            onRequestClose={() => {
-                Alert.alert('Introduction has been closed.');
-            }}>
-            <View style={styles.modal}>
-                <View>
-                    {introContainer}
-                </View>
-            </View>
-        </Modal>
-    )*/
-
 
     const changeText = text => {
         setText(text);
@@ -130,13 +76,13 @@ export default function VigenereScreen({ navigation }) {
     });
 
     const introText = "Here comes the introduction to the Vigenere method...";
-
+    const method = "The Vigenère cipher"
 
     return (
 
         <View style={{ flex: 1 }}>
             <ScrollView style={{ flex: 1 }}>
-                <Modals text={introText} method="Vigenere" />
+                <Modals text={introText} method={method} />
                 <TextInput
                     width={280}
                     multiline={true}

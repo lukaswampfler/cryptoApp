@@ -4,7 +4,8 @@ import { Divider } from 'react-native-elements';
 import AppContext from '../components/AppContext';
 import NumInput from '../components/NumInput';
 import Button from '../components/Button';
-import ShareButton from '../components/ShareButton';
+import Modals from '../utils/Modals';
+
 import { useFormik } from 'formik';
 import * as Yup from 'yup'
 
@@ -136,6 +137,9 @@ export default function RSAEncryptionScreen({ route, navigation }) {
         } else return '';
     }
 
+    const introText = "Here comes the introduction to the RSA method...";
+    const method = "The RSA cipher"
+
 
 
     return (
@@ -145,6 +149,7 @@ export default function RSAEncryptionScreen({ route, navigation }) {
         <ScrollView style={{
             flex: 1,
         }}>
+            <Modals text={introText} method={method} />
             <View
                 style={{
                     flex: 1,
@@ -229,6 +234,13 @@ export default function RSAEncryptionScreen({ route, navigation }) {
                 />
                 <Button label='Send message' onPress={() => { navigation.navigate('UsersList', { toSend: true, toImportKey: false }) }} width={100} />
                 {/*} <ShareButton message={myContext.ciphers.rsa.isEncrypted ? myContext.ciphers.rsa.encrypted.toString() : 'No Encryption done yet'} />*/}
+            </View>
+            <View style={{
+                flexDirection: 'center',
+                justifyContent: 'center', width: 150,
+                marginTop: 100
+            }}>
+                <Button label='show introduction' onPress={() => { myContext.setIntroVisible(true) }} />
             </View>
         </ScrollView>
         //{/*</View>*/}

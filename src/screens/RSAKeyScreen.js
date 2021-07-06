@@ -11,6 +11,7 @@ import * as Yup from 'yup';
 import RandomPrimeRow from '../components/RandomPrimeRow';
 import PublicExponentRow from '../components/PublicExponentRow'
 import ButtonRow from '../components/ButtonRow';
+import Modals from '../utils/Modals';
 
 //import {RSAPrimeInputScheme} from '../components/PublicExponentRow';
 
@@ -63,8 +64,15 @@ export default function RSAKeyScreen({ navigation }) {
       }
     });
 
+  const introText = "Here comes the introduction to the RSA key generation...";
+  const method = "RSA keys"
+
+
+
   return (
     <View style={{ flex: 1 }}>
+      <Modals text={introText} method={method} />
+
       <ScrollView style={{ flex: 1 }}>
         <View
           style={{
@@ -127,6 +135,13 @@ export default function RSAKeyScreen({ navigation }) {
 
         </View>
         <ButtonRow navigation={navigation} />
+        <View style={{
+          flexDirection: 'center',
+          justifyContent: 'center', width: 150,
+          marginTop: 100
+        }}>
+          <Button label='show explanation' onPress={() => { myContext.setIntroVisible(true) }} />
+        </View>
       </ScrollView>
       {/*</SafeAreaView>*/}
     </View>
