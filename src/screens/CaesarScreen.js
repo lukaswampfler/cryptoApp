@@ -4,7 +4,7 @@ import { Divider } from 'react-native-elements';
 import AppContext from '../components/AppContext';
 import Button from '../components/Button';
 import NumInput from '../components/NumInput';
-import Modals from '../utils/Modals';
+import { IntroModal } from '../utils/Modals';
 import { caesarEncrypt } from '../utils/caesarMath';
 import { setIn, useFormik } from 'formik';
 
@@ -81,7 +81,7 @@ export default function CaesarScreen({ navigation }) {
 
         <View style={{ flex: 1 }}>
             <ScrollView style={{ flex: 1 }}>
-                <Modals text={introText} method={method} />
+                <IntroModal text={introText} method={method} />
                 <TextInput
                     width={280}
                     multiline={true}

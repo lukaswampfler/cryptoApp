@@ -4,7 +4,7 @@ import { Divider } from 'react-native-elements';
 import AppContext from '../components/AppContext';
 import NumInput from '../components/NumInput';
 import Button from '../components/Button';
-import Modals from '../utils/Modals';
+import { IntroModal } from '../utils/Modals';
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup'
@@ -149,7 +149,7 @@ export default function RSAEncryptionScreen({ route, navigation }) {
         <ScrollView style={{
             flex: 1,
         }}>
-            <Modals text={introText} method={method} />
+            <IntroModal text={introText} method={method} />
             <View
                 style={{
                     flex: 1,

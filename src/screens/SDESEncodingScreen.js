@@ -5,7 +5,7 @@ import AppContext from '../components/AppContext';
 import Button from '../components/Button';
 import NumInput from '../components/NumInput';
 import { encode, decode, bitsStringFromBytes } from '../utils/sdesMath';
-import Modals from '../utils/Modals';
+import { ExplanationModal } from '../utils/Modals';
 import { useFormik } from 'formik';
 import * as Yup from 'yup'
 
@@ -42,7 +42,7 @@ export default function SDESEncodingScreen({ navigation }) {
 
 
             <ScrollView style={{ flex: 1 }}>
-                <Modals text={introText} method={method} />
+                <ExplanationModal text={introText} title={method} />
                 <View style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
@@ -88,7 +88,7 @@ export default function SDESEncodingScreen({ navigation }) {
                     justifyContent: 'center', width: 150,
                     marginTop: 100
                 }}>
-                    <Button label='show explanation' onPress={() => { myContext.setIntroVisible(true) }} />
+                    <Button label='show explanation' onPress={() => { myContext.setExplVisible(true) }} />
                 </View>
             </ScrollView>
         </View>

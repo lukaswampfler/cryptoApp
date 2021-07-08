@@ -9,7 +9,7 @@ import { useFormik } from 'formik';
 
 
 import { VigenereKeyInputScheme } from '../utils/InputTests';
-import Modals from '../utils/Modals';
+import { IntroModal } from '../utils/Modals';
 
 import styles from './styles'
 
@@ -82,7 +82,7 @@ export default function VigenereScreen({ navigation }) {
 
         <View style={{ flex: 1 }}>
             <ScrollView style={{ flex: 1 }}>
-                <Modals text={introText} method={method} />
+                <IntroModal text={introText} method={method} />
                 <TextInput
                     width={280}
                     multiline={true}

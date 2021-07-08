@@ -4,7 +4,7 @@ import { Divider } from 'react-native-elements';
 import AppContext from '../components/AppContext';
 import Button from '../components/Button';
 import NumInput from '../components/NumInput';
-import Modals from '../utils/Modals';
+import { IntroModal } from '../utils/Modals';
 
 
 import { useFormik } from 'formik';
@@ -130,12 +130,12 @@ export default function SDESScreen({ route, navigation }) {
 
 
   const introText = "Introduction to the S-DES method ...."
-  const method = "The S-DES cipher."
+  const method = "The S-DES cipher"
 
   return (
     <View style={{ flex: 1 }}>
       <ScrollView style={{ flex: 1 }}>
-        <Modals text={introText} method={method} />
+        <IntroModal text={introText} method={method} />
 
         <View style={{
           flexDirection: 'row',
