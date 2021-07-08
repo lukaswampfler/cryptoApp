@@ -5,45 +5,32 @@ import { Picker } from '@react-native-picker/picker';
 
 import styles from './styles'
 
+
 import AppContext from '../components/AppContext';
 
 
 
-
-
-
-
-
-
-
-export default function MethodsHomeScreen({ navigation }) {
+export default function AnalysisHomeScreen({ navigation }) {
 
     const myContext = useContext(AppContext);
 
-    const [selectedMethod, setSelectedMethod] = useState('rsa');
+    const [selectedMethod, setSelectedMethod] = useState('caesar');
 
 
     function pressSelectButton() {
         console.log("Method chosen: ", selectedMethod);
-        if (selectedMethod == 'rsa') {
-            navigation.navigate("RSAEncryption");
-        } else if (selectedMethod == 'sdes') {
-            navigation.navigate("SDESEncryption", { message: '' });
-        } else if (selectedMethod == 'caesar') {
-            navigation.navigate("Caesar");
-        } else if (selectedMethod == 'vigenere') {
-            navigation.navigate("Vigenere");
+        if (selectedMethod == 'caesar') {
+            navigation.navigate("CaesarAnalysis");
         } else {
-            console.log("Navigating to ...", selectedMethod);
+            console.log("Navigating to ...", selectedMethod, " analysis.");
         }
-
 
     }
 
 
     return (
         <SafeAreaView style={styles.container}>
-            <Text style={{ fontSize: 25 }}> Select your encryption method:  </Text>
+            <Text style={{ fontSize: 25 }}> Select your encryption method for Analysis:  </Text>
             {(Platform.OS === 'android')
                 && <View style={{ backgroundColor: '#DDD', height: 50 }}>
                     <Picker style={{ flex: 1, width: 250 }}
@@ -52,10 +39,9 @@ export default function MethodsHomeScreen({ navigation }) {
                             setSelectedMethod(itemValue)
                         }
                         prompt="Please choose">
-                        <Picker.Item label="RSA" value="rsa" />
-                        <Picker.Item label="S-DES" value="sdes" />
                         <Picker.Item label="Caesar" value="caesar" />
                         <Picker.Item label="Vigenere" value="vigenere" />
+                        <Picker.Item label="Permutation" value="permutation" />
                     </Picker>
                 </View>}
             {Boolean(Platform.OS === 'ios') &&
@@ -64,10 +50,9 @@ export default function MethodsHomeScreen({ navigation }) {
                     onValueChange={(itemValue, itemIndex) =>
                         setSelectedMethod(itemValue)
                     }>
-                    <Picker.Item label="RSA" value="rsa" />
-                    <Picker.Item label="S-DES" value="sdes" />
                     <Picker.Item label="Caesar" value="caesar" />
                     <Picker.Item label="Vigenere" value="vigenere" />
+                    <Picker.Item label="Permutation" value="permutation" />
                 </Picker>}
 
 

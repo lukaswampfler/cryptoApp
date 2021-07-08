@@ -39,7 +39,7 @@ export default function HomeScreen({ navigation }) {
       navigation.navigate("Methods");
 
     } else if (choice == 'analysis') {
-      console.log("navigation.navigate(analysis)");
+      navigation.navigate("Analysis");
     } else if (choice == 'messages') {
       navigation.navigate("Messages");
     } else if (choice == 'riddles') {
@@ -137,19 +137,6 @@ export default function HomeScreen({ navigation }) {
             <Picker.Item label="Messages" value="messages" />
             <Picker.Item label="Riddles" value="riddles" />
           </Picker>}
-        {/*<View style={{ backgroundColor: '#DDD', height: 50 }}>
-          <Picker style={{ flex: 1, width: 250 }}
-            selectedValue={choice}
-            onValueChange={(itemValue, itemIndex) =>
-              setChoice(itemValue)}
-            prompt="Please choose"
-          >
-            <Picker.Item label="Encryption Methods" value="methods" />
-            <Picker.Item label="Cryptoanalysis" value="analysis" />
-            <Picker.Item label="Messages" value="messages" />
-            <Picker.Item label="Riddles" value="riddles" />
-          </Picker>
-            </View>*/}
         <Button onPress={pressSelectButton} title="Select" />
       </View>
     </SafeAreaView >

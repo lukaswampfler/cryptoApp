@@ -24,7 +24,9 @@ import CaesarScreen from './src/screens/CaesarScreen';
 import VigenereScreen from './src/screens/VigenereScreen';
 
 import MethodsHomeScreen from './src/screens/MethodsHomeScreen';
+import AnalysisHomeScreen from './src/screens/AnalysisHomeScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import CaesarAnalysisScreen from './src/screens/CaesarAnalysisScreen';
 
 
 
@@ -44,6 +46,7 @@ const AppStack = createStackNavigator();
 //const RSAStack = createStackNavigator();
 const MethodStack = createStackNavigator();
 const HomeTab = createBottomTabNavigator();
+const AnalysisStack = createStackNavigator();
 
 
 const AuthenticationNavigator = props => {
@@ -122,6 +125,23 @@ const MethodNavigator = props => {
 }
 
 
+const AnalysisNavigator = props => {
+  return (
+    <AnalysisStack.Navigator>
+      <AnalysisStack.Screen
+        name="AnalysisHome"
+        component={AnalysisHomeScreen}
+      />
+      <AnalysisStack.Screen
+        name="CaesarAnalysis"
+        component={CaesarAnalysisScreen}
+      />
+    </AnalysisStack.Navigator>
+  );
+}
+
+
+
 
 /*const RSANavigator = props => {
   return (
@@ -178,7 +198,7 @@ export default function App() {
 
   const rsa = { isEncrypted: false, m: '', exp: '', n: '' };
   const sdes = { keys: undefined }
-  const caesar = { message: '', key: 0, secret: '' }
+  const caesar = { message: '', key: 0, secret: 'aliceundlena' }
   const vigenere = { message: '', key: '' }
   const [ciphers, setCiphers] = useState({ rsa, sdes, caesar, vigenere, currentMethod: undefined, currentMessage: undefined })
 
@@ -264,6 +284,7 @@ export default function App() {
           <HomeTab.Navigator updateAuthState={updateAuthState}>
             <HomeTab.Screen name="HomeScreen" component={HomeScreen} />
             <HomeTab.Screen name="Methods" component={MethodNavigator} />
+            <HomeTab.Screen name="Analysis" component={AnalysisNavigator} />
             <HomeTab.Screen name="Messages" component={MessageScreen} options={{ title: "Your Messages" }} />
           </HomeTab.Navigator>
         )}

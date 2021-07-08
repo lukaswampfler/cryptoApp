@@ -38,6 +38,8 @@ export default function CaesarScreen({ navigation }) {
         let ciphers = myContext.ciphers;
         ciphers.currentMethod = 'CAESAR';
         ciphers.currentMessage = secret;
+        ciphers.caesar.secret = secret;
+        myContext.setCiphers(ciphers);
         navigation.navigate('UsersList', { toSend: true, toImportKey: false })
     }
 
