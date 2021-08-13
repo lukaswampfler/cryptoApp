@@ -1,6 +1,15 @@
 import { max } from "react-native-reanimated";
 import { gcdArray } from "./CryptoMath";
 
+export const germanFreq = {'A' :  6.34 ,       'K' :  1.50  ,      'U' :  3.76,
+    'D' :  4.92   ,     'N' :  9.59   ,     'X' :  0.07,
+    'B' :  2.21     ,   'L' :  3.72   ,     'V' :  0.94,
+    'C' :  2.71     ,   'M' :  2.75   ,     'W' :  1.40,
+    'E' : 15.99      ,  'O' :  2.75   ,     'Y' :  0.13,
+    'F' :  1.80     ,   'P' :  1.06   ,     'Z' :  1.22,
+    'G' :  3.02       , 'Q' :  0.04   ,     'H': 4.11, 'I': 7.60, 'J': 0.27, 
+'R': 7.71, 'S': 6.41 , 'T': 6.43 }
+
 export function createFrequencyDict(s, dist = 1) {
     const parts = createParts(s, dist);
     let allDics = {};

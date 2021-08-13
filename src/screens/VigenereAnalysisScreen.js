@@ -4,20 +4,14 @@ import Button from '../components/Button';
 
 import AppContext from '../components/AppContext';
 
+import data from '../data/data'
 
-import {
-    BarChart
-} from "react-native-chart-kit";
 
-import { createFrequencyDict, sortDictionaryByKey, onlyNonAlpha , kasiskiTest} from '../utils/frequencyAnalysis';
+import { createFrequencyDict, sortDictionaryByKey, onlyNonAlpha , kasiskiTest, germanFreq} from '../utils/frequencyAnalysis';
+import CarouselCards from '../components/CarouselCards';
 
 const screenWidth = 0.9 * Dimensions.get("window").width;
 
-const DismissKeyboard = ({children }) => {
-    <TouchableWithoutFeedback onPress = {() => Keyboard.dismiss}> 
-    {children} 
-    </TouchableWithoutFeedback>
-};
 
 
 export default function VigenereAnalysisScreen({ navigation }) {
@@ -53,15 +47,20 @@ export default function VigenereAnalysisScreen({ navigation }) {
 
     const freqDict = createFrequencyDict(secret)["0"];
     const sorted = sortDictionaryByKey(freqDict)
-    //console.log("Frequencies", sorted);
+    
+    const germanSorted = sortDictionaryByKey(germanFreq)
 
-    //const test = 3
 
-    const data = {
+    /*const data = {
         labels: Object.keys(sorted),
         datasets: [{ data: Object.values(sorted) }]
     };
-    //console.log(data)
+
+
+    const germanData = {
+        labels: Object.keys(germanSorted),
+        datasets : [{data: Object.values(germanSorted)}]
+    }*/
 
     
 
@@ -78,7 +77,9 @@ export default function VigenereAnalysisScreen({ navigation }) {
 
 
     return (
+        
         <View>
+            
             <Text>Enter secret message below:</Text>
             <TextInput
                 width={280}
@@ -95,6 +96,7 @@ export default function VigenereAnalysisScreen({ navigation }) {
                 onChangeText={changeText}
                 onBlur={() => { }}
             />
+
             <View style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
@@ -103,8 +105,12 @@ export default function VigenereAnalysisScreen({ navigation }) {
                 }}>
                     <Button label='Analyze Text' onPress={handleAnalysis} width={240} />
                 </View>
+                <Text>most likely length of secret key word: {kasiskiLength}</Text> 
 
-            {(!onlyNonAlpha(secret)) && (<BarChart
+                {(!onlyNonAlpha(secret)) && (<CarouselCards data= {data}/>)}
+
+
+            {/*{(!onlyNonAlpha(secret)) && (<BarChart
                 style={{
                     marginVertical: 8,
                     borderRadius: 16
@@ -115,9 +121,9 @@ export default function VigenereAnalysisScreen({ navigation }) {
                 yAxisSuffix="%"
                 chartConfig={chartConfig}
                 verticalLabelRotation={90}
-            />)}
+            />)}*/}
 
-            <Text>most likely length of secret key word: {kasiskiLength}</Text> 
+            
         </View>
     );
 
