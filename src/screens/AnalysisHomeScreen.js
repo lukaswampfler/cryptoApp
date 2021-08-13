@@ -21,6 +21,8 @@ export default function AnalysisHomeScreen({ navigation }) {
         console.log("Method chosen: ", selectedMethod);
         if (selectedMethod == 'caesar') {
             navigation.navigate("CaesarAnalysis");
+        } else if (selectedMethod == 'vigenere'){
+            navigation.navigate("VigenereAnalysis")
         } else {
             console.log("Navigating to ...", selectedMethod, " analysis.");
         }

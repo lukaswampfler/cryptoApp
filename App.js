@@ -27,7 +27,7 @@ import MethodsHomeScreen from './src/screens/MethodsHomeScreen';
 import AnalysisHomeScreen from './src/screens/AnalysisHomeScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import CaesarAnalysisScreen from './src/screens/CaesarAnalysisScreen';
-
+import VigenereAnalysisScreen from './src/screens/VigenereAnalysisScreen';
 
 
 
@@ -135,6 +135,10 @@ const AnalysisNavigator = props => {
       <AnalysisStack.Screen
         name="CaesarAnalysis"
         component={CaesarAnalysisScreen}
+      />
+      <AnalysisStack.Screen
+        name="VigenereAnalysis"
+        component={VigenereAnalysisScreen}
       />
     </AnalysisStack.Navigator>
   );

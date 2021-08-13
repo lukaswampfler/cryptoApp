@@ -30,7 +30,7 @@ export default function SDESEncodingScreen({ navigation }) {
     }
 
 
-    const introText = "Here comes the introduction to S-DES encoding ...";
+    const introText = "Here comes the introduction to S-DES encoding ..., please use only characters from latin-1 encoding, i.e. no emojis";
     const method = "Encoding a message"
 
 

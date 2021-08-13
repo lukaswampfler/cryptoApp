@@ -12,7 +12,7 @@ import * as Yup from 'yup'
 
 
 import { SDESKeyInputScheme, SDESK12InputScheme, SDESMessageInputScheme } from '../utils/InputTests';
-import { encryptSDESMessage, generateSDESKeys, decodeBinaryString } from '../utils/sdesMath';
+import { encryptSDESMessage, generateSDESKeys, decodeBinaryString, encodeEncrypted } from '../utils/sdesMath';
 
 
 const INVALID_FORMAT_ERROR_MESSAGE = 'invalid format';
@@ -117,10 +117,18 @@ export default function SDESScreen({ route, navigation }) {
       let ciphers = myContext.ciphers;
       ciphers.sdes.message = values.message;
       setMessage(values.message);
+      console.log("message", values.message);
+      console.log("keys: ", myContext.ciphers.sdes.keys);
       const encrypted = encryptSDESMessage(values.message, myContext.ciphers.sdes.keys)
       const decryptionKeys = { k1: myContext.ciphers.sdes.keys.k2, k2: myContext.ciphers.sdes.keys.k1 }
-      const decrypted = encryptSDESMessage(values.message, decryptionKeys);
       ciphers.sdes.encryptedMessage = encrypted;
+      const encryptedAsText = decodeBinaryString(encrypted);
+      console.log("decoded", encryptedAsText);
+      const encryptedEncoded = encodeEncrypted(encryptedAsText);
+      console.log("encrypted encoded", encryptedEncoded);
+      console.log("decryption keys: ", decryptionKeys);
+      console.log("Encrypted decrypted", encryptSDESMessage(encryptedEncoded, decryptionKeys))
+      const decrypted = encryptSDESMessage(encodeEncrypted(decodeBinaryString(encrypted)), decryptionKeys);
       myContext.setCiphers(ciphers);
       setIsEncrypted(true);
       setEncryptedMessage(encrypted);
@@ -242,6 +250,10 @@ export default function SDESScreen({ route, navigation }) {
           <View style={{ flex: 1 }}>
             <Text style={{ fontSize: 20 }}>Message encrypted </Text>
             <Text style={{ fontSize: 20 }} selectable> {myContext.ciphers.sdes.encryptedMessage} </Text>
+            <Text style={{ fontSize: 20 }}>encrypted message as String </Text>
+            <Text style={{ fontSize: 20 }} selectable> {decodeBinaryString(myContext.ciphers.sdes.encryptedMessage)} </Text>
+            <Text style={{ fontSize: 20 }}>encrypted message encoded </Text>
+            <Text style={{ fontSize: 20 }} selectable> {encodeEncrypted(decodeBinaryString(myContext.ciphers.sdes.encryptedMessage))} </Text>
             <Text style={{ fontSize: 20 }}>Message decrypted </Text>
             <Text style={{ fontSize: 20 }} selectable> {decryptedMessage} </Text>
           </View> : null}

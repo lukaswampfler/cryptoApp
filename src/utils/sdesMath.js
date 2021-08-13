@@ -27,12 +27,11 @@ function applyRound(s, key) {
     const EP = [3, 0, 1, 2, 1, 2, 3, 0];
     const afterEP = applyPermutation(s, EP);
     const afterXOR = xor(afterEP, key);
+    
     let { first, second } = generateTwoParts(afterXOR);
     first = applySub(first, 0);
     second = applySub(second, 1);
-    //console.log(first, second);
     const afterP4 = applyPermutation(first.concat(second), [1, 3, 2, 0]);
-    //console.log("After P4: " + afterP4);
     return afterP4;
 }
 export function applyPermutation(s, perm) {
@@ -118,6 +117,7 @@ function divideIntoMultiples(str, size) {
 
 export function encryptSDESMessage(bitString, keys) {
     // accepts as input a bitString of length multiple of 8
+    // returns a bitString of the same length as the input
     const size = 8
     const chunks = divideIntoMultiples(bitString, size);
     const encryptedChunks = new Array(chunks.length);
@@ -129,6 +129,7 @@ export function encryptSDESMessage(bitString, keys) {
         const part1 = chunk.substr(0, 4);
         const part2 = chunk.substr(4, 4);
         const part2AfterRound1 = applyRound(part2, keys.k1);
+
         const inputRound2Part1 = part2;
         const inputRound2Part2 = xor(part1, part2AfterRound1);
         const part2AfterRound2 = applyRound(inputRound2Part2, keys.k2);
@@ -155,6 +156,7 @@ function toNumber(s) {
 }
 function toBinary(n) {
     let res = '';
+    if (n == 0) return '0'
     while (n != 0) {
         res = n % 2 + res;
         n = Math.floor(n / 2);
@@ -173,16 +175,39 @@ function stringToBytes(text) {
     return result;
 }
 
+function encryptedStringToBytes(text){
+    const length = text.length;
+    const result = new Array(length);
+    for( let i = 0; i< length ; i++){
+        const code = text.charCodeAt(i);
+        let byte = 0
+        // check if code is in certain area
+        if ( code >= 256 && code <=287) { 
+                byte = code - 256;
+        } else if (code >= 319 && code <= 351){
+            byte = code - 192;
+        } else if (code == 295){
+            byte = 173
+        } else {
+            byte = code
+        }
+        result[i] = ("00000000" + byte.toString(2)).slice(-8);
+    }
+    return result
+}
+
 function bytesToString(byteArray) {
     let result = ''
     for (const byte of byteArray) {
         const num = parseInt(byte, 2);
         console.log(byte, num)
-        //TODO: (extended) control characters: num<32 or 0x80 <= num <= ox9F
-        if (num < 32) {// handle non printable characters
-            num += 8032
-        }
+        if (num < 32) {// replace non printable characters
+            num += 256
+        } else if (num <= 159 && num >= 127){
+            num += 192
+        } else if (num == 173 ){num = 295}
         result += String.fromCharCode(num);
+        console.log(num , String.fromCharCode(num));
     }
     return result
 }
@@ -201,6 +226,10 @@ function binaryStringToBytesArray(binString) {
 export function encode(text) {
     console.log(text, stringToBytes(text));
     return stringToBytes(text);
+}
+
+export function encodeEncrypted(text){
+    return encryptedStringToBytes(text).join('');
 }
 
 export function decode(stringArray) {
