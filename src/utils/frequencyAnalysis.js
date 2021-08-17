@@ -12,13 +12,16 @@ export const germanFreq = {'A' :  6.34 ,       'K' :  1.50  ,      'U' :  3.76,
 
 export function createFrequencyDict(s, dist = 1) {
     const parts = createParts(s, dist);
-    let allDics = {};
-    let d = {};
-    let a = 97;
-    for (let i = 0; i < 26; i++)
-        d[String.fromCharCode(a + i)] = 0;
+    //let allDics = {};
+    let allDics = [];
     let numAlpha;
     for (let i = 0; i < parts.length; i++) {
+        let d = {};
+        const a = 97;
+        for (let i = 0; i < 26; i++){
+            d[String.fromCharCode(a + i)] = 0;
+        }
+        //console.log("d before filling: ", d);
         numAlpha = 0;
         for (let char of parts[i].split('')) {
             if (isalpha(char)) {
@@ -31,21 +34,51 @@ export function createFrequencyDict(s, dist = 1) {
                 }
             }
         }
+        //console.log("numAlpha", numAlpha);
+        //console.log("d before normalization", d);
         for (const k in d) {
-            d[k] = d[k] / numAlpha * 100;
+            d[k] = Math.round(d[k] / numAlpha * 100);
         }
-        allDics[i] = d;
+        //console.log(d)
+        //allDics[i] = d;
+        allDics.push(d);
         //console.log(d, numAlpha);
-        d = {};
+        //d = {};
     }
     return allDics;
 }
 
 
+export function createData(freqDicts, mostFrequent){
+    // input: array of frequencyDicts
+    // output: array of Objects with attributes title and data
+
+    let out = []
+    for(let i = 0; i < freqDicts.length; i++){
+        const tit = "Character " + (i+1);
+        //console.log(tit);
+        let newItem = {title: tit, mostFrequentInAlphabet: mostFrequent, mostFrequentInDictionary: getMaxKey(freqDicts[i]), data: {labels: Object.keys(freqDicts[i]), datasets: [{data: Object.values(freqDicts[i])}]}}
+        out.push(newItem)
+    }
+    return out;
+}
+
 export function sortDictionaryByKey(dict) {
     return Object.fromEntries(Object.entries(dict).sort(function (a, b) {
         return a[0].localeCompare(b[0]);
     }))
+}
+
+export function getMaxKey(dict){
+    let maxValue = 0; 
+    let maxKey = null;
+    for (let key in dict){
+        if (dict[key] > maxValue){
+            maxValue = dict[key];
+            maxKey = key;
+        }
+    }
+    return maxKey;
 }
 
 

@@ -1,44 +1,57 @@
-import React from 'react'
+import React, { useContext }from 'react'
 import { View, Text, StyleSheet, Dimensions, Image } from "react-native"
 
 import {
   BarChart
 } from "react-native-chart-kit";
+import AppContext from './AppContext';
+//import styles from '../screens/styles';
 
-export const SLIDER_WIDTH = Dimensions.get('window').width + 80
-export const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7)
+//import { BarChart } from 'react-native-svg-charts';
+
+export const SLIDER_WIDTH = Dimensions.get('window').width +50
+export const ITEM_WIDTH = Math.round(SLIDER_WIDTH )
 
 const chartConfig = {
   backgroundGradientFrom: "#1E2923",
   backgroundGradientFromOpacity: 0,
-  backgroundGradientTo: "#08130D",
+  backgroundGradientTo: "#080808",
   backgroundGradientToOpacity: 0,
-  color: (opacity = 1) => `rgba(20, 20, 20, ${opacity})`,
+  color: (opacity = 1) => `rgba(10, 10, 10, ${opacity})`,
   strokeWidth: 2, // optional, default 3
-  barPercentage: 0.2,
+  barPercentage: 0.15,
+  decimalPlaces:0,
   //useShadowColorFromDataset: false // optional
 };
 
 
-const CarouselCardItem = ({ item, index }) => {
-  return (
+const CarouselCardItem  = ({ item, index })  => {
+
+    
+    //const myContext = {mostFrequentLetter: item.mostFrequentInAlphabet}
+    return (
     <View style={styles.container} key={index}>
       <BarChart
                 style={{
                     marginVertical: 8,
-                    borderRadius: 16
+                    borderRadius: 5, 
                 }}
                 data={item.data}
-                width={ITEM_WIDTH}
+                width={ITEM_WIDTH-50}
                 height={240}
                 yAxisSuffix="%"
                 chartConfig={chartConfig}
                 verticalLabelRotation={90}
             />
+            
       <Text style={styles.header}>{item.title}</Text>
+      <Text style ={styles.body}> most frequent letter in Dictionary: {item.mostFrequentInDictionary} </Text>
+      <Text style ={styles.body}> most frequent letter in Alphabet: {item.mostFrequentInAlphabet} </Text>
     </View>
   )
 }
+
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',

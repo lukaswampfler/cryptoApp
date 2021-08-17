@@ -4,10 +4,10 @@ import Button from '../components/Button';
 
 import AppContext from '../components/AppContext';
 
-import data from '../data/data'
+//import data from '../data/data'
 
 
-import { createFrequencyDict, sortDictionaryByKey, onlyNonAlpha , kasiskiTest, germanFreq} from '../utils/frequencyAnalysis';
+import { createFrequencyDict, sortDictionaryByKey, onlyNonAlpha , kasiskiTest, germanFreq, createData, getMaxKey} from '../utils/frequencyAnalysis';
 import CarouselCards from '../components/CarouselCards';
 
 const screenWidth = 0.9 * Dimensions.get("window").width;
@@ -19,21 +19,32 @@ export default function VigenereAnalysisScreen({ navigation }) {
     const myContext = useContext(AppContext);
     const [secret, setSecret] = useState('');
     const [kasiskiLength, setKasiskiLength] = useState(0)
+    const [data, setData] = useState([])
+    const [mostFrequentLetter, setMostFrequentLetter] = useState('a')
 
 
-   /* useEffect(() => {
-        console.log("kasiskiTest", kasiskiTest("lukaslukaswampflerwampfler"));
-      }, [])*/
+   useEffect(() => {
+       const myLongText = "lukaslukaslukaslukaswampfler"
+       //const dicts = [{'a': 2, 'b': 3, 'c': 1}, {'a': 4, 'b': 2, 'c': 3}, {'a':5, 'b': 12, 'c':0    }]
+       const dicts = createFrequencyDict(myLongText, 5) 
+       console.log("dicts: ", dicts);
+       console.log("Data: ", createData(dicts));
+      }, [])
 
- 
+
+    
+
     let likelyLength = 0
     let analysisDone = false;
 
+    //let data = []
+
     const changeText = text => {
         setSecret(text);
-        //
-        //setKasiskiLength(kasiskiTest(text))
-        //setKasiskiLength(Math.random());
+    }
+
+    const changeMostFrequent = letter => {
+        setMostFrequentLetter(letter);
     }
 
     const handleAnalysis = () => {
@@ -41,6 +52,8 @@ export default function VigenereAnalysisScreen({ navigation }) {
         console.log(likelyLength);
         setKasiskiLength(likelyLength);
         analysisDone = true;
+        let frequencyDictionaries = createFrequencyDict(secret, likelyLength)
+        setData(createData(frequencyDictionaries, mostFrequentLetter));
     }
 
 
@@ -96,7 +109,7 @@ export default function VigenereAnalysisScreen({ navigation }) {
                 onChangeText={changeText}
                 onBlur={() => { }}
             />
-
+<View style = {{marginBottom: 20}}>
             <View style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
@@ -105,9 +118,28 @@ export default function VigenereAnalysisScreen({ navigation }) {
                 }}>
                     <Button label='Analyze Text' onPress={handleAnalysis} width={240} />
                 </View>
-                <Text>most likely length of secret key word: {kasiskiLength}</Text> 
+                <Text>Most likely length of secret key word: {kasiskiLength}</Text> 
+</View>
+                <View style={{flexDirection: 'row'}}>
+                <Text>Most frequent letter?  </Text> 
+<TextInput
+                width={60}
+                textAlignVertical='top'
+                placeholder='Enter secret vigenere message'
+                autoCapitalize='none'
+                autoCorrect={false}
+                style={{ height: 30, borderColor: 'gray', borderWidth: 1 }}
+                keyboardType='default'
+                keyboardAppearance='dark'
+                returnKeyType='next'
+                returnKeyLabel='next'
+                onChangeText={changeMostFrequent}
+                onBlur={() => { }}
+            />
 
-                {(!onlyNonAlpha(secret)) && (<CarouselCards data= {data}/>)}
+    </View>
+                {(!onlyNonAlpha(secret)) && (<CarouselCards data= {data} />)}
+
 
 
             {/*{(!onlyNonAlpha(secret)) && (<BarChart

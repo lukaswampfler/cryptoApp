@@ -1,17 +1,17 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { View } from "react-native"
 import Carousel from 'react-native-snap-carousel'
+import AppContext from './AppContext'
 import CarouselCardItem, { SLIDER_WIDTH, ITEM_WIDTH } from './CarouselCardItem'
 
 
 const CarouselCards = ({data}) => {
   const isCarousel = React.useRef(null)
-
   return (
     <View>
       <Carousel
         layout="tinder"
-        layoutCardOffset={9}
+        layoutCardOffset={3}
         ref={isCarousel}
         data={data}
         renderItem={CarouselCardItem}
