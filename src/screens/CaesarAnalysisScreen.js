@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, Dimensions, TextInput } from 'react-native';
+import { View, Text, Dimensions, TextInput, TouchableWithoutFeedback, Keyboard  } from 'react-native';
 import AppContext from '../components/AppContext';
 
 
@@ -53,6 +53,8 @@ export default function CaesarAnalysisScreen({ navigation }) {
 
     return (
         <View>
+ <TouchableWithoutFeedback onPress = {Keyboard.dismiss} accessible={false}>
+<View>
             <Text>Bar Chart for message</Text>
             <TextInput
                 width={280}
@@ -69,7 +71,8 @@ export default function CaesarAnalysisScreen({ navigation }) {
                 onChangeText={changeText}
                 onBlur={() => { }}
             />
-
+           </View> 
+</TouchableWithoutFeedback>
             {(!onlyNonAlpha(secret)) && (<BarChart
                 style={{
                     marginVertical: 8,

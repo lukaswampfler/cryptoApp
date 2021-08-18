@@ -4,64 +4,77 @@ import Button from '../components/Button';
 
 import AppContext from '../components/AppContext';
 
+//import data from '../data/data'
 
-import {
-    BarChart
-} from "react-native-chart-kit";
 
-import { createFrequencyDict, sortDictionaryByKey, onlyNonAlpha , kasiskiTest} from '../utils/frequencyAnalysis';
+import { createFrequencyDict, sortDictionaryByKey, onlyNonAlpha , kasiskiTest, germanFreq, createData, getFirstLetter} from '../utils/frequencyAnalysis';
+import CarouselCards from '../components/CarouselCards';
 
 const screenWidth = 0.9 * Dimensions.get("window").width;
 
-const DismissKeyboard = ({children }) => {
-    <TouchableWithoutFeedback onPress = {() => Keyboard.dismiss}> 
-    {children} 
-    </TouchableWithoutFeedback>
-};
 
 
 export default function VigenereAnalysisScreen({ navigation }) {
 
-    const myContext = useContext(AppContext);
     const [secret, setSecret] = useState('');
     const [kasiskiLength, setKasiskiLength] = useState(0)
+    const [data, setData] = useState([])
+    const [mostFrequentLetter, setMostFrequentLetter] = useState('e')
 
 
-   /* useEffect(() => {
-        console.log("kasiskiTest", kasiskiTest("lukaslukaswampflerwampfler"));
+   /*useEffect(() => {
+       const myLongText = "lukaslukaslukaslukaswampfler"
+       //const dicts = [{'a': 2, 'b': 3, 'c': 1}, {'a': 4, 'b': 2, 'c': 3}, {'a':5, 'b': 12, 'c':0    }]
+       const dicts = createFrequencyDict(myLongText, 5) 
+       console.log("dicts: ", dicts);
+       console.log("Data: ", createData(dicts));
       }, [])*/
 
- 
+
+    
+
     let likelyLength = 0
     let analysisDone = false;
 
+    //let data = []
+
     const changeText = text => {
         setSecret(text);
-        //
-        //setKasiskiLength(kasiskiTest(text))
-        //setKasiskiLength(Math.random());
+    }
+
+    const changeMostFrequent = letter => {
+        const firstLetter = getFirstLetter(letter);
+        setMostFrequentLetter(firstLetter);
     }
 
     const handleAnalysis = () => {
+        //TODO: clean secret of whitespace, punctuation etc.
         likelyLength = kasiskiTest(secret);
         console.log(likelyLength);
         setKasiskiLength(likelyLength);
         analysisDone = true;
+        let frequencyDictionaries = createFrequencyDict(secret, likelyLength)
+        setData(createData(frequencyDictionaries, mostFrequentLetter));
     }
 
 
 
     const freqDict = createFrequencyDict(secret)["0"];
     const sorted = sortDictionaryByKey(freqDict)
-    //console.log("Frequencies", sorted);
+    
+    const germanSorted = sortDictionaryByKey(germanFreq)
 
-    //const test = 3
 
-    const data = {
+    /*const data = {
         labels: Object.keys(sorted),
         datasets: [{ data: Object.values(sorted) }]
     };
-    //console.log(data)
+
+
+    const germanData = {
+        labels: Object.keys(germanSorted),
+        datasets : [{data: Object.values(germanSorted)}]
+    }*/
 
     
 
@@ -78,7 +91,10 @@ export default function VigenereAnalysisScreen({ navigation }) {
 
 
     return (
-        <View>
+        <View>   
+                 <TouchableWithoutFeedback onPress = {Keyboard.dismiss} accessible={false}>
+
+            <View>
             <Text>Enter secret message below:</Text>
             <TextInput
                 width={280}
@@ -95,6 +111,7 @@ export default function VigenereAnalysisScreen({ navigation }) {
                 onChangeText={changeText}
                 onBlur={() => { }}
             />
+<View style = {{marginBottom: 20}}>
             <View style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
@@ -103,8 +120,33 @@ export default function VigenereAnalysisScreen({ navigation }) {
                 }}>
                     <Button label='Analyze Text' onPress={handleAnalysis} width={240} />
                 </View>
+                <Text>Most likely length of secret key word: {kasiskiLength}</Text> 
+</View>
+                <View style={{flexDirection: 'row'}}>
+                <Text>Most frequent letter?  </Text> 
+<TextInput
+                width={60}
+                textAlignVertical='top'
+                placeholder='Enter secret vigenere message'
+                autoCapitalize='none'
+                autoCorrect={false}
+                style={{ height: 30, borderColor: 'gray', borderWidth: 1 }}
+                keyboardType='default'
+                keyboardAppearance='dark'
+                returnKeyType='next'
+                returnKeyLabel='next'
+                onChangeText={changeMostFrequent}
+                onBlur={() => { }}
+            />
+</View>
 
-            {(!onlyNonAlpha(secret)) && (<BarChart
+    </View>
+    </TouchableWithoutFeedback>
+                {(!onlyNonAlpha(secret)) && (<CarouselCards data= {data} />)}
+
+
+
+            {/*{(!onlyNonAlpha(secret)) && (<BarChart
                 style={{
                     marginVertical: 8,
                     borderRadius: 16
@@ -115,10 +157,11 @@ export default function VigenereAnalysisScreen({ navigation }) {
                 yAxisSuffix="%"
                 chartConfig={chartConfig}
                 verticalLabelRotation={90}
-            />)}
+            />)}*/}
 
-            <Text>most likely length of secret key word: {kasiskiLength}</Text> 
+            
         </View>
+        
     );
 
 

@@ -1,15 +1,27 @@
 import { max } from "react-native-reanimated";
 import { gcdArray } from "./CryptoMath";
 
+export const germanFreq = {'A' :  6.34 ,       'K' :  1.50  ,      'U' :  3.76,
+    'D' :  4.92   ,     'N' :  9.59   ,     'X' :  0.07,
+    'B' :  2.21     ,   'L' :  3.72   ,     'V' :  0.94,
+    'C' :  2.71     ,   'M' :  2.75   ,     'W' :  1.40,
+    'E' : 15.99      ,  'O' :  2.75   ,     'Y' :  0.13,
+    'F' :  1.80     ,   'P' :  1.06   ,     'Z' :  1.22,
+    'G' :  3.02       , 'Q' :  0.04   ,     'H': 4.11, 'I': 7.60, 'J': 0.27, 
+'R': 7.71, 'S': 6.41 , 'T': 6.43 }
+
 export function createFrequencyDict(s, dist = 1) {
     const parts = createParts(s, dist);
-    let allDics = {};
-    let d = {};
-    let a = 97;
-    for (let i = 0; i < 26; i++)
-        d[String.fromCharCode(a + i)] = 0;
+    //let allDics = {};
+    let allDics = [];
     let numAlpha;
     for (let i = 0; i < parts.length; i++) {
+        let d = {};
+        const a = 97;
+        for (let i = 0; i < 26; i++){
+            d[String.fromCharCode(a + i)] = 0;
+        }
+        //console.log("d before filling: ", d);
         numAlpha = 0;
         for (let char of parts[i].split('')) {
             if (isalpha(char)) {
@@ -22,16 +34,34 @@ export function createFrequencyDict(s, dist = 1) {
                 }
             }
         }
+        //console.log("numAlpha", numAlpha);
+        //console.log("d before normalization", d);
         for (const k in d) {
-            d[k] = d[k] / numAlpha * 100;
+            d[k] = Math.round(d[k] / numAlpha * 100);
         }
-        allDics[i] = d;
+        //console.log(d)
+        //allDics[i] = d;
+        allDics.push(d);
         //console.log(d, numAlpha);
-        d = {};
+        //d = {};
     }
     return allDics;
 }
 
+
+export function createData(freqDicts, mostFrequent){
+    // input: array of frequencyDicts
+    // output: array of Objects with attributes title and data
+
+    let out = []
+    for(let i = 0; i < freqDicts.length; i++){
+        const tit = "Character " + (i+1);
+        //console.log(tit);
+        let newItem = {title: tit, mostFrequentInAlphabet: mostFrequent, mostFrequentInDictionary: getMaxKey(freqDicts[i]), data: {labels: Object.keys(freqDicts[i]), datasets: [{data: Object.values(freqDicts[i])}]}}
+        out.push(newItem)
+    }
+    return out;
+}
 
 export function sortDictionaryByKey(dict) {
     return Object.fromEntries(Object.entries(dict).sort(function (a, b) {
@@ -39,6 +69,40 @@ export function sortDictionaryByKey(dict) {
     }))
 }
 
+export function calculateKeyCharacter(mostFreqDict, mostFreqAlph){
+    const diff = mostFreqDict.charCodeAt(0)- mostFreqAlph.charCodeAt(0)
+
+    const aNumber = 'a'.charCodeAt(0)
+    let newChar =  aNumber + diff
+    if (newChar < aNumber){newChar += 26}
+    else if (newChar > 'z'.charCodeAt(0)) {newChar -= 26}
+
+    return String.fromCharCode(newChar)
+}
+
+
+export function getMaxKey(dict){
+    let maxValue = 0; 
+    let maxKey = null;
+    for (let key in dict){
+        if (dict[key] > maxValue){
+            maxValue = dict[key];
+            maxKey = key;
+        }
+    }
+    return maxKey;
+}
+
+
+export function getFirstLetter(s){
+    s = s.toLowerCase();
+    let currentChar = ''
+    for (let i = 0; i < s.length; i++){
+        currentChar = s.charAt(i)
+        if (currentChar>= 'a' && currentChar <= 'z') return currentChar;
+    }
+    return 'e';
+}
 
 function createParts(s, dist = 1) {
     let parts = [];
