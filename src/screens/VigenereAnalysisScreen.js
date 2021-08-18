@@ -7,7 +7,7 @@ import AppContext from '../components/AppContext';
 //import data from '../data/data'
 
 
-import { createFrequencyDict, sortDictionaryByKey, onlyNonAlpha , kasiskiTest, germanFreq, createData, getMaxKey} from '../utils/frequencyAnalysis';
+import { createFrequencyDict, sortDictionaryByKey, onlyNonAlpha , kasiskiTest, germanFreq, createData, getFirstLetter} from '../utils/frequencyAnalysis';
 import CarouselCards from '../components/CarouselCards';
 
 const screenWidth = 0.9 * Dimensions.get("window").width;
@@ -44,7 +44,9 @@ export default function VigenereAnalysisScreen({ navigation }) {
     }
 
     const changeMostFrequent = letter => {
-        setMostFrequentLetter(letter);
+        //TODO: set only first alpha letter as most frequent.
+        const firstLetter = getFirstLetter(letter);
+        setMostFrequentLetter(firstLetter);
     }
 
     const handleAnalysis = () => {

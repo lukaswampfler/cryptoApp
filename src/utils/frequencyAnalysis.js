@@ -94,6 +94,16 @@ export function getMaxKey(dict){
 }
 
 
+export function getFirstLetter(s){
+    s = s.toLowerCase();
+    let currentChar = ''
+    for (let i = 0; i < s.length; i++){
+        currentChar = s.charAt(i)
+        if (currentChar>= 'a' && currentChar <= 'z') return currentChar;
+    }
+    return 'e';
+}
+
 function createParts(s, dist = 1) {
     let parts = [];
     for (let j = 0; j < dist; j++) {
