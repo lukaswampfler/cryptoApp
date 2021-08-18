@@ -38,10 +38,11 @@ const CarouselCardItem  = ({ item, index })  => {
                 style={{
                     marginVertical: 8,
                     borderRadius: 5, 
+                    paddingRight: 45,
                 }}
                 data={item.data}
-                width={ITEM_WIDTH-80}
-                height={240}
+                width={ITEM_WIDTH-90}
+                height={220}
                 yAxisSuffix="%"
                 chartConfig={chartConfig}
                 verticalLabelRotation={90}
@@ -77,14 +78,14 @@ const styles = StyleSheet.create({
   },
   header: {
     color: "#222",
-    fontSize: 28,
+    fontSize: 22,
     fontWeight: "bold",
     paddingLeft: 20,
     paddingTop: 20
   },
   body: {
     color: "#222",
-    fontSize: 18,
+    fontSize: 14,
     paddingLeft: 20,
     paddingLeft: 20,
     paddingRight: 20

@@ -16,20 +16,19 @@ const screenWidth = 0.9 * Dimensions.get("window").width;
 
 export default function VigenereAnalysisScreen({ navigation }) {
 
-    const myContext = useContext(AppContext);
     const [secret, setSecret] = useState('');
     const [kasiskiLength, setKasiskiLength] = useState(0)
     const [data, setData] = useState([])
     const [mostFrequentLetter, setMostFrequentLetter] = useState('e')
 
 
-   useEffect(() => {
+   /*useEffect(() => {
        const myLongText = "lukaslukaslukaslukaswampfler"
        //const dicts = [{'a': 2, 'b': 3, 'c': 1}, {'a': 4, 'b': 2, 'c': 3}, {'a':5, 'b': 12, 'c':0    }]
        const dicts = createFrequencyDict(myLongText, 5) 
        console.log("dicts: ", dicts);
        console.log("Data: ", createData(dicts));
-      }, [])
+      }, [])*/
 
 
     
@@ -44,7 +43,6 @@ export default function VigenereAnalysisScreen({ navigation }) {
     }
 
     const changeMostFrequent = letter => {
-        //TODO: set only first alpha letter as most frequent.
         const firstLetter = getFirstLetter(letter);
         setMostFrequentLetter(firstLetter);
     }
