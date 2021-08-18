@@ -1,5 +1,6 @@
 import React, { useContext }from 'react'
 import { View, Text, StyleSheet, Dimensions, Image } from "react-native"
+import{calculateKeyCharacter} from '../utils/frequencyAnalysis'
 
 import {
   BarChart
@@ -27,8 +28,10 @@ const chartConfig = {
 
 const CarouselCardItem  = ({ item, index })  => {
 
+    const mostFreqInDict = item.mostFrequentInDictionary
+    const mostFreqInAlph = item.mostFrequentInAlphabet
     
-    //const myContext = {mostFrequentLetter: item.mostFrequentInAlphabet}
+    
     return (
     <View style={styles.container} key={index}>
       <BarChart
@@ -37,7 +40,7 @@ const CarouselCardItem  = ({ item, index })  => {
                     borderRadius: 5, 
                 }}
                 data={item.data}
-                width={ITEM_WIDTH-50}
+                width={ITEM_WIDTH-80}
                 height={240}
                 yAxisSuffix="%"
                 chartConfig={chartConfig}
@@ -45,8 +48,9 @@ const CarouselCardItem  = ({ item, index })  => {
             />
             
       <Text style={styles.header}>{item.title}</Text>
-      <Text style ={styles.body}> most frequent letter in Dictionary: {item.mostFrequentInDictionary} </Text>
-      <Text style ={styles.body}> most frequent letter in Alphabet: {item.mostFrequentInAlphabet} </Text>
+      <Text style ={styles.body}> most frequent letter in Dictionary: {mostFreqInDict} </Text>
+      <Text style ={styles.body}> most frequent letter in Alphabet: {mostFreqInAlph} </Text>
+      <Text style ={styles.body}> most likely corresponding letter in secret key: {calculateKeyCharacter(mostFreqInDict, mostFreqInAlph)} </Text>
     </View>
   )
 }

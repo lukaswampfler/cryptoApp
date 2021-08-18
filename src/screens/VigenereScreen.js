@@ -105,7 +105,7 @@ export default function VigenereScreen({ navigation }) {
                     width={200}
                     placeholder='Enter Vigenere key'
                     autoCapitalize='none'
-                    keyboardType='number-pad'
+                    keyboardType='default'
                     keyboardAppearance='dark'
                     returnKeyType='next'
                     returnKeyLabel='next'

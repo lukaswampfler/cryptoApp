@@ -69,6 +69,18 @@ export function sortDictionaryByKey(dict) {
     }))
 }
 
+export function calculateKeyCharacter(mostFreqDict, mostFreqAlph){
+    const diff = mostFreqDict.charCodeAt(0)- mostFreqAlph.charCodeAt(0)
+
+    const aNumber = 'a'.charCodeAt(0)
+    let newChar =  aNumber + diff
+    if (newChar < aNumber){newChar += 26}
+    else if (newChar > 'z'.charCodeAt(0)) {newChar -= 26}
+
+    return String.fromCharCode(newChar)
+}
+
+
 export function getMaxKey(dict){
     let maxValue = 0; 
     let maxKey = null;

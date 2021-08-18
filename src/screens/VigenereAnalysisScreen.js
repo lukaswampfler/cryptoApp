@@ -20,7 +20,7 @@ export default function VigenereAnalysisScreen({ navigation }) {
     const [secret, setSecret] = useState('');
     const [kasiskiLength, setKasiskiLength] = useState(0)
     const [data, setData] = useState([])
-    const [mostFrequentLetter, setMostFrequentLetter] = useState('a')
+    const [mostFrequentLetter, setMostFrequentLetter] = useState('e')
 
 
    useEffect(() => {
@@ -48,6 +48,7 @@ export default function VigenereAnalysisScreen({ navigation }) {
     }
 
     const handleAnalysis = () => {
+        //TODO: clean secret of whitespace, punctuation etc.
         likelyLength = kasiskiTest(secret);
         console.log(likelyLength);
         setKasiskiLength(likelyLength);
@@ -90,9 +91,10 @@ export default function VigenereAnalysisScreen({ navigation }) {
 
 
     return (
-        
-        <View>
-            
+        <View>   
+                 <TouchableWithoutFeedback onPress = {Keyboard.dismiss} accessible={false}>
+
+            <View>
             <Text>Enter secret message below:</Text>
             <TextInput
                 width={280}
@@ -136,8 +138,10 @@ export default function VigenereAnalysisScreen({ navigation }) {
                 onChangeText={changeMostFrequent}
                 onBlur={() => { }}
             />
+</View>
 
     </View>
+    </TouchableWithoutFeedback>
                 {(!onlyNonAlpha(secret)) && (<CarouselCards data= {data} />)}
 
 
@@ -157,6 +161,7 @@ export default function VigenereAnalysisScreen({ navigation }) {
 
             
         </View>
+        
     );
 
 
