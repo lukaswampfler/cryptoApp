@@ -127,7 +127,7 @@ export default function VigenereAnalysisScreen({ navigation }) {
 <TextInput
                 width={60}
                 textAlignVertical='top'
-                placeholder='Enter secret vigenere message'
+                placeholder='secret'
                 autoCapitalize='none'
                 autoCorrect={false}
                 style={{ height: 30, borderColor: 'gray', borderWidth: 1 }}

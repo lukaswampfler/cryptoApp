@@ -124,7 +124,8 @@ export default function MessageScreen({ navigation }) {
                             data={messages}
                             renderItem={renderItem}
                             keyExtractor={item => item.createdAt}
-                        /> : <Loading />}
+                        /> :
+                        <Text> No messages yet... </Text>}
 
                 </View>
             </View>
