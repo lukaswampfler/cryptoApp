@@ -176,7 +176,7 @@ export default function VigenereScreen({ navigation }) {
                         value={secret}/>
                    
                 <View style={{
-                    flexDirection: 'center',
+                    flexDirection: 'row',
                     justifyContent: 'center', width: 150,
                     marginTop: 100
                 }}>

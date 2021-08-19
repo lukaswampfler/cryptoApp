@@ -143,7 +143,7 @@ export default function CaesarScreen({ navigation }) {
 
                 </View>
                 <View style={{
-                    flexDirection: 'center',
+                    flexDirection: 'row',
                     justifyContent: 'center', width: 150,
                     marginTop: 100
                 }}>
