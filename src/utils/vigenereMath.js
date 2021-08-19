@@ -21,6 +21,24 @@ export function vigenereEncrypt(text, key) {
     }
 }
 
+export function vigenereDecrypt(secret, key){
+    const keyInverse = invert(key);
+    return vigenereEncrypt(secret, keyInverse);
+}
+
+
+function invert(key){
+    // returns the inverse key, i.e. key = abc -> inverse = azy
+    let inverse = '';
+    for (let index = 0; index < key.length; index ++){
+        let diff = key.charCodeAt(index)- 'a'.charCodeAt(0);
+        if (diff > 0){
+            inverse += String.fromCharCode('a'.charCodeAt(0)+ 26 - diff)
+        } else {inverse += 'a'}
+    }
+    console.log("inverse of ", key, " is: ", inverse);
+    return inverse; 
+}
 
 function isAlpha(c) {
     return c.length == 1 && ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'));

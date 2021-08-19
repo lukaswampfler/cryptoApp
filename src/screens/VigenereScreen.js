@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import { SafeAreaView, ScrollView, Text, View, TextInput, TouchableOpacity, Modal } from 'react-native';
 import { Divider } from 'react-native-elements';
 import AppContext from '../components/AppContext';
 import Button from '../components/Button';
 import NumInput from '../components/NumInput';
-import { vigenereEncrypt } from '../utils/vigenereMath';
+import { vigenereEncrypt, vigenereDecrypt } from '../utils/vigenereMath';
 import { useFormik } from 'formik';
 
 
@@ -23,16 +23,24 @@ const encryptVigenere = () => {
 
 export default function VigenereScreen({ navigation }) {
     const myContext = useContext(AppContext);
+    
+
 
     const [text, setText] = useState('');
     const [secret, setSecret] = useState('');
     const [key, setKey] = useState('a');
-
+    const ref = useRef(key);
 
     const changeText = text => {
         setText(text);
         //encryptVigenere();
         setSecret(vigenereEncrypt(text, key));
+    }
+
+    const changeSecret = secret => {
+        setSecret(secret);
+        //encryptVigenere();
+        //setSecret(vigenereEncrypt(text, key));
     }
 
 
@@ -42,6 +50,13 @@ export default function VigenereScreen({ navigation }) {
         ciphers.currentMessage = secret;
         myContext.setCiphers(ciphers);
         navigation.navigate('UsersList', { toSend: true, toImportKey: false })
+    }
+
+    const decrypt = () => {
+        //console.log("formikKey.values: ", formikKey.values);
+        const currentKey = formikKey.values.key
+        setKey(currentKey);
+        setText(vigenereDecrypt(secret, currentKey)); 
     }
 
     useEffect(() => {
@@ -58,6 +73,7 @@ export default function VigenereScreen({ navigation }) {
 
     const formikKey = useFormik({
         validationSchema: VigenereKeyInputScheme,
+        innerRef: ref,
         initialValues: {
             key: ''
         },
@@ -123,6 +139,7 @@ export default function VigenereScreen({ navigation }) {
                 }}>
                     <Button label='use this key' onPress={formikKey.handleSubmit} />
                     <Button label='send message' onPress={sendMessage} />
+                    <Button label='Decrypt' onPress={decrypt} />
                 </View>
 
 
@@ -134,13 +151,30 @@ export default function VigenereScreen({ navigation }) {
                     marginLeft: 20,
                 }}>
 
-                    <Text
+                  {/*}  <Text
                         style={{ padding: 10, fontSize: 25, borderColor: 'gray', borderWidth: 1, width: 280 }}
                         selectable>
                         {secret}
-                    </Text>
-                </View>
-
+            </Text>*/}
+                    
+                </View> 
+                <Text>Secret message </Text>
+                <TextInput
+                        width={280}
+                        multiline={true}
+                        textAlignVertical='top'
+                        placeholder='Enter secret message'
+                        autoCapitalize='none'
+                        autoCorrect={false}
+                        style={{ height: 80, borderColor: 'gray', borderWidth: 1 }}
+                        keyboardType='default'
+                        keyboardAppearance='dark'
+                        returnKeyType='next'
+                        returnKeyLabel='next'
+                        onChangeText={changeSecret}
+                        onBlur={() => { }}
+                        value={secret}/>
+                   
                 <View style={{
                     flexDirection: 'center',
                     justifyContent: 'center', width: 150,
