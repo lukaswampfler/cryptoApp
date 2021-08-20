@@ -6,16 +6,13 @@ import Button from '../components/Button';
 import NumInput from '../components/NumInput';
 import { IntroModal } from '../utils/Modals';
 import { caesarEncrypt } from '../utils/caesarMath';
-import { setIn, useFormik } from 'formik';
+import { useFormik } from 'formik';
 
 
 import { CaesarKeyInputScheme } from '../utils/InputTests';
 
 import styles from './styles'
 
-const encryptCaesar = () => {
-    console.log("Caesar encryption in progress")
-}
 
 
 

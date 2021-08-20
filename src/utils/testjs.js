@@ -100,15 +100,21 @@ keys = {k1: '00001111', k2: '11110000'}
 
 const message = '11111111'
 
+let anyString = 'Mozilla';
+let data = anyString.split('')
+console.log(data)
+let newData = data.slice()
+const toIndex = 6; 
+const fromIndex = 0;
 
+const toRemoved = newData.splice(toIndex, 1)[0]
+const fromRemoved = newData.splice(fromIndex, 1, toRemoved)[0]
+newData.splice(toIndex, 0, fromRemoved);
+//newData.splice(toIndex, 0, newData.splice(fromIndex, 1)[0])
 
-array = [2, 4, 17]
-console.log(gcdArray(array));
-console.log(kasiskiTest('blaeruerzbla'))
+console.log("newData", newData);
+const minIndex = 0
+const maxIndex = anyString.length;
 
-
-
-const s = "Sm Ngnknt lkrus Zwdt Ubuwey nvn Eewm; nir Xzne numb wnk eeefm cxd jbzb, Fvgadeegqc lnz cobrk lor Hknvug nvn Gbmbos Txqct fvpgeomm eeoxz nez Picsrk. Oytg lxbapa: Mc wrklo Lvvpd. Uaw mc whklo Lvvpd. Gbmb cau, wics qta Vipab qug pib. Gbmb ccubmn dnl Tscum dyn qxz Pialboraba enq Zwdt atvxtr wic Lvvpd Tnz cxd qbm Pialboraba xaagbo ee Gimhg. Xa guewm Kbrgl enq xa guewm Woezmx: eelbor Gto. Naag azrnvp Qogm: Msn Txeyeyum onglbohr fqdtrg qw Wnlaor hgl ccuxqne Jtacee owx Wnlaor. Thbd mnvpde neay dnl Oowbxtle hgl ccubmn dnl Eksfxz engxzrayu los Txeyeyumc vbf Eksfxz ybrkpklo wmc Grpwoloxa. Co txamhna mc uaw Oytg gixngx lks Txeyeyum Rizfmv. Ef pcbdr Tjonq nvn ef pcbdr Fwbgrg: hgevmmb Tnz. Lkna lxbapa Oytg: Wic Wnlaor hgboruttl drl Psmzxtc snfuve fbkr aa xqxez Hzd, dnfqd dnl Bbopdmxe fbkrtotz geewm. Co txamhna mc. Dnl Bbopdmxe atvxtr Zwdt Ytvn uaw lks ngoosnfuolgx Eksfxz xaagbo ee Fmor. Thbd sna, lksf xa qug pib."
-
-
-
+let newString = anyString.substring(0, minIndex) + anyString.charAt(maxIndex) + anyString.substring(minIndex+1 , maxIndex) + anyString.charAt(minIndex) + anyString.substring(maxIndex+1);
+console.log(newString);

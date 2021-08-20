@@ -23,6 +23,8 @@ export default function AnalysisHomeScreen({ navigation }) {
             navigation.navigate("CaesarAnalysis");
         } else if (selectedMethod == 'vigenere'){
             navigation.navigate("VigenereAnalysis")
+        } else if (selectedMethod == 'permutation'){
+            navigation.navigate("PermutationAnalysis")
         } else {
             console.log("Navigating to ...", selectedMethod, " analysis.");
         }
