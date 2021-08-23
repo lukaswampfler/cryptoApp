@@ -100,21 +100,25 @@ keys = {k1: '00001111', k2: '11110000'}
 
 const message = '11111111'
 
-let anyString = 'Mozilla';
-let data = anyString.split('')
-console.log(data)
-let newData = data.slice()
-const toIndex = 6; 
-const fromIndex = 0;
 
-const toRemoved = newData.splice(toIndex, 1)[0]
-const fromRemoved = newData.splice(fromIndex, 1, toRemoved)[0]
-newData.splice(toIndex, 0, fromRemoved);
-//newData.splice(toIndex, 0, newData.splice(fromIndex, 1)[0])
+const decryptionDict = {'a': 'x', 'b': 'y', 'c': 'z'}
 
-console.log("newData", newData);
-const minIndex = 0
-const maxIndex = anyString.length;
+const text = 'abcdabcejfkdjahfjakshvjbhfjkadhvjhvcyxhvj'
 
-let newString = anyString.substring(0, minIndex) + anyString.charAt(maxIndex) + anyString.substring(minIndex+1 , maxIndex) + anyString.charAt(minIndex) + anyString.substring(maxIndex+1);
-console.log(newString);
+
+function partialDecryption(text, decryptionDict){
+    let secret = ''; 
+    for (let ind = 0; ind < text.length; ind++){
+        if (text.charAt(ind) in decryptionDict){
+            secret += decryptionDict[text.charAt(ind)]
+        } else {
+            secret += '*'
+            // alternatively: secret += text.charAt(i)
+            // plus eintrag in Dokument, dass dieser Teil nicht entschlüsselt ist.
+        }
+    }
+    
+    return secret; 
+}
+
+console.log(partialDecryption(text, decryptionDict));

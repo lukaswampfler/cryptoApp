@@ -1,15 +1,18 @@
 import React, { useContext, useState } from 'react';
 import { View, Text, Dimensions, TextInput, TouchableWithoutFeedback, Keyboard, StyleSheet } from 'react-native';
 import Button from '../components/Button';
+import { Divider } from 'react-native-elements';
+
 import { DraxProvider, DraxList } from 'react-native-drax';
 import AppContext from '../components/AppContext';
 
 import { createFrequencyDict, sortDictionaryByKey, onlyNonAlpha } from '../utils/frequencyAnalysis';
 
 import {BarChart} from "react-native-chart-kit";
-import { alphabet, getMostFrequent } from '../utils/permutationMath';
+import { alphabet, createDecryptionDict, getMostFrequent, partialDecryption } from '../utils/permutationMath';
 import { FlatList } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native';
+import { createIconSetFromFontello } from 'react-native-vector-icons';
 
 const screenWidth = 0.9 * Dimensions.get("window").width;
 
@@ -28,17 +31,25 @@ export default function PermutationAnalysisScreen({ navigation }) {
 
     const changeText = (text) => {
         const mostFrequentLetters = getMostFrequent(text);
+        console.log("most frequent: ", mostFrequentLetters)
         setAlphaData(Object.keys(mostFrequentLetters));
         setSecret(text)
     }
 
     const handleAnalysis = () => {
-        return; 
+        //console.log(alphaShort, alphaData);
+        const decryptionDict = createDecryptionDict(alphaShort, alphaData) 
+        console.log(secret);
+        setDecypheredMessage(partialDecryption(secret, decryptionDict))
     }
 
-    const renderItem = ({ item }) => (
+    const renderItem = ({ item, index }) => (
         <Text> {item}</Text>  
     );
+
+
+    
+
     const getBackgroundColor = (alphaIndex) => {
         switch (alphaIndex % 6) {
           case 0:
@@ -78,6 +89,16 @@ export default function PermutationAnalysisScreen({ navigation }) {
         strokeWidth: 2, // optional, default 3
         barPercentage: 0.2,
     };
+
+    const textList  = secret.split('').map((char) => {
+        //TODO: define knownClearLetters
+        const knownClearLetters = 'abcdl'
+            return ( knownClearLetters.includes(char) ? 
+            <Text style={{ color: '#0000ff'}}> {char} </Text> :
+            <Text style={{ color: '#ff0000'}}> {char} </Text>  
+                )
+        })
+    
 
     return (
         //first: ScrollView
@@ -139,12 +160,13 @@ export default function PermutationAnalysisScreen({ navigation }) {
           data={alphaData}
           horizontal
           renderItemContent={({ item }) => (
-            <View style={[styles.alphaItem, getItemStyleTweaks(item)]}>
+            <View style={[styles.alphaItem, getItemStyleTweaks(item)]} width = {25}>
               <Text style={styles.alphaText}>{item}</Text>
             </View>
           )}
           onItemReorder={({ fromIndex, toIndex }) => {
             const newData = alphaData.slice(); // copy of alphaData
+            // to insert the dragged point
             //newData.splice(toIndex, 0, newData.splice(fromIndex, 1)[0]);
             // better: switch the two entries instead of just setting fromIndex to its place.-> To be tested!
             const toRemoved = newData.splice(toIndex, 1)[0]
@@ -154,7 +176,13 @@ export default function PermutationAnalysisScreen({ navigation }) {
           }}
           keyExtractor={(item) => item}
         />
-        <Text width={100} style={{fontSize:24}}> secret text (drag the secret letters below the corresponding frequent german letter)</Text>
+        <Text width={100} style={{fontSize:24}}> secret letters (drag letters to switch)</Text>
+        <Divider/>
+        <Text width={100} style={{fontSize:22}}> partially decrypted String</Text>
+        <Text width={100} style={{fontSize:16}}> {decypheredMessage}</Text>
+        <Divider/>
+        <Text width={100} style={{fontSize:22}}> Decyphered Message: <Text style={{color: '#0000ff'}}>known </Text><Text style={{color: '#ff0000'}}>unknown </Text></Text>
+        <View style= {{flexDirection: 'row'}}><Text >{textList}</Text></View>
       </View>
     
  </DraxProvider>
@@ -180,6 +208,6 @@ const styles = StyleSheet.create({
       height: 50,
     },
     alphaText: {
-      fontSize: 28,
+      fontSize: 22,
     },
   });

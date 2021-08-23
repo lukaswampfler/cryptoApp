@@ -47,25 +47,49 @@ export function encryptPermutation(text, key){
 
 
 export function getMostFrequent(text, num = 10){
-    if (text.length <= num){
-        return unique((text.toUpperCase()))
-    } else { // text longer than 9 characters
+    let res = {}
+    const uni = unique((text.toUpperCase()));
+    if (uni.length <= num){
+        for (let ind = 0; ind < uni.length; ind++){
+            res[uni.charAt(ind)] = 1
+        }
+    } else { // more than 10 distinct characters - choose most frequent ones.
         const frequencyDict = createFrequencyDict(text);
-        //TODO : check out createFrequencyDict
-        console.log(frequencyDict)
-        const res = pickHighest(frequencyDict[0], num);
-        console.log(res);
-        return res;
+        //TODO : check out createFrequencyDict - no: these values are relative frequencies.
+        res = pickHighest(frequencyDict[0], num);
+        
     }
+    return res;
 
+}
+
+export function createDecryptionDict(alphaClear, alphaSecret){
+    let decryptionDict = {}
+    const min = Math.min(alphaClear.length, alphaSecret.length);
+    for (let ind = 0; ind < min; ind++){
+        decryptionDict[alphaSecret[ind].toLowerCase()] = alphaClear[ind].toLowerCase();
+    }
+    return decryptionDict;
 }
 
 
 export function partialDecryption(text, decryptionDict){
-    const secret = text; 
+    let secret = ''; 
+    for (let ind = 0; ind < text.length; ind++){
+        if (text.charAt(ind) in decryptionDict){
+            secret += decryptionDict[text.charAt(ind)]
+        } else {
+            secret += '*'
+            // alternatively: secret += text.charAt(i)
+            // plus eintrag in Dokument, dass dieser Teil nicht entschlüsselt ist.
+        }
+    }
     
     return secret; 
 }
+
+
+
 
 function  pickHighest (dict, num = 1) {
     const result = {};
