@@ -9,37 +9,53 @@ import AppContext from '../components/AppContext';
 import { createFrequencyDict, sortDictionaryByKey, onlyNonAlpha } from '../utils/frequencyAnalysis';
 
 import {BarChart} from "react-native-chart-kit";
-import { alphabet, createDecryptionDict, getMostFrequent, partialDecryption } from '../utils/permutationMath';
+import { alphabet, createDecryptionDict, getMostFrequent, partialDecryption, createInverseDict } from '../utils/permutationMath';
 import { FlatList } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native';
-import { createIconSetFromFontello } from 'react-native-vector-icons';
 
 const screenWidth = 0.9 * Dimensions.get("window").width;
 
 const alphaShort = 'ENIRSTADHU'.split('');
+
+
 
 export default function PermutationAnalysisScreen({ navigation }) {
 
 
     const myContext = useContext(AppContext);
     const [secret, setSecret] = useState('');
-    const [key, setKey] = useState(alphabet);
+    //const [key, setKey] = useState(alphabet);
     const [decypheredMessage, setDecypheredMessage] =useState('');
+    const [secretHasAlpha, setSecretHasAlpha] = useState(false);
     const [isDecyphered, setIsDecyphered] = useState(false);
-    const [alphaData, setAlphaData]= useState(alphaShort);
+    const [alphaSecret, setAlphaSecret]= useState('');
+    const [showBarChart, setShowBarChart] = useState(false);
+    const [inverseDict, setInverseDict] = useState({})
 
 
-    const changeText = (text) => {
-        const mostFrequentLetters = getMostFrequent(text);
-        console.log("most frequent: ", mostFrequentLetters)
-        setAlphaData(Object.keys(mostFrequentLetters));
-        setSecret(text)
+    const changeText = (secret) => {
+
+        if(!onlyNonAlpha(secret)) {
+            setSecretHasAlpha(true);
+        } else {
+            setSecretHasAlpha(false);
+        }
+
+        const mostFrequentLetters = getMostFrequent(secret);
+        console.log("most frequent: ", mostFrequentLetters);
+        const newAlphaData = Object.keys(mostFrequentLetters)
+        setAlphaSecret(newAlphaData);
+        setSecret(secret)
+        const decryptionDict = createDecryptionDict(alphaShort, newAlphaData) ;
+        const newInverseDict = createInverseDict(alphaShort, newAlphaData)
+        setInverseDict( newInverseDict);
+        setDecypheredMessage(partialDecryption(secret, decryptionDict))
     }
 
     const handleAnalysis = () => {
-        //console.log(alphaShort, alphaData);
-        const decryptionDict = createDecryptionDict(alphaShort, alphaData) 
-        console.log(secret);
+        //console.log(alphaShort, alphaSecret);
+        const decryptionDict = createDecryptionDict(alphaShort, alphaSecret) 
+        //console.log(secret);
         setDecypheredMessage(partialDecryption(secret, decryptionDict))
     }
 
@@ -47,7 +63,9 @@ export default function PermutationAnalysisScreen({ navigation }) {
         <Text> {item}</Text>  
     );
 
-
+    const changeChartStatus = () =>{
+        setShowBarChart(!showBarChart);
+    }
     
 
     const getBackgroundColor = (alphaIndex) => {
@@ -90,11 +108,25 @@ export default function PermutationAnalysisScreen({ navigation }) {
         barPercentage: 0.2,
     };
 
+    // data for barChart.
+    const freqDict = createFrequencyDict(secret)["0"];
+    const sorted = sortDictionaryByKey(freqDict)
+    console.log("Frequencies", sorted);
+
+    const data = {
+        labels: Object.keys(sorted),
+        datasets: [{ data: Object.values(sorted) }]
+    };
+
     const textList  = secret.split('').map((char) => {
         //TODO: define knownClearLetters
-        const knownClearLetters = 'abcdl'
-            return ( knownClearLetters.includes(char) ? 
-            <Text style={{ color: '#0000ff'}}> {char} </Text> :
+        //const knownClearLetters = 'abcdul'
+        const knownSecretLetters = alphaSecret.join('').toLowerCase();
+        const decryptionDict = createDecryptionDict(alphaShort, alphaSecret) ;
+        //console.log("known clear", knownClearLetters);
+        //console.log("inverse: ", inverseDict)
+            return ( knownSecretLetters.includes(char) ? 
+            <Text style={{ color: '#0000ff'}}> {decryptionDict[char]} </Text> :
             <Text style={{ color: '#ff0000'}}> {char} </Text>  
                 )
         })
@@ -135,8 +167,21 @@ export default function PermutationAnalysisScreen({ navigation }) {
                     marginBottom: 10,
                 }}>
                     <Button label='Analyze Text' onPress={handleAnalysis} width={240} />
+                    {secretHasAlpha && <Button label={!showBarChart? 'show chart': 'hide chart'} onPress={changeChartStatus} width={80} />}
                 </View>
 </View>
+{(showBarChart) && (<BarChart
+                style={{
+                    marginVertical: 8,
+                    borderRadius: 16
+                }}
+                data={data}
+                width={screenWidth}
+                height={240}
+                yAxisSuffix="%"
+                chartConfig={chartConfig}
+                verticalLabelRotation={90}
+            />)}
 
     </View>
     </TouchableWithoutFeedback>
@@ -157,7 +202,7 @@ export default function PermutationAnalysisScreen({ navigation }) {
     
       <View style={styles.container}>
         <DraxList
-          data={alphaData}
+          data={alphaSecret}
           horizontal
           renderItemContent={({ item }) => (
             <View style={[styles.alphaItem, getItemStyleTweaks(item)]} width = {25}>
@@ -165,14 +210,14 @@ export default function PermutationAnalysisScreen({ navigation }) {
             </View>
           )}
           onItemReorder={({ fromIndex, toIndex }) => {
-            const newData = alphaData.slice(); // copy of alphaData
+            const newData = alphaSecret.slice(); // copy of alphaSecret
             // to insert the dragged point
             //newData.splice(toIndex, 0, newData.splice(fromIndex, 1)[0]);
             // better: switch the two entries instead of just setting fromIndex to its place.-> To be tested!
             const toRemoved = newData.splice(toIndex, 1)[0]
             const fromRemoved = newData.splice(fromIndex, 1, toRemoved)[0]
             newData.splice(toIndex, 0, fromRemoved);
-            setAlphaData(newData);
+            setAlphaSecret(newData);
           }}
           keyExtractor={(item) => item}
         />

@@ -30,8 +30,8 @@ export function encryptPermutation(text, key){
     for (let ind = 0 ; ind < alphabet.length; ind++){
         encryptionDictionary[alphabet.charAt(ind)] = key.charAt(ind);
     }
-    console.log("key: ", key);
-    console.log("dict: ", encryptionDictionary);
+    //console.log("key: ", key);
+    //console.log("dict: ", encryptionDictionary);
     for (let ind = 0 ; ind < text.length; ind++){
         let char = text.charAt(ind);
         if (isAlpha(char)){
@@ -66,10 +66,18 @@ export function getMostFrequent(text, num = 10){
 export function createDecryptionDict(alphaClear, alphaSecret){
     let decryptionDict = {}
     const min = Math.min(alphaClear.length, alphaSecret.length);
+    
     for (let ind = 0; ind < min; ind++){
+        //console.log(ind, alphaClear[ind], alphaSecret[ind])
         decryptionDict[alphaSecret[ind].toLowerCase()] = alphaClear[ind].toLowerCase();
     }
+    //console.log(decryptionDict)
     return decryptionDict;
+}
+
+export function createInverseDict(alphaClear, alphaSecret){
+    //console.log("clear, secret: ", alphaClear, alphaSecret)
+    return createDecryptionDict(alphaSecret, alphaClear);
 }
 
 
@@ -93,7 +101,7 @@ export function partialDecryption(text, decryptionDict){
 
 function  pickHighest (dict, num = 1) {
     const result = {};
-    console.log("length of keys: ", Object.keys(dict).length)
+    //console.log("length of keys: ", Object.keys(dict).length)
     if(num > Object.keys(dict).length){
        return false;
     };
