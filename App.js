@@ -28,6 +28,8 @@ import AnalysisHomeScreen from './src/screens/AnalysisHomeScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import CaesarAnalysisScreen from './src/screens/CaesarAnalysisScreen';
 import VigenereAnalysisScreen from './src/screens/VigenereAnalysisScreen';
+import PermutationScreen from './src/screens/PermutationScreen';
+import PermutationAnalysisScreen from './src/screens/PermutationAnalysisScreen';
 
 
 
@@ -120,6 +122,11 @@ const MethodNavigator = props => {
         component={VigenereScreen}
         options={{ title: 'Vigenere Encryption' }}
       />
+      <MethodStack.Screen
+        name="Permutation"
+        component={PermutationScreen}
+        options={{ title: 'Permutation cipher' }}
+      />
     </MethodStack.Navigator>
   );
 }
@@ -139,6 +146,10 @@ const AnalysisNavigator = props => {
       <AnalysisStack.Screen
         name="VigenereAnalysis"
         component={VigenereAnalysisScreen}
+      />
+      <AnalysisStack.Screen
+        name="PermutationAnalysis"
+        component={PermutationAnalysisScreen}
       />
     </AnalysisStack.Navigator>
   );
@@ -204,7 +215,8 @@ export default function App() {
   const sdes = { keys: undefined }
   const caesar = { message: '', key: 0, secret: 'aliceundlena' }
   const vigenere = { message: '', key: '' }
-  const [ciphers, setCiphers] = useState({ rsa, sdes, caesar, vigenere, currentMethod: undefined, currentMessage: undefined })
+  const permutation = {message: '', key: '', secret: ''}
+  const [ciphers, setCiphers] = useState({ rsa, sdes, caesar, vigenere, permutation, currentMethod: undefined, currentMessage: undefined })
 
   const [useBigIntegerLibrary, setUseBigIntegerLibrary] = useState(false);
 

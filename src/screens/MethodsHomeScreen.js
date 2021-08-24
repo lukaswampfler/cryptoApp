@@ -33,6 +33,8 @@ export default function MethodsHomeScreen({ navigation }) {
             navigation.navigate("Caesar");
         } else if (selectedMethod == 'vigenere') {
             navigation.navigate("Vigenere");
+        } else if (selectedMethod == 'permutation') {
+            navigation.navigate("Permutation");
         } else {
             console.log("Navigating to ...", selectedMethod);
         }
@@ -56,6 +58,7 @@ export default function MethodsHomeScreen({ navigation }) {
                         <Picker.Item label="S-DES" value="sdes" />
                         <Picker.Item label="Caesar" value="caesar" />
                         <Picker.Item label="Vigenere" value="vigenere" />
+                        <Picker.Item label="Permutation" value="permutation" />
                     </Picker>
                 </View>}
             {Boolean(Platform.OS === 'ios') &&
@@ -68,6 +71,7 @@ export default function MethodsHomeScreen({ navigation }) {
                     <Picker.Item label="S-DES" value="sdes" />
                     <Picker.Item label="Caesar" value="caesar" />
                     <Picker.Item label="Vigenere" value="vigenere" />
+                    <Picker.Item label="Permutation" value="permutation" />
                 </Picker>}
 
 
