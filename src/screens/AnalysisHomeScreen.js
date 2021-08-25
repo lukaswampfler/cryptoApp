@@ -53,7 +53,8 @@ export default function AnalysisHomeScreen({ navigation }) {
                     selectedValue={selectedMethod}
                     onValueChange={(itemValue, itemIndex) =>
                         setSelectedMethod(itemValue)
-                    }>
+                    }
+                    mode = 'dialog'>
                     <Picker.Item label="Caesar" value="caesar" />
                     <Picker.Item label="Vigenere" value="vigenere" />
                     <Picker.Item label="Permutation" value="permutation" />

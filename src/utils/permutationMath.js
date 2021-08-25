@@ -66,12 +66,17 @@ export function getMostFrequent(text, num = 10){
 export function createDecryptionDict(alphaClear, alphaSecret){
     let decryptionDict = {}
     const min = Math.min(alphaClear.length, alphaSecret.length);
-    
+    let trueIndex = 0
     for (let ind = 0; ind < min; ind++){
-        //console.log(ind, alphaClear[ind], alphaSecret[ind])
-        decryptionDict[alphaSecret[ind].toLowerCase()] = alphaClear[ind].toLowerCase();
+        if (alphaSecret[ind] == null) trueIndex ++; 
+        else {
+            decryptionDict[alphaSecret[ind].toLowerCase()] = alphaClear[ind].toLowerCase();
+            trueIndex++;     
+        }
+        //there could be an issue here .... -> check if alphaSecret[ind] === undefined
+        //decryptionDict[alphaSecret[ind].toLowerCase()] = alphaClear[ind].toLowerCase();
     }
-    //console.log(decryptionDict)
+    //console.log("decryptionDict: ", decryptionDict)
     return decryptionDict;
 }
 

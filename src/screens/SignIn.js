@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import AppTextInput from '../components/AppTextInput';
 import AppButton from '../components/AppButton';
 import AppContext from '../components/AppContext';
+import { IntroModal } from '../utils/Modals';
 
 export default function SignIn({ navigation, updateAuthState }) {
   
@@ -12,7 +13,14 @@ export default function SignIn({ navigation, updateAuthState }) {
 
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
+  const [hidePassword, setHidePassword] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
   
+
+  const togglePasswordVisibility = () => {
+    setHidePassword(!hidePassword);
+  }
+
   async function signIn() {
     try {
       await Auth.signIn(userName, password);
@@ -20,12 +28,20 @@ export default function SignIn({ navigation, updateAuthState }) {
       myContext.setUserName(userName)
       updateAuthState('loggedIn');
     } catch (error) {
+      myContext.setIntroVisible(true);
       console.log('Error signing in...', error);
+      setErrorMessage(error.message)
     }
   }
+
+
+  const introText = "Here comes the introduction to the Error";
+  const method = "Error!"
+
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
       <View style={styles.container}>
+      <IntroModal text={errorMessage} method={method} transparent/>
         <Text style={styles.title}>Sign in to your account</Text>
         <AppTextInput
           value={userName}
@@ -42,10 +58,12 @@ export default function SignIn({ navigation, updateAuthState }) {
           value={password}
           onChangeText={text => setPassword(text)}
           leftIcon="lock"
+          rightIcon={hidePassword? "eye-outline": "eye-off-outline"}
           placeholder="Enter password"
           autoCapitalize="none"
           autoCorrect={false}
-          secureTextEntry
+          secureTextEntry = {hidePassword}
+          toggleVisibility = { togglePasswordVisibility }
           textContentType="password"
         />
         <AppButton title="Login" onPress={signIn} />
