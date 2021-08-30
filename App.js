@@ -1,12 +1,19 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, View, ScrollView , Text, TouchableOpacity} from 'react-native';
 import AppContext from './src/components/AppContext';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItemList,
+  DrawerItem,
+} from '@react-navigation/drawer';
 
 import Amplify, { Auth, API } from 'aws-amplify';
 import config from './src/aws-exports';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
 
@@ -22,6 +29,7 @@ import SDESScreen from './src/screens/SDESScreen';
 import SDESEncodingScreen from './src/screens/SDESEncodingScreen';
 import CaesarScreen from './src/screens/CaesarScreen';
 import VigenereScreen from './src/screens/VigenereScreen';
+import RootDrawerContent from './src/components/RootDrawerContent';
 
 import MethodsHomeScreen from './src/screens/MethodsHomeScreen';
 import AnalysisHomeScreen from './src/screens/AnalysisHomeScreen';
@@ -30,6 +38,7 @@ import CaesarAnalysisScreen from './src/screens/CaesarAnalysisScreen';
 import VigenereAnalysisScreen from './src/screens/VigenereAnalysisScreen';
 import PermutationScreen from './src/screens/PermutationScreen';
 import PermutationAnalysisScreen from './src/screens/PermutationAnalysisScreen';
+import { SafeAreaView } from 'react-native';
 
 
 
@@ -42,7 +51,7 @@ Amplify.configure({
 
 
 // setting up navigators
-
+const RootDrawer = createDrawerNavigator();
 const AuthenticationStack = createStackNavigator();
 const AppStack = createStackNavigator();
 //const RSAStack = createStackNavigator();
@@ -51,15 +60,19 @@ const HomeTab = createBottomTabNavigator();
 const AnalysisStack = createStackNavigator();
 
 
+
+
 const AuthenticationNavigator = props => {
   return (
-    <AuthenticationStack.Navigator headerMode="none">
+    <AuthenticationStack.Navigator screenOptions={{ headerShown: false }}>
       <AuthenticationStack.Screen name="SignIn">
         {screenProps => (
           <SignIn {...screenProps} updateAuthState={props.updateAuthState} />
         )}
       </AuthenticationStack.Screen>
-      <AuthenticationStack.Screen name="SignUp" component={SignUp} />
+      <AuthenticationStack.Screen 
+      name="SignUp" 
+      component={SignUp} />
       <AuthenticationStack.Screen
         name="ConfirmSignUp"
         component={ConfirmSignUp}
@@ -68,7 +81,7 @@ const AuthenticationNavigator = props => {
   );
 };
 
-const AppNavigator = props => {
+/*const AppNavigator = props => {
   return (
     <AppStack.Navigator>
       <AppStack.Screen name="Home Screen">
@@ -78,11 +91,11 @@ const AppNavigator = props => {
       </AppStack.Screen>
     </AppStack.Navigator>
   );
-};
+};*/
 
 const MethodNavigator = props => {
   return (
-    <MethodStack.Navigator>
+    <MethodStack.Navigator  >
       <MethodStack.Screen
         name="MethodsHome"
         component={MethodsHomeScreen}
@@ -155,6 +168,28 @@ const AnalysisNavigator = props => {
   );
 }
 
+const RootDrawerNavigator = props => {
+  return (
+    <RootDrawer.Navigator 
+    drawerContent = {(props) => <RootDrawerContent {...props} updateAuthState={props.updateAuthState} screenOptions={{ headerShown: false }}/> }
+    >
+            <RootDrawer.Screen name="HomeScreen" >
+            {screenProps => (
+            <HomeScreen {...screenProps} updateAuthState={props.updateAuthState} />
+           )} 
+        </RootDrawer.Screen>
+            <RootDrawer.Screen name="Methods" component={MethodNavigator} />
+            <RootDrawer.Screen name="Analysis" component={AnalysisNavigator} />
+            <RootDrawer.Screen name="Messages" component={MessageScreen} options={{ title: "Your Messages" }} />
+    </RootDrawer.Navigator>
+  );
+}
+
+
+
+
+
+
 
 
 
@@ -196,7 +231,7 @@ const Initializing = () => {
 export default function App() {
 
   // use array destructuring to get hold of data and functions to change data
-  const [isUserLoggedIn, setUserLoggedIn] = useState('initializing');
+  const [isUserLoggedIn, setUserLoggedIn] = useState('initializing'); 
   const [userName, setUserName] = useState('');
   const [userID, setUserID] = useState('');
   const [password, setPassword] = useState('');
@@ -254,6 +289,15 @@ export default function App() {
     setExplVisible,
   };
 
+  async function signOut() {
+    try {
+      await Auth.signOut();
+      setUserLoggedIn('loggedOut');
+      console.log("sign out succesful")
+    } catch (error) {
+      console.log('error signing out: ', error);
+    }
+  }
 
   function updateAuthState(isUserLoggedIn) {
     setUserLoggedIn(isUserLoggedIn);
@@ -285,18 +329,22 @@ export default function App() {
 
 
 
+
+
   if (typeof BigInt === 'undefined') {
     global.BigInt = require('big-integer');
     setUseBigIntegerLibrary(true);
   }
 
+  
 
 
   return (
     <AppContext.Provider value={userSettings}>
       <NavigationContainer>
         {isUserLoggedIn === 'initializing' && <Initializing />}
-        {isUserLoggedIn === 'loggedIn' && (
+       {/*}
+       {isUserLoggedIn === 'loggedIn' && (
           <HomeTab.Navigator updateAuthState={updateAuthState}>
             <HomeTab.Screen name="HomeScreen" component={HomeScreen} />
             <HomeTab.Screen name="Methods" component={MethodNavigator} />
@@ -304,6 +352,16 @@ export default function App() {
             <HomeTab.Screen name="Messages" component={MessageScreen} options={{ title: "Your Messages" }} />
           </HomeTab.Navigator>
         )}
+       */}
+        {isUserLoggedIn === 'loggedIn' && (
+          <RootDrawerNavigator updateAuthState={updateAuthState} signOut = {signOut} />
+        )}
+         {/*{isUserLoggedIn === 'loggedIn' && (
+                <RootDrawer.Navigator initialRouteName="Home">
+                <RootDrawer.Screen name="Home" component={HomeScreen} />
+                <RootDrawer.Screen name="Messages" component={MessageScreen} />
+              </RootDrawer.Navigator>
+        )}*/}
         {isUserLoggedIn === 'loggedOut' && (
           <AuthenticationNavigator updateAuthState={updateAuthState} />
         )}
@@ -322,4 +380,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  item: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 40,
+    marginLeft: 30,
+  },
+  icon: {
+    marginRight: 10
+  },
+
 });

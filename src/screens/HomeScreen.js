@@ -23,7 +23,7 @@ export default function HomeScreen({ navigation }) {
   const [users, setUsers] = useState(null);
   const [choice, setChoice] = useState('methods');
 
-  async function signOut() {
+  /*async function signOut() {
     try {
       await Auth.signOut();
       myContext.setUserLoggedIn('loggedOut');
@@ -31,7 +31,7 @@ export default function HomeScreen({ navigation }) {
     } catch (error) {
       console.log('error signing out: ', error);
     }
-  }
+  }*/
 
   function pressSelectButton() {
     console.log("Your choice: ", choice);
@@ -109,8 +109,8 @@ export default function HomeScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.homeScreen}>
-        <Button onPress={signOut} title="Sign Out" />
-        {/*{userID ? <Text>userID: {userID}</Text> : <Text> no userID set </Text>}*/}
+       {/* <Button onPress={signOut} title="Sign Out" />
+        {userID ? <Text>userID: {userID}</Text> : <Text> no userID set </Text>}*/}
         <Text style={{ fontSize: 25, marginBottom: 50 }}> What would you like to do?  </Text>
         {(Platform.OS === 'android')
           && <View style={{ backgroundColor: '#DDD', height: 50 }}>
