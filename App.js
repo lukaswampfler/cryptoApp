@@ -95,13 +95,13 @@ const AuthenticationNavigator = props => {
 
 const MethodNavigator = props => {
   return (
-    <MethodStack.Navigator  >
+    <MethodStack.Navigator  screenOptions={{ headerShown: false }}>
       <MethodStack.Screen
         name="MethodsHome"
         component={MethodsHomeScreen}
       />
       <MethodStack.Screen
-        name="RSAEncryption"
+        name="RSA"
         component={RSAEncryptionScreen}
         options={{ title: 'RSA Encryption' }}
       />
@@ -116,7 +116,7 @@ const MethodNavigator = props => {
         options={{ title: 'Users of CryptoApp' }}
       />
       <MethodStack.Screen
-        name="SDESEncryption"
+        name="SDES"
         component={SDESScreen}
         options={{ title: 'S-DES Encryption' }}
       />
@@ -126,17 +126,17 @@ const MethodNavigator = props => {
         options={{ title: 'Encoding' }}
       />
       <MethodStack.Screen
-        name="Caesar"
+        name="CAESAR"
         component={CaesarScreen}
         options={{ title: 'Caesar Encryption' }}
       />
       <MethodStack.Screen
-        name="Vigenere"
+        name="VIGENERE"
         component={VigenereScreen}
         options={{ title: 'Vigenere Encryption' }}
       />
       <MethodStack.Screen
-        name="Permutation"
+        name="PERMUTATION"
         component={PermutationScreen}
         options={{ title: 'Permutation cipher' }}
       />
@@ -147,7 +147,7 @@ const MethodNavigator = props => {
 
 const AnalysisNavigator = props => {
   return (
-    <AnalysisStack.Navigator>
+    <AnalysisStack.Navigator screenOptions={{ headerShown: false}} >
       <AnalysisStack.Screen
         name="AnalysisHome"
         component={AnalysisHomeScreen}
@@ -171,16 +171,15 @@ const AnalysisNavigator = props => {
 const RootDrawerNavigator = props => {
   return (
     <RootDrawer.Navigator 
-    drawerContent = {(props) => <RootDrawerContent {...props} updateAuthState={props.updateAuthState} screenOptions={{ headerShown: false }}/> }
-    >
-            <RootDrawer.Screen name="HomeScreen" >
+    drawerContent = {(props) => <RootDrawerContent {...props} updateAuthState={props.updateAuthState} screenOptions={{ headerShown: false }}/> }>
+            <RootDrawer.Screen name="Home" >
             {screenProps => (
             <HomeScreen {...screenProps} updateAuthState={props.updateAuthState} />
            )} 
         </RootDrawer.Screen>
-            <RootDrawer.Screen name="Methods" component={MethodNavigator} />
-            <RootDrawer.Screen name="Analysis" component={AnalysisNavigator} />
-            <RootDrawer.Screen name="Messages" component={MessageScreen} options={{ title: "Your Messages" }} />
+            <RootDrawer.Screen name="Methods" component={MethodNavigator} options={{title: "Encryption", unmountOnBlur: true}} />
+            <RootDrawer.Screen name="Analysis" component={AnalysisNavigator} options={{title: "Cryptoanalysis", unmountOnBlur: true}}/>
+            <RootDrawer.Screen name="Messages" component={MessageScreen} options={{ title: "My Messages" }} />
     </RootDrawer.Navigator>
   );
 }

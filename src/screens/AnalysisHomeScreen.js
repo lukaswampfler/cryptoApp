@@ -8,7 +8,7 @@ import styles from './styles'
 
 import AppContext from '../components/AppContext';
 
-
+const analysisMethods = ['caesar', 'vigenere', 'permutation']
 
 export default function AnalysisHomeScreen({ navigation }) {
 
@@ -16,6 +16,37 @@ export default function AnalysisHomeScreen({ navigation }) {
 
     const [selectedMethod, setSelectedMethod] = useState('caesar');
 
+
+    const renderItem = ({ item }) => (
+        
+        <View style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            borderBottomWidth: 1,
+            margin: 10,
+        }}
+        >
+            <TouchableOpacity onPress={()=> navigateToScreen(item)}>
+            <Text style={{fontSize: 20 , width: 250 }}  >
+                {item.toUpperCase()}  </Text>
+            
+          
+            </TouchableOpacity>
+        </View>
+    );
+
+    function navigateToScreen(method){
+        if (method == 'caesar') {
+            navigation.navigate("CaesarAnalysis");
+        } else if (method == 'vigenere') {
+            navigation.navigate("VigenereAnalysis");
+        } else if (method == 'permutation') {
+            navigation.navigate("PermutationAnalysis");
+        } else {
+            console.log("Navigating to ...", method);
+        }
+
+    }
 
     function pressSelectButton() {
         console.log("Method chosen: ", selectedMethod);
@@ -34,8 +65,10 @@ export default function AnalysisHomeScreen({ navigation }) {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Text style={{ fontSize: 25 }}> Select your encryption method for Analysis:  </Text>
-            {(Platform.OS === 'android')
+            <View style={{margin: 15}}>
+            <Text style={{ fontSize: 20 }}> Which method do you want to analyze?  </Text>
+            </View>
+           {/*} {(Platform.OS === 'android')
                 && <View style={{ backgroundColor: '#DDD', height: 50 }}>
                     <Picker style={{ flex: 1, width: 250 }}
                         selectedValue={selectedMethod}
@@ -61,7 +94,13 @@ export default function AnalysisHomeScreen({ navigation }) {
                 </Picker>}
 
 
-            <Button onPress={pressSelectButton} title="Select" />
+                <Button onPress={pressSelectButton} title="Select" /> */}
+
+            <FlatList removeClippedSubviews={false}
+                            data={analysisMethods}
+                            renderItem={renderItem}
+                            keyExtractor={item => item.createdAt}
+                        /> 
 
         </SafeAreaView>
 

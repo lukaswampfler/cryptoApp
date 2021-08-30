@@ -5,6 +5,7 @@ import {
   DrawerItemList,
   DrawerItem,
 } from '@react-navigation/drawer';
+import { StackActions } from '@react-navigation/native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Auth } from 'aws-amplify';
 
@@ -29,15 +30,49 @@ export default function RootDrawerContent(props) {
     return ( 
       <ScrollView contentContainerStyle={{flex: 1,  flexDirection: 'column', justifyContent: 'space-between' }}>
       <DrawerContentScrollView {...props}>
-        <DrawerItemList {...props} />
+        {/*<DrawerItemList {...props}  />*/}
         <DrawerItem
-          label="Close drawer"
-          onPress={() => props.navigation.closeDrawer()}
+        label="Home"
+        onPress={() => {
+          props.navigation.closeDrawer()
+          //props.navigation.dispatch(StackActions.popToTop());          
+          props.navigation.navigate("Home")
+        }}
         />
         <DrawerItem
+        label="Encryption"
+        onPress={() => {
+          props.navigation.closeDrawer()
+          props.navigation.dispatch(StackActions.popToTop());          
+          props.navigation.navigate("Methods")
+        }}
+        />
+        <DrawerItem
+        label="Cryptoanalysis"
+        onPress={() => {
+          props.navigation.closeDrawer()
+          props.navigation.dispatch(StackActions.popToTop());          
+          props.navigation.navigate("Analysis")
+        }}/>
+        
+        <DrawerItem
+          label="My Messages"
+          onPress={() => {
+            props.navigation.closeDrawer()
+            props.navigation.navigate("Messages")
+          }}
+        />
+        <DrawerItem
+          label="Riddles"
+          onPress={() => {
+            props.navigation.closeDrawer()
+            console.log("Navigating to riddles ...")
+          }}
+        />
+        {/*<DrawerItem
           label="Toggle drawer"
           onPress={() => props.navigation.toggleDrawer()}
-        />
+        />*/}
       </DrawerContentScrollView>
       <TouchableOpacity onPress = {signOut}>
         <SafeAreaView>

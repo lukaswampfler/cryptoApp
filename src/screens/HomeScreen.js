@@ -122,7 +122,7 @@ export default function HomeScreen({ navigation }) {
             >
               <Picker.Item label="Encryption Methods" value="methods" />
               <Picker.Item label="Cryptoanalysis" value="analysis" />
-              <Picker.Item label="Messages" value="messages" />
+              <Picker.Item label="My Messages" value="messages" />
               <Picker.Item label="Riddles" value="riddles" />
             </Picker>
           </View>}

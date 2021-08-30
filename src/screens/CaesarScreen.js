@@ -79,6 +79,7 @@ export default function CaesarScreen({ navigation }) {
     return (
 
         <View style={{ flex: 1 }}>
+            <ScrollView contentContainerStyle={{flex: 1,  flexDirection: 'column', justifyContent: 'space-between' }}>
             <ScrollView style={{ flex: 1 }}>
                 <IntroModal text={introText} method={method} />
                 <TextInput
@@ -145,6 +146,18 @@ export default function CaesarScreen({ navigation }) {
                     marginTop: 100
                 }}>
                     <Button label='show introduction' onPress={() => { myContext.setIntroVisible(true) }} />
+                </View>
+            </ScrollView>
+            <View style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    marginTop: 10,
+                    marginBottom: 30,
+                    marginLeft: 20,
+                    width: 100,
+                }}>
+                        <Button style={{width: 100}} label='back' onPress={() => { navigation.navigate("MethodsHome")}} />
+ 
                 </View>
             </ScrollView>
         </View>
