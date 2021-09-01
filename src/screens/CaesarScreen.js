@@ -4,6 +4,7 @@ import { Divider } from 'react-native-elements';
 import AppContext from '../components/AppContext';
 import Button from '../components/Button';
 import NumInput from '../components/NumInput';
+import Title from '../components/Title';
 import { IntroModal } from '../utils/Modals';
 import { caesarEncrypt } from '../utils/caesarMath';
 import { useFormik } from 'formik';
@@ -80,7 +81,8 @@ export default function CaesarScreen({ navigation }) {
 
         <View style={{ flex: 1 }}>
             <ScrollView contentContainerStyle={{flex: 1,  flexDirection: 'column', justifyContent: 'space-between' }}>
-            <ScrollView style={{ flex: 1 }}>
+            <ScrollView style={{ flex: 1 , margin: 10}}>
+                <Title title={method}/>
                 <IntroModal text={introText} method={method} />
                 <TextInput
                     width={280}
@@ -148,17 +150,7 @@ export default function CaesarScreen({ navigation }) {
                     <Button label='show introduction' onPress={() => { myContext.setIntroVisible(true) }} />
                 </View>
             </ScrollView>
-            <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    marginTop: 10,
-                    marginBottom: 30,
-                    marginLeft: 20,
-                    width: 100,
-                }}>
-                        <Button style={{width: 100}} label='back' onPress={() => { navigation.navigate("MethodsHome")}} />
- 
-                </View>
+            
             </ScrollView>
         </View>
     );

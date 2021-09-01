@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Platform, View, Text, FlatList, Pressable, SafeAreaView, TouchableOpacity, Button } from 'react-native'
 import { Picker } from '@react-native-picker/picker';
-
+import Title from '../components/Title';
 
 import styles from './styles'
 
@@ -9,7 +9,7 @@ import AppContext from '../components/AppContext';
 
 
 
-const methods = ['rsa', 'sdes', 'caesar', 'vigenere', 'permutation' ]
+const methods = ['caesar', 'vigenere', 'permutation', 'rsa', 'sdes']
 
 
 
@@ -77,12 +77,12 @@ export default function MethodsHomeScreen({ navigation }) {
 
     }
 
+    const title = "Select your encryption method"
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={{margin: 15}}> 
-            <Text style={{ fontSize: 25 }}> Select your encryption method:  </Text>
-            </View>
+            <Title title ={title}/>
+           
             {/*{(Platform.OS === 'android')
                 && <View style={{ backgroundColor: '#DDD', height: 50 }}>
                     <Picker style={{ flex: 1, width: 250 }}
@@ -117,7 +117,7 @@ export default function MethodsHomeScreen({ navigation }) {
             <FlatList removeClippedSubviews={false}
                             data={methods}
                             renderItem={renderItem}
-                            keyExtractor={item => item.createdAt}
+                            keyExtractor={item => item}
                         /> 
 
         </SafeAreaView>
@@ -129,4 +129,3 @@ export default function MethodsHomeScreen({ navigation }) {
 
 
 }
-

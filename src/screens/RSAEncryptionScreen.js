@@ -4,6 +4,7 @@ import { Divider } from 'react-native-elements';
 import AppContext from '../components/AppContext';
 import NumInput from '../components/NumInput';
 import Button from '../components/Button';
+import Title from '../components/Title';
 import { IntroModal } from '../utils/Modals';
 
 import { useFormik } from 'formik';
@@ -147,8 +148,9 @@ export default function RSAEncryptionScreen({ route, navigation }) {
         backgroundColor: '#eee',}}>   
        <SafeAreaView>*/
         <ScrollView style={{
-            flex: 1,
+            flex: 1, margin: 10
         }}>
+            <Title title={method} />
             <IntroModal text={introText} method={method} />
             <View
                 style={{

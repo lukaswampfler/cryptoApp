@@ -5,7 +5,7 @@ import { Divider } from 'react-native-elements';
 
 import { DraxProvider, DraxList } from 'react-native-drax';
 import AppContext from '../components/AppContext';
-
+import Title from '../components/Title';
 import { createFrequencyDict, sortDictionaryByKey, onlyNonAlpha } from '../utils/frequencyAnalysis';
 
 import {BarChart} from "react-native-chart-kit";
@@ -113,6 +113,7 @@ export default function PermutationAnalysisScreen({ navigation }) {
     const sorted = sortDictionaryByKey(freqDict)
     //console.log("Frequencies", sorted);
 
+    
     const data = {
         labels: Object.keys(sorted),
         datasets: [{ data: Object.values(sorted) }]
@@ -131,13 +132,16 @@ export default function PermutationAnalysisScreen({ navigation }) {
                 )
         })
     
+      const title = "Analyzing the Permutation Cipher"
+
 
     return (
         //first: ScrollView
         <DraxProvider>  
          <TouchableWithoutFeedback onPress = {Keyboard.dismiss} accessible={false}>
-
-            <View>
+          
+            <View style = {{margin: 10}}>
+              <Title title = {title}/>
             <Text>Enter secret message below:</Text>
             <TextInput
                 width={280}

@@ -3,7 +3,7 @@ import { View, Text, Dimensions, TextInput, TouchableWithoutFeedback, Keyboard }
 import Button from '../components/Button';
 import { caesarEncrypt } from '../utils/caesarMath';
 import AppContext from '../components/AppContext';
-
+import Title from '../components/Title';
 
 import {
     BarChart
@@ -76,11 +76,14 @@ export default function CaesarAnalysisScreen({ navigation }) {
     };
 
 
+    const title = "Analyzing the Caesar Cipher"
+
 
     return (
-        <View>
+        <View style = {{margin: 10}}>
             <TouchableWithoutFeedback onPress = {Keyboard.dismiss} accessible={false}>
                 <View>
+                    <Title title={title}/>
                 <Text>Enter secret message: </Text>
             <TextInput
                 width={280}

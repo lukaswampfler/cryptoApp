@@ -7,6 +7,7 @@ import styles from './styles'
 
 
 import AppContext from '../components/AppContext';
+import Title from '../components/Title';
 
 const analysisMethods = ['caesar', 'vigenere', 'permutation']
 
@@ -62,12 +63,14 @@ export default function AnalysisHomeScreen({ navigation }) {
 
     }
 
+    const title = "Which method do you want to analyze?"
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={{margin: 15}}>
-            <Text style={{ fontSize: 20 }}> Which method do you want to analyze?  </Text>
-            </View>
+            <Title title={title}/>
+            {/*<View style={{margin: 15}}>
+            <Text style={{ fontSize: 20 }}>   </Text>
+    </View>*/}
            {/*} {(Platform.OS === 'android')
                 && <View style={{ backgroundColor: '#DDD', height: 50 }}>
                     <Picker style={{ flex: 1, width: 250 }}
@@ -99,7 +102,7 @@ export default function AnalysisHomeScreen({ navigation }) {
             <FlatList removeClippedSubviews={false}
                             data={analysisMethods}
                             renderItem={renderItem}
-                            keyExtractor={item => item.createdAt}
+                            keyExtractor={item => item}
                         /> 
 
         </SafeAreaView>

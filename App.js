@@ -38,6 +38,7 @@ import CaesarAnalysisScreen from './src/screens/CaesarAnalysisScreen';
 import VigenereAnalysisScreen from './src/screens/VigenereAnalysisScreen';
 import PermutationScreen from './src/screens/PermutationScreen';
 import PermutationAnalysisScreen from './src/screens/PermutationAnalysisScreen';
+import RiddleHomeScreen from './src/screens/RiddleHomeScreen';
 import { SafeAreaView } from 'react-native';
 
 
@@ -58,6 +59,7 @@ const AppStack = createStackNavigator();
 const MethodStack = createStackNavigator();
 const HomeTab = createBottomTabNavigator();
 const AnalysisStack = createStackNavigator();
+const RiddleStack = createStackNavigator();
 
 
 
@@ -80,6 +82,8 @@ const AuthenticationNavigator = props => {
     </AuthenticationStack.Navigator>
   );
 };
+
+
 
 /*const AppNavigator = props => {
   return (
@@ -168,6 +172,21 @@ const AnalysisNavigator = props => {
   );
 }
 
+const RiddleNavigator = props => {
+  return (
+    <RiddleStack.Navigator screenOptions={{ headerShown: false }}>
+      <RiddleStack.Screen 
+      name="RiddleHome" 
+      component={RiddleHomeScreen} />
+      {/*<RiddleStack.Screen
+        name="ConfirmSignUp"
+        component={ConfirmSignUp}
+      />*/}
+    </RiddleStack.Navigator>
+  );
+};
+
+
 const RootDrawerNavigator = props => {
   return (
     <RootDrawer.Navigator 
@@ -180,6 +199,7 @@ const RootDrawerNavigator = props => {
             <RootDrawer.Screen name="Methods" component={MethodNavigator} options={{title: "Encryption", unmountOnBlur: true}} />
             <RootDrawer.Screen name="Analysis" component={AnalysisNavigator} options={{title: "Cryptoanalysis", unmountOnBlur: true}}/>
             <RootDrawer.Screen name="Messages" component={MessageScreen} options={{ title: "My Messages" }} />
+            <RootDrawer.Screen name="Riddles" component={RiddleNavigator} options={{ title: "Riddles" }} />
     </RootDrawer.Navigator>
   );
 }

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, Dimensions, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import Button from '../components/Button';
-
+import Title from '../components/Title';
 import AppContext from '../components/AppContext';
 
 //import data from '../data/data'
@@ -89,12 +89,14 @@ export default function VigenereAnalysisScreen({ navigation }) {
         //useShadowColorFromDataset: false // optional
     };
 
+    const title = "Analyzing the Vigenère Cipher"
 
     return (
-        <View>   
+        <View style = {{margin: 10}}>   
                  <TouchableWithoutFeedback onPress = {Keyboard.dismiss} accessible={false}>
 
             <View>
+                <Title title ={title}/>
             <Text>Enter secret message below:</Text>
             <TextInput
                 width={280}

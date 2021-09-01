@@ -66,7 +66,7 @@ export default function RootDrawerContent(props) {
           label="Riddles"
           onPress={() => {
             props.navigation.closeDrawer()
-            console.log("Navigating to riddles ...")
+            props.navigation.navigate("Riddles")
           }}
         />
         {/*<DrawerItem

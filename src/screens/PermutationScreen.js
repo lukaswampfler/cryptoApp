@@ -4,7 +4,7 @@ import { Divider } from 'react-native-elements';
 import { Table, TableWrapper, Row, Rows, Col } from 'react-native-table-component';
 import AppContext from '../components/AppContext';
 import Button from '../components/Button';
-//import NumInput from '../components/NumInput';
+import Title from '../components/Title';
 import { IntroModal } from '../utils/Modals';
 
 import { alphabet, randomTransposition, shuffleAlphabet, encryptPermutation} from '../utils/permutationMath';
@@ -67,7 +67,8 @@ export default function PermutationScreen({ navigation }) {
     return (
 
         <View style={{ flex: 1 }}>
-            <ScrollView style={{ flex: 1 }}>
+            <ScrollView style={{ flex: 1 , margin: 10}}>
+                <Title title={method} />
                 <IntroModal text={introText} method={method} />
                 <TextInput
                     width={280}
@@ -124,13 +125,13 @@ export default function PermutationScreen({ navigation }) {
                     <Button label = 'send message' onPress = {sendMessage} />
                 </View>
 
-                <View style={{
+                {/*<View style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                     marginTop: 10,
                     marginBottom: 10,
                     marginLeft: 20,
-                }}>
+                }}>*/}
                     <Text> Encrypted message: </Text>
                     <Text
                         style={{ padding: 10, fontSize: 25, borderColor: 'gray', borderWidth: 1, width: 280 }}
@@ -138,7 +139,7 @@ export default function PermutationScreen({ navigation }) {
                         {secret}
                     </Text>
 
-                </View>
+                {/*</View>*/}
                 <View style={{
                     flexDirection: 'row',
                     justifyContent: 'center', width: 150,
