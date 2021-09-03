@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Platform, View, Text, FlatList, Pressable, SafeAreaView, TouchableOpacity, Button } from 'react-native'
 import { Picker } from '@react-native-picker/picker';
 import Loading from './Loading'
+import Title from '../components/Title';
 import { listMessages, listUsers, messagesByReceiver } from '../graphql/queries';
 import { createUser, createKey } from '../graphql/mutations';
 
@@ -23,7 +24,7 @@ export default function HomeScreen({ navigation }) {
   const [users, setUsers] = useState(null);
   const [choice, setChoice] = useState('methods');
 
-  async function signOut() {
+  /*async function signOut() {
     try {
       await Auth.signOut();
       myContext.setUserLoggedIn('loggedOut');
@@ -31,7 +32,9 @@ export default function HomeScreen({ navigation }) {
     } catch (error) {
       console.log('error signing out: ', error);
     }
-  }
+  }*/
+
+  const title = "Welcome to CryptoApp"
 
   function pressSelectButton() {
     console.log("Your choice: ", choice);
@@ -43,8 +46,8 @@ export default function HomeScreen({ navigation }) {
     } else if (choice == 'messages') {
       navigation.navigate("Messages");
     } else if (choice == 'riddles') {
-      console.log("navigation.navigate(riddles)");
-    }
+      navigation.navigate("Riddles");
+    } 
   }
 
   async function fetchUsers() {
@@ -108,10 +111,12 @@ export default function HomeScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.homeScreen}>
-        <Button onPress={signOut} title="Sign Out" />
-        {/*{userID ? <Text>userID: {userID}</Text> : <Text> no userID set </Text>}*/}
-        <Text style={{ fontSize: 25, marginBottom: 50 }}> What would you like to do?  </Text>
+      <Title title={title}/>
+      <Title title="Open the menu to see your options"/>
+      {/*<View style={styles.homeScreen}>
+       {/* <Button onPress={signOut} title="Sign Out" />
+        {userID ? <Text>userID: {userID}</Text> : <Text> no userID set </Text>}*/}
+       {/*} <Text style={{ fontSize: 18, marginBottom: 50 }}> What would you like to do?  </Text>
         {(Platform.OS === 'android')
           && <View style={{ backgroundColor: '#DDD', height: 50 }}>
             <Picker style={{ flex: 1, width: 250 }}
@@ -122,7 +127,7 @@ export default function HomeScreen({ navigation }) {
             >
               <Picker.Item label="Encryption Methods" value="methods" />
               <Picker.Item label="Cryptoanalysis" value="analysis" />
-              <Picker.Item label="Messages" value="messages" />
+              <Picker.Item label="My Messages" value="messages" />
               <Picker.Item label="Riddles" value="riddles" />
             </Picker>
           </View>}
@@ -138,7 +143,7 @@ export default function HomeScreen({ navigation }) {
             <Picker.Item label="Riddles" value="riddles" />
           </Picker>}
         <Button onPress={pressSelectButton} title="Select" />
-      </View>
+            </View>*/}
     </SafeAreaView >
   )
 }

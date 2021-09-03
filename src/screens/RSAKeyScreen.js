@@ -12,6 +12,7 @@ import RandomPrimeRow from '../components/RandomPrimeRow';
 import PublicExponentRow from '../components/PublicExponentRow'
 import ButtonRow from '../components/ButtonRow';
 import { ExplanationModal } from '../utils/Modals';
+import Title from '../components/Title';
 
 //import {RSAPrimeInputScheme} from '../components/PublicExponentRow';
 
@@ -68,12 +69,12 @@ export default function RSAKeyScreen({ navigation }) {
   const keyTitle = "RSA keys"
 
 
-
+  const title = "RSA-key generation"
   return (
     <View style={{ flex: 1 }}>
       <ExplanationModal text={keyText} title={keyTitle} />
-
-      <ScrollView style={{ flex: 1 }}>
+      <Title title = {title}/>
+      <ScrollView style={{ flex: 1, margin: 10 }}>
         <View
           style={{
             flex: 1,

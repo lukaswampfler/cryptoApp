@@ -5,7 +5,7 @@ import { Divider } from 'react-native-elements';
 
 import { DraxProvider, DraxList } from 'react-native-drax';
 import AppContext from '../components/AppContext';
-
+import Title from '../components/Title';
 import { createFrequencyDict, sortDictionaryByKey, onlyNonAlpha } from '../utils/frequencyAnalysis';
 
 import {BarChart} from "react-native-chart-kit";
@@ -42,7 +42,7 @@ export default function PermutationAnalysisScreen({ navigation }) {
         }
 
         const mostFrequentLetters = getMostFrequent(secret);
-        console.log("most frequent: ", mostFrequentLetters);
+        //console.log("most frequent: ", mostFrequentLetters);
         const newAlphaData = Object.keys(mostFrequentLetters)
         setAlphaSecret(newAlphaData);
         setSecret(secret)
@@ -111,8 +111,9 @@ export default function PermutationAnalysisScreen({ navigation }) {
     // data for barChart.
     const freqDict = createFrequencyDict(secret)["0"];
     const sorted = sortDictionaryByKey(freqDict)
-    console.log("Frequencies", sorted);
+    //console.log("Frequencies", sorted);
 
+    
     const data = {
         labels: Object.keys(sorted),
         datasets: [{ data: Object.values(sorted) }]
@@ -131,13 +132,16 @@ export default function PermutationAnalysisScreen({ navigation }) {
                 )
         })
     
+      const title = "Analyzing the Permutation Cipher"
+
 
     return (
         //first: ScrollView
         <DraxProvider>  
          <TouchableWithoutFeedback onPress = {Keyboard.dismiss} accessible={false}>
-
-            <View>
+          
+            <View style = {{margin: 10}}>
+              <Title title = {title}/>
             <Text>Enter secret message below:</Text>
             <TextInput
                 width={280}
@@ -211,6 +215,10 @@ export default function PermutationAnalysisScreen({ navigation }) {
           )}
           onItemReorder={({ fromIndex, toIndex }) => {
             const newData = alphaSecret.slice(); // copy of alphaSecret
+            //TODO: hier liegt das Problem.
+            console.log(newData);
+            // problematisch: newData may contain undefined
+            if (newData.includes(undefined)){console.log(newData)}
             // to insert the dragged point
             //newData.splice(toIndex, 0, newData.splice(fromIndex, 1)[0]);
             // better: switch the two entries instead of just setting fromIndex to its place.-> To be tested!
@@ -221,12 +229,12 @@ export default function PermutationAnalysisScreen({ navigation }) {
           }}
           keyExtractor={(item) => item}
         />
-        <Text width={100} style={{fontSize:24}}> secret letters (drag letters to switch)</Text>
+        <Text width={100} style={{fontSize:18}}> secret letters (drag letters to switch)</Text>
         <Divider/>
-        <Text width={100} style={{fontSize:22}}> partially decrypted String</Text>
+        <Text width={100} style={{fontSize:18}}> partially decrypted String</Text>
         <Text width={100} style={{fontSize:16}}> {decypheredMessage}</Text>
         <Divider/>
-        <Text width={100} style={{fontSize:22}}> Decyphered Message: <Text style={{color: '#0000ff'}}>known </Text><Text style={{color: '#ff0000'}}>unknown </Text></Text>
+        <Text width={100} style={{fontSize:18}}> Decyphered Message: <Text style={{color: '#0000ff'}}>known </Text><Text style={{color: '#ff0000'}}>unknown </Text></Text>
         <View style= {{flexDirection: 'row'}}><Text >{textList}</Text></View>
       </View>
     

@@ -8,7 +8,7 @@ import styles from '../screens/styles'
 
 
 
-export function IntroModal({ text, method }) {
+export function IntroModal({ text, method , transparent = false}) {
     const myContext = useContext(AppContext);
 
 
@@ -54,7 +54,7 @@ export function IntroModal({ text, method }) {
 
     return (
         <Modal
-            transparent={false}
+            transparent={transparent}
             visible={myContext.introVisible}
             onRequestClose={() => {
                 Alert.alert('Introduction has been closed.');

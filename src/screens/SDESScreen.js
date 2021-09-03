@@ -4,6 +4,7 @@ import { Divider } from 'react-native-elements';
 import AppContext from '../components/AppContext';
 import Button from '../components/Button';
 import NumInput from '../components/NumInput';
+import Title from '../components/Title';
 import { IntroModal } from '../utils/Modals';
 
 
@@ -142,7 +143,8 @@ export default function SDESScreen({ route, navigation }) {
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView style={{ flex: 1 }}>
+      <ScrollView style={{ flex: 1 , margin: 10}}>
+       <Title title={method} />
         <IntroModal text={introText} method={method} />
 
         <View style={{

@@ -71,8 +71,8 @@ export default function ButtonRow({ navigation }) {
             margin: 40
         }}>
             <Button style={{ margin: 20 }} label='Save keys on server' onPress={uploadKeys} width={110} />
-            <Button label='Use private' onPress={() => { navigation.navigate('RSAEncryption', { usePublicKey: false, usePrivateKey: true, user: undefined }) }} width={70} />
-            <Button label='Use public' onPress={() => { navigation.navigate('RSAEncryption', { usePublicKey: true, usePrivateKey: false, user: undefined }) }} width={70} />
+            <Button label='Use private' onPress={() => { navigation.navigate('RSA', { usePublicKey: false, usePrivateKey: true, user: undefined }) }} width={70} />
+            <Button label='Use public' onPress={() => { navigation.navigate('RSA', { usePublicKey: true, usePrivateKey: false, user: undefined }) }} width={70} />
         </View>
     );
 }

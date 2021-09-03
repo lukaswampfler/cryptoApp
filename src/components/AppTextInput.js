@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, TextInput } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-export default function AppTextInput({ leftIcon, ...otherProps }) {
+export default function AppTextInput({ leftIcon, rightIcon,  toggleVisibility,  ...otherProps }) {
   return (
     <View style={styles.container}>
       {leftIcon && (
@@ -17,6 +17,15 @@ export default function AppTextInput({ leftIcon, ...otherProps }) {
         placeholderTextColor="#6e6869"
         {...otherProps}
       />
+      {rightIcon && (
+        <MaterialCommunityIcons
+          name={rightIcon}
+          size={20}
+          color="#6e6869"
+          style={styles.icon}
+          onPress = {toggleVisibility}
+        />
+      )}
     </View>
   );
 }
@@ -26,7 +35,8 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     flexDirection: 'row',
     padding: 15,
-    marginVertical: 10
+    marginVertical: 10,
+    width : '90%'
   },
   icon: {
     marginRight: 10

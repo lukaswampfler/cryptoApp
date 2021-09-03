@@ -4,6 +4,7 @@ import { Divider } from 'react-native-elements';
 import AppContext from '../components/AppContext';
 import Button from '../components/Button';
 import NumInput from '../components/NumInput';
+import Title from '../components/Title';
 import { encode, decode, bitsStringFromBytes } from '../utils/sdesMath';
 import { ExplanationModal } from '../utils/Modals';
 import { useFormik } from 'formik';
@@ -26,14 +27,14 @@ export default function SDESEncodingScreen({ navigation }) {
         let ciphers = myContext.ciphers;
         ciphers.sdes.message = bitString;
         myContext.setCiphers(ciphers);
-        navigation.navigate('SDESEncryption', { message: bitString })
+        navigation.navigate('SDES', { message: bitString })
     }
 
 
     const introText = "Here comes the introduction to S-DES encoding ..., please use only characters from latin-1 encoding, i.e. no emojis";
     const method = "Encoding a message"
 
-
+    const title = "S-DES Encoding"
 
     return (
 
@@ -41,7 +42,8 @@ export default function SDESEncodingScreen({ navigation }) {
 
 
 
-            <ScrollView style={{ flex: 1 }}>
+            <ScrollView style={{ flex: 1 , margin: 10}}>
+                <Title title = {title}/>
                 <ExplanationModal text={introText} title={method} />
                 <View style={{
                     flexDirection: 'row',
@@ -52,7 +54,7 @@ export default function SDESEncodingScreen({ navigation }) {
                 }}>
 
                     <TextInput
-                        width={280}
+                        width={240}
                         multiline={true}
                         textAlignVertical='top'
                         placeholder='Enter plain text message'
@@ -77,7 +79,7 @@ export default function SDESEncodingScreen({ navigation }) {
                 }}>
 
                     <Text
-                        style={{ padding: 10, fontSize: 25, borderColor: 'gray', borderWidth: 1, width: 280 }}
+                        style={{ padding: 10, fontSize: 25, borderColor: 'gray', borderWidth: 1, width: 240 }}
                         selectable>
                         {encoded}
                     </Text>
