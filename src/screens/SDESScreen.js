@@ -260,7 +260,7 @@ export default function SDESScreen({ route, navigation }) {
             <Text style={{ fontSize: 20 }} selectable> {decryptedMessage} </Text>
           </View> : null}
         <View style={{
-          flexDirection: 'center',
+          flexDirection: 'row',
           justifyContent: 'center', width: 150,
           marginTop: 100
         }}>

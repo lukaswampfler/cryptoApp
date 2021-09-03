@@ -66,6 +66,7 @@ export default function RootDrawerContent(props) {
           label="Riddles"
           onPress={() => {
             props.navigation.closeDrawer()
+            props.navigation.dispatch(StackActions.popToTop()); 
             props.navigation.navigate("Riddles")
           }}
         />

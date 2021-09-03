@@ -86,7 +86,7 @@ export default function SDESEncodingScreen({ navigation }) {
                 </View>
 
                 <View style={{
-                    flexDirection: 'center',
+                    flexDirection: 'row',
                     justifyContent: 'center', width: 150,
                     marginTop: 100
                 }}>

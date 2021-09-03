@@ -5,6 +5,7 @@ import Title from '../components/Title';
 import Button from '../components/Button';
 import { IntroModal } from '../utils/Modals';
 import styles from './styles'
+import { useNavigation } from '@react-navigation/core';
 
 import AppContext from '../components/AppContext';
 
@@ -13,28 +14,56 @@ import AppContext from '../components/AppContext';
 const methods = ['rsa', 'sdes', 'caesar', 'vigenere', 'permutation' ]
 
 
-const options = ["secret with known cipher", "secret with unknown cipher", "random message from server"]
+const options = [
+    {name: "secret with known cipher", short: "knownCipher"}, 
+    {name: "secret with unknown cipher", short: "unknownCipher"}, 
+    {name:  "random message from server", short: "randomMessage"},
+]
 
 
-const renderItem = ({ item }) => (
-        
-    <View style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        borderBottomWidth: 1,
-        margin: 5,
-    }}
-    >
-        <TouchableOpacity onPress={()=> console.log({item})}>
-        <Text style={{fontSize: 18 , width: 350, marginBottom: 10, marginTop: 5 }}  >
-            {item.toUpperCase()}  </Text>
-        
-      
-        </TouchableOpacity>
-    </View>
-);
+
+
+
+
 
 export default function RiddleHomeScreen({ navigation }) {
+
+
+    const renderItem = ({ item }) => {
+
+        return (
+        <View style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            borderBottomWidth: 1,
+            margin: 5,
+        }}
+        >
+            <TouchableOpacity onPress={() => {
+                let details = {};
+                if (item.short == "knownCipher"){
+                    details.allowHints = true;
+                    details.isRandom = false;
+                    navigation.navigate("MethodChoice", {details})
+                } else if (item.short == "unknownCipher"){
+                    details.allowHints = false;
+                    details.isRandom = false;
+                    navigation.navigate("RiddleDisplay", {details});
+                } else if (item.short == "randomMessage"){
+                    details.allowHints = false;
+                    details.isRandom = true
+                    navigation.navigate("RiddleDisplay", {details});
+                }
+                
+            }}>
+            <Text style={{fontSize: 18 , width: 350, marginBottom: 10, marginTop: 5 }}  >
+                {item.name.toUpperCase()}  </Text>
+            
+          
+            </TouchableOpacity>
+        </View>
+        );
+    }
 
     const myContext = useContext(AppContext);
 
@@ -51,7 +80,7 @@ export default function RiddleHomeScreen({ navigation }) {
             <FlatList removeClippedSubviews={false}
                             data={options}
                             renderItem={renderItem}
-                            keyExtractor={item => item}
+                            keyExtractor={item => item.name}
                         /> 
                 <View style={{
                     flexDirection: 'row',

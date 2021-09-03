@@ -40,6 +40,8 @@ import PermutationScreen from './src/screens/PermutationScreen';
 import PermutationAnalysisScreen from './src/screens/PermutationAnalysisScreen';
 import RiddleHomeScreen from './src/screens/RiddleHomeScreen';
 import { SafeAreaView } from 'react-native';
+import RiddleMethodChoiceScreen from './src/screens/RiddleMethodChoiceScreen';
+import RiddleDisplayScreen from './src/screens/RiddleDisplayScreen';
 
 
 
@@ -178,10 +180,14 @@ const RiddleNavigator = props => {
       <RiddleStack.Screen 
       name="RiddleHome" 
       component={RiddleHomeScreen} />
-      {/*<RiddleStack.Screen
-        name="ConfirmSignUp"
-        component={ConfirmSignUp}
-      />*/}
+      <RiddleStack.Screen
+        name="MethodChoice"
+        component={RiddleMethodChoiceScreen}
+      />
+      <RiddleStack.Screen
+        name="RiddleDisplay"
+        component={RiddleDisplayScreen}
+      />
     </RiddleStack.Navigator>
   );
 };
@@ -199,7 +205,7 @@ const RootDrawerNavigator = props => {
             <RootDrawer.Screen name="Methods" component={MethodNavigator} options={{title: "Encryption", unmountOnBlur: true}} />
             <RootDrawer.Screen name="Analysis" component={AnalysisNavigator} options={{title: "Cryptoanalysis", unmountOnBlur: true}}/>
             <RootDrawer.Screen name="Messages" component={MessageScreen} options={{ title: "My Messages" }} />
-            <RootDrawer.Screen name="Riddles" component={RiddleNavigator} options={{ title: "Riddles" }} />
+            <RootDrawer.Screen name="Riddles" component={RiddleNavigator} options={{ title: "Riddles", unmountOnBlur: true }} />
     </RootDrawer.Navigator>
   );
 }
