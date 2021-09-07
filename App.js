@@ -269,6 +269,7 @@ export default function App() {
   const [RSAInputSwitchisDecimal, setRSAInputSwitchisDecimal] = useState(true);
   const [introVisible, setIntroVisible] = useState(false);
   const [explVisible, setExplVisible] = useState(false);
+  const [secretContainer, setSecretContainer] = useState({});
 
 
   const rsa = { isEncrypted: false, m: '', exp: '', n: '' };
@@ -297,6 +298,7 @@ export default function App() {
     useBigIntegerLibrary: useBigIntegerLibrary,
     introVisible: introVisible,
     explVisible: explVisible,
+    secretContainer: secretContainer,
     setUserName,
     setUserID,
     setPassword,
@@ -312,6 +314,7 @@ export default function App() {
     setUseBigIntegerLibrary,
     setIntroVisible,
     setExplVisible,
+    setSecretContainer,
   };
 
   async function signOut() {

@@ -80,6 +80,7 @@ export function swap(array) {
     let { first, second } = generateTwoParts(array);
     return second.concat(first);
 }
+
 export function applySub(s, n) {
     // works with (binary) String arrays of length 4
     let S;
@@ -248,4 +249,18 @@ export function bitsStringFromBytes(byteArray) {
     }
     console.log(result);
     return result;
+}
+
+export function getRandomKeys(){
+    const LENGTH = 10;
+    let key10 = ''
+    for (let i = 0; i < LENGTH; i++){
+        const randomBit = Math.random() < 0.5 ? '0' : '1'
+        key10 = key10 + randomBit;
+    }
+
+    const keys = generateSDESKeys(key10);
+    return keys;
+    console.log("SDES-Keys: ", keys)
+
 }

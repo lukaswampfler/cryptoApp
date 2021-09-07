@@ -39,15 +39,19 @@ const renderItem = ({ item }) => (
 
 export default function RiddleMethodChoiceScreen({ navigation }) {
     const myContext = useContext(AppContext);
-    const [selectedMethod, setSelectedMethod] = useState('caesar')
-    const [selectedLevel, setSelectedLevel] = useState('easy')
-    const [selectedLanguage, setSelectedLanguage] = useState('german')
+    const [selectedMethod, setSelectedMethod] = useState('')
+    const [selectedLevel, setSelectedLevel] = useState('')
+    const [selectedLanguage, setSelectedLanguage] = useState('')
 
     
     const titleMethod = "Choose your method!"
     const titleLevel = "Choose your level!"
     const titleLanguage = "Choose your language!"
 
+
+    const enabled = selectedMethod.length != ''  && selectedLevel.length != '' && selectedLanguage.length != '';
+    console.log("enabled: ", enabled)
+    console.log(selectedMethod, selectedLevel, selectedLanguage)
     return (
         <SafeAreaView style={{margin: 0}}>
             <Title title ={titleMethod}/>
@@ -89,6 +93,7 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
             items={[
                 { label: 'Easy', value: 'easy' },
                 { label: 'Hard', value: 'hard' },
+                { label: 'Extreme', value: 'extreme' },
             ]}
         />
         </View>
@@ -105,14 +110,14 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
     ]}
 />
 </View>
-<View style = {{margin: 20, width : '25%'}}>
-<Button label='create secret message' onPress={() => { 
+<View style = {{margin: 20, width : '40%'}}>
+<Button disabled={!enabled} label='create secret message' onPress={() => { 
     const details = {
         allowHints: true, 
         isRandom: false,
-        language: {selectedLanguage},
-        method: {selectedMethod}, 
-        level: {selectedLevel},
+        language: selectedLanguage,
+        method: selectedMethod, 
+        level: selectedLevel,
     }
     navigation.navigate("RiddleDisplay", {details}) }} />
 

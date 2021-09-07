@@ -15,7 +15,7 @@ const methods = ['rsa', 'sdes', 'caesar', 'vigenere', 'permutation' ]
 
 
 const options = [
-    {name: "secret with known cipher", short: "knownCipher"}, 
+    {name: "secret with given cipher", short: "knownCipher"}, 
     {name: "secret with unknown cipher", short: "unknownCipher"}, 
     {name:  "random message from server", short: "randomMessage"},
 ]
@@ -46,7 +46,7 @@ export default function RiddleHomeScreen({ navigation }) {
                     details.isRandom = false;
                     navigation.navigate("MethodChoice", {details})
                 } else if (item.short == "unknownCipher"){
-                    details.allowHints = false;
+                    details.allowHints = true;
                     details.isRandom = false;
                     navigation.navigate("RiddleDisplay", {details});
                 } else if (item.short == "randomMessage"){
