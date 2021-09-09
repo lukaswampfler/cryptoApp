@@ -122,3 +122,22 @@ function partialDecryption(text, decryptionDict){
 }
 
 console.log(partialDecryption(text, decryptionDict));
+
+
+function isInteger(s){
+    let result = true;
+    for (let ind = 0; ind< s.length; ind++){
+        result = result && (s.charAt(ind) >= '0' && s.charAt(ind) <= '9')
+    }
+    return result
+}
+
+
+
+let s1 = '34'
+let s2 = 'a'
+let s3 = '34 '
+
+console.log(s1, "isInteger: ", isInteger(s1))
+console.log(s2, "isInteger: ", isInteger(s2))
+console.log(s3, "isInteger: ", isInteger(s3))

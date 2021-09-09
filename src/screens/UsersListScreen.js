@@ -65,7 +65,7 @@ export default function UsersListScreen({ route, navigation }) {
       user={item}
       onPress={() => {
         if (route.params.toImportKey) {
-          navigation.navigate('RSAEncryption', { user: item, usePublicKey: false, usePrivateKey: false })
+          navigation.navigate('RSA', { user: item, usePublicKey: false, usePrivateKey: false })
         } else if (route.params.toSend) {
           // create and send new Message
           newMessage(item);

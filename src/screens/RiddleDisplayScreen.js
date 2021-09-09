@@ -6,7 +6,7 @@ import Button from '../components/Button';
 
 import getSecretContainer from '../utils/getSecretContainer';
 
-import AppContext from '../components/AppContext';
+//import AppContext from '../components/AppContext';
 
 const choose = (array) => {
     const ind = Math.floor(Math.random()*array.length);
@@ -56,26 +56,19 @@ export default function RiddleDisplayScreen({ route,  navigation }) {
 
 useEffect(() => {
     // TODO: only if details is supplied, else do nothing!
+    if(!details.isRandom) {
     const languageShort = details['language'] == 'german' ? 'de' : 'en'; 
     getResponse(languageShort).then( function (response){
-        console.log(response)
         setSecretMessage(response)
         secretContainer = getSecretContainer(response, details);
         setEncryptedMessage(secretContainer.secret)
         setMethod(secretContainer.method)
-        console.log(secretContainer.secret)
-        
     })
+    }
         
     }, [])
 
-    /*useEffect(() => {
-        if(secretMessage != null){
-            secretContainer = 
-            console.log("secretContainer: ", secretContainer)
-        }
-        }, [secretMessage])*/
-
+    
 
     const {details} = route.params;
     const title = "I challenge you to decrypt the message below!";
@@ -120,9 +113,9 @@ useEffect(() => {
                 {encryptedMessage}
             </Text>
             </View>}
-            <View style ={{margin: 10}}>
+            {/*<View style ={{margin: 10}}>
             {!(details.method == undefined) && <Text> You selected the {details.method} cipher</Text>}
-            </View>
+</View>*/}
             <View style ={{margin: 20}}>
             {details.allowHints? <Button label='give me a hint!' onPress={() => { 
                 console.log(details)

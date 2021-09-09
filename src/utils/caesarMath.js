@@ -41,3 +41,12 @@ export function caesarEncrypt(text, key) {
     else
         return '';
 }
+
+
+export function isInteger(s){
+    let result = true;
+    for (let ind = 0; ind< s.length; ind++){
+        result = result && (s.charAt(ind) >= '0' && s.charAt(ind) <= '9')
+    }
+    return result
+}
