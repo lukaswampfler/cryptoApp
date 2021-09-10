@@ -43,3 +43,11 @@ function invert(key){
 function isAlpha(c) {
     return c.length == 1 && ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'));
 }
+
+export function isAlphabetic(s){
+    let result = true;
+    for (let ind = 0; ind< s.length; ind++){
+        result = result && ((s.charAt(ind) >= 'a' && s.charAt(ind) <= 'z') || (s.charAt(ind) >= 'A' && s.charAt(ind) <= 'Z'))
+    }
+    return result
+}

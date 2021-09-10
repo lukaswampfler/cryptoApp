@@ -132,12 +132,26 @@ function isInteger(s){
     return result
 }
 
+function isAlphabetic(s){
+    let result = true;
+    for (let ind = 0; ind< s.length; ind++){
+        result = result && ((s.charAt(ind) >= 'a' && s.charAt(ind) <= 'z') || (s.charAt(ind) >= 'A' && s.charAt(ind) <= 'Z'))
+    }
+    return result
+}
+
 
 
 let s1 = '34'
 let s2 = 'a'
 let s3 = '34 '
+let s4 = 'abcd4'
+let s5 = 'abcddfajvbcjvksADSFJASDKFDJSFKSDAJF'
 
 console.log(s1, "isInteger: ", isInteger(s1))
 console.log(s2, "isInteger: ", isInteger(s2))
 console.log(s3, "isInteger: ", isInteger(s3))
+
+console.log(s2, "isAlphabetic: ", isAlphabetic(s2))
+console.log(s4, "isAlphabetic: ", isAlphabetic(s4))
+console.log(s5, "isAlphabetic: ", isAlphabetic(s5))

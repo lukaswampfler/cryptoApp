@@ -34,7 +34,9 @@ export default function CaesarScreen({ navigation }) {
     const changeKey = key =>{
         if(isInteger(key)){
            setKey(key);
+           setSecret(caesarEncrypt(text, key))
         } else {
+            setSecret('')
             alert("Please use only positive integers for keys!")
         }
     }

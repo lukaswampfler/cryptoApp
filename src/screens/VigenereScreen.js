@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
-import { SafeAreaView, ScrollView, Text, View, TextInput, TouchableOpacity, Modal } from 'react-native';
+import { SafeAreaView, ScrollView, Text, View, TextInput, Switch, Modal } from 'react-native';
 import { Divider } from 'react-native-elements';
 import AppContext from '../components/AppContext';
 import Button from '../components/Button';
 import NumInput from '../components/NumInput';
 import Title from '../components/Title';
-import { vigenereEncrypt, vigenereDecrypt } from '../utils/vigenereMath';
+import { vigenereEncrypt, vigenereDecrypt, isAlphabetic } from '../utils/vigenereMath';
 import { useFormik } from 'formik';
 
 
@@ -29,19 +29,46 @@ export default function VigenereScreen({ navigation }) {
 
     const [text, setText] = useState('');
     const [secret, setSecret] = useState('');
-    const [key, setKey] = useState('a');
+    const [key, setKey] = useState('');
+    const [isEncrypting, setIsEncrypting] = useState(true)
     const ref = useRef(key);
 
-    const changeText = text => {
-        setText(text);
+    const toggleEncryptionSwitch = (value) => {
+        //To handle switch toggle
+        setIsEncrypting(!isEncrypting);
+        //State changes according to switch
+        updateTextAndSecret(text, secret, key, !isEncrypting)
+    };
+
+    const changeText = newText => {
+        setText(newText);
         //encryptVigenere();
-        setSecret(vigenereEncrypt(text, key));
+        if(isEncrypting) updateTextAndSecret(newText, '', key);
     }
 
-    const changeSecret = secret => {
-        setSecret(secret);
+    const changeSecret = newSecret => {
+        setSecret(newSecret);
         //encryptVigenere();
-        //setSecret(vigenereEncrypt(text, key));
+        if(!isEncrypting) updateTextAndSecret('', newSecret, key, false);
+    }
+
+    const changeKey = newKey => {
+        if(isAlphabetic(newKey)){
+            setKey(newKey)
+            updateTextAndSecret(text, secret, newKey)
+
+        } else {
+            alert("Please use only letters for the key!")
+            updateTextAndSecret('', '', newKey)
+        }
+    }
+
+    const updateTextAndSecret = (text, secret, newKey, encrypting = isEncrypting) => {
+        if(encrypting){
+            setSecret(vigenereEncrypt(text, newKey));
+        } else {
+            setText(vigenereDecrypt(secret, newKey)); 
+        }
     }
 
 
@@ -92,7 +119,7 @@ export default function VigenereScreen({ navigation }) {
         }
     });
 
-    const introText = "Here comes the introduction to the Vigenere method...";
+    const introText = "Important: Please use only letters for the Vigenere key.";
     const method = "The Vigenère cipher"
 
     return (
@@ -117,23 +144,54 @@ export default function VigenereScreen({ navigation }) {
                     onBlur={() => { }}
                     value={text}
                 />
-                <Text style={{ marginTop: 30 }}> Enter Key.</Text>
+
+            <View style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                }}>
+                <View style={{
+                    flexDirection: 'column',
+                    justifyContent: 'space-around',
+                    marginTop: 10,
+                    marginBottom: 10,
+                }}>
+                <Text style={{ marginTop: 20 }}> Enter Key.</Text>
                 <NumInput
-                    icon='pinterest'
-                    width={200}
+                    //icon='pinterest'
+                    width={280}
                     placeholder='Enter Vigenere key'
                     autoCapitalize='none'
                     keyboardType='default'
                     keyboardAppearance='dark'
                     returnKeyType='next'
                     returnKeyLabel='next'
-                    onChangeText={formikKey.handleChange('key')}
+                    //onChangeText={formikKey.handleChange('key')}
+                    onChangeText={changeKey}
                     onBlur={formikKey.handleBlur('key')}
-                    error={formikKey.errors.key}
+                    //error={formikKey.errors.key}
                     touched={formikKey.touched.key}
-                    value={formikKey.values.key} />
+                    //value={formikKey.values.key} 
+                    value={key}
+                    />
+                   </View> 
+                   <View style={{
+                    flexDirection: 'column',
+                    justifyContent: 'space-around',
+                    marginTop: 10,
+                    marginBottom: 10,
+                }}>
+                <Text style={{ marginTop: 20 }}> {isEncrypting?  'Encryption': 'Decryption'} </Text>
+                <Switch
+                    
+                            onValueChange={toggleEncryptionSwitch}
+                            value={isEncrypting}
+                        />
 
-                <View style={{
+                </View>
+                </View>
+              
+
+               {/*} <View style={{
                     flexDirection: 'row',
                     justifyContent: 'space-around',
                     marginTop: 10,
@@ -142,7 +200,7 @@ export default function VigenereScreen({ navigation }) {
                     <Button label='use this key' onPress={formikKey.handleSubmit} />
                     <Button label='send message' onPress={sendMessage} />
                     <Button label='Decrypt' onPress={decrypt} />
-                </View>
+            </View>*/}
 
 
                 <View style={{
@@ -177,12 +235,17 @@ export default function VigenereScreen({ navigation }) {
                         onBlur={() => { }}
                         value={secret}/>
                    
-                <View style={{
+                   <View style={{
                     flexDirection: 'row',
-                    justifyContent: 'center', width: 150,
+                    justifyContent: 'space-evenly', width: 350,
                     marginTop: 100
                 }}>
-                    <Button label='show introduction' onPress={() => { myContext.setIntroVisible(true) }} />
+                    <View style = {{margin: 20}}>
+                    <Button  label='show introduction' onPress={() => { myContext.setIntroVisible(true) }} />
+                    </View>
+                    <View style = {{margin: 20}}>
+                    <Button label='send message' onPress={sendMessage} />
+                    </View>
                 </View>
             </ScrollView>
         </View>
