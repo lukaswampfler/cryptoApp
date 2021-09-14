@@ -45,7 +45,8 @@ export default function UsersListScreen({ route, navigation }) {
         senderID: myContext.userID,
         receiverID: receiver.id,
         text: myContext.ciphers.currentMessage,
-        method: myContext.ciphers.currentMethod
+        method: myContext.ciphers.currentMethod,
+        sent: "true"
       }
       console.log(messageDetails)
       const messageData = await API.graphql({ query: createMessage, variables: { input: messageDetails } });

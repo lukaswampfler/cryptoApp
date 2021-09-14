@@ -47,6 +47,8 @@ export default function MessageScreen({ navigation }) {
         }).subscribe({
             error: err => console.log("error caught in subscribe: ", err),
             next: messageData => {
+                console.log("user id: ", myContext.userID);
+                console.log("messageData", messageData.value)
                 alert("Received new message from " + messageData.value.data.onCreateMessageByReceiverID.sender.name)
                 updateLatestMessage(messageData.value.data.onCreateMessageByReceiverID.text)
                 //console.log("new message: ", messageData.value.data.onCreateMessageByReceiverID.text);
@@ -78,6 +80,8 @@ export default function MessageScreen({ navigation }) {
     }, [])
 
 
+    
+    //PAUSE FOR THE MOMENT
     useEffect(() => {
         console.log("running subscription effect....");
         //console.log("before subscribe: ", userID)
@@ -86,6 +90,8 @@ export default function MessageScreen({ navigation }) {
 
         return () => { subscription.unsubscribe() } // return wird ausgeführt beim unmounten.
     }, [messages])
+    
+    
 
 
 

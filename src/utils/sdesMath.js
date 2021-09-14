@@ -251,16 +251,22 @@ export function bitsStringFromBytes(byteArray) {
     return result;
 }
 
-export function getRandomKeys(){
-    const LENGTH = 10;
-    let key10 = ''
-    for (let i = 0; i < LENGTH; i++){
+export function getRandomBitString(length){
+    let randBitString = ''
+    for (let i = 0; i < length; i++){
         const randomBit = Math.random() < 0.5 ? '0' : '1'
-        key10 = key10 + randomBit;
+        randBitString = randBitString + randomBit;
     }
+    return randBitString;
+}
+
+
+export function getRandomKeys(){
+    const key10 = getRandomBitString(10);
 
     const keys = generateSDESKeys(key10);
-    return keys;
-    console.log("SDES-Keys: ", keys)
+    // return keys
+    return {key10: key10, key1: keys.k1, key2:keys.k2};
+    //console.log("SDES-Keys: ", keys)
 
 }

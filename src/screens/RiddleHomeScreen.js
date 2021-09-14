@@ -52,7 +52,7 @@ export default function RiddleHomeScreen({ navigation }) {
                 } else if (item.short == "randomMessage"){
                     details.allowHints = false;
                     details.isRandom = true
-                    navigation.navigate("RiddleDisplay", {details});
+                    navigation.navigate("RiddlesFromServer", {details});
                 }
                 
             }}>
@@ -69,7 +69,7 @@ export default function RiddleHomeScreen({ navigation }) {
 
 
     const title = "Riddles ..."
-    const introText = "Here comes the introduction to Riddles section";
+    const introText = "You can either \n- solve a riddle with a method of your liking,\n- create a random riddle or\n- download a few of the last sent messages from other people.";
     const method = "Solving riddles"
 
 

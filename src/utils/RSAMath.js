@@ -46,7 +46,7 @@ export function isPrime(n, useBigIntegerLibrary) {
 }
 export function generatePrime(exp, useBigIntegerLibrary) {
     // returns a prime number (as string)
-    let min = Math.pow(10, exp);
+    let min = exp < 1 ? 1 : Math.pow(10, exp-1);
     let max = 10 * min;
     let cand = BigInt(Math.floor(Math.max(2, min + Math.random() * (max - min))));
     while (!isPrime(cand, useBigIntegerLibrary)){
@@ -123,5 +123,29 @@ function millerRabin(n, millerRabinIterations, useBigIntegerLibrary) {
     }
     return listOfResults.every(x => x == true);
 }
+
+
+export function calculateKeyPair(p, q, useBigIntegerLibrary) {
+    const phi = (BigInt(p) - BigInt(1)) * (BigInt(q) - BigInt(1));
+    const n = (BigInt(p) * BigInt(q)).toString();
+    const expPublic = phi > Math.pow(2, 16) ?  (Math.pow(2, 16) + 1).toString() : (phi - BigInt(1)).toString()
+    
+    let { inverse, gcd } = extendedEuclid(BigInt(expPublic), phi, useBigIntegerLibrary);
+
+    if (inverse === undefined) {
+        console.log("Not possible to determine private Key: " + "public" + pubKey.exp + "phi: " + phi);
+    } else if (gcd != BigInt(1)) {
+        console.log("GCD not equal to 1");
+    } else {
+        if (inverse < 0){
+            inverse += phi;
+        }
+    } 
+    const keys = {private: {exp: inverse.toString(), mod: n}, public: {exp: expPublic, mod: n}}
+    console.log("RSA generated keys: ", keys)
+    return keys;
+            
+ }
+        
 
 

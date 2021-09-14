@@ -1,22 +1,34 @@
-import {useContext} from 'react-native';
+import {useContext} from 'react';
 import { caesarEncrypt } from './caesarMath';
 import { vigenereEncrypt } from './vigenereMath';
 import { encryptPermutation, randomTransposition, shuffleAlphabet } from './permutationMath';
 import * as dataEng from '../data/jeopardy_questions_eng.json';
-import {getRandomKeys, encryptSDESMessage, encode, bitsStringFromBytes} from './sdesMath';
+import {getRandomKeys, encryptSDESMessage, encode, bitsStringFromBytes, getRandomBitString} from './sdesMath';
+import { smartExponentiation } from './RSAMath';
 
 import AppContext from '../components/AppContext';
+
 
 const alphabet = 'abcdefghijklmnopqrstuvwxyz'
 
 
 
-export default function getSecretContainer(message, details){
 
-    message = cleanMessage(message);
-    message = adjustMessage(message, details.level)
+export default function getSecretContainer(details, message = ''){
 
-    let {language, method, level } = details;
+    
+
+    console.log("details: ", details)
+    if(details.isText){
+        message = cleanMessage(message);
+        message = adjustMessage(message, details.level)
+    } else {
+        console.log("not yet implemented")
+
+    }
+    
+
+    let {method, level } = details;
 
     if (method == 'random'){
         const secrets = getMessagesFromServer(10)
@@ -43,7 +55,7 @@ export default function getSecretContainer(message, details){
         key = createVigenereKey(keyLength)
         secretMessage = vigenereEncrypt(message, key)
     } else if (method == 'permutation'){
-        if (level == 'easy'){ // 5 Transpositions
+        if (level == 'easy'){ // 5 transpositions
             key = alphabet;
             for (let i = 0; i < 5; i++){
                 key = randomTransposition(key);
@@ -54,20 +66,34 @@ export default function getSecretContainer(message, details){
             secretMessage = encryptPermutation(message, key)
     } else if (method == 'sdes'){
         key = getRandomKeys();
-        const encodedMessage = bitsStringFromBytes(encode(message));
-        console.log(encodedMessage);
-        //secretMessage = encryptSDESMessage(encodedMessage, key);
-    } else { 
-            secretMessage =  'blabla' 
-            message= 'bloblo'
-            key = 0, 
-            method = 'other'
+        if (level == 'easy'){
+            message = getRandomBitString(8);
+        } else if (level == 'hard'){
+            if (Math.random() < 0.5){
+                message = String.fromCharCode('a'.charCodeAt(0) + randomNumber(26))
+            } else {
+                message = String.fromCharCode('A'.charCodeAt(0) + randomNumber(26))
+            }
+            message = bitsStringFromBytes(encode(message));
+        } else if (level == 'extreme'){ 
+            message = bitsStringFromBytes(encode("Hello, world!"));
+        }
+        
+        secretMessage = encryptSDESMessage(message, {k1: key.key1, k2: key.key2});
+        method = 'sdes'
+    } else if (method == 'rsa'){ 
+            key = details.rsaKey;
+            message = randomNumber(key.mod)
+            secretMessage =  smartExponentiation(BigInt(message), BigInt(key.exp), BigInt(key.mod), details.useBigIntegerLibrary).toString()
+            //message= 'bloblo'
+            //key = 0, 
+            method = 'rsa'
         }
         
 
     const secretContainer = {secret: secretMessage, key: key, clear: message, method}
 
-
+    //console.log("secretContainer: ", secretContainer)
     
     return secretContainer;
 }

@@ -19,6 +19,13 @@ export const onCreateMessageByReceiverID = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        privateKey {
+          id
+          exponent
+          modulus
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -34,10 +41,18 @@ export const onCreateMessageByReceiverID = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        privateKey {
+          id
+          exponent
+          modulus
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
       text
+      sent
       method
       createdAt
       updatedAt
@@ -62,6 +77,13 @@ export const onCreateMessage = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        privateKey {
+          id
+          exponent
+          modulus
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -77,10 +99,18 @@ export const onCreateMessage = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        privateKey {
+          id
+          exponent
+          modulus
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
       text
+      sent
       method
       createdAt
       updatedAt
@@ -105,6 +135,13 @@ export const onUpdateMessage = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        privateKey {
+          id
+          exponent
+          modulus
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -120,10 +157,18 @@ export const onUpdateMessage = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        privateKey {
+          id
+          exponent
+          modulus
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
       text
+      sent
       method
       createdAt
       updatedAt
@@ -148,6 +193,13 @@ export const onDeleteMessage = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        privateKey {
+          id
+          exponent
+          modulus
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -163,10 +215,18 @@ export const onDeleteMessage = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        privateKey {
+          id
+          exponent
+          modulus
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
       text
+      sent
       method
       createdAt
       updatedAt
@@ -181,6 +241,13 @@ export const onCreateUser = /* GraphQL */ `
       publicKeyID
       privateKeyID
       publicKey {
+        id
+        exponent
+        modulus
+        createdAt
+        updatedAt
+      }
+      privateKey {
         id
         exponent
         modulus
@@ -206,6 +273,13 @@ export const onUpdateUser = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      privateKey {
+        id
+        exponent
+        modulus
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -219,6 +293,13 @@ export const onDeleteUser = /* GraphQL */ `
       publicKeyID
       privateKeyID
       publicKey {
+        id
+        exponent
+        modulus
+        createdAt
+        updatedAt
+      }
+      privateKey {
         id
         exponent
         modulus

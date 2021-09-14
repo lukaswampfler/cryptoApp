@@ -19,6 +19,13 @@ export const getMessage = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        privateKey {
+          id
+          exponent
+          modulus
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -34,10 +41,18 @@ export const getMessage = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        privateKey {
+          id
+          exponent
+          modulus
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
       text
+      sent
       method
       createdAt
       updatedAt
@@ -72,6 +87,7 @@ export const listMessages = /* GraphQL */ `
           updatedAt
         }
         text
+        sent
         method
         createdAt
         updatedAt
@@ -88,6 +104,13 @@ export const getUser = /* GraphQL */ `
       publicKeyID
       privateKeyID
       publicKey {
+        id
+        exponent
+        modulus
+        createdAt
+        updatedAt
+      }
+      privateKey {
         id
         exponent
         modulus
@@ -163,6 +186,54 @@ export const messagesByReceiver = /* GraphQL */ `
           updatedAt
         }
         text
+        sent
+        method
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const messagesBySent = /* GraphQL */ `
+  query MessagesBySent(
+    $sent: String
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelMessageFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    messagesBySent(
+      sent: $sent
+      createdAt: $createdAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        senderID
+        receiverID
+        sender {
+          id
+          name
+          publicKeyID
+          privateKeyID
+          createdAt
+          updatedAt
+        }
+        receiver {
+          id
+          name
+          publicKeyID
+          privateKeyID
+          createdAt
+          updatedAt
+        }
+        text
+        sent
         method
         createdAt
         updatedAt

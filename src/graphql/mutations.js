@@ -22,6 +22,13 @@ export const createMessage = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        privateKey {
+          id
+          exponent
+          modulus
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -37,10 +44,18 @@ export const createMessage = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        privateKey {
+          id
+          exponent
+          modulus
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
       text
+      sent
       method
       createdAt
       updatedAt
@@ -68,6 +83,13 @@ export const updateMessage = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        privateKey {
+          id
+          exponent
+          modulus
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -83,10 +105,18 @@ export const updateMessage = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        privateKey {
+          id
+          exponent
+          modulus
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
       text
+      sent
       method
       createdAt
       updatedAt
@@ -114,6 +144,13 @@ export const deleteMessage = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        privateKey {
+          id
+          exponent
+          modulus
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -129,10 +166,18 @@ export const deleteMessage = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        privateKey {
+          id
+          exponent
+          modulus
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
       text
+      sent
       method
       createdAt
       updatedAt
@@ -150,6 +195,13 @@ export const createUser = /* GraphQL */ `
       publicKeyID
       privateKeyID
       publicKey {
+        id
+        exponent
+        modulus
+        createdAt
+        updatedAt
+      }
+      privateKey {
         id
         exponent
         modulus
@@ -178,6 +230,13 @@ export const updateUser = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      privateKey {
+        id
+        exponent
+        modulus
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -194,6 +253,13 @@ export const deleteUser = /* GraphQL */ `
       publicKeyID
       privateKeyID
       publicKey {
+        id
+        exponent
+        modulus
+        createdAt
+        updatedAt
+      }
+      privateKey {
         id
         exponent
         modulus

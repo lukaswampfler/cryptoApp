@@ -48,13 +48,21 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
     const titleLevel = "Choose your level!"
     const titleLanguage = "Choose your language!"
 
+    
+    const method = "Your choice"
+    const introText = "Please select a language in any case, even if your message is just a number.\n"
+    const introSDES = "- SDES easy is just an 8-bit string \n- SDES hard is ONE ASCII-encoded character\n- SDES extreme: a larger text first encoded and then encrypted."
+    const introRSA = "- RSA easy is the result of the encryption using YOUR public key\n- RSA hard: you will get the public key and the result, primes not larger than 1000\n- RSA extreme: the same with larger primes - good luck!"
+    const intro = introText + '\n' + introSDES + '\n' + introRSA;
 
     const enabled = selectedMethod.length != ''  && selectedLevel.length != '' && selectedLanguage.length != '';
+
     console.log("enabled: ", enabled)
     console.log(selectedMethod, selectedLevel, selectedLanguage)
     return (
         <SafeAreaView style={{margin: 0}}>
             <Title title ={titleMethod}/>
+            <IntroModal text={intro} method={method} />
             {/*<View style = {{marginBottom: 10}}>
     <Text style = {{fontSize: 16}}>Method</Text>
     </View>*/}

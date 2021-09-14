@@ -4,6 +4,11 @@ type Message
     name: "messagesByReceiver"
     fields: ["receiverID", "createdAt"]
     queryField: "messagesByReceiver"
+  )
+  @key(
+    name: "messagesBySent"
+    fields: ["sent", "createdAt"]
+    queryField: "messagesBySent"
   ) {
   id: ID!
   senderID: ID!
@@ -11,6 +16,7 @@ type Message
   sender: User @connection(fields: ["senderID"])
   receiver: User @connection(fields: ["receiverID"])
   text: String!
+  sent: String!
   method: EncryptionMethod!
   createdAt: AWSDateTime!
 }
@@ -21,17 +27,16 @@ type User @model {
   publicKeyID: ID!
   privateKeyID: ID!
   publicKey: Key @connection(fields: ["publicKeyID"])
-  privateKey: Key 
-  @connection(fields: ["privateKeyID"])
-  @auth(rules: [{allow: owner, ownerField: "name"}])
+  privateKey: Key
+    @connection(fields: ["privateKeyID"])
+    @auth(rules: [{ allow: owner, ownerField: "name" }])
 }
 
-type Key @model(queries:null) {
+type Key @model(queries: null) {
   id: ID!
   exponent: String!
   modulus: String!
 }
-
 
 enum EncryptionMethod {
   RSA
@@ -40,7 +45,6 @@ enum EncryptionMethod {
   VIGENERE
   PERMUTATION
 }
-
 
 type Subscription {
   onCreateMessageByReceiverID(receiverID: String!): Message

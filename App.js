@@ -39,6 +39,7 @@ import VigenereAnalysisScreen from './src/screens/VigenereAnalysisScreen';
 import PermutationScreen from './src/screens/PermutationScreen';
 import PermutationAnalysisScreen from './src/screens/PermutationAnalysisScreen';
 import RiddleHomeScreen from './src/screens/RiddleHomeScreen';
+import RiddlesFromServerScreen from './src/screens/RiddlesFromServerScreen';
 import { SafeAreaView } from 'react-native';
 import RiddleMethodChoiceScreen from './src/screens/RiddleMethodChoiceScreen';
 import RiddleDisplayScreen from './src/screens/RiddleDisplayScreen';
@@ -187,6 +188,10 @@ const RiddleNavigator = props => {
       <RiddleStack.Screen
         name="RiddleDisplay"
         component={RiddleDisplayScreen}
+      />
+      <RiddleStack.Screen
+      name = "RiddlesFromServer"
+      component={RiddlesFromServerScreen}
       />
     </RiddleStack.Navigator>
   );

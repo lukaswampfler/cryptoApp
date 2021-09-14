@@ -155,3 +155,17 @@ console.log(s3, "isInteger: ", isInteger(s3))
 console.log(s2, "isAlphabetic: ", isAlphabetic(s2))
 console.log(s4, "isAlphabetic: ", isAlphabetic(s4))
 console.log(s5, "isAlphabetic: ", isAlphabetic(s5))
+
+
+let method = 'caesar'
+const setIsText = (method) => {
+    let isText = false;
+    if(['caesar', 'vigenere', 'permutation'].includes(method)  || (method == 'sdes' && level =='extreme')){
+            isText = true
+        }
+        console.log(isText)
+}
+
+setIsText(method)
+
+console.log(String.fromCharCode('a'.charCodeAt(0)+ Math.floor(26*Math.random())))
