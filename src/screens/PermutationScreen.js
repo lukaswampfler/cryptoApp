@@ -15,7 +15,7 @@ export default function PermutationScreen({ navigation }) {
     const [secret, setSecret] = useState('');
     const [key, setKey] = useState(alphabet);
     const [keyTable, setKeyTable] = useState({
-        tableTitle: ['c', 's' ], 
+        tableTitle: ['clear', 'secret' ], 
         tableData: [alphabet.split(""), key.split("")]
 });
 
@@ -34,21 +34,27 @@ export default function PermutationScreen({ navigation }) {
     const changeText = (text) => {
         // TODO: text anpassen: Umlaute ersetzen, scharfes s, etc.
         setText(text);
+        setSecret(encryptPermutation(text, key))
     }
 
     const changeKeyToId = () => {
         setKey(alphabet);
         console.log("new key after id: ", key)
+        setSecret(encryptPermutation(text, alphabet))
     }
 
     const transposeKey = () => {
-        setKey(randomTransposition(key));
-        console.log("new key after transposition: ", key)
+        const newKey = randomTransposition(key)
+        setKey(newKey);
+        //console.log("new key after transposition: ", key)
+        setSecret(encryptPermutation(text, newKey))
     }
 
     const shuffleKey = () => {
-        setKey(shuffleAlphabet(alphabet));
-        console.log("new key after shuffle: ", key)
+        const newKey = shuffleAlphabet(alphabet)
+        setKey(newKey);
+        //console.log("new key after shuffle: ", key)
+        setSecret(encryptPermutation(text, newKey))
     }
 
     const encrypt = () => {
@@ -94,16 +100,45 @@ export default function PermutationScreen({ navigation }) {
                 </Text>  */} 
 
                 
-                <Text style={{ marginTop: 30, marginBottom: 20 }}> Permutation (below) of all of the letters of the alphabet (above)</Text>
+                <Text style={{ marginTop: 30, marginBottom: 20 }}> <Text style ={{fontWeight: 'bold'}}>  KEY: </Text>All the letters of the alphabet (above) are permuted in some way (below)</Text>
 
-                <View style={styles.container}>
+                {/*<View style={styles.container}>
                     <Table borderStyle={{borderWidth: 1}}>
                         <TableWrapper style={styles.wrapper}>
-                           {/*} <Col data={keyTable.tableTitle} style={styles.title} heightArr={[28,28]} textStyle={styles.text}/>*/}
+                           {/*} <Col data={keyTable.tableTitle} style={styles.title} heightArr={[28,28]} textStyle={styles.text}/>
                             <Rows data={keyTable.tableData} flexArr={Array(alphabet.length).fill(1)} style={styles.row} textStyle={styles.text}/>
                         </TableWrapper>
                     </Table>
                 </View>
+            */}
+
+                <ScrollView horizontal={true}>
+                <View>
+
+                  <ScrollView style={styles.dataWrapper}>
+                    <Table borderStyle={{borderColor: '#C1C0B9'}}>
+                    <TableWrapper>
+                    <Col data={keyTable.tableTitle} style={styles.title} heightArr={[28,28]} textStyle={styles.text}/>
+                      <Row
+                            key={0}
+                            data={keyTable.tableData[0]}
+                            width={40}
+                            style={[0%2 && {backgroundColor: '#ffffff'}]}
+                            textStyle={{fontSize: 17}}
+                            />
+                            <Row
+                            key={1}
+                            data={keyTable.tableData[1]}
+                            width={40}
+                            style={[1%2 && {backgroundColor: '#ffffff'}]}
+                            textStyle={{fontSize: 17}}
+                            />
+
+                    </TableWrapper>
+                    </Table>
+                  </ScrollView>
+                </View>
+              </ScrollView>
 
                 <View style={{
                     flexDirection: 'row',
@@ -115,23 +150,25 @@ export default function PermutationScreen({ navigation }) {
                     <Button label='transposition' onPress={transposeKey} />
                     <Button label='shuffle' onPress={shuffleKey} />
                 </View>
-                <View style={{
+
+
+
+                {/*<View style={{
                     flexDirection: 'row',
                     justifyContent: 'space-around',
                     marginTop: 10,
                     marginBottom: 10,
                 }}>
                     <Button label='use this key' onPress={encrypt} />
-                    <Button label = 'send message' onPress = {sendMessage} />
-                </View>
+                  
+            </View>*/}
 
-                {/*<View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    marginTop: 10,
+                <View style={{
+                    flexDirection: 'column',
+                    marginTop: 30,
                     marginBottom: 10,
-                    marginLeft: 20,
-                }}>*/}
+                    marginLeft: 10,
+                }}>
                     <Text> Encrypted message: </Text>
                     <Text
                         style={{ padding: 10, fontSize: 25, borderColor: 'gray', borderWidth: 1, width: 280 }}
@@ -139,13 +176,15 @@ export default function PermutationScreen({ navigation }) {
                         {secret}
                     </Text>
 
-                {/*</View>*/}
+                </View>
                 <View style={{
                     flexDirection: 'row',
-                    justifyContent: 'center', width: 150,
+                    justifyContent: 'space-between', 
+                    width: '95%',
                     marginTop: 100
                 }}>
                     <Button label='show introduction' onPress={() => { myContext.setIntroVisible(true) }} />
+                    <Button label = 'send message' onPress = {sendMessage} />
                 </View>
             </ScrollView>
         </View>
