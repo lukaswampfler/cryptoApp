@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, Dimensions, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import Button from '../components/Button';
-import { caesarEncrypt } from '../utils/caesarMath';
+import { caesarEncrypt, isInteger } from '../utils/caesarMath';
 import AppContext from '../components/AppContext';
 import Title from '../components/Title';
 
@@ -10,6 +10,7 @@ import {
 } from "react-native-chart-kit";
 
 import { createFrequencyDict, sortDictionaryByKey, onlyNonAlpha } from '../utils/frequencyAnalysis';
+
 
 
 const screenWidth = 0.9 * Dimensions.get("window").width;
@@ -28,14 +29,33 @@ export default function CaesarAnalysisScreen({ navigation }) {
 
     const changeText = text => {
         setSecret(text);
+        setDecypheredMessage(caesarEncrypt(text, key))
     }
 
     const changeKey = key => {
-        setKey(key);
-        decypher()
+
+        const keyAsInt = parseInt(key, 10);
+        if (isNaN(keyAsInt) || !isInteger(key)){
+            setIsDecyphered(false);
+            setDecypheredMessage("Please enter a valid key (integer number)")
+        }
+        else{
+            const decyph = caesarEncrypt(secret, key);
+            setDecypheredMessage(decyph)
+            setIsDecyphered(true); 
     }
 
-    const decypher = () => {
+
+        /*if(isInteger(key)){
+            setKey(key);
+            setDecypheredMessage(caesarEncrypt(secret, key))
+         } else {
+             setDecypheredMessage('')
+             alert("Please use only positive integers for keys!")
+         }*/
+    }
+
+    /*const decypher = () => {
         setIsDecyphered(false);
         const keyAsInt = parseInt(key, 10);
         console.log(keyAsInt)
@@ -50,7 +70,7 @@ export default function CaesarAnalysisScreen({ navigation }) {
         console.log(decypheredMessage)
         
         return; 
-    }
+    }*/
 
 
 
@@ -133,13 +153,13 @@ export default function CaesarAnalysisScreen({ navigation }) {
                 onChangeText={changeKey}
                 onBlur={() => { }}
             />
-           <Button label='Go' onPress={decypher} width={80} /> 
+         {/*}  <Button label='Go' onPress={decypher} width={80} /> */}
 </View>
 <TouchableWithoutFeedback onPress = {Keyboard.dismiss} accessible={false}>
 <View>
 {(isDecyphered && !(isNaN(parseInt(key, 10)))) ? 
-<View> 
-    <Text> The decyphered message is: </Text>
+<View style ={{marginTop: 20}}> 
+    <Text style ={{fontWeight: '500'}}> The decyphered message is: </Text>
     <Text> {decypheredMessage} </Text>
 </View> :
 <Text> Please enter valid key above (integer number)! </Text>}

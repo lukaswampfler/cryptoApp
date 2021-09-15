@@ -23,6 +23,7 @@ const MessageItem = ({ message }) => (
     >
         <Text style={{ width: 250 , fontSize: 20}} selectable={true} selectionColor='yellow' >
             {message.text}  </Text>
+            {/* TODO: if method == rsa - then also display the public key.*/}
         <Divider width={5} />
     </View>
 );

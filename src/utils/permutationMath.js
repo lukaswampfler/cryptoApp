@@ -142,3 +142,7 @@ function shuffleArray(array) {
         [array[i], array[j]] = [array[j], array[i]];
     }
 }
+
+export function removeSpecialChars(text) {
+    return text.replace(/[^a-zA-Z]/gi, ''); 
+}

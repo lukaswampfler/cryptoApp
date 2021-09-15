@@ -30,6 +30,31 @@ export default function RSAKeyInput({ values, errors, touched, handleChange, han
         flex: 1,
       }}
     >
+ <View style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        margin: 20
+      }}>
+ {/*<View style={{
+          marginLeft: 10,
+        }}>*/}
+          <Button label='Generate / use own Keys'  onPress={() => {
+            const ciphers = myContext.ciphers;
+            ciphers.rsa.m = values.m;
+            myContext.setCiphers(ciphers);
+            navigation.navigate('RSAKey');
+          }} width = {180} />
+      {/*}  </View>*/}
+
+       {/*} <View style={{
+          marginLeft: 10,
+        }}>*/}
+          <Button label='Import Key' onPress={() => { navigation.navigate('UsersList', { toSend: false, toImportKey: true }) }} width={180} />
+       {/*} </View>*/}
+
+
+      </View>
+
       <Text> Exponent </Text>
       <View style={{
         flexDirection: 'row',
@@ -52,7 +77,7 @@ export default function RSAKeyInput({ values, errors, touched, handleChange, han
           error={errors.exp}
           touched={touched.exp}
           value={values.exp} />
-        <View style={{
+       {/*} <View style={{
           marginLeft: 10,
         }}>
           <Button label='Generate / use own Keys' width={130} onPress={() => {
@@ -61,7 +86,7 @@ export default function RSAKeyInput({ values, errors, touched, handleChange, han
             myContext.setCiphers(ciphers);
             navigation.navigate('RSAKey');
           }} />
-        </View>
+        </View>*/}
       </View>
 
       <Text> Modulus </Text>
@@ -86,11 +111,11 @@ export default function RSAKeyInput({ values, errors, touched, handleChange, han
           error={errors.n}
           touched={touched.n}
           value={values.n} />
-        <View style={{
+       {/*} <View style={{
           marginLeft: 10,
         }}>
           <Button label='Import Key' onPress={() => { navigation.navigate('UsersList', { toSend: false, toImportKey: true }) }} width={130} />
-        </View>
+      </View>*/}
       </View>
 
 

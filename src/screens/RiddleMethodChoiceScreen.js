@@ -55,7 +55,7 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
     const introRSA = "- RSA easy is the result of the encryption using YOUR public key\n- RSA hard: you will get the public key and the result, primes not larger than 1000\n- RSA extreme: the same with larger primes - good luck!"
     const intro = introText + '\n' + introSDES + '\n' + introRSA;
 
-    const enabled = selectedMethod.length != ''  && selectedLevel.length != '' && selectedLanguage.length != '';
+    const enabled = (selectedMethod.length != 0  && selectedLevel.length != 0 && selectedLanguage.length != 0) || (selectedMethod == 'rsa' && selectedLevel.length != 0) ;
 
     console.log("enabled: ", enabled)
     console.log(selectedMethod, selectedLevel, selectedLanguage)

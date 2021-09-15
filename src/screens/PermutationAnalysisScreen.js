@@ -9,13 +9,14 @@ import Title from '../components/Title';
 import { createFrequencyDict, sortDictionaryByKey, onlyNonAlpha } from '../utils/frequencyAnalysis';
 
 import {BarChart} from "react-native-chart-kit";
-import { alphabet, createDecryptionDict, getMostFrequent, partialDecryption, createInverseDict } from '../utils/permutationMath';
+import { alphabet, createDecryptionDict, getMostFrequent, partialDecryption, createInverseDict, removeSpecialChars } from '../utils/permutationMath';
 import { FlatList } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native';
+import { IntroModal } from '../utils/Modals';
 
 const screenWidth = 0.9 * Dimensions.get("window").width;
 
-const alphaShort = 'ENIRSTADHU'.split('');
+const alphaShort = 'ENIRSTADHULCGMO'.split('');
 
 
 
@@ -33,6 +34,8 @@ export default function PermutationAnalysisScreen({ navigation }) {
     const [inverseDict, setInverseDict] = useState({})
 
 
+
+
     const changeText = (secret) => {
 
         if(!onlyNonAlpha(secret)) {
@@ -41,7 +44,8 @@ export default function PermutationAnalysisScreen({ navigation }) {
             setSecretHasAlpha(false);
         }
 
-        const mostFrequentLetters = getMostFrequent(secret);
+        const cleanedText = removeSpecialChars(secret);
+        const mostFrequentLetters = getMostFrequent(cleanedText, alphaShort.length);
         //console.log("most frequent: ", mostFrequentLetters);
         const newAlphaData = Object.keys(mostFrequentLetters)
         setAlphaSecret(newAlphaData);
@@ -52,12 +56,12 @@ export default function PermutationAnalysisScreen({ navigation }) {
         setDecypheredMessage(partialDecryption(secret, decryptionDict))
     }
 
-    const handleAnalysis = () => {
+    /*const handleAnalysis = () => {
         //console.log(alphaShort, alphaSecret);
         const decryptionDict = createDecryptionDict(alphaShort, alphaSecret) 
         //console.log(secret);
         setDecypheredMessage(partialDecryption(secret, decryptionDict))
-    }
+    }*/
 
     const renderItem = ({ item, index }) => (
         <Text> {item}</Text>  
@@ -133,6 +137,8 @@ export default function PermutationAnalysisScreen({ navigation }) {
         })
     
       const title = "Analyzing the Permutation Cipher"
+      const introText = "Here comes the introduction to the Permutation analysis...";
+      const method = "Permutation Analysis"
 
 
     return (
@@ -142,6 +148,7 @@ export default function PermutationAnalysisScreen({ navigation }) {
           
             <View style = {{margin: 10}}>
               <Title title = {title}/>
+              <IntroModal text={introText} method={method} />
             <Text>Enter secret message below:</Text>
             <TextInput
                 width={280}
@@ -170,7 +177,7 @@ export default function PermutationAnalysisScreen({ navigation }) {
                     marginTop: 10,
                     marginBottom: 10,
                 }}>
-                    <Button label='Analyze Text' onPress={handleAnalysis} width={240} />
+                   {/*} <Button label='Analyze Text' onPress={handleAnalysis} width={240} />*/}
                     {secretHasAlpha && <Button label={!showBarChart? 'show chart': 'hide chart'} onPress={changeChartStatus} width={80} />}
                 </View>
 </View>
@@ -189,12 +196,15 @@ export default function PermutationAnalysisScreen({ navigation }) {
 
     </View>
     </TouchableWithoutFeedback>
-    <Text width={100} style={{fontSize:24}}> 10 most frequent german letters: </Text>
     <View style={{padding: 12}}>
+    <Divider/>
+    <Text width={100} style={{fontSize:20}}> {alphaShort.length} most frequent german letters: </Text>
+    
+    
        <FlatList horizontal={true}
        data = {alphaShort}
        renderItem={({ item }) => (
-        <View style={[styles.alphaItem, getItemStyleTweaks(item)]} width={25}>
+        <View style={[styles.alphaItem, getItemStyleTweaks(item)]} width={20}>
           <Text style={styles.alphaText}>{item}</Text>
         </View>
       )}
@@ -209,7 +219,7 @@ export default function PermutationAnalysisScreen({ navigation }) {
           data={alphaSecret}
           horizontal
           renderItemContent={({ item }) => (
-            <View style={[styles.alphaItem, getItemStyleTweaks(item)]} width = {25}>
+            <View style={[styles.alphaItem, getItemStyleTweaks(item)]} width = {20}>
               <Text style={styles.alphaText}>{item}</Text>
             </View>
           )}
@@ -229,15 +239,30 @@ export default function PermutationAnalysisScreen({ navigation }) {
           }}
           keyExtractor={(item) => item}
         />
-        <Text width={100} style={{fontSize:18}}> secret letters (drag letters to switch)</Text>
+        <View style = {{marginBottom: 10}}>
+        <Text width={100} style={{fontSize:20}}> Most frequent secret letters (drag to switch)</Text>
         <Divider/>
+        </View>
         <Text width={100} style={{fontSize:18}}> partially decrypted String</Text>
         <Text width={100} style={{fontSize:16}}> {decypheredMessage}</Text>
         <Divider/>
         <Text width={100} style={{fontSize:18}}> Decyphered Message: <Text style={{color: '#0000ff'}}>known </Text><Text style={{color: '#ff0000'}}>unknown </Text></Text>
         <View style= {{flexDirection: 'row'}}><Text >{textList}</Text></View>
+
+
+        <View style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between', 
+                    width: '95%',
+                    marginTop: 100
+                }}>
+                    <Button label='show introduction' onPress={() => { myContext.setIntroVisible(true) }} />
+                   {/*} <Button label = 'send message' onPress = {sendMessage} />*/}
+                </View>
+
       </View>
-    
+      
+
  </DraxProvider>
         
     );
@@ -249,18 +274,18 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       padding: 12,
-      paddingTop: 20,
+      paddingTop: 10,
     },
     alphaItem: {
       backgroundColor: '#aaaaff',
       borderRadius: 8,
-      margin: 4,
-      padding: 4,
+      margin: 3,
+      padding: 3,
       justifyContent: 'center',
       alignItems: 'center',
-      height: 50,
+      height: 40,
     },
     alphaText: {
-      fontSize: 22,
+      fontSize: 18,
     },
   });

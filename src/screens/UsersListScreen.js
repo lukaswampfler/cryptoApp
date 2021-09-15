@@ -51,6 +51,7 @@ export default function UsersListScreen({ route, navigation }) {
       console.log(messageDetails)
       const messageData = await API.graphql({ query: createMessage, variables: { input: messageDetails } });
       alert('Message sent successfully to ' + receiver.name);
+      navigation.goBack();
     } catch (err) { console.log('erorr sending message: ', err) }
   }
 

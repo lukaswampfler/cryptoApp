@@ -20,26 +20,34 @@ export function extendedEuclid(e, f, useBigIntegerLibrary) {
 }
 // primality test
 export function isPrime(n, useBigIntegerLibrary) {
+    console.log("Number n in isPrime: ", n)
     // returns true if n is probably prime
     const MILLER_RABIN_ITERATIONS = 20;
     if(useBigIntegerLibrary){
+        console.log("before isProbablePrime call")
         return BigInt(n).isProbablePrime(MILLER_RABIN_ITERATIONS);
     } 
-    if (n <= BigInt(1))
+    console.log("so far, so good.")
+    if (n <= BigInt(1)){
+        console.log("isPrime returning false")
         return false; 
-    else if (n === BigInt(2))
+    } else if (n === BigInt(2)){
+        console.log("isPrime returning true")
         return true;
-    else if ( n % BigInt(2) === BigInt(0) ){ // even number larger than 2
+    } else if ( n % BigInt(2) === BigInt(0) ){ // even number larger than 2
+        console.log("isPrime returning false")
         return false;
     } else if (n < 10000) {
         let nNumber = Number(n); // check for odd divisors of a small n -> type number
         for (let divisor = 3; divisor <= Math.pow(nNumber, 0.5); divisor += 2) {
             if (nNumber % divisor == 0)
+                console.log("isPrime returning false")
                 return false;
         }
+        console.log("isPrime returning true")
         return true;
-    }
-    else {
+    } else {
+        console.log("in isPrime before miller rabin")
         return millerRabin(n, MILLER_RABIN_ITERATIONS, useBigIntegerLibrary); // use Miller Rabin for larger numbers 
     }
     
@@ -107,6 +115,7 @@ function conditionMillerRabin(base, n, odd, exp, useBigIntegerLibrary) {
     }
 }
 function millerRabin(n, millerRabinIterations, useBigIntegerLibrary) {
+    console.log("inside Miller Rabin")
     // extract properties of return value
     const { exponent, odd } = decomposeOdd(n);
     const listOfResults = [];

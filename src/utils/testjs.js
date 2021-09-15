@@ -168,4 +168,14 @@ const setIsText = (method) => {
 
 setIsText(method)
 
-console.log(String.fromCharCode('a'.charCodeAt(0)+ Math.floor(26*Math.random())))
+
+const value = ' abc14633925tedghjdft38747   39edjkgfuitr72034'
+const isalpha = value.match(/^[a-zA-Z]*$/);
+
+
+if (isalpha){
+    console.log(value , "is alphabetic")
+} else {
+    console.log(value , "is not alphabetic, replace")
+    console.log(value.replace(/[^a-zA-Z]/gi, ''))
+}
