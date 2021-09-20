@@ -62,10 +62,10 @@ export default function RSAEncryptionScreen({ route, navigation }) {
         } /*else if (route.params.exp){
             return route.params.exp.toString();
         } */
-        else if (route.params.usePrivateKey) {
+        else if (myContext.privateKey.exp !== undefined && route.params.usePrivateKey) {
             console.log("myContext un getExpInitialValues(): ", myContext)
             return myContext.privateKey.exp.toString();
-        } else if (route.params.usePublicKey) {
+        } else if (myContext.publicKey.exp !== undefined && route.params.usePublicKey) {
             console.log("using public key as initial value", myContext.publicKey)
             return myContext.publicKey.exp.toString();
         } 
@@ -80,7 +80,7 @@ export default function RSAEncryptionScreen({ route, navigation }) {
         } else if (route.params.user !== undefined) {
             console.log("getmodInitialValues: ", route.params.user);
             return route.params.user.publicKey.modulus;
-        } else if (route.params.usePrivateKey || route.params.usePublicKey) {
+        } else if (myContext.privateKey.mod !== undefined && route.params.usePrivateKey || (myContext.publicKey.mod !== undefined && route.params.usePublicKey)) {
             return myContext.privateKey.mod.toString();
         } else {
             return '';

@@ -28,8 +28,8 @@ const NUM_DIGITS = 4;
 
 export default function TestRSAKeyScreen({ navigation }) {
   const myContext = useContext(AppContext);
-  const [p, setP] = useState(2);
-  const [q, setQ] = useState(3);
+  const [p, setP] = useState('');
+  const [q, setQ] = useState('');
   const [exp, setExp] = useState('');
   const [pubExp, setPubExp] = useState('');
   const [verifiedPubExp, setVerifiedPubExp] = useState((p-1)*(q-1)-1);
@@ -39,13 +39,17 @@ export default function TestRSAKeyScreen({ navigation }) {
 
 
   /*useEffect(() => {
-    setP(generatePrime(4, myContext.useBigIntegerLibrary))
-    setQ(generatePrime(4, myContext.useBigIntegerLibrary))
+    toggleRandomSwitch()
+    toggleRandomSwitch()
 }
 , [])*/
 
 
   useEffect(() => {
+      if (exp == 0){
+          setP('')
+          setQ('')
+      } else {
       const pCand = generatePrime(exp, myContext.useBigIntegerLibrary)
       setP(pCand);
       let qCand = generatePrime(exp, myContext.useBigIntegerLibrary)
@@ -53,6 +57,10 @@ export default function TestRSAKeyScreen({ navigation }) {
           qCand = generatePrime(exp, myContext.useBigIntegerLibrary)
         }
       setQ(qCand);
+      console.log("use Effect, p and q are set to ", pCand, qCand)
+      console.log("use Effect, exp ", exp)
+    }
+      
   }
   , [exp])
 
@@ -253,7 +261,7 @@ const checkAndUsePubExp = () => {
 
           <View style={{ paddingHorizontal: 32, marginBottom: 16, marginTop: 20, width: '60%' }}>
             <NumInput
-              icon='pinterest'
+              //icon='pinterest'
               editable={!isRandom}
               width={245}
               placeholder='Enter prime number p'
@@ -271,7 +279,7 @@ const checkAndUsePubExp = () => {
           </View>
           <View style={{ paddingHorizontal: 32, marginBottom: 16, width: '60%' }}>
             <NumInput
-              icon='pinterest-with-circle'
+              //icon='pinterest-with-circle'
               width={245}
               editable={!isRandom}
               placeholder='Enter prime number q'
@@ -342,7 +350,7 @@ const checkAndUsePubExp = () => {
 <RNPickerSelect style={pickerSelectStyles}
             onValueChange={(value) => setExp(value)}
             //placeholder={{label :"Select number of digits", value: 1}}
-            placeholder=''
+            placeholder={{label :"Select number of digits", value: ''}}
             items={[
                 { label: '1', value: 1},
                 { label: '2', value: 2 },

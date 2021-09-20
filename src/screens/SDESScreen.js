@@ -70,6 +70,17 @@ export default function SDESScreen({ route, navigation }) {
     }
   }
 
+  const encryptKey = () => {
+    console.log("TODO")
+    myContext.setRSAInputSwitchisDecimal(false);
+    let ciphers = myContext.ciphers;
+    ciphers.rsa.m = formikKey.values.key
+    formikKey.handleSubmit(formikKey.values);
+    //console.log("encrypt Key: ", formikKey.values.key);
+    navigation.navigate("RSA")
+
+  }
+
   /*formikKey has properties: handleChange,
       handleSubmit,
       handleBlur,
@@ -79,16 +90,15 @@ export default function SDESScreen({ route, navigation }) {
       */
 
   const formikKey = useFormik({
+    enableReinitialize: true, 
     validationSchema: SDESKeyInputScheme,
-    initialValues: {
-      key: ''
-    },
+    initialValues: myContext.ciphers.sdes.key10 === undefined ? {key: ''} : {key: myContext.ciphers.sdes.key10},
     onSubmit: values => {
       let ciphers = myContext.ciphers;
       if (ciphers.sdes === undefined) {
         ciphers.sdes = { key: values.key };
       } else {
-        ciphers.sdes.key = values.key;
+        ciphers.sdes.key10 = values.key;
       }
       setKeyEntered(true);
       ciphers.sdes.keys = generateSDESKeys(values.key);
@@ -156,7 +166,7 @@ export default function SDESScreen({ route, navigation }) {
 
           {/*<View style={{ paddingHorizontal: 32, marginBottom: 16, width: '100%' }}>*/}
           <NumInput
-            icon='pinterest'
+            //icon='pinterest'
             width={245}
             placeholder='Enter 10-bit key'
             autoCapitalize='none'
@@ -188,7 +198,7 @@ export default function SDESScreen({ route, navigation }) {
           marginBottom: 10,
         }}>
           <NumInput
-            icon='pinterest'
+            //icon='pinterest'
             width={245}
             placeholder='Enter k1'
             autoCapitalize='none'
@@ -202,10 +212,10 @@ export default function SDESScreen({ route, navigation }) {
             touched={formikK12.touched.k1}
             value={formikK12.values.k1}
           />
-          <Button label='RSA encrypt key' onPress={() => { console.log("TODO: navigate to RSA encryption...") }} />
+          <Button label='RSA encrypt key' onPress={encryptKey} />
         </View>
         <NumInput
-          icon='pinterest'
+          //icon='pinterest'
           width={245}
           placeholder='Enter k2'
           autoCapitalize='none'
@@ -231,7 +241,7 @@ export default function SDESScreen({ route, navigation }) {
         }}>
 
           <NumInput
-            icon='pinterest'
+            //icon='pinterest'
             width={245}
             placeholder='Enter message'
             autoCapitalize='none'
