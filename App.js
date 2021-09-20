@@ -18,6 +18,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
 import RSAKeyScreen from './src/screens/RSAKeyScreen';
+import TestRSAKeyScreen from './src/screens/TestRSAKeyScreen';
 import RSAEncryptionScreen from './src/screens/RSAEncryptionScreen';
 import UsersListScreen from './src/screens/UsersListScreen';
 import SignIn from './src/screens/SignIn';
@@ -114,7 +115,7 @@ const MethodNavigator = props => {
       />
       <MethodStack.Screen
         name="RSAKey"
-        component={RSAKeyScreen}
+        component={TestRSAKeyScreen}
         options={{ title: 'RSA Key Generation' }}
       />
       <MethodStack.Screen

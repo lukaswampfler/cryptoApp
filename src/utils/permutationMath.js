@@ -13,8 +13,13 @@ function transpose(text, i, j){
 
 export function randomTransposition(text){
     const ind1 = getRandomInt(text.length)
-    const ind2 = getRandomInt(text.length)
+    let ind2 = ind1
+    while (ind2 == ind1){
+        ind2 = getRandomInt(text.length)
+    }
+    //console.log("transposition: ", ind1, ind2)
     return transpose(text, ind1 ,ind2)
+    
 }
 
 export function shuffleAlphabet(text){

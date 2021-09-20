@@ -22,6 +22,7 @@ export default function getSecretContainer(details, message = ''){
     if(details.isText){
         message = cleanMessage(message);
         message = adjustMessage(message, details.level)
+        console.log(message);
     } else {
         console.log("not yet implemented")
 
@@ -60,7 +61,7 @@ export default function getSecretContainer(details, message = ''){
             for (let i = 0; i < 5; i++){
                 key = randomTransposition(key);
             }
-        } else {  // shuffle entire alphabet.
+        } else {  // shuffle entire alphabet in hard and extreme mode.
             key = shuffleAlphabet(alphabet);
         }
             secretMessage = encryptPermutation(message, key)
@@ -82,11 +83,10 @@ export default function getSecretContainer(details, message = ''){
         secretMessage = encryptSDESMessage(message, {k1: key.key1, k2: key.key2});
         method = 'sdes'
     } else if (method == 'rsa'){ 
-            key = details.rsaKey;
+            key = details.rsaKey.public;
+            console.log(key)
             message = randomNumber(key.mod)
-            secretMessage =  smartExponentiation(BigInt(message), BigInt(key.exp), BigInt(key.mod), details.useBigIntegerLibrary).toString()
-            //message= 'bloblo'
-            //key = 0, 
+            secretMessage =  smartExponentiation(BigInt(message), BigInt(key.exp), BigInt(key.mod), details.useBigIntegerLibrary).toString() 
             method = 'rsa'
         }
         
@@ -159,7 +159,7 @@ function getMessagesFromServer(num){
 }
 
 function cleanMessage(text){
-    const newText = text.replaceAll('===', '').replaceAll('==', '');
+    const newText = text.replaceAll('=', '')
     return newText;
 }
 

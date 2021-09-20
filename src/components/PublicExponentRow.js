@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import {TextInput as RNTextInput, View, StyleSheet } from 'react-native';
+import {TextInput as RNTextInput, View, StyleSheet, Text } from 'react-native';
 import AppContext from '../components/AppContext';
 import Button from '../components/Button';
 import NumInput from '../components/NumInput';
@@ -115,9 +115,12 @@ export default function PublicExponentRow({ width}) {
             borderRadius: 8,
             borderColor: '#223e4b',
             borderWidth: StyleSheet.hairlineWidth,
-            padding: 8
+            padding: 8, 
+            marginTop: 10,
           }}
         >
+
+
             <Button label='default' onPress={calculateKeys} width={80} />
             <NumInput 
                 icon='key'

@@ -130,6 +130,7 @@ export default function VigenereScreen({ navigation }) {
                 <IntroModal text={introText} method={method} />
                 <TextInput
                     width={280}
+                    editable = {isEncrypting}
                     multiline={true}
                     textAlignVertical='top'
                     placeholder='Enter plain text message'
@@ -221,6 +222,7 @@ export default function VigenereScreen({ navigation }) {
                 <Text>Secret message </Text>
                 <TextInput
                         width={280}
+                        editable = {!isEncrypting}
                         multiline={true}
                         textAlignVertical='top'
                         placeholder='Enter secret message'

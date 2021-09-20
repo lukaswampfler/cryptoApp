@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Platform, View, Text, FlatList, Pressable, SafeAreaView, TouchableOpacity } from 'react-native'
+import { Platform, View, Text, FlatList, Switch, SafeAreaView, TouchableOpacity } from 'react-native'
 import { Picker } from '@react-native-picker/picker';
 import Title from '../components/Title';
 import Button from '../components/Button';
@@ -8,6 +8,7 @@ import getSecretContainer from '../utils/getSecretContainer';
 import { calculateKeyPair, generatePrime } from '../utils/RSAMath';
 import AppContext from '../components/AppContext';
 import { getRandomKeys } from '../utils/sdesMath';
+import { TextInput } from 'react-native-gesture-handler';
 
 const choose = (array) => {
     const ind = Math.floor(Math.random()*array.length);
@@ -24,6 +25,10 @@ export default function RiddleDisplayScreen({ route,  navigation }) {
     const [encryptedMessage, setEncryptedMessage] = useState(null);
     const [method, setMethod] = useState(null);
     const [key, setKey] = useState(null);
+    const [enterSolution, setEnterSolution] = useState(false);
+    const [solution, setSolution] = useState('');
+    const [clearText, setClearText] = useState('')
+    const [showSolution, setShowSolution] = useState(false);
 
 
     //let secretContainer = {message: secretMessage, method: 'keine', secret: 'secret'}; 
@@ -31,9 +36,40 @@ export default function RiddleDisplayScreen({ route,  navigation }) {
     let secretContainer = {secret: 'encrypted message', method: 'unknown'};
 
 
+    const toggleEnterSolution = () => {
+        setEnterSolution(!enterSolution);
+    }
+
+    const changeSolution = (text) => {
+        setSolution(text);
+        //console.log(solution);
+    }
+
+    const checkSolution = () => {
+        alert(clearText)
+    }
+
+    const showKey = () => {
+        if (details.method == 'rsa'){
+            //console.log(key.private)
+            alert("private exponent: "+ Number(key.private.exp))
+        } else if (details.method == 'sdes') {
+            //console.log(key)
+            alert('k1: ' + key.key1 + '\nk2: ' + key.key2)
+        } else {
+            console.log(key)
+            alert("key: "+ key)
+        }
+        
+    }
+
+    const toggleShowSolution = () => {
+        setShowSolution(!showSolution);
+    }
+
     const setIsText = (method) => {
         details.isText = false;
-        if(['caesar', 'vigenere', 'permutation'].includes(method)  || (method == 'sdes' && level =='extreme')){
+        if(['caesar', 'vigenere', 'permutation'].includes(method)  || (method == 'sdes' && details.level =='extreme')){
                 details.isText = true
             }
     }
@@ -48,7 +84,7 @@ export default function RiddleDisplayScreen({ route,  navigation }) {
         
         const response = await fetch(myRequest)
         const json = await response.json();
-        console.log(json);
+        //console.log(json);
         const pageInfo = json["query"]["pages"]
         const pageIDs = Object.keys(pageInfo)
         const extract = pageInfo[pageIDs[0]]  // first page
@@ -61,12 +97,12 @@ export default function RiddleDisplayScreen({ route,  navigation }) {
 }
 
 const setContainer = () => {
-    
+    setIsText(details.method);
     if (!details.isRandom && details.method == 'rsa'){
         let key, maxExp
         // create keys for RSA
         if (details.level == 'easy'){
-            key = myContext.publicKey;
+            key = {public: myContext.publicKey, private: myContext.privateKey};
         } else {
             if (details.level == 'hard'){
                 maxExp = 3;
@@ -76,11 +112,13 @@ const setContainer = () => {
             const p = generatePrime(maxExp);
             const  q = generatePrime(maxExp);
             const keyPair  = calculateKeyPair(p, q, myContext.useBigIntegerLibrary);
+            key = keyPair;
             //console.log("keyPair: ", keyPair)
-            key = keyPair.public;
+            //key = keyPair.public;
 
         }
 
+        // was: details.rsaKey = key;
         details.rsaKey = key;
         details.useBigIntegerLibrary = myContext.useBigIntegerLibrary;
         secretContainer = getSecretContainer(details)
@@ -93,7 +131,8 @@ const setContainer = () => {
         secretContainer = getSecretContainer(details);
         setEncryptedMessage(secretContainer.secret)
         setMethod(secretContainer.method)
-        setKey(key);
+        //console.log("secret SDES-Container: ", secretContainer);
+        setKey(secretContainer.key);
         //details.sdesKey = getRandomKeys();
         /*if (details.level == 'easy'){
             
@@ -108,13 +147,17 @@ const setContainer = () => {
         const languageShort = details['language'] == 'german' ? 'de' : 'en'; 
         getResponse(languageShort).then( function (response){
             setSecretMessage(response)
+            
             secretContainer = getSecretContainer(details, response);
             setEncryptedMessage(secretContainer.secret)
+            setClearText(secretContainer.clear)
             setMethod(secretContainer.method)
+            setKey(secretContainer.key)
         }
     )
     } 
-    console.log("secret container: ", secretContainer) 
+    setClearText(secretContainer.clear)
+    //myContext.setSecretContainer(secretContainer);
     
         
     }
@@ -132,8 +175,8 @@ const setContainer = () => {
         // generate message for undefined method
         if (details.method == undefined){   
             alert("We are choosing method, level and language (if sensible)")
-            //const methodsChoice = ['rsa', 'sdes', 'caesar', 'vigenere', 'permutation' ]
-            const methodsChoice = ['sdes']
+            const methodsChoice = ['rsa', 'sdes', 'caesar', 'vigenere', 'permutation' ]
+            //const methodsChoice = ['sdes']
             const method = choose(methodsChoice);
             const level = choose(['easy', 'hard', 'extreme']);
             const language = choose(['english', 'german']);
@@ -147,13 +190,6 @@ const setContainer = () => {
     
 }, []);
 
-
-
-    //TODO: define secretContainer as 
-    //const secretContainer = getSecretContainer(details, secretMessage);
-
-    
-    //const secretContainer = myContext.secretContainer;
 
     
     return (
@@ -172,9 +208,9 @@ const setContainer = () => {
             </Text>
             </View>}
 
-            {key && <View style = {{marginLeft: 15, marginTop: 5, marginRight: 10}}>
+            {(details.method == 'rsa' && key) && <View style = {{marginLeft: 15, marginTop: 5, marginRight: 10}}>
              <Text style= {{fontWeight: 'bold'}} selectable>
-                key: exponent: {key.exp}, modulus:  {key.mod}
+                public exponent: {key.public.exp}, modulus:  {key.public.mod} 
             </Text>
             </View>}
             {/*<View style ={{margin: 10}}>
@@ -182,10 +218,21 @@ const setContainer = () => {
 </View>*/}
             <View style ={{margin: 20}}>
             {details.allowHints? <Button label='give me a hint!' onPress={() => { 
-                console.log(details)
+                //console.log(details)
                 alert((method=='rsa'? 'Try factorizing the modulus!': 'Method: ' + method))
                 }} /> : <Text > Hints are not allowed </Text>}
             </View>
+            <View style ={{margin: 20}}>
+            <Switch
+                            style={{ marginTop: 5 }}
+                            onValueChange={toggleShowSolution}
+                            value={showSolution}
+                        />
+            </View>
+            {showSolution && <View style ={{backgroundColor: '#aaa', margin: 20, flexDirection: 'row', justifyContent: 'space-around'}}>
+                <Button label='show key' onPress={showKey} /> 
+                <Button label='show solution' onPress={checkSolution} /> 
+             </View>   }
           </SafeAreaView>  
 
     );

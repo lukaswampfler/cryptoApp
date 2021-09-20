@@ -179,3 +179,20 @@ if (isalpha){
     console.log(value , "is not alphabetic, replace")
     console.log(value.replace(/[^a-zA-Z]/gi, ''))
 }
+
+function transpose(text, i, j){
+    if (i >= text.length || j >= text.length) return text; 
+    const maxIndex = Math.max(i, j)
+    const minIndex = Math.min(i, j)
+    console.log(minIndex, maxIndex, text.substring(0, minIndex),text.charAt(maxIndex) , text.substring(minIndex+1 , maxIndex) , text.charAt(minIndex) , text.substring(maxIndex+1) )
+    const newText = text.substring(0, minIndex) + text.charAt(maxIndex) + text.substring(minIndex+1 , maxIndex) + text.charAt(minIndex) + text.substring(maxIndex+1);
+    console.log(newText.length)
+    return newText
+}
+
+const alph = 'abcdefghijklmnopqrstuvwxyz'
+for (let i = 0; i<10; i++){
+    let rand1 = Math.floor(alph.length* Math.random())
+    let rand2 = Math.floor(alph.length*Math.random())
+    console.log(transpose(alph, rand1, rand2));
+}

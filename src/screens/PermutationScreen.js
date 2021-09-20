@@ -44,9 +44,10 @@ export default function PermutationScreen({ navigation }) {
     }
 
     const transposeKey = () => {
+        console.log("before transposition: ", key)
         const newKey = randomTransposition(key)
         setKey(newKey);
-        //console.log("new key after transposition: ", key)
+        console.log("new key after transposition: ", key)
         setSecret(encryptPermutation(text, newKey))
     }
 

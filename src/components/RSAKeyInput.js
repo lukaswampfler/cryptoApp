@@ -39,6 +39,7 @@ export default function RSAKeyInput({ values, errors, touched, handleChange, han
           marginLeft: 10,
         }}>*/}
           <Button label='Generate / use own Keys'  onPress={() => {
+            console.log("navigating to RSAKey: ", myContext)
             const ciphers = myContext.ciphers;
             ciphers.rsa.m = values.m;
             myContext.setCiphers(ciphers);

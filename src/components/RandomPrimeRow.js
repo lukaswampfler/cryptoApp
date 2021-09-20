@@ -23,12 +23,7 @@ export default function RandomPrimeRow({ width}) {
   });
 
 
-  const {handleChange,
-    handleSubmit,
-    handleBlur,
-    values,
-    errors,
-    touched} = useFormik({
+  const formikExponent = useFormik({
     validationSchema: ExpInputScheme,
     initialValues: { exp: 1 },
     onSubmit: values => {
@@ -52,7 +47,7 @@ export default function RandomPrimeRow({ width}) {
         padding: 8
       }}
     >
-     <Button label='Random' onPress={handleSubmit} width={80} />
+     <Button label='Random' onPress={formikExponent.handleSubmit} width={80} />
       
 
     <NumInput icon='info'
@@ -63,10 +58,10 @@ export default function RandomPrimeRow({ width}) {
           returnKeyType='next'
           enablesReturnKeyAutomatically= {true}
           returnKeyLabel='next'
-          onChangeText={handleChange('exp')}
-          onBlur={handleBlur('exp')}
-          error={errors.exp}
-          touched={touched.exp}
+          onChangeText={formikExponent.handleChange('exp')}
+          onBlur={formikExponent.handleBlur('exp')}
+          error={formikExponent.errors.exp}
+          touched={formikExponent.touched.exp}
     />  
 
     </View>

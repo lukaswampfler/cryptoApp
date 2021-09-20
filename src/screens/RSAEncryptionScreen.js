@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView, Text, View, TextInput, Switch } from 'react-native';
 import { Divider } from 'react-native-elements';
 import AppContext from '../components/AppContext';
@@ -34,17 +34,42 @@ function createRSAObject(m, exp, n) {
 export default function RSAEncryptionScreen({ route, navigation }) {
     // get the context
     const myContext = useContext(AppContext);
+
+
+    /*let expInitialValue; 
+    useEffect(() => {
+        if (route.params === undefined) {
+            expInitialValue =  myContext.ciphers.rsa.exp;
+        } else if (route.params.user !== undefined) {
+            returnexpInitialValue =  route.params.user.publicKey.exponent;
+        } else if (route.params.usePrivateKey) {
+            expInitialValue =  myContext.privateKey.exp.toString();
+        } else if (route.params.usePublicKey) {
+            console.log("using public key as initial value", myContext.publicKey)
+            expInitialValue =  myContext.publicKey.exp.toString();
+        } else {
+            expInitialValue =  '';
+        }
+        console.log("expInitialValue: ", expInitialValue)
+    }, [])
+*/
     // get initial values for Form: exponent ...
     const getExpInitialValue = () => {
         if (route.params === undefined) {
             return myContext.ciphers.rsa.exp;
-        } else if (route.params.user !== undefined) {
+        } else if (route.params.user !== undefined) {  // importing other users public key
             return route.params.user.publicKey.exponent;
-        } else if (route.params.usePrivateKey) {
+        } /*else if (route.params.exp){
+            return route.params.exp.toString();
+        } */
+        else if (route.params.usePrivateKey) {
+            console.log("myContext un getExpInitialValues(): ", myContext)
             return myContext.privateKey.exp.toString();
         } else if (route.params.usePublicKey) {
+            console.log("using public key as initial value", myContext.publicKey)
             return myContext.publicKey.exp.toString();
-        } else {
+        } 
+        else {
             return '';
         };
     }

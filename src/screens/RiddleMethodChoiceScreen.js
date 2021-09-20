@@ -5,6 +5,8 @@ import Title from '../components/Title';
 import Button from '../components/Button';
 import { IntroModal } from '../utils/Modals';
 import styles, { PINK } from './styles'
+import { Chevron } from 'react-native-shapes';
+import { Ionicons } from '@expo/vector-icons';
 import RNPickerSelect from 'react-native-picker-select';
 
 import AppContext from '../components/AppContext';
@@ -55,10 +57,13 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
     const introRSA = "- RSA easy is the result of the encryption using YOUR public key\n- RSA hard: you will get the public key and the result, primes not larger than 1000\n- RSA extreme: the same with larger primes - good luck!"
     const intro = introText + '\n' + introSDES + '\n' + introRSA;
 
-    const enabled = (selectedMethod.length != 0  && selectedLevel.length != 0 && selectedLanguage.length != 0) || (selectedMethod == 'rsa' && selectedLevel.length != 0) ;
+    const enabled = selectedMethod && (selectedMethod.length != 0  && selectedLevel.length != 0 && selectedLanguage.length != 0) || (selectedMethod == 'rsa' && selectedLevel.length != 0)  || (selectedMethod == 'sdes' && selectedLevel.length != 0) ;
 
-    console.log("enabled: ", enabled)
-    console.log(selectedMethod, selectedLevel, selectedLanguage)
+    const languageDisabled = ['rsa', 'sdes'].includes(selectedMethod);
+
+    //console.log("enabled: ", enabled)
+    //console.log(selectedMethod, selectedLevel, selectedLanguage)
+    
     return (
         <SafeAreaView style={{margin: 0}}>
             <Title title ={titleMethod}/>
@@ -89,6 +94,9 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
                 { label: 'S-DES', value: 'sdes' }, 
                 { label: 'RSA', value: 'rsa' }, 
             ]}
+            Icon={() => {
+                return <Chevron size={1.5} color="gray" />;
+              }}
         />
         </View>
 
@@ -103,6 +111,9 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
                 { label: 'Hard', value: 'hard' },
                 { label: 'Extreme', value: 'extreme' },
             ]}
+            Icon={() => {
+                return <Chevron size={1.5} color="gray" />;
+              }}
         />
         </View>
 
@@ -111,11 +122,15 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
 <View style = {{margin: 15, borderColor: 'green'}}>
     <RNPickerSelect
     onValueChange={(value) => setSelectedLanguage(value)}
+    disabled = {languageDisabled}
     placeholder={{label :"Select your language", value: null}}
     items={[
         { label: 'German', value: 'german' },
         { label: 'English', value: 'english' },
     ]}
+    Icon={() => {
+        return <Chevron size={1.5} color="gray" />;
+      }}
 />
 </View>
 <View style = {{margin: 20, width : '40%'}}>

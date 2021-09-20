@@ -1,4 +1,6 @@
 export function extendedEuclid(e, f, useBigIntegerLibrary) {
+    //alert("ext. euclid, e: " + e + " f: " + f);
+    //console.log("ext. euclid, e: " + e + " f: " + f);
     // uses extended euclid for calculation of decryption exponent d
     let x1 = BigInt(1), x2 = BigInt(0), x3 = BigInt(f), y1 = BigInt(0), y2 = BigInt(1), y3 = BigInt(e);
     let q = BigInt(1);
@@ -38,11 +40,13 @@ export function isPrime(n, useBigIntegerLibrary) {
         console.log("isPrime returning false")
         return false;
     } else if (n < 10000) {
+        console.log("number smaller than 10000")
         let nNumber = Number(n); // check for odd divisors of a small n -> type number
         for (let divisor = 3; divisor <= Math.pow(nNumber, 0.5); divisor += 2) {
-            if (nNumber % divisor == 0)
+            if (nNumber % divisor == 0){
                 console.log("isPrime returning false")
                 return false;
+            }
         }
         console.log("isPrime returning true")
         return true;
