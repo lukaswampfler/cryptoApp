@@ -398,7 +398,7 @@ const checkAndUsePubExp = () => {
 <Text> Public exponent </Text>
 <View style={{
                         flex: 1,
-                        backgroundColor: '#fff',
+                        //backgroundColor: '#fff',
                         flexDirection: 'column', 
                         alignItems: 'center', 
                         width: '35%'
@@ -438,9 +438,9 @@ const checkAndUsePubExp = () => {
 
 <Divider style={{ width: "100%", margin: 10 }} />
        {/*} <PublicExponentRow />*/}
-          <Text>You are using the public key: {JSON.stringify(myContext.publicKey)}
+          <Text>Exponent: <Text style ={{fontWeight: 'bold'}} > public: {myContext.publicKey.exp} </Text> <Text style ={{fontWeight: 'bold'}} > private: {myContext.privateKey.exp} </Text> 
           </Text>
-          <Text>Corresponding private key: {JSON.stringify(myContext.privateKey)}
+          <Text>Modulus: <Text style = {{fontWeight: 'bold'}}>  {myContext.publicKey.mod} </Text>
                 </Text>
 </View>
 

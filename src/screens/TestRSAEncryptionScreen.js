@@ -1,39 +1,33 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, Text, View, TextInput, Switch } from 'react-native';
-import { Divider } from 'react-native-elements';
-import AppContext from '../components/AppContext';
-import NumInput from '../components/NumInput';
+import React, { useContext } from 'react';
+import {  ScrollView, View, TextInput, Switch } from 'react-native';
+//import { Divider } from 'react-native-elements';
+//import AppContext from '../components/AppContext';
+//import NumInput from '../components/NumInput';
 import Button from '../components/Button';
 import Title from '../components/Title';
 import { IntroModal } from '../utils/Modals';
 
-import { useFormik } from 'formik';
-import * as Yup from 'yup'
+//import { useFormik } from 'formik';
+//import * as Yup from 'yup'
 
-import {
+/*import {
     RSAEncryptionDecimalInputScheme,
     RSAEncryptionBinaryInputScheme
 } from '../utils/InputTests'
-import RSA from '../utils/RSA'
-import RSAKeyInput from '../components/RSAKeyInput';
-import { smartExponentiation } from '../utils/RSAMath';
-
-
-
-/*function createRSAObject(m, exp, n) {
-    if (typeof m === "undefined") {
-        alert(`m is undefined!`);
-    }
-    const rsa = new RSA(m, exp, n);
-    return rsa;
-}*/
+*/
+//import RSAKeyInput from '../components/RSAKeyInput';
+//import { smartExponentiation } from '../utils/RSAMath';
 
 
 
 
-export default function RSAEncryptionScreen({ route, navigation }) {
+
+
+
+
+export default function TestRSAEncryptionScreen({ route , navigation}) {
     // get the context
-    const myContext = useContext(AppContext);
+    //const myContext = useContext(AppContext);
 
 
     /*let expInitialValue; 
@@ -54,7 +48,7 @@ export default function RSAEncryptionScreen({ route, navigation }) {
     }, [])
 */
     // get initial values for Form: exponent ...
-    const getExpInitialValue = () => {
+    /*const getExpInitialValue = () => {
         if (route.params === undefined) {
             return myContext.ciphers.rsa.exp;
         } else if (route.params.user !== undefined) {  // importing other users public key
@@ -62,7 +56,7 @@ export default function RSAEncryptionScreen({ route, navigation }) {
         } /*else if (route.params.exp){
             return route.params.exp.toString();
         } */
-        else if (myContext.privateKey.exp !== undefined && route.params.usePrivateKey) {
+       /* else if (myContext.privateKey.exp !== undefined && route.params.usePrivateKey) {
             console.log("myContext un getExpInitialValues(): ", myContext)
             return myContext.privateKey.exp.toString();
         } else if (myContext.publicKey.exp !== undefined && route.params.usePublicKey) {
@@ -73,6 +67,8 @@ export default function RSAEncryptionScreen({ route, navigation }) {
             return '';
         };
     }
+
+    
     //... and modulus ....
     const getModInitialValues = () => {
         if (route.params === undefined) {
@@ -100,9 +96,9 @@ export default function RSAEncryptionScreen({ route, navigation }) {
         myContext.setRSAInputSwitchisDecimal(value);
         //State changes according to switch
     };
-
+*/
     // Submission function 
-    const RSASubmit = values => {
+   /* const RSASubmit = values => {
         let m = values.m
         if (!myContext.RSAInputSwitchisDecimal) {// binary input
             m = '0b' + values.m;
@@ -123,10 +119,11 @@ export default function RSAEncryptionScreen({ route, navigation }) {
         ciphers.currentMessage = encryptedMessage;
         myContext.setCiphers(ciphers);
     }
+    */
 
 
     // use formik hook to get hold of form values, errors, etc.
-    const { handleChange,
+   /* const { handleChange,
         handleSubmit,
         handleBlur,
         values,
@@ -137,7 +134,7 @@ export default function RSAEncryptionScreen({ route, navigation }) {
             initialValues: { m: getMessageInitialValue(), exp: getExpInitialValue(), n: getModInitialValues() },
             onSubmit: RSASubmit
         });
-
+*/
 
 
     // do the encryption
@@ -157,27 +154,25 @@ export default function RSAEncryptionScreen({ route, navigation }) {
     */
 
     // Output-Value
-    const getRSAOutputValue = () => {
+   /* const getRSAOutputValue = () => {
         if (myContext.ciphers.rsa.isEncrypted) {
             return myContext.RSAInputSwitchisDecimal ? myContext.ciphers.rsa.encrypted : BigInt(myContext.ciphers.rsa.encrypted).toString(2);
         } else return '';
     }
+    */
 
     const introText = "Here comes the introduction to the RSA method...";
-    const method = "The RSA cipher"
+    const method = "The RSA cipher - TEST"
 
 
 
     return (
-        /*<View style={{flex:1,
-        backgroundColor: '#eee',}}>   
-       <SafeAreaView>*/
-        <ScrollView style={{
-            flex: 1, margin: 0
-        }}>
-            <Title title={method} />
-            <IntroModal text={introText} method={method} />
-            <View
+        <View style={{ flex: 1 }}>
+            <ScrollView contentContainerStyle={{flex: 1,  flexDirection: 'column', justifyContent: 'space-between' }}>
+            <ScrollView style={{ flex: 1 , margin: 10}}>
+                <Title title={method}/>
+                <IntroModal text={introText} method={method} />
+            {/*<View
                 style={{
                     flex: 1,
                     backgroundColor: '#fff',
@@ -266,17 +261,18 @@ export default function RSAEncryptionScreen({ route, navigation }) {
                 />
                 <Button label='Send message' onPress={() => { navigation.navigate('UsersList', { toSend: true, toImportKey: false }) }} width={100} />
                 {/*} <ShareButton message={myContext.ciphers.rsa.isEncrypted ? myContext.ciphers.rsa.encrypted.toString() : 'No Encryption done yet'} />*/}
-            </View>
-            </View>
+           {/*} </View>*/}
+           {/*} </View>*/}
             <View style={{
                 flexDirection: 'row',
                 justifyContent: 'space-around', width: 150,
                 marginTop: 30,
                 marginLeft: 20
             }}>
-                <Button label='show introduction' onPress={() => { myContext.setIntroVisible(true) }} />
+                <Button label='show introduction' onPress={() => { console.log("Button pressed")}} />
             </View>
         </ScrollView>
-        //{/*</View>*/}
+        </ScrollView>
+        </View>
     );
 }

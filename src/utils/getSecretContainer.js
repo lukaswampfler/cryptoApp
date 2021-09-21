@@ -1,4 +1,5 @@
 import {useContext} from 'react';
+import { Platform} from 'react-native';
 import { caesarEncrypt } from './caesarMath';
 import { vigenereEncrypt } from './vigenereMath';
 import { encryptPermutation, randomTransposition, shuffleAlphabet } from './permutationMath';
@@ -16,9 +17,12 @@ const alphabet = 'abcdefghijklmnopqrstuvwxyz'
 
 export default function getSecretContainer(details, message = ''){
 
+
     
 
     console.log("details: ", details)
+    console.log("message: ", message)
+
     if(details.isText){
         message = cleanMessage(message);
         message = adjustMessage(message, details.level)
@@ -159,21 +163,24 @@ function getMessagesFromServer(num){
 }
 
 function cleanMessage(text){
-    const newText = text.replaceAll('=', '')
-    return newText;
+    console.log("text: ", text)
+
+    const newText = Platform.OS == 'ios' ? text.replaceAll('=', '') : text.replace(/=/g, '')
+    return newText.replace(/(\r\n|\r|\n)/g, '');
 }
 
 function adjustMessage(text, level){
     if (level == 'hard'){
-        return text.substr(0, 200);
+        return text.substr(0, 300);
     } else if (level == 'easy'){
         return text
     } else if (level == 'extreme'){
-        return removeNonAscii(text.substr(0, 200))
+        return removeNonAscii(text.substr(0, 300))
     }
 }
 
 function removeNonAscii(text){
     text = text.toLowerCase();
+    text = text.replace(/[^\x20-\x7E]/g, '') // remove all non ASCII-characters
     return text
 }

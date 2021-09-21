@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react'
-import { Platform, View, Text, FlatList, Pressable, SafeAreaView, TouchableOpacity } from 'react-native'
+import React, {  useState, useEffect, useContext } from 'react'
+import { StyleSheet, Platform, View, Text, FlatList, Pressable, SafeAreaView, TouchableOpacity } from 'react-native'
 import { Picker } from '@react-native-picker/picker';
 import Title from '../components/Title';
 import Button from '../components/Button';
@@ -20,7 +20,7 @@ const methods = ['rsa', 'sdes', 'caesar', 'vigenere', 'permutation' ]
 const options = ["secret with known cipher", "secret with unknown cipher", "random message from server"]
 
 
-const renderItem = ({ item }) => (
+/*onst renderItem = ({ item }) => (
         
     <View style={{
         flexDirection: 'row',
@@ -36,7 +36,7 @@ const renderItem = ({ item }) => (
       
         </TouchableOpacity>
     </View>
-);
+);*/
 
 
 export default function RiddleMethodChoiceScreen({ navigation }) {
@@ -87,6 +87,7 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
             <RNPickerSelect
             onValueChange={(value) => setSelectedMethod(value)}
             placeholder={{label :"Select the encryption method", value: null}}
+            style={{ ...pickerSelectStyles }}
             items={[
                 { label: 'Caesar', value: 'caesar' },
                 { label: 'Vigenère', value: 'vigenere' },
@@ -106,6 +107,7 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
             <RNPickerSelect
             onValueChange={(value) => setSelectedLevel(value)}
             placeholder={{label :"Select the difficulty", value: null}}
+            style={{ ...pickerSelectStyles }}
             items={[
                 { label: 'Easy', value: 'easy' },
                 { label: 'Hard', value: 'hard' },
@@ -124,6 +126,7 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
     onValueChange={(value) => setSelectedLanguage(value)}
     disabled = {languageDisabled}
     placeholder={{label :"Select your language", value: null}}
+    style={{ ...pickerSelectStyles }}
     items={[
         { label: 'German', value: 'german' },
         { label: 'English', value: 'english' },
@@ -156,3 +159,33 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
     );
 
 }
+
+
+const pickerSelectStyles = StyleSheet.create({
+    inputIOS: {
+        fontSize: 16,
+        paddingTop: 13,
+        paddingHorizontal: 10,
+        paddingBottom: 12,
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 4,
+        backgroundColor: 'white',
+        color: 'black',
+    },
+    inputAndroid: {
+        fontSize: 16,
+        paddingTop: 13,
+        paddingHorizontal: 10,
+        paddingBottom: 12,
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 4,
+        backgroundColor: 'white',
+        color: 'black',
+    },
+    underline: {
+      borderTopWidth: 0,
+      backgroundColor: 'red',
+    }
+});

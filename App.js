@@ -17,9 +17,11 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
 
-import RSAKeyScreen from './src/screens/RSAKeyScreen';
+//import RSAKeyScreen from './src/screens/RSAKeyScreen';
 import TestRSAKeyScreen from './src/screens/TestRSAKeyScreen';
 import RSAEncryptionScreen from './src/screens/RSAEncryptionScreen';
+//import TestRSAEncryptionScreen from './src/screens/TestRSAEncryptionScreen';
+
 import UsersListScreen from './src/screens/UsersListScreen';
 import SignIn from './src/screens/SignIn';
 import SignUp from './src/screens/SignUp';
@@ -262,7 +264,7 @@ const Initializing = () => {
 export default function App() {
 
   // use array destructuring to get hold of data and functions to change data
-  const [isUserLoggedIn, setUserLoggedIn] = useState('initializing'); 
+  const [isUserLoggedIn, setUserLoggedIn] = useState('loggedOut'); 
   const [userName, setUserName] = useState('');
   const [userID, setUserID] = useState('');
   const [password, setPassword] = useState('');
