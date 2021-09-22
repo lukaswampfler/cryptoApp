@@ -1,16 +1,23 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, Dimensions, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { View, Text, Dimensions, TextInput, TouchableWithoutFeedback, FlatList, Keyboard, StyleSheet } from 'react-native';
 import Button from '../components/Button';
 import Title from '../components/Title';
 import AppContext from '../components/AppContext';
 
+import {
+    BarChart
+  } from "react-native-chart-kit";
+
 //import data from '../data/data'
 
 
-import { createFrequencyDict, sortDictionaryByKey, onlyNonAlpha , kasiskiTest, germanFreq, createData, getFirstLetter} from '../utils/frequencyAnalysis';
+import { createFrequencyDict, sortDictionaryByKey, onlyNonAlpha , kasiskiTest, germanFreq, createData, getFirstLetter, factorize} from '../utils/frequencyAnalysis';
 import CarouselCards from '../components/CarouselCards';
 
 const screenWidth = 0.9 * Dimensions.get("window").width;
+
+export const SLIDER_WIDTH = Dimensions.get('window').width +50
+export const ITEM_WIDTH = Math.round(SLIDER_WIDTH )
 
 
 
@@ -18,44 +25,108 @@ export default function VigenereAnalysisScreen({ navigation }) {
 
     const [secret, setSecret] = useState('');
     const [kasiskiLength, setKasiskiLength] = useState(0)
+    const [chosenLength, setChosenLength] = useState(1)
     const [data, setData] = useState([])
+    const [analysisDone, setAnalysisDone] = useState(false)
     const [mostFrequentLetter, setMostFrequentLetter] = useState('e')
+    const [factors, setFactors] = useState([])
+    const [factorsCalculated, setFactorsCalculated] = useState(false);
+
+   
+
+    const BarChartItem = ({ data, index }) => {
 
 
-   /*useEffect(() => {
-       const myLongText = "lukaslukaslukaslukaswampfler"
-       //const dicts = [{'a': 2, 'b': 3, 'c': 1}, {'a': 4, 'b': 2, 'c': 3}, {'a':5, 'b': 12, 'c':0    }]
-       const dicts = createFrequencyDict(myLongText, 5) 
-       console.log("dicts: ", dicts);
-       console.log("Data: ", createData(dicts));
-      }, [])*/
+        const mostFreqInDict = data.mostFrequentInDictionary
+        const mostFreqInAlph = data.mostFrequentInAlphabet
 
+        const chartConfig = {
+            backgroundGradientFrom: "#1E2923",
+            backgroundGradientFromOpacity: 0,
+            backgroundGradientTo: "#080808",
+            backgroundGradientToOpacity: 0,
+            color: (opacity = 1) => `rgba(10, 10, 10, ${opacity})`,
+            strokeWidth: 2, // optional, default 3
+            barPercentage: 0.15,
+            decimalPlaces:0,
+            //useShadowColorFromDataset: false // optional
+          
+          };
+        
+        
+        return (
+        <View style={styles.container} key={index}>
+        <BarChart
+                style={{
+                    marginVertical: 8,
+                    borderRadius: 5, 
+                    paddingRight: 45,
+                }}
+                data={data.data}
+                width={ITEM_WIDTH-90}
+                height={220}
+                yAxisSuffix="%"
+                chartConfig={chartConfig}
+                verticalLabelRotation={90}
+            />
+            
+      <Text style={styles.header}>{data.title}</Text>
+      <Text style ={styles.body}> most frequent letter in Dictionary: {mostFreqInDict} </Text>
+      <Text style ={styles.body}> most frequent letter in Alphabet: {mostFreqInAlph} </Text>
+      {/*<Text style ={styles.body}> most likely corresponding letter in secret key: {calculateKeyCharacter(mostFreqInDict, mostFreqInAlph)} </Text>*/}
+    </View>
+  );
+
+    } 
 
     
 
     let likelyLength = 0
-    let analysisDone = false;
+    //let analysisDone = false;
 
+    
     //let data = []
+
+    useEffect(() => {
+        setFactors(factorize(kasiskiLength));
+        setFactorsCalculated(true);
+        console.log("factors: ", kasiskiLength)
+    }, [kasiskiLength])
+
+
+    useEffect( () => {console.log("Data: ", data)}, [data])
+
+    useEffect(() => {
+        let frequencyDictionaries = createFrequencyDict(secret, chosenLength)
+        setData(createData(frequencyDictionaries, mostFrequentLetter));
+    }, [secret])
 
     const changeText = text => {
         setSecret(text);
     }
 
-    const changeMostFrequent = letter => {
-        const firstLetter = getFirstLetter(letter);
-        setMostFrequentLetter(firstLetter);
+
+    const changeChosenLength = value => {
+        const mostFrequentLetter = 'e';
+        setChosenLength(value);
+        let frequencyDictionaries = createFrequencyDict(secret, value)
+        setData(createData(frequencyDictionaries, mostFrequentLetter));
     }
 
     const handleAnalysis = () => {
         //TODO: clean secret of whitespace, punctuation etc.
         likelyLength = kasiskiTest(secret);
-        console.log(likelyLength);
+        //console.log(likelyLength);
         setKasiskiLength(likelyLength);
-        analysisDone = true;
-        let frequencyDictionaries = createFrequencyDict(secret, likelyLength)
-        setData(createData(frequencyDictionaries, mostFrequentLetter));
+        //let frequencyDictionaries = createFrequencyDict(secret, likelyLength)
+        //setData(createData(frequencyDictionaries, mostFrequentLetter));
+        //analysisDone = true;
+        setAnalysisDone(true);
     }
+
+    const renderItem = ({ item }) => (
+        <BarChartItem data={item} />
+    );
 
 
 
@@ -93,7 +164,7 @@ export default function VigenereAnalysisScreen({ navigation }) {
 
     return (
         <View style = {{margin: 10}}>   
-                 <TouchableWithoutFeedback onPress = {Keyboard.dismiss} accessible={false}>
+            <TouchableWithoutFeedback onPress = {Keyboard.dismiss} accessible={false}>
 
             <View>
                 <Title title ={title}/>
@@ -122,29 +193,45 @@ export default function VigenereAnalysisScreen({ navigation }) {
                 }}>
                     <Button label='Analyze Text' onPress={handleAnalysis} width={240} />
                 </View>
-                <Text>Most likely length of secret key word: {kasiskiLength}</Text> 
+            {factorsCalculated &&  <Text> Most likely length of secret key word is one of the following (or products):</Text>  }
+                { factors.map((item, key)=>(
+         <Text key={key} style={{fontWeight: '200'}} > { item } </Text>)) }  
+                
 </View>
                 <View style={{flexDirection: 'row'}}>
-                <Text>Most frequent letter?  </Text> 
+                <Text>Choose length of keyword:   </Text> 
 <TextInput
                 width={60}
                 textAlignVertical='top'
-                placeholder='secret'
+                placeholder='length'
                 autoCapitalize='none'
                 autoCorrect={false}
                 style={{ height: 30, borderColor: 'gray', borderWidth: 1 }}
-                keyboardType='default'
+                keyboardType='numeric'
                 keyboardAppearance='dark'
                 returnKeyType='next'
                 returnKeyLabel='next'
-                onChangeText={changeMostFrequent}
+                onChangeText={changeChosenLength}
                 onBlur={() => { }}
             />
 </View>
 
     </View>
+   
+                   
+
     </TouchableWithoutFeedback>
-                {(!onlyNonAlpha(secret)) && (<CarouselCards data= {data} />)}
+    <View style = {{height: '50%'}}>
+    { analysisDone ?
+                        <FlatList removeClippedSubviews={false}
+                            data={data}
+                            renderItem={renderItem}
+                            keyExtractor={item => item.title}
+                        /> :
+                        null}
+
+    </View>
+              {/*  {(!onlyNonAlpha(secret)) && (<CarouselCards data= {data} />)} */}
 
 
 
@@ -169,3 +256,39 @@ export default function VigenereAnalysisScreen({ navigation }) {
 
 
 }
+
+
+const styles = StyleSheet.create({
+    container: {
+      backgroundColor: 'white',
+      borderRadius: 8,
+      width: ITEM_WIDTH,
+      paddingBottom: 40,
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 3,
+      },
+      shadowOpacity: 0.29,
+      shadowRadius: 4.65,
+      elevation: 7,
+    },
+    image: {
+      width: ITEM_WIDTH,
+      height: 300,
+    },
+    header: {
+      color: "#222",
+      fontSize: 22,
+      fontWeight: "bold",
+      paddingLeft: 20,
+      paddingTop: 20
+    },
+    body: {
+      color: "#222",
+      fontSize: 14,
+      paddingLeft: 20,
+      paddingLeft: 20,
+      paddingRight: 20
+    }
+  })

@@ -228,6 +228,10 @@ export const messagesBySent = /* GraphQL */ `
           id
           name
           publicKeyID
+          publicKey{
+            exponent
+            modulus
+          }
           privateKeyID
           createdAt
           updatedAt

@@ -95,9 +95,9 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
                 { label: 'S-DES', value: 'sdes' }, 
                 { label: 'RSA', value: 'rsa' }, 
             ]}
-            Icon={() => {
+            /*Icon={() => {
                 return <Chevron size={1.5} color="gray" />;
-              }}
+              }}*/
         />
         </View>
 
@@ -113,9 +113,9 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
                 { label: 'Hard', value: 'hard' },
                 { label: 'Extreme', value: 'extreme' },
             ]}
-            Icon={() => {
+            /*Icon={() => {
                 return <Chevron size={1.5} color="gray" />;
-              }}
+              }}*/
         />
         </View>
 
@@ -131,9 +131,9 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
         { label: 'German', value: 'german' },
         { label: 'English', value: 'english' },
     ]}
-    Icon={() => {
-        return <Chevron size={1.5} color="gray" />;
-      }}
+    /*Icon={() => {
+                return <Chevron size={1.5} color="gray" />;
+              }}*/
 />
 </View>
 <View style = {{margin: 20, width : '40%'}}>

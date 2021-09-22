@@ -263,7 +263,7 @@ const checkAndUsePubExp = () => {
             <NumInput
               //icon='pinterest'
               editable={!isRandom}
-              width={245}
+              width={140}
               placeholder='Enter prime number p'
               autoCapitalize='none'
               keyboardType='number-pad'
@@ -280,7 +280,7 @@ const checkAndUsePubExp = () => {
           <View style={{ paddingHorizontal: 32, marginBottom: 16, width: '60%' }}>
             <NumInput
               //icon='pinterest-with-circle'
-              width={245}
+              width={140}
               editable={!isRandom}
               placeholder='Enter prime number q'
               autoCapitalize='none'

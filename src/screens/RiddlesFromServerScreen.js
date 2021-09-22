@@ -15,7 +15,7 @@ import { API, graphqlOperation } from 'aws-amplify'
 
 const MessageItem = ({ message }) => (
     <View style={{
-        flexDirection: 'row',
+        flexDirection: 'column',
         justifyContent: 'space-between',
         borderBottomWidth: 1,
         marginBottom: 5,
@@ -23,7 +23,7 @@ const MessageItem = ({ message }) => (
     >
         <Text style={{ width: 250 , fontSize: 20}} selectable={true} selectionColor='yellow' >
             {message.text}  </Text>
-            {/* TODO: if method == rsa - then also display the public key.*/}
+           {message.method == 'RSA' && <Text> exponent <Text selectable={true}>{message.receiver.publicKey.exponent} </Text> modulus:  <Text selectable = {true}>{message.receiver.publicKey.modulus}</Text></Text>}
         <Divider width={5} />
     </View>
 );

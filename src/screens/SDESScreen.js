@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, Text, View } from 'react-native';
+import { SafeAreaView, ScrollView, Text, View , Switch} from 'react-native';
 import { Divider } from 'react-native-elements';
 import AppContext from '../components/AppContext';
 import Button from '../components/Button';
@@ -30,6 +30,7 @@ export default function SDESScreen({ route, navigation }) {
   const [message, setMessage] = useState('');
   const [encryptedMessage, setEncryptedMessage] = useState('');
   const [decryptedMessage, setDecryptedMessage] = useState('');
+  const [isMessageBinary, setIsMessageBinary] = useState(false);
 
 
   useEffect(() => {
@@ -43,6 +44,20 @@ export default function SDESScreen({ route, navigation }) {
     console.log(message);
   }, [message]);
 
+
+
+  const toggleSendMessageState = () => {
+    setIsMessageBinary(!isMessageBinary);
+  }
+
+  const sendMessage = () => {
+    let ciphers = myContext.ciphers;
+    ciphers.currentMethod = 'SDES';
+    ciphers.currentMessage = isMessageBinary? encryptedMessage : decodeBinaryString(encryptedMessage);
+    ciphers.sdes.secret = encryptedMessage;
+    myContext.setCiphers(ciphers);
+    navigation.navigate('UsersList', { toSend: true, toImportKey: false })
+}
 
 
   const getK1InitialValue = () => {
@@ -71,7 +86,6 @@ export default function SDESScreen({ route, navigation }) {
   }
 
   const encryptKey = () => {
-    console.log("TODO")
     myContext.setRSAInputSwitchisDecimal(false);
     let ciphers = myContext.ciphers;
     ciphers.rsa.m = formikKey.values.key
@@ -79,6 +93,11 @@ export default function SDESScreen({ route, navigation }) {
     //console.log("encrypt Key: ", formikKey.values.key);
     navigation.navigate("RSA")
 
+  }
+
+  const handleEncryption = () => {
+    formikKey.handleSubmit(formikKey.values)
+    formikMessage.handleSubmit(formikMessage.values)
   }
 
   /*formikKey has properties: handleChange,
@@ -156,18 +175,62 @@ export default function SDESScreen({ route, navigation }) {
       <ScrollView style={{ flex: 1 , margin: 10}}>
        <Title title={method} />
         <IntroModal text={introText} method={method} />
+        <View
+                style={{
+                    flex: 1,
+                    backgroundColor: '#fff',
+                    //alignItems: 'center',
+                    justifyContent: 'center', 
+                }}
+            >
 
-        <View style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          marginTop: 10,
-          marginBottom: 10,
-        }}>
+                <Text style={{
+                    fontSize: 20,
+                    marginTop: 20, 
+                    marginLeft: 10
+                }}> 
+                Input (Multiples of 8 Bits) </Text>
+                <View style={{
+                    paddingHorizontal: 32,
+                    marginBottom: 16,
+                    width: '100%',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    margin: 20
+                }}>
+                    <NumInput
+                        //icon='new-message'
+                        width='40%'
+                        placeholder='Enter message'
+                        autoCapitalize='none'
+                        keyboardType='number-pad'
+                        keyboardAppearance='dark'
+                        returnKeyType='next'
+                        returnKeyLabel='next'
+                        onChangeText={formikMessage.handleChange('message')}
+                        onBlur={formikMessage.handleBlur('message')}
+                        error={formikMessage.errors.message}
+                        touched={formikMessage.touched.message}
+                        value={formikMessage.values.message}
+                    />
+                    
+                    <Button label='encode message' onPress={() => { navigation.navigate('SDESEncoding') }} />
+                        
+                    
+                </View>
 
-          {/*<View style={{ paddingHorizontal: 32, marginBottom: 16, width: '100%' }}>*/}
-          <NumInput
+                </View>
+                <Divider style={{ width: "100%", margin: 10 }} />
+
+                <View style ={{margin: 10}}>
+
+          <Text style={{ fontSize: 20 }}>Key</Text>
+        <View style = {{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}> 
+        <Text style = {{fontSize: 16, fontWeight: '500'}}> 10-bit key: </Text>
+        
+         <NumInput
             //icon='pinterest'
-            width={245}
+            width='40%'
             placeholder='Enter 10-bit key'
             autoCapitalize='none'
             keyboardType='number-pad'
@@ -180,26 +243,29 @@ export default function SDESScreen({ route, navigation }) {
             touched={formikKey.touched.key}
             value={formikKey.values.key}
           />
-          <Button label='Generate keys' onPress={formikKey.handleSubmit} />
+          </View>
+          <View style={{
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 5,
+    marginBottom: 10,
+}}>
+             <Button label='Calculate       k1, k2' onPress={formikKey.handleSubmit}  width = '40%'/>
+             <Button label='RSA encrypt  10-bit key' onPress={encryptKey} width = '40%'/>
 
 
-          {/*</View>*/}
-        </View>
-        <Divider style={{ width: "100%", margin: 10 }} />
-        {/*{keyEntered ?
-          <View style={{ flex: 1 }}>
-            <Text>The above key yields the two keys: </Text>
-            <Text>{JSON.stringify(myContext.ciphers.sdes.keys)} </Text>
-        </View> : null}*/}
-        <View style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          marginTop: 10,
-          marginBottom: 10,
-        }}>
-          <NumInput
+</View>
+<View style={{
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 5,
+    marginBottom: 10,
+}}>
+  <View style ={{flexDirection: 'row', alignItems: 'center'}}>
+    <Text style ={{fontSize: 16, fontWeight: '500'}}> k1:  </Text> 
+             <NumInput
             //icon='pinterest'
-            width={245}
+            width='50%'
             placeholder='Enter k1'
             autoCapitalize='none'
             keyboardType='number-pad'
@@ -212,11 +278,13 @@ export default function SDESScreen({ route, navigation }) {
             touched={formikK12.touched.k1}
             value={formikK12.values.k1}
           />
-          <Button label='RSA encrypt key' onPress={encryptKey} />
-        </View>
+
+       </View>   
+       <View style ={{flexDirection: 'row', alignItems: 'center'}}>
+    <Text style ={{fontSize: 16, fontWeight: '500'}}> k2:  </Text> 
         <NumInput
           //icon='pinterest'
-          width={245}
+          width='50%'
           placeholder='Enter k2'
           autoCapitalize='none'
           keyboardType='number-pad'
@@ -229,46 +297,51 @@ export default function SDESScreen({ route, navigation }) {
           touched={formikK12.touched.k2}
           value={formikK12.values.k2}
         />
-        <Button label='Use k1, k2' onPress={formikK12.handleSubmit} />
-        <Divider style={{ width: "100%", margin: 10 }} />
-        <Text>Message</Text>
+</View>
 
-        <View style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          marginTop: 10,
-          marginBottom: 10,
-        }}>
-
-          <NumInput
-            //icon='pinterest'
-            width={245}
-            placeholder='Enter message'
-            autoCapitalize='none'
-            keyboardType='default'
-            keyboardAppearance='dark'
-            returnKeyType='next'
-            returnKeyLabel='next'
-            onChangeText={formikMessage.handleChange('message')}
-            onBlur={formikMessage.handleBlur('message')}
-            error={formikMessage.errors.message}
-            touched={formikMessage.touched.message}
-            value={formikMessage.values.message}
-          />
-          <Button label='encode message' onPress={() => { navigation.navigate('SDESEncoding') }} />
+</View>
+</View> 
+       
+        
+       {/*} <Button label='Use k1, k2' onPress={formikK12.handleSubmit} />*/}
+       
+        <View style ={{flexDirection: 'row', justifyContent: 'center'}}>
+        <Button label='encrypt' onPress={handleEncryption} width = '50%'/>
         </View>
-        <Button label='encrypt/decrypt' onPress={formikMessage.handleSubmit} />
+        <Divider style={{ width: "100%", margin: 10 }} />
+        <View style ={{margin: 10}}>
+
+          <Text style={{ fontSize: 20 }}>Output</Text>
         {isEncrypted ?
           <View style={{ flex: 1 }}>
-            <Text style={{ fontSize: 20 }}>Message encrypted </Text>
-            <Text style={{ fontSize: 20 }} selectable> {myContext.ciphers.sdes.encryptedMessage} </Text>
-            <Text style={{ fontSize: 20 }}>encrypted message as String </Text>
-            <Text style={{ fontSize: 20 }} selectable> {decodeBinaryString(myContext.ciphers.sdes.encryptedMessage)} </Text>
-            <Text style={{ fontSize: 20 }}>encrypted message encoded </Text>
+            <View style ={{flexDirection: 'row', justifyContent: 'flex-start', marginBottom: 10, marginTop: 10}}>
+            <Text style={{ fontSize: 16, fontWeight: '500' }}>encrypted message binary:  </Text>
+            <Text style={{ fontSize: 16 }} selectable> {myContext.ciphers.sdes.encryptedMessage} </Text>
+            </View>
+            <View style ={{flexDirection: 'row', justifyContent: 'flex-start', marginBottom: 10}}>
+            <Text style={{ fontSize: 16, fontWeight: '500' }}>encrypted message as String:  </Text>
+            <Text style={{ fontSize: 16 }} selectable> {decodeBinaryString(myContext.ciphers.sdes.encryptedMessage)} </Text>
+            </View>
+            {/*<Text style={{ fontSize: 20 }}>encrypted message encoded </Text>
             <Text style={{ fontSize: 20 }} selectable> {encodeEncrypted(decodeBinaryString(myContext.ciphers.sdes.encryptedMessage))} </Text>
             <Text style={{ fontSize: 20 }}>Message decrypted </Text>
-            <Text style={{ fontSize: 20 }} selectable> {decryptedMessage} </Text>
+        <Text style={{ fontSize: 20 }} selectable> {decryptedMessage} </Text>*/}
+<View style ={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
+<Switch
+                            style={{ marginTop: 5 }}
+                            onValueChange={toggleSendMessageState}
+                            value={isMessageBinary}
+                        />
+<Button label={'send ' + (isMessageBinary ? 'binary ': '') + 'message'} onPress={sendMessage} width = '40%'/>
+
+</View>
+
+
           </View> : null}
+
+         </View> 
+
+         <View style ={{flexDirection: 'row', justifyContent: 'space-between'}} >
         <View style={{
           flexDirection: 'row',
           justifyContent: 'center', width: 150,
@@ -276,6 +349,13 @@ export default function SDESScreen({ route, navigation }) {
         }}>
           <Button label='show introduction' onPress={() => { myContext.setIntroVisible(true) }} />
         </View>
+        <View style={{
+          flexDirection: 'row',
+          justifyContent: 'center', width: 150,
+          marginTop: 100
+        }}>
+        </View>              
+                    </View>
 
       </ScrollView>
     </View>

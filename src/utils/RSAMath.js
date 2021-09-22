@@ -22,14 +22,17 @@ export function extendedEuclid(e, f, useBigIntegerLibrary) {
 }
 // primality test
 export function isPrime(n, useBigIntegerLibrary) {
+    //n = Number(n);
+    //n = BigInt(n)
     console.log("Number n in isPrime: ", n)
+    console.log("n is BigInt: ", typeof BigInt(n))
     // returns true if n is probably prime
     const MILLER_RABIN_ITERATIONS = 20;
     if(useBigIntegerLibrary){
         console.log("before isProbablePrime call")
         return BigInt(n).isProbablePrime(MILLER_RABIN_ITERATIONS);
     } 
-    console.log("so far, so good.")
+    //console.log("so far, so good.")
     if (n <= BigInt(1)){
         console.log("isPrime returning false")
         return false; 
@@ -61,6 +64,7 @@ export function generatePrime(exp, useBigIntegerLibrary) {
     let min = exp < 1 ? 1 : Math.pow(10, exp-1);
     let max = 10 * min;
     let cand = BigInt(Math.floor(Math.max(2, min + Math.random() * (max - min))));
+    console.log(cand, useBigIntegerLibrary);
     while (!isPrime(cand, useBigIntegerLibrary)){
         cand++;
     }
@@ -141,6 +145,7 @@ function millerRabin(n, millerRabinIterations, useBigIntegerLibrary) {
 export function calculateKeyPair(p, q, useBigIntegerLibrary) {
     const phi = (BigInt(p) - BigInt(1)) * (BigInt(q) - BigInt(1));
     const n = (BigInt(p) * BigInt(q)).toString();
+    console.log("p: ", p, "q: ", q, "n: ", n);
     const expPublic = phi > Math.pow(2, 16) ?  (Math.pow(2, 16) + 1).toString() : (phi - BigInt(1)).toString()
     
     let { inverse, gcd } = extendedEuclid(BigInt(expPublic), phi, useBigIntegerLibrary);

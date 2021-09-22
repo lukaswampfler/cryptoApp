@@ -121,7 +121,7 @@ export default function CaesarScreen({ navigation }) {
                 />
                 <Text style={{ marginTop: 30 }}> Enter Key.</Text>
                 <NumInput
-                    icon='pinterest'
+                    //icon='pinterest'
                     width={200}
                     placeholder='Enter Caesar key'
                     autoCapitalize='none'
@@ -174,10 +174,10 @@ export default function CaesarScreen({ navigation }) {
                     marginTop: 100
                 }}>
                     <View style = {{margin: 20}}>
-                    <Button  label='show introduction' onPress={() => { myContext.setIntroVisible(true) }} />
+                    <Button  label='show introduction' onPress={() => { myContext.setIntroVisible(true) }} width = '80%' />
                     </View>
                     <View style = {{margin: 20}}>
-                    <Button label='send message' onPress={sendMessage} />
+                    <Button label='send message' onPress={sendMessage} width = '80%'/>
                     </View>
                 </View>
             </ScrollView>

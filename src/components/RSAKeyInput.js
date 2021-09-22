@@ -44,28 +44,33 @@ export default function RSAKeyInput({ values, errors, touched, handleChange, han
             ciphers.rsa.m = values.m;
             myContext.setCiphers(ciphers);
             navigation.navigate('RSAKey');
-          }} width = {180} />
+          }} width = '40%' />
       {/*}  </View>*/}
 
        {/*} <View style={{
           marginLeft: 10,
         }}>*/}
-          <Button label='Import Key' onPress={() => { navigation.navigate('UsersList', { toSend: false, toImportKey: true }) }} width={180} />
+          <Button label='Import Key' onPress={() => { navigation.navigate('UsersList', { toSend: false, toImportKey: true }) }} width='40%' />
        {/*} </View>*/}
 
 
       </View>
 
-      <Text> Exponent </Text>
+<View style = {{
+  flexDirection: 'row', 
+  justifyContent: 'space-between'}}
+>
+
+      
       <View style={{
-        flexDirection: 'row',
+        flexDirection: 'column',
         justifyContent: 'space-between',
         marginTop: 10,
         marginBottom: 10,
-      }}>
+      }}><Text> Exponent </Text>
 
         <NumInput
-          icon='pinterest'
+          //icon='pinterest'
           width={200}
           placeholder='Enter exponent'
           autoCapitalize='none'
@@ -90,16 +95,16 @@ export default function RSAKeyInput({ values, errors, touched, handleChange, han
         </View>*/}
       </View>
 
-      <Text> Modulus </Text>
+      
       <View style={{
-        flexDirection: 'row',
+        flexDirection: 'column',
         justifyContent: 'space-between',
         marginTop: 10,
         marginBottom: 10,
       }}>
-
+  <Text> Modulus </Text>
         <NumInput
-          icon='pinterest'
+          //icon='pinterest'
           width={200}
           placeholder='Enter modulus n'
           autoCapitalize='none'
@@ -118,7 +123,7 @@ export default function RSAKeyInput({ values, errors, touched, handleChange, han
           <Button label='Import Key' onPress={() => { navigation.navigate('UsersList', { toSend: false, toImportKey: true }) }} width={130} />
       </View>*/}
       </View>
-
+</View>
 
 
     </View>

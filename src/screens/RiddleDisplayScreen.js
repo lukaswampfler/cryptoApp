@@ -109,8 +109,12 @@ const setContainer = () => {
             } else if (details.level == 'extreme'){
                 maxExp = 7;
             }
-            const p = generatePrime(maxExp);
-            const  q = generatePrime(maxExp);
+            const p = generatePrime(maxExp, myContext.useBigIntegerLibrary);
+            let  q = generatePrime(maxExp, myContext.useBigIntegerLibrary);
+            while ( q == p){
+                q = generatePrime(maxExp, myContext.useBigIntegerLibrary);
+            }
+            //console.log("p: ", p, "q: ", q)
             const keyPair  = calculateKeyPair(p, q, myContext.useBigIntegerLibrary);
             key = keyPair;
             //console.log("keyPair: ", keyPair)

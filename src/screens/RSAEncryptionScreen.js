@@ -190,7 +190,8 @@ export default function RSAEncryptionScreen({ route, navigation }) {
                     fontSize: 20,
                     marginTop: 20, 
                     marginLeft: 10
-                }}> Input (decimal or binary number) </Text>
+                }}> 
+                Input (decimal or binary number) </Text>
                 <View style={{
                     paddingHorizontal: 32,
                     marginBottom: 16,
@@ -200,7 +201,7 @@ export default function RSAEncryptionScreen({ route, navigation }) {
                     margin: 40
                 }}>
                     <NumInput
-                        icon='new-message'
+                        //icon='new-message'
                         width={245}
                         placeholder='Enter message'
                         autoCapitalize='none'
@@ -256,7 +257,7 @@ export default function RSAEncryptionScreen({ route, navigation }) {
                 margin: 20
             }}>
                 <NumInput
-                    icon='new-message'
+                    //icon='new-message'
                     width={245}
                     placeholder='Encrypted message'
                     autoCapitalize='none'

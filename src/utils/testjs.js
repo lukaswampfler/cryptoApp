@@ -196,3 +196,6 @@ for (let i = 0; i<10; i++){
     let rand2 = Math.floor(alph.length*Math.random())
     console.log(transpose(alph, rand1, rand2));
 }
+
+const prod = BigInt(671284177) * BigInt(806774921)
+console.log(prod.toString())

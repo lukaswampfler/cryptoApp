@@ -4,7 +4,7 @@ import { isPrime } from './RSAMath'
 const INVALID_DECIMAL_FORMAT_ERROR_MESSAGE = 'invalid decimal number';
 const INVALID_BINARY_FORMAT_ERROR_MESSAGE = 'invalid binary number';
 const INVALID_FORMAT_ERROR_MESSAGE = 'invalid format';
-const REQUIRED_ERROR_MESSAGE = 'this field is required';
+const REQUIRED_ERROR_MESSAGE = 'required';
 const INVALID_LOWER_CASE_STRING_ERROR_MESSAGE = 'only letters allowed'
 
 

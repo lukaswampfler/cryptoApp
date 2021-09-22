@@ -52,7 +52,7 @@ export function createFrequencyDict(s, dist = 1) {
 export function createData(freqDicts, mostFrequent){
     // input: array of frequencyDicts
     // output: array of Objects with attributes title and data
-
+    //console.log("freqDicts in createData: ", freqDicts);
     let out = []
     for(let i = 0; i < freqDicts.length; i++){
         const tit = "Character " + (i+1);
@@ -131,25 +131,12 @@ export function onlyNonAlpha(s){
 export function kasiskiTest(secret, minLength = 3, maxLength = 5) {
     if (secret.length < 6) return 1; 
     // verwende der Einfachheit halber nur das aktuelle und das letzte Vorkommen einer Zeichenkette der Länge len
-    let posDiff = {};
-    let s = secret.toLowerCase().replace(/\s/g, ''); // remove all whitespace from secret
-    // TODO: remove all special characters: :,;:?' .... ( or anything not small or large letters)
-    console.log("s : ",s)
-    for (let len = maxLength; len >= minLength; len--) {
-        for (let start = 0; start < s.length - len; start++) {
-            let part = s.substr(start, len);
-            console.log(part)
-            let lastPos = s.lastIndexOf(part);
-            if (lastPos != start && !(posDiff.hasOwnProperty(part)) ) {
-                console.log(part, lastPos-start);
-                posDiff[part] = lastPos - start;
-                console.log(posDiff)
-            }
-        }
-        // starting from length = 3 up to 5: 
-        // let part = str.substr(start, len)
-        // let nextPos = str.indexOf(part) ODER str.lastIndexOf
-    }
+    //let posDiff = {};
+    let s = secret.toLowerCase().replace(/\s/g, '').replace(/[^\x20-\x7E]/g, ''); // remove all whitespace and non-Ascii from secret
+    console.log("s in kasiski : ",s)
+    
+    let posDiff = testForEqualParts(s, minLength, maxLength);
+    //console.log(posDiff)
     const gcd = gcdArray(Object.values(posDiff));
     console.log("gcd for ", posDiff, " : ", gcd);
     if (minLength == 2) return 1; 
@@ -159,4 +146,49 @@ export function kasiskiTest(secret, minLength = 3, maxLength = 5) {
     else if (gcd == 1)
         return kasiskiTest(secret, minLength + 1, maxLength + 1);
     return gcd;
+}
+
+
+function testForEqualParts(s, minLength, maxLength){
+    const NUM_DIFFERENT_PARTS = 5
+    let result = {}
+    for (let len = maxLength; len >= minLength; len--) {
+        for (let start = 0; start < s.length - len; start = start + len) {
+            let part = s.substr(start, len);
+            //console.log(part)
+            let lastPos = s.lastIndexOf(part);
+            if (lastPos != start && !(result.hasOwnProperty(part)) && !isSubstringOf(part, Object.keys(result)) ) {
+                //console.log(part, lastPos-start);
+                result[part] = lastPos - start;
+                //console.log(result)
+                if ( Object.entries(result).length == NUM_DIFFERENT_PARTS){
+                    return result;
+                }
+            } 
+        }
+    }
+    console.log("result of test for equal parts: ", result)
+    return result;
+}
+
+function isSubstringOf(part, arrayOfWholes){
+    for (let ind = 0 ; ind < arrayOfWholes.length; ind++){
+        if (arrayOfWholes[ind].includes(part)) return true; 
+    }
+    return false; 
+}
+
+export function factorize(num){
+    let result = []
+    for (let cand = 2; cand <= num; cand ++){
+        const remainder = num % cand; 
+        console.log("remainder: ", num, cand, remainder);
+        if (remainder == 0) {
+            result.push(cand)
+            num = Math.floor(num/cand);
+        }
+
+    }
+    console.log(result);
+    return result;
 }
