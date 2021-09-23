@@ -170,6 +170,9 @@ function cleanMessage(text){
 }
 
 function adjustMessage(text, level){
+    text = text.replace(/ö/g, 'oe').replace(/ä/g, 'ae').replace(/ü/g, 'ue')
+    text = text.replace(/Ö/g, 'Oe').replace(/Ä/g, 'Ae').replace(/Ü/g, 'Ue')
+    
     if (level == 'hard'){
         return text.substr(0, 300);
     } else if (level == 'easy'){

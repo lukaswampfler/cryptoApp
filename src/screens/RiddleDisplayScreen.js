@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Platform, View, Text, FlatList, Switch, SafeAreaView, TouchableOpacity } from 'react-native'
+import { Platform, View, ScrollView, Text, FlatList, Switch, SafeAreaView, Dimensions } from 'react-native'
 import { Picker } from '@react-native-picker/picker';
 import Title from '../components/Title';
 import Button from '../components/Button';
@@ -15,6 +15,8 @@ const choose = (array) => {
     return array[ind];
 }
 
+const WIDTH = Dimensions.get('window').width;
+const HEIGHT = Dimensions.get('window').height;
 
 
 export default function RiddleDisplayScreen({ route,  navigation }) {
@@ -198,6 +200,7 @@ const setContainer = () => {
     
     return (
         <SafeAreaView style={{margin: 0}}>
+            
             <View style = {{margin: 10}}>
             <Title title ={title}/>
             </View>
@@ -205,12 +208,14 @@ const setContainer = () => {
              <Text style= {{fontWeight: 'bold'}} selectable>
                 {secretMessage}
             </Text>
-    </View>}*/}
+    </View>}*/}<ScrollView style={{height: ['rsa', 'sdes'].includes(details.method)? 0.1*HEIGHT : 0.2 * HEIGHT}}>
             {encryptedMessage && <View style = {{marginLeft: 15, marginTop: 5, marginRight: 10}}>
              <Text style= {{fontWeight: 'bold'}} selectable>
                 {encryptedMessage}
             </Text>
             </View>}
+
+            </ScrollView>
 
             {(details.method == 'rsa' && key) && <View style = {{marginLeft: 15, marginTop: 5, marginRight: 10}}>
              <Text style= {{fontWeight: 'bold'}} selectable>
@@ -237,6 +242,7 @@ const setContainer = () => {
                 <Button label='show key' onPress={showKey} /> 
                 <Button label='show solution' onPress={checkSolution} /> 
              </View>   }
+             
           </SafeAreaView>  
 
     );

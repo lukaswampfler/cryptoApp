@@ -288,6 +288,7 @@ export default function App() {
   const [ciphers, setCiphers] = useState({ rsa, sdes, caesar, vigenere, permutation, currentMethod: undefined, currentMessage: undefined })
 
   const [useBigIntegerLibrary, setUseBigIntegerLibrary] = useState(false);
+  const [isFirstTime, setIsFirstTime] = useState(true);
 
 
   const userSettings = {
@@ -346,13 +347,20 @@ export default function App() {
     //setUserLoggedIn('loggedOut');
   }, []);
 
+  //TO TEST
+  useEffect(() => {console.log(isUserLoggedIn)}, [isUserLoggedIn])
+
   async function checkAuthState() {
+    if (isFirstTime){
+      setIsFirstTime(false)
+      setUserLoggedIn('loggedOut')
+    } else {
     try {
       const user = await Auth.currentAuthenticatedUser();
       console.log('User is signed in');
       // TODO: check here!
       console.log('name', user.username, 'bla')
-      if (user.username === ' ') {
+      if (user.username === ' ' || user.username === '' ) {
         setUserLoggedIn('loggedOut');
       } else {
         setUserLoggedIn('loggedIn');
@@ -361,6 +369,7 @@ export default function App() {
       console.log('User is not signed in');
       setUserLoggedIn('loggedOut');
     }
+  }
   }
 
 

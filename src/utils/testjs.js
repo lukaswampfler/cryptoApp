@@ -199,3 +199,6 @@ for (let i = 0; i<10; i++){
 
 const prod = BigInt(671284177) * BigInt(806774921)
 console.log(prod.toString())
+
+const test = 'öüäöäüöä'
+console.log(test.replace(/ö/g, 'oe'))
