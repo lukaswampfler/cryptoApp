@@ -36,27 +36,26 @@ export default function TestRSAKeyScreen({ navigation }) {
   const [isRandom, setIsRandom] = useState(true);
   const [isDefault, setIsDefault] = useState(true);
   const [publicKey, setPublicKey] = useState({})
+  const [pConfirmed, setPConfirmed] = useState('')
+  const [qConfirmed, setQConfirmed] = useState('')
 
 
-  /*useEffect(() => {
-    toggleRandomSwitch()
-    toggleRandomSwitch()
-}
-, [])*/
 
 
   useEffect(() => {
       if (exp == 0){
-          setP('')
-          setQ('')
+          setPConfirmed('')
+          setQConfirmed('')
       } else {
       const pCand = generatePrime(exp, myContext.useBigIntegerLibrary)
-      setP(pCand);
+      setPConfirmed(pCand);
       let qCand = generatePrime(exp, myContext.useBigIntegerLibrary)
       while (qCand == pCand){
           qCand = generatePrime(exp, myContext.useBigIntegerLibrary)
         }
-      setQ(qCand);
+      setQConfirmed(qCand);
+      setP(pCand)
+      setQ(qCand)
       console.log("use Effect, p and q are set to ", pCand, qCand)
       console.log("use Effect, exp ", exp)
     }
@@ -71,13 +70,15 @@ export default function TestRSAKeyScreen({ navigation }) {
         //setPrivateKey();
     }
 
-  }, [p, q])
+  }, [pConfirmed, qConfirmed])
 
 
   useEffect( () => {
     changePublicKey();
     //setPrivateKey();
 }, [verifiedPubExp])
+
+useEffect(() => {console.log("P: ", p, "Q: ", q)}, [p, q])
 
 
 useEffect(() =>{
@@ -88,6 +89,14 @@ useEffect(() =>{
 
 const changePubExp = pubExp => {
     setPubExp(pubExp);
+}
+
+const changeP = value => {
+  setP(value);
+}
+
+const changeQ = value => {
+  setQ(value);
 }
 
 const toggleRandomSwitch = () => {
@@ -124,22 +133,61 @@ const togglePubExpSwitch = () => {
   setIsDefault(!isDefault);
 }
 
+const checkPrime = value => {
+  console.log(value);
+  if (!value.match(/^[1-9][0-9]*$/)){
+    //alert("This is not a decimal number!")
+    return false; 
+  } else {
+    const n = BigInt(value);
+    if (!isPrime(n, myContext.useBigIntegerLibrary)){
+      //alert("Please enter a prime number!")
+      return false;
+    }
+  }
+  return true;
+}
+
+// TODO: 
+// 1) new state variables pConfirmed, qConfirmed
+// 2) these need to be set in useEffect for exp (above, lines 43)
+// 3) useEffect for [p, q] needs to be changed to [pConfirmed, qConfirmed]
+// 3b) maybe remove alerts from checkPrime (above)
+// 4) use my primes - button should be using this function: 
+
+const checkAndUsePrimes = () => {
+  if (checkPrime(p)){
+    setPConfirmed(p)
+    if (checkPrime(q)){
+      setQConfirmed(q)
+    }
+  } else {
+    alert("please enter prime numbers for p and q!")
+    setPConfirmed('')
+    setQConfirmed('')
+  };
+  
+
+}
+
+
+
 const changePublicKey = () => {
     console.log("verified public exp: ", verifiedPubExp)
     if(verifiedPubExp != ''){
-        myContext.setPublicKey({exp: verifiedPubExp, mod: p*q})
-        setPublicKey({exp: verifiedPubExp, mod: p*q})
+        myContext.setPublicKey({exp: verifiedPubExp, mod: pConfirmed*qConfirmed})
+        setPublicKey({exp: verifiedPubExp, mod: pConfirmed*qConfirmed})
     } else {
         myContext.setPublicKey({})
         setPublicKey({})
     }
     // 
-    console.log("public key: ", {exp: verifiedPubExp, mod: p*q})
+    console.log("public key: ", {exp: verifiedPubExp, mod: pConfirmed*qConfirmed})
 }
 
 const setPrivateKey = () => {
     console.log(verifiedPubExp)
-    const phi = (p-1)*(q-1)
+    const phi = (pConfirmed-1)*(qConfirmed-1)
     if(verifiedPubExp && verifiedPubExp != ''){
 
         //console.log("p-1*q-1: ",(p-1)*(q-1) )
@@ -154,8 +202,8 @@ const setPrivateKey = () => {
                 inverse += BigInt(phi);
             } 
         }
-        console.log("inverse: ", inverse, "mod: ", p*q);
-        myContext.setPrivateKey({ exp: Number(inverse), mod: (p*q) });
+        console.log("inverse: ", inverse, "mod: ", pConfirmed*qConfirmed);
+        myContext.setPrivateKey({ exp: Number(inverse), mod: (pConfirmed*qConfirmed) });
     } else {
         myContext.setPrivateKey({})
     }
@@ -163,7 +211,7 @@ const setPrivateKey = () => {
 
 const checkAndUsePubExp = () => {
     //TODO: check condition on pubExp and then (in another function) calculate private key and 
-  const phi = (p-1)*(q-1)
+  const phi = (pConfirmed-1)*(qConfirmed-1)
   if (gcd(phi, parseInt(pubExp)) == 1){
       setVerifiedPubExp(pubExp);
    } else {
@@ -270,10 +318,10 @@ const checkAndUsePubExp = () => {
               keyboardAppearance='dark'
               returnKeyType='next'
               returnKeyLabel='next'
-              onChangeText={formikPrimes.handleChange('p')}
-              onBlur={formikPrimes.handleBlur('p')}
-              error={formikPrimes.errors.p}
-              touched={formikPrimes.touched.p}
+              onChangeText={changeP}
+              //onBlur={formikPrimes.handleBlur('p')}
+              //error={formikPrimes.errors.p}
+              //touched={formikPrimes.touched.p}
               value = {p}
             />
           </View>
@@ -289,10 +337,10 @@ const checkAndUsePubExp = () => {
               returnKeyType='next'
               returnKeyLabel='next'
               autoCompleteType='off'
-              onChangeText={formikPrimes.handleChange('q')}
-              onBlur={formikPrimes.handleBlur('q')}
-              error={formikPrimes.errors.q}
-              touched={formikPrimes.touched.q}
+              onChangeText={changeQ}
+              //onBlur={formikPrimes.handleBlur('q')}
+              //error={formikPrimes.errors.q}
+              //touched={formikPrimes.touched.q}
               value = {q}
             />
         </View>
@@ -363,19 +411,19 @@ const checkAndUsePubExp = () => {
                 { label: '9', value: 9 }, 
                 { label: '10', value: 10 } 
             ]}
-            Icon={() => {
+           /* Icon={() => {
                 return (
                 <View style ={{margin: 10, marginTop: 20}}>
                 <Chevron size={1.5} color="gray" />
                 </View>);
-              }}
+              }}*/
         />
      </View>   
 
 
       </View> : 
       <View style={{marginTop: 10}}>
-      <Button label='Use my primes' onPress={formikPrimes.handleSubmit} width={'80%'} />
+      <Button label='Use my primes' onPress={checkAndUsePrimes} width={'80%'} /> 
       </View>
       }
         </View>
@@ -384,9 +432,9 @@ const checkAndUsePubExp = () => {
 
         <View style ={{margin: 10}}>
 
-                  <Text>You are using the two prime numbers: p: {p}, q: {q}
+                  <Text>You are using the two prime numbers: p: {pConfirmed}, q: {qConfirmed}
           </Text>
-          <Text>Their product is equal to n =  {p * q}
+          <Text>Their product is equal to n =  {pConfirmed * qConfirmed}
          </Text>
 </View>
 
