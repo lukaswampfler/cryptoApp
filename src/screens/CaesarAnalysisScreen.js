@@ -11,6 +11,8 @@ import {
 } from "react-native-chart-kit";
 
 import { createFrequencyDict, sortDictionaryByKey, onlyNonAlpha } from '../utils/frequencyAnalysis';
+import ClearButton from '../components/ClearButton';
+import NumInput from '../components/NumInput';
 
 
 
@@ -27,6 +29,7 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
     const [key, setKey] = useState(0);
     const [decypheredMessage, setDecypheredMessage] =useState('')
     const [isDecyphered, setIsDecyphered] = useState(false)
+    const [keyGhost, setKeyGhost] = useState(0);
 
     const changeText = text => {
         setSecret(text);
@@ -49,7 +52,9 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
         else{
             const decyph = caesarEncrypt(secret, key);
             setKey(key);
+            setKeyGhost(key)
             setDecypheredMessage(decyph)
+            console.log("change Key: ", key, decypheredMessage)
             setIsDecyphered(true); 
     }
 
@@ -119,6 +124,7 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
                 }}> 
                  Input (secret message)</Text>
                 </View>
+                <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
             <TextInput
                 width={280}
                 multiline={true}
@@ -135,6 +141,8 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
                 value = {secret}
                 //onBlur={() => { }}
             />
+            <ClearButton setInput={changeText} setKey= {changeKey} defaultKey={0} />
+            </View>
           
           <Divider style={{ width: "100%", margin: 10 }} />
 
@@ -161,7 +169,20 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
                 }}> 
                  Key (number)</Text>
                 </View>
-<TextInput
+                <NumInput
+                width={200}
+                placeholder='Enter key'
+                autoCapitalize='none'
+                keyboardType='number-pad'
+                keyboardAppearance='dark'
+                returnKeyType='next'
+                returnKeyLabel='next'
+                //onChangeText={formikKey.handleChange('key')}
+                onChangeText= {changeKey}
+                value = {keyGhost}
+                />
+
+{/*<TextInput
                 width={60}
                 textAlignVertical='top'
                 placeholder='key'
@@ -173,7 +194,8 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
                 returnKeyType='next'
                 returnKeyLabel='next'
                 onChangeText={changeKey}
-            />
+                value = {key}
+/> */}
          {/*}  <Button label='Go' onPress={decypher} width={80} /> */}
 </View>
 <Divider style={{ width: "100%", margin: 10 }} />

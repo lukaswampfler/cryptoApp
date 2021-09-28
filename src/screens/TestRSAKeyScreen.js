@@ -1,8 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useCallback } from 'react';
 import { SafeAreaView, ScrollView, Text, View , StyleSheet, Switch} from 'react-native';
 import { Divider } from 'react-native-elements';
 import RNPickerSelect from 'react-native-picker-select';
 import AppContext from '../components/AppContext';
+import { useFocusEffect } from '@react-navigation/native';
 import { Chevron } from 'react-native-shapes';
 
 
@@ -19,7 +20,9 @@ import Title from '../components/Title';
 import { isInteger } from '../utils/caesarMath';
 import { gcd } from '../utils/CryptoMath';
 
-//import {RSAPrimeInputScheme} from '../components/PublicExponentRow';
+import * as SecureStore from 'expo-secure-store';
+import API from '@aws-amplify/api';
+import { getUser } from '../graphql/queries';
 
 const NOPRIME_MESSAGE = 'not a prime number'
 const REQUIRED_ERROR_MESSAGE = 'this field is required';
@@ -28,25 +31,45 @@ const NUM_DIGITS = 4;
 
 export default function TestRSAKeyScreen({ navigation }) {
   const myContext = useContext(AppContext);
-  const [p, setP] = useState('');
-  const [q, setQ] = useState('');
-  const [exp, setExp] = useState('');
+  const [p, setP] = useState(myContext.RSAKeyGenState.p);
+  const [q, setQ] = useState(myContext.RSAKeyGenState.q);
+  const [exp, setExp] = useState(myContext.RSAKeyGenState.primeExponent);
   const [pubExp, setPubExp] = useState('');
-  const [verifiedPubExp, setVerifiedPubExp] = useState((p-1)*(q-1)-1);
-  const [isRandom, setIsRandom] = useState(true);
-  const [isDefault, setIsDefault] = useState(true);
+  const [verifiedPubExp, setVerifiedPubExp] = useState(myContext.RSAKeyGenState.verifiedPubExp);
+  const [isRandom, setIsRandom] = useState(myContext.RSAKeyGenState.isRandom);
+  const [isDefault, setIsDefault] = useState(myContext.RSAKeyGenState.isDefault);
   const [publicKey, setPublicKey] = useState({})
-  const [pConfirmed, setPConfirmed] = useState('')
-  const [qConfirmed, setQConfirmed] = useState('')
+  const [pConfirmed, setPConfirmed] = useState(myContext.RSAKeyGenState.p);
+  const [qConfirmed, setQConfirmed] = useState(myContext.RSAKeyGenState.q);
 
 
 
+  async function getValueFor(key) {
+    let result = await SecureStore.getItemAsync(key);
+    if (result) {
+      //alert("🔐 Here's your value 🔐 \n" + result);
+      console.log("🔐 Here's your value 🔐 \n" + result)
+      return result;
+    } else {
+      alert('No values stored under that key.');
+    }
+    
+  }
+
+  async function getPublicKey() {
+    let result = await API.graphql({
+      query: getUser, 
+      variables: {id: myContext.userID}
+    })
+    return result.data.getUser.publicKey;
+  }
+
+  //{ query: queries.getTodo, variables: { id: 'some id' }}
 
   useEffect(() => {
-      if (exp == 0){
-          setPConfirmed('')
-          setQConfirmed('')
-      } else {
+    console.log("exp in its own useEffect: ", exp);
+      //myContext.setPrimeExponent(exp);
+      if (exp > 0) {
       const pCand = generatePrime(exp, myContext.useBigIntegerLibrary)
       setPConfirmed(pCand);
       let qCand = generatePrime(exp, myContext.useBigIntegerLibrary)
@@ -66,14 +89,24 @@ export default function TestRSAKeyScreen({ navigation }) {
   useEffect( () => {
     setDefaultPubExp();
     if(isDefault){
-        changePublicKey();
+        changePublicKey(); // change publicKey in Context and as state variable
         //setPrivateKey();
-    }
+    } 
+    // should publicKey be changed when !isDefault?
+    /*else {
+      let publicKey = myContext.publicKey
+      publicKey.mod = pConfirmed * qConfirmed;
+      myContext.setPublicKey(publicKey);
+    }*/
+    console.log("publicKey updated: ", publicKey);
+    myContext.setPrimes({p: pConfirmed, q: qConfirmed})
+    
 
   }, [pConfirmed, qConfirmed])
 
 
   useEffect( () => {
+    console.log("in verified public Exponent: p: ", pConfirmed, " q: ", qConfirmed)
     changePublicKey();
     //setPrivateKey();
 }, [verifiedPubExp])
@@ -86,6 +119,41 @@ useEffect(() =>{
 }
 , [publicKey])
 
+
+useEffect(()=> {
+  console.log("pConfirmed, qConfirmed, exp: ", pConfirmed, qConfirmed, exp)
+}, [pConfirmed])
+
+
+useEffect(() => {
+  const state = {p: pConfirmed, q: qConfirmed, 
+    isDefault, isRandom, verifiedPubExp}
+    myContext.setRSAKeyGenState(state)
+    console.log("RSAKeyGenState changed: ", state);
+}
+  , [pConfirmed, qConfirmed, isRandom, isDefault, verifiedPubExp])
+
+
+/*useFocusEffect(
+    useCallback(() => {
+      setP(myContext.RSAKeyGenState.p)
+
+      return () => {
+
+          updateContextVariables();
+        // Do something when the screen is unfocused
+        // Useful for cleanup functions
+      };
+    }, [])
+  );*/
+
+
+const updateContextVariables = () => {
+  const state = {p: pConfirmed, q: qConfirmed, 
+  isDefault, isRandom, verifiedPubExp}
+  console.log("state: ", state)
+  myContext.setRSAKeyGenState(state);
+}
 
 const changePubExp = pubExp => {
     setPubExp(pubExp);
@@ -103,10 +171,11 @@ const toggleRandomSwitch = () => {
   setIsRandom(!isRandom);
   setP(null)
   setQ(null)
+  setPubExp(null)
 }
 
   const setDefaultPubExp = () => {
-      const phi = (p-1) * (q-1);
+      const phi = (pConfirmed-1) * (qConfirmed-1);
       const pow16 = Math.pow(2, 16)
       if( phi > pow16){
           //console.log("setting to large default")
@@ -174,6 +243,7 @@ const checkAndUsePrimes = () => {
 
 const changePublicKey = () => {
     console.log("verified public exp: ", verifiedPubExp)
+    console.log(qConfirmed, pConfirmed)
     if(verifiedPubExp != ''){
         myContext.setPublicKey({exp: verifiedPubExp, mod: pConfirmed*qConfirmed})
         setPublicKey({exp: verifiedPubExp, mod: pConfirmed*qConfirmed})
@@ -182,7 +252,7 @@ const changePublicKey = () => {
         setPublicKey({})
     }
     // 
-    console.log("public key: ", {exp: verifiedPubExp, mod: pConfirmed*qConfirmed})
+    console.log("new public key: ", {exp: verifiedPubExp, mod: pConfirmed*qConfirmed})
 }
 
 const setPrivateKey = () => {
@@ -198,11 +268,11 @@ const setPrivateKey = () => {
             console.log("GCD not equal to 1");
         } else {
             if (inverse < 0){
-                if (typeof(inverse) == 'bigint') console.log("inverse is bigint")
+                //if (typeof(inverse) == 'bigint') console.log("inverse is bigint")
                 inverse += BigInt(phi);
             } 
         }
-        console.log("inverse: ", inverse, "mod: ", pConfirmed*qConfirmed);
+        console.log("new Private Key: ,exp ", Number(inverse), " mod: ", (pConfirmed*qConfirmed) );
         myContext.setPrivateKey({ exp: Number(inverse), mod: (pConfirmed*qConfirmed) });
     } else {
         myContext.setPrivateKey({})
@@ -494,6 +564,8 @@ const checkAndUsePubExp = () => {
 
     
       <ButtonRow navigation={navigation} />
+
+      <Divider style={{ width: "100%", margin: 10 , marginTop: 0}} />
        {/*} <View style={{
           flexDirection: 'center',
           justifyContent: 'center', width: 150,
@@ -501,6 +573,27 @@ const checkAndUsePubExp = () => {
         }}>
           <Button label='show explanation' onPress={() => { myContext.setExplVisible(true) }} />
     </View>*/}
+    <View style = {{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <Button style = {{width: '45%'}} label = 'use my private key' onPress={() => {
+          getValueFor("privateKey").then( (res) => {
+            console.log("result: ", res)
+            res = JSON.parse(res)
+            console.log("modulus: ", res.modulus)
+            navigation.navigate("RSA", {key: {mod: res.modulus, exp: res.exponent}, usePersonalKey: true})})
+          //console.log()
+          //alert("exp: " + privateKey.exponent)}
+        }}
+         />
+         <Button style = {{width: 150}}label = 'use my public key' onPress={() => {
+          getPublicKey().then( (res) => {
+            console.log("result: ", res)
+            navigation.navigate("RSA", {key: {mod: res.modulus, exp: res.exponent}, usePersonalKey: true})
+
+          //console.log()
+          //alert("exp: " + privateKey.exponent)}
+        })}}
+         />
+      </View>
       </ScrollView>
       {/*</SafeAreaView>*/}
     </View>

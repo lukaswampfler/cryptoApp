@@ -276,12 +276,15 @@ export default function App() {
   const [publicKeyID, setPublicKeyID] = useState(null);
   const [privateKey, setPrivateKey] = useState({ exp: 5, mod: 143 })
   const [privateKeyID, setPrivateKeyID] = useState(null)
-  const [primes, setPrimes] = useState({ p: 2, q: 3 })
+  const [primes, setPrimes] = useState({ p: '2', q: '3' })
   const [exp, setExp] = useState(3)
   const [RSAInputSwitchisDecimal, setRSAInputSwitchisDecimal] = useState(true);
   const [introVisible, setIntroVisible] = useState(false);
   const [explVisible, setExplVisible] = useState(false);
   const [secretContainer, setSecretContainer] = useState({});
+  const [RSAKeyGenState, setRSAKeyGenState] = useState({
+    p: '2', q: '3', isRandom: true, isDefault: true, verifiedPubExp: 1, primeExponent: 0
+  });
 
 
   const rsa = { isEncrypted: false, m: '', exp: '', n: '' };
@@ -314,6 +317,7 @@ export default function App() {
     explVisible: explVisible,
     secretContainer: secretContainer,
     lastRiddle: lastRiddle,
+    RSAKeyGenState: RSAKeyGenState,
     setUserName,
     setUserID,
     setPassword,
@@ -331,6 +335,7 @@ export default function App() {
     setExplVisible,
     setSecretContainer,
     setLastRiddle,
+    setRSAKeyGenState,
   };
 
   async function signOut() {

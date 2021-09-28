@@ -8,7 +8,7 @@ import Title from '../components/Title';
 import { IntroModal } from '../utils/Modals';
 import { caesarEncrypt, isInteger } from '../utils/caesarMath';
 import { useFormik } from 'formik';
-
+import ClearButton from '../components/ClearButton';
 
 import { CaesarKeyInputScheme } from '../utils/InputTests';
 
@@ -23,7 +23,7 @@ export default function CaesarScreen({ navigation }) {
 
     const [text, setText] = useState('');
     const [secret, setSecret] = useState('');
-    const [key, setKey] = useState('r');
+    const [key, setKey] = useState('');
 
 
     const changeText = text => {
@@ -88,7 +88,7 @@ export default function CaesarScreen({ navigation }) {
             }
             myContext.setCiphers(ciphers);
             setKey(parseInt(values.key));
-            console.log("Do the caesar encryption .... using key: ", values.key);
+            //console.log("Do the caesar encryption .... using key: ", values.key);
             setSecret(caesarEncrypt(text, values.key));
         }
     });
@@ -111,6 +111,7 @@ export default function CaesarScreen({ navigation }) {
                 }}> 
                 Input </Text>
                 </View>
+                <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                 <TextInput
                     width={280}
                     multiline={true}
@@ -127,6 +128,8 @@ export default function CaesarScreen({ navigation }) {
                     onBlur={() => { }}
                     value={text}
                 />
+            <ClearButton setInput={setText} setKey = {setKey} defaultKey = {0}/>
+                </View>
 <Divider style={{ width: "100%", margin: 10 }} />
 
                 <View style = {{marginTop: 20, marginLeft: 10, marginRight: 10, marginBottom: 10}}>
@@ -145,7 +148,8 @@ export default function CaesarScreen({ navigation }) {
                     returnKeyType='next'
                     returnKeyLabel='next'
                     //onChangeText={formikKey.handleChange('key')}
-                    onChangeText= {changeKey}/>
+                    onChangeText= {changeKey}
+                    value = {key}/>
                     {/*onBlur={formikKey.handleBlur('key')}
                     //error={formikKey.errors.key}
                     //touched={formikKey.touched.key}
