@@ -35,9 +35,9 @@ export default function SDESScreen({ route, navigation }) {
 
   useEffect(() => {
     console.log("route params", route);
-    if (route != undefined) {
+    /*if (route != undefined) {
       setMessage(route.params.message)
-    }
+    }*/
   }, [])
 
   useEffect(() => {
@@ -81,7 +81,7 @@ export default function SDESScreen({ route, navigation }) {
     if (route === undefined) {
       return '';
     } else {
-      return route.params.message;
+       return route.params.message;
     }
   }
 

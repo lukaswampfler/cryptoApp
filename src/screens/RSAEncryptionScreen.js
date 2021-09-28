@@ -35,6 +35,9 @@ export default function RSAEncryptionScreen({ route, navigation }) {
     // get the context
     const myContext = useContext(AppContext);
 
+    useEffect(() => {
+        console.log("route params in RSA encryption: ", route.params);
+    }, [])
 
     /*let expInitialValue; 
     useEffect(() => {
@@ -88,11 +91,16 @@ export default function RSAEncryptionScreen({ route, navigation }) {
     }
     //... and the message
     const getMessageInitialValue = () => {
+       if (route.params.fromRiddles){
+            return route.params.message
+        } else {
         let m = myContext.ciphers.rsa.m;
         if (m.indexOf('0b') == 0) {
             return m.slice(2);
         }
         return m;
+    }
+    //return "123";
     }
 
     const toggleRSAInputSwitch = (value) => {
@@ -100,6 +108,12 @@ export default function RSAEncryptionScreen({ route, navigation }) {
         myContext.setRSAInputSwitchisDecimal(value);
         //State changes according to switch
     };
+
+    //just for tests:
+    useEffect(() => {
+        console.log("route params", route);
+        
+      }, [])
 
     // Submission function 
     const RSASubmit = values => {

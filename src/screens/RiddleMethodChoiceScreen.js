@@ -50,6 +50,9 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
     const titleLevel = "Choose your level!"
     const titleLanguage = "Choose your language!"
 
+    useEffect(()=>{
+        console.log(selectedMethod)
+    },[selectedMethod])
     
     const method = "Your choice"
     const introText = "Please select a language in any case, even if your message is just a number.\n"
@@ -57,9 +60,12 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
     const introRSA = "- RSA easy is the result of the encryption using YOUR public key\n- RSA hard: you will get the public key and the result, primes not larger than 1000\n- RSA extreme: the same with larger primes - good luck!"
     const intro = introText + '\n' + introSDES + '\n' + introRSA;
 
-    const enabled = selectedMethod && (selectedMethod.length != 0  && selectedLevel.length != 0 && selectedLanguage.length != 0) || (selectedMethod == 'rsa' && selectedLevel.length != 0)  || (selectedMethod == 'sdes' && selectedLevel.length != 0) ;
-
-    const languageDisabled = ['rsa', 'sdes'].includes(selectedMethod);
+    const languageDisabled = selectedMethod == null || ['rsa', 'sdes'].includes(selectedMethod);
+    
+    const enabledWithLanguage = (selectedMethod && selectedLevel && selectedLanguage) &&  (selectedMethod.length != 0 && selectedLevel.length != 0 && selectedLanguage.length!= 0) 
+    const enabledWithoutLanguage = (selectedMethod && selectedLevel) &&  (['rsa', 'sdes'].includes(selectedMethod)) ;
+    const buttonEnabled =   enabledWithLanguage || enabledWithoutLanguage;
+    
 
     //console.log("enabled: ", enabled)
     //console.log(selectedMethod, selectedLevel, selectedLanguage)
@@ -119,6 +125,9 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
         />
         </View>
 
+
+{!languageDisabled &&
+<View>
 <Title title ={titleLanguage}/>
 
 <View style = {{margin: 15, borderColor: 'green'}}>
@@ -136,10 +145,12 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
               }}*/
 />
 </View>
+</View>
+}
 <View style = {{margin: 20, width : '40%'}}>
-<Button disabled={!enabled} label='create secret message' onPress={() => { 
+<Button disabled={!buttonEnabled} label='create secret message' onPress={() => { 
     const details = {
-        allowHints: true, 
+        allowHints: false, 
         isRandom: false,
         language: selectedLanguage,
         method: selectedMethod, 

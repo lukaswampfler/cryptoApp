@@ -46,6 +46,7 @@ import RiddlesFromServerScreen from './src/screens/RiddlesFromServerScreen';
 import { SafeAreaView } from 'react-native';
 import RiddleMethodChoiceScreen from './src/screens/RiddleMethodChoiceScreen';
 import RiddleDisplayScreen from './src/screens/RiddleDisplayScreen';
+import EncryptedMessageMethodChoiceScreen from './src/screens/EncryptedMessageMethodChoiceScreen';
 
 
 
@@ -196,6 +197,9 @@ const RiddleNavigator = props => {
       name = "RiddlesFromServer"
       component={RiddlesFromServerScreen}
       />
+      <RiddleStack.Screen 
+      name="EncryptedMessageMethodChoice" 
+      component={EncryptedMessageMethodChoiceScreen} />
     </RiddleStack.Navigator>
   );
 };
@@ -289,6 +293,7 @@ export default function App() {
 
   const [useBigIntegerLibrary, setUseBigIntegerLibrary] = useState(false);
   const [isFirstTime, setIsFirstTime] = useState(true);
+  const [lastRiddle, setLastRiddle] = useState({})
 
 
   const userSettings = {
@@ -308,6 +313,7 @@ export default function App() {
     introVisible: introVisible,
     explVisible: explVisible,
     secretContainer: secretContainer,
+    lastRiddle: lastRiddle,
     setUserName,
     setUserID,
     setPassword,
@@ -324,6 +330,7 @@ export default function App() {
     setIntroVisible,
     setExplVisible,
     setSecretContainer,
+    setLastRiddle,
   };
 
   async function signOut() {

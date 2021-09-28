@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, Dimensions, TextInput, TouchableWithoutFeedback, Keyboard, StyleSheet } from 'react-native';
 import Button from '../components/Button';
 import { Divider } from 'react-native-elements';
@@ -20,7 +20,7 @@ const alphaShort = 'ENIRSTADHULCGMO'.split('');
 
 
 
-export default function PermutationAnalysisScreen({ navigation }) {
+export default function PermutationAnalysisScreen({ route,  navigation }) {
 
 
     const myContext = useContext(AppContext);
@@ -29,11 +29,18 @@ export default function PermutationAnalysisScreen({ navigation }) {
     const [decypheredMessage, setDecypheredMessage] =useState('');
     const [secretHasAlpha, setSecretHasAlpha] = useState(false);
     const [isDecyphered, setIsDecyphered] = useState(false);
-    const [alphaSecret, setAlphaSecret]= useState('');
+    const [alphaSecret, setAlphaSecret]= useState([]);
     const [showBarChart, setShowBarChart] = useState(false);
     const [inverseDict, setInverseDict] = useState({})
 
 
+
+    useEffect(() => {
+      if (route.params){
+        /* was: setSecret(route.params.message) */
+          changeText(route.params.message)
+      }
+  }, [])
 
 
     const changeText = (secret) => {
@@ -48,6 +55,7 @@ export default function PermutationAnalysisScreen({ navigation }) {
         const mostFrequentLetters = getMostFrequent(cleanedText, alphaShort.length);
         //console.log("most frequent: ", mostFrequentLetters);
         const newAlphaData = Object.keys(mostFrequentLetters)
+        console.log("newAlphaData", newAlphaData);
         setAlphaSecret(newAlphaData);
         setSecret(secret)
         const decryptionDict = createDecryptionDict(alphaShort, newAlphaData) ;
@@ -124,6 +132,7 @@ export default function PermutationAnalysisScreen({ navigation }) {
     };
 
     const textList  = secret.split('').map((char) => {
+      console.log(alphaSecret);
         //TODO: define knownClearLetters
         //const knownClearLetters = 'abcdul'
         const knownSecretLetters = alphaSecret.join('').toLowerCase();
@@ -164,6 +173,7 @@ export default function PermutationAnalysisScreen({ navigation }) {
                 returnKeyLabel='next'
                 onChangeText={changeText}
                 onBlur={() => { }}
+                value = {secret}
             />
 
 
@@ -243,9 +253,9 @@ export default function PermutationAnalysisScreen({ navigation }) {
         <Text width={100} style={{fontSize:20}}> Most frequent secret letters (drag to switch)</Text>
         <Divider/>
         </View>
-        <Text width={100} style={{fontSize:18}}> partially decrypted String</Text>
+        {/*<Text width={100} style={{fontSize:18}}> partially decrypted String</Text>
         <Text width={100} style={{fontSize:16}}> {decypheredMessage}</Text>
-        <Divider/>
+        <Divider/>*/}
         <Text width={100} style={{fontSize:18}}> Decyphered Message: <Text style={{color: '#0000ff'}}>known </Text><Text style={{color: '#ff0000'}}>unknown </Text></Text>
         <View style= {{flexDirection: 'row'}}><Text >{textList}</Text></View>
 

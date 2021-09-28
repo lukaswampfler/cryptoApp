@@ -77,6 +77,12 @@ export default function PermutationScreen({ navigation }) {
             <ScrollView style={{ flex: 1 , margin: 10}}>
                 <Title title={method} />
                 <IntroModal text={introText} method={method} />
+                <View style={{marginTop: 10, marginLeft: 10, marginBottom: 5}}>
+                <Text style={{
+                    fontSize: 20
+                }}> Input</Text>
+                </View>
+                
                 <TextInput
                     width={280}
                     multiline={true}
@@ -99,9 +105,10 @@ export default function PermutationScreen({ navigation }) {
                 <Text>
                     {key}
                 </Text>  */} 
+<Divider style={{ width: "100%", margin: 10 }} />
 
                 
-                <Text style={{ marginTop: 30, marginBottom: 20 }}> <Text style ={{fontWeight: 'bold'}}>  KEY: </Text>All the letters of the alphabet (above) are permuted in some way (below)</Text>
+                <Text style={{ marginTop: 30, marginBottom: 20 }}> <Text style ={{fontSize: 20}}>  KEY: </Text>All the letters of the alphabet (above) are permuted in some way (below)</Text>
 
                 {/*<View style={styles.container}>
                     <Table borderStyle={{borderWidth: 1}}>
@@ -163,6 +170,7 @@ export default function PermutationScreen({ navigation }) {
                     <Button label='use this key' onPress={encrypt} />
                   
             </View>*/}
+            <Divider style={{ width: "100%", margin: 10 }} />
 
                 <View style={{
                     flexDirection: 'column',
@@ -170,7 +178,11 @@ export default function PermutationScreen({ navigation }) {
                     marginBottom: 10,
                     marginLeft: 10,
                 }}>
-                    <Text> Encrypted message: </Text>
+                   <View style={{marginTop: 10, marginLeft: 10, marginBottom: 5}}>
+                <Text style={{
+                    fontSize: 20
+                }}> Output</Text>
+                </View>
                     <Text
                         style={{ padding: 10, fontSize: 25, borderColor: 'gray', borderWidth: 1, width: 280 }}
                         selectable>

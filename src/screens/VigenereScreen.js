@@ -15,6 +15,8 @@ import { IntroModal } from '../utils/Modals';
 import styles from './styles'
 
 
+const BACKGROUND_COLOR = 'rgb(210, 220, 250)'
+
 const encryptVigenere = () => {
     console.log("Vigenere encryption in progress")
 }
@@ -22,7 +24,7 @@ const encryptVigenere = () => {
 
 
 
-export default function VigenereScreen({ navigation }) {
+export default function VigenereScreen({ route, navigation }) {
     const myContext = useContext(AppContext);
     
 
@@ -34,6 +36,7 @@ export default function VigenereScreen({ navigation }) {
     const ref = useRef(key);
 
     const toggleEncryptionSwitch = (value) => {
+        console.log(BACKGROUND_COLOR);
         //To handle switch toggle
         setIsEncrypting(!isEncrypting);
         //State changes according to switch
@@ -90,6 +93,15 @@ export default function VigenereScreen({ navigation }) {
     useEffect(() => {
         const message = myContext.ciphers.vigenere.message;
         if (typeof message != undefined) setText(message)
+    
+        if (route.params){
+                const {message, key} = route.params
+                console.log(message, key)
+                setSecret(message)
+                setKey(key)
+                setIsEncrypting(false)
+                setText(vigenereDecrypt(message, key)); 
+        }
     }, [])
 
     useEffect(() => {
@@ -128,12 +140,19 @@ export default function VigenereScreen({ navigation }) {
             <ScrollView style={{ flex: 1 , margin: 10}}>
                 <Title title={method} />
                 <IntroModal text={introText} method={method} />
+                <View style={{marginTop: 10, marginLeft: 10, marginBottom: 5}}>
+                <Text style={{
+                    fontSize: 20
+                }}> 
+                {isEncrypting? 'Input' : 'Output'}  </Text>
+                </View>
+                <View style = {{width : '70%', backgroundColor: isEncrypting? BACKGROUND_COLOR: null}}>
                 <TextInput
-                    width={280}
+                    width='100%'
                     editable = {isEncrypting}
                     multiline={true}
                     textAlignVertical='top'
-                    placeholder='Enter plain text message'
+                    placeholder='plain text message'
                     autoCapitalize='none'
                     autoCorrect={false}
                     style={{ height: 80, borderColor: 'gray', borderWidth: 1 }}
@@ -145,6 +164,10 @@ export default function VigenereScreen({ navigation }) {
                     onBlur={() => { }}
                     value={text}
                 />
+                </View>
+
+                <Divider style={{ width: "100%", margin: 10 }} />
+
 
             <View style={{
                     flexDirection: 'row',
@@ -155,12 +178,19 @@ export default function VigenereScreen({ navigation }) {
                     justifyContent: 'space-around',
                     marginTop: 10,
                     marginBottom: 10,
+                    width: '35%'
                 }}>
-                <Text style={{ marginTop: 20 }}> Enter Key.</Text>
+                <Text style={{
+                    fontSize: 20, marginBottom: 10
+                }}> 
+                Key (letters a-z)  </Text>
+                
+
                 <NumInput
                     //icon='pinterest'
-                    width={280}
-                    placeholder='Enter Vigenere key'
+                    bgColor = {BACKGROUND_COLOR}
+                    width='100%'
+                    placeholder='Vigenere key'
                     autoCapitalize='none'
                     keyboardType='default'
                     keyboardAppearance='dark'
@@ -174,6 +204,7 @@ export default function VigenereScreen({ navigation }) {
                     //value={formikKey.values.key} 
                     value={key}
                     />
+                    
                    </View> 
                    <View style={{
                     flexDirection: 'column',
@@ -202,7 +233,7 @@ export default function VigenereScreen({ navigation }) {
                     <Button label='send message' onPress={sendMessage} />
                     <Button label='Decrypt' onPress={decrypt} />
             </View>*/}
-
+<Divider style={{ width: "100%", margin: 10 }} />
 
                 <View style={{
                     flexDirection: 'row',
@@ -219,13 +250,19 @@ export default function VigenereScreen({ navigation }) {
             </Text>*/}
                     
                 </View> 
-                <Text>Secret message </Text>
+                <View style={{marginTop: 10, marginLeft: 10, marginBottom: 5}}>
+                <Text style={{
+                    fontSize: 20
+                }}> 
+                {isEncrypting? 'Output' : 'Input'}  </Text>
+                </View>
+                <View style={{width: '70%', backgroundColor: (!isEncrypting)? BACKGROUND_COLOR: null}}>
                 <TextInput
-                        width={280}
+                        width='100%'
                         editable = {!isEncrypting}
                         multiline={true}
                         textAlignVertical='top'
-                        placeholder='Enter secret message'
+                        placeholder='secret message'
                         autoCapitalize='none'
                         autoCorrect={false}
                         style={{ height: 80, borderColor: 'gray', borderWidth: 1 }}
@@ -236,6 +273,7 @@ export default function VigenereScreen({ navigation }) {
                         onChangeText={changeSecret}
                         onBlur={() => { }}
                         value={secret}/>
+                    </View>    
                    
                    <View style={{
                     flexDirection: 'row',

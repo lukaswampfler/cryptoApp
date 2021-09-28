@@ -11,7 +11,7 @@ import {
 //import data from '../data/data'
 
 
-import { createFrequencyDict, sortDictionaryByKey, onlyNonAlpha , kasiskiTest, germanFreq, createData, getFirstLetter, factorize} from '../utils/frequencyAnalysis';
+import { createFrequencyDict, sortDictionaryByKey, calculateKeyCharacter , kasiskiTest, germanFreq, createData, getFirstLetter, factorize} from '../utils/frequencyAnalysis';
 import CarouselCards from '../components/CarouselCards';
 
 const screenWidth = 0.9 * Dimensions.get("window").width;
@@ -21,16 +21,16 @@ export const ITEM_WIDTH = Math.round(SLIDER_WIDTH )
 
 
 
-export default function VigenereAnalysisScreen({ navigation }) {
-
+export default function VigenereAnalysisScreen({ route, navigation }) {
     const [secret, setSecret] = useState('');
     const [kasiskiLength, setKasiskiLength] = useState(0)
-    const [chosenLength, setChosenLength] = useState(1)
+    const [chosenLength, setChosenLength] = useState(0)
     const [data, setData] = useState([])
     const [analysisDone, setAnalysisDone] = useState(false)
     const [mostFrequentLetter, setMostFrequentLetter] = useState('e')
     const [factors, setFactors] = useState([])
     const [factorsCalculated, setFactorsCalculated] = useState(false);
+    const [likelyKeyWord, setLikelyKeyWord] = useState('')
 
    
 
@@ -72,8 +72,8 @@ export default function VigenereAnalysisScreen({ navigation }) {
             
       <Text style={styles.header}>{data.title}</Text>
       <Text style ={styles.body}> most frequent letter in Dictionary: {mostFreqInDict} </Text>
-      <Text style ={styles.body}> most frequent letter in Alphabet: {mostFreqInAlph} </Text>
-      {/*<Text style ={styles.body}> most likely corresponding letter in secret key: {calculateKeyCharacter(mostFreqInDict, mostFreqInAlph)} </Text>*/}
+      {/*<Text style ={styles.body}> most frequent letter in Alphabet: {mostFreqInAlph} </Text>*/}
+      <Text style ={styles.body}> most likely corresponding letter in secret key: {calculateKeyCharacter(mostFreqInDict, mostFreqInAlph)} </Text>
     </View>
   );
 
@@ -82,10 +82,13 @@ export default function VigenereAnalysisScreen({ navigation }) {
     
 
     let likelyLength = 0
-    //let analysisDone = false;
 
-    
-    //let data = []
+
+    useEffect(() => {
+        if (route.params){
+            setSecret(route.params.message)
+        }
+    }, [])
 
     useEffect(() => {
         setFactors(factorize(kasiskiLength));
@@ -94,12 +97,25 @@ export default function VigenereAnalysisScreen({ navigation }) {
     }, [kasiskiLength])
 
 
-    useEffect( () => {console.log("Data: ", data)}, [data])
+    /*useEffect( () => {
+        console.log("Data: ", data)
+    }
+        , [data])*/
 
     useEffect(() => {
-        let frequencyDictionaries = createFrequencyDict(secret, chosenLength)
-        setData(createData(frequencyDictionaries, mostFrequentLetter));
-    }, [secret])
+        if(chosenLength > 0){
+            let frequencyDictionaries = createFrequencyDict(secret, chosenLength)
+            const newData = createData(frequencyDictionaries, mostFrequentLetter)
+            setData(newData);
+            let candKeyWord = '';
+            console.log("newData", newData)
+            for (let i = 0; i < newData.length; i++){
+                candKeyWord += calculateKeyCharacter(newData[i].mostFrequentInDictionary, mostFrequentLetter)
+            }
+            setLikelyKeyWord(candKeyWord)
+    }
+
+    }, [secret, chosenLength])
 
     const changeText = text => {
         setSecret(text);
@@ -109,8 +125,13 @@ export default function VigenereAnalysisScreen({ navigation }) {
     const changeChosenLength = value => {
         const mostFrequentLetter = 'e';
         setChosenLength(value);
-        let frequencyDictionaries = createFrequencyDict(secret, value)
-        setData(createData(frequencyDictionaries, mostFrequentLetter));
+        //let frequencyDictionaries = createFrequencyDict(secret, value)
+        //setData(createData(frequencyDictionaries, mostFrequentLetter));
+        
+        //console.log("data: ", data)
+        
+
+
     }
 
     const handleAnalysis = () => {
@@ -122,6 +143,11 @@ export default function VigenereAnalysisScreen({ navigation }) {
         //setData(createData(frequencyDictionaries, mostFrequentLetter));
         //analysisDone = true;
         setAnalysisDone(true);
+    }
+
+    const goToVigenereDecryption = () => {
+        console.log("Navigating to Vigenere Decryption...")
+        navigation.navigate("Methods", {screen: "VIGENERE", params: {message: secret, key: likelyKeyWord}})
     }
 
     const renderItem = ({ item }) => (
@@ -183,6 +209,7 @@ export default function VigenereAnalysisScreen({ navigation }) {
                 returnKeyLabel='next'
                 onChangeText={changeText}
                 onBlur={() => { }}
+                value = {secret}
             />
 <View style = {{marginBottom: 20}}>
             <View style={{
@@ -198,9 +225,14 @@ export default function VigenereAnalysisScreen({ navigation }) {
          <Text key={key} style={{fontWeight: '200'}} > { item } </Text>)) }  
                 
 </View>
-                <View style={{flexDirection: 'row'}}>
+
+
+<View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+                <View style={{flexDirection: 'column', alignItems: 'center'}}>
                 <Text>Choose length of keyword:   </Text> 
-<TextInput
+
+<View style={{marginTop: 10}}>
+<TextInput 
                 width={60}
                 textAlignVertical='top'
                 placeholder='length'
@@ -214,14 +246,19 @@ export default function VigenereAnalysisScreen({ navigation }) {
                 onChangeText={changeChosenLength}
                 onBlur={() => { }}
             />
+           </View>  
 </View>
-
+<View >
+<Button label='Go to decryption' onPress={goToVigenereDecryption} width={140}/>
+</View>
+</View>
     </View>
    
                    
 
     </TouchableWithoutFeedback>
     <View style = {{height: '50%'}}>
+    { analysisDone && <Text>Likely key word: {likelyKeyWord} </Text>}
     { analysisDone ?
                         <FlatList removeClippedSubviews={false}
                             data={data}

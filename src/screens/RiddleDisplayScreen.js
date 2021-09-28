@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react'
-import { Platform, View, ScrollView, Text, FlatList, Switch, SafeAreaView, Dimensions } from 'react-native'
+import React, { useState, useEffect, useContext, useCallback } from 'react'
+import { Platform, View, ScrollView, Text, TouchableOpacity, Switch, SafeAreaView, Dimensions } from 'react-native'
+import { useFocusEffect } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
 import Title from '../components/Title';
 import Button from '../components/Button';
@@ -9,6 +10,7 @@ import { calculateKeyPair, generatePrime } from '../utils/RSAMath';
 import AppContext from '../components/AppContext';
 import { getRandomKeys } from '../utils/sdesMath';
 import { TextInput } from 'react-native-gesture-handler';
+import { encryptPermutation } from '../utils/permutationMath';
 
 const choose = (array) => {
     const ind = Math.floor(Math.random()*array.length);
@@ -24,13 +26,16 @@ export default function RiddleDisplayScreen({ route,  navigation }) {
     const myContext = useContext(AppContext);
 
     const [secretMessage, setSecretMessage] = useState(null);
+    const [allowHints, setAllowHints] = useState(null);
     const [encryptedMessage, setEncryptedMessage] = useState(null);
     const [method, setMethod] = useState(null);
+    const [language, setLanguage] = useState(null);
+    const [level, setLevel] = useState(null); 
     const [key, setKey] = useState(null);
     const [enterSolution, setEnterSolution] = useState(false);
-    const [solution, setSolution] = useState('');
     const [clearText, setClearText] = useState('')
     const [showSolution, setShowSolution] = useState(false);
+    const [lastRiddle, setLastRiddle] = useState({})
 
 
     //let secretContainer = {message: secretMessage, method: 'keine', secret: 'secret'}; 
@@ -42,20 +47,39 @@ export default function RiddleDisplayScreen({ route,  navigation }) {
         setEnterSolution(!enterSolution);
     }
 
-    const changeSolution = (text) => {
-        setSolution(text);
-        //console.log(solution);
-    }
 
     const checkSolution = () => {
         alert(clearText)
     }
 
+    /*const changeLastRiddle = () => {
+        console.log("change last riddle is run...")
+        console.log("encryptedMessage: ", encryptedMessage )
+        let newLast = {encrypted: encryptedMessage, method: method, clearText: clearText, key: key}
+        setLastRiddle(newLast);
+        myContext.setLastRiddle(newLast);
+    }*/
+
+    const showLastRiddle = () => {
+        console.log("in showLastRiddle: ", myContext.lastRiddle)
+        if (myContext.lastRiddle == {}){
+            alert("cannot access last riddle")
+        } else {
+            setEncryptedMessage(myContext.lastRiddle.message)
+            setMethod(myContext.lastRiddle.method)
+            setClearText(myContext.lastRiddle.clearText)
+            setKey(myContext.lastRiddle.key)}
+            setLevel(myContext.lastRiddle.level)
+            setLanguage(myContext.lastRiddle.language)
+        
+    }
+
+
     const showKey = () => {
-        if (details.method == 'rsa'){
+        if (method == 'rsa'){
             //console.log(key.private)
             alert("private exponent: "+ Number(key.private.exp))
-        } else if (details.method == 'sdes') {
+        } else if (method == 'sdes') {
             //console.log(key)
             alert('k1: ' + key.key1 + '\nk2: ' + key.key2)
         } else {
@@ -75,6 +99,15 @@ export default function RiddleDisplayScreen({ route,  navigation }) {
                 details.isText = true
             }
     }
+
+// just to test.
+/*    useEffect(() => {
+        console.log("encrypted message changed: ...", encryptedMessage)
+        //let newLast = {encrypted: encryptedMessage, method: method, clearText: clearText, key: key}
+        //setLastRiddle(newLast);
+        //myContext.setLastRiddle(newLast);
+    }, [encryptedMessage])*/
+
 
     async function getResponse(languageShort){
         const API = 'https://' + languageShort + '.wikipedia.org/w/api.php?action=query&generator=random&grnnamespace=0&prop=extracts&exchars=1000&explaintext&utf8=&format=json';
@@ -123,8 +156,6 @@ const setContainer = () => {
             //key = keyPair.public;
 
         }
-
-        // was: details.rsaKey = key;
         details.rsaKey = key;
         details.useBigIntegerLibrary = myContext.useBigIntegerLibrary;
         secretContainer = getSecretContainer(details)
@@ -164,37 +195,62 @@ const setContainer = () => {
     } 
     setClearText(secretContainer.clear)
     //myContext.setSecretContainer(secretContainer);
-    
-        
     }
 
-    
+    let details;
 
-    const {details} = route.params;
+
     const title = "I challenge you to decrypt the message below!";
-    if (details.isRandom){
+    /*if (details.isRandom){
         console.log("getting 10 random messages from server, render them in Flatlist")
         details.method = 'random';
-    }
+    }*/
 
     useEffect( () => {
+        details = route.params.details;
+        console.log("Riddle display details: ", details)
+        setLevel(details.level)
+        setLanguage(details.language)
+        setMethod(details.method)
+        setAllowHints(details.allowHints);
         // generate message for undefined method
         if (details.method == undefined){   
-            alert("We are choosing method, level and language (if sensible)")
+            //alert("We are choosing method, level and language (if sensible)")
             const methodsChoice = ['rsa', 'sdes', 'caesar', 'vigenere', 'permutation' ]
-            //const methodsChoice = ['sdes']
+            //const methodsChoice = ['rsa']
             const method = choose(methodsChoice);
             const level = choose(['easy', 'hard', 'extreme']);
-            const language = choose(['english', 'german']);
-            console.log("we chose for you: ", method, level, language);
-            details.language = language;
+            //console.log("we chose for you: ", method, level);
             details.method = method;
             details.level = level;
+            setMethod(method);
+            setLevel(level);
+            if(!(['rsa', 'sdes'].includes(method))){
+                const language = choose(['english', 'german']);
+                details.language = language;
+                setLanguage(language);
+            }
+            
+            
             
     } 
     setContainer();
     
 }, []);
+
+
+/*useFocusEffect(
+    useCallback(() => {
+      // Do something when the screen is focused
+
+      return () => {
+
+          changeLastRiddle();
+        // Do something when the screen is unfocused
+        // Useful for cleanup functions
+      };
+    }, [])
+  );*/
 
 
     
@@ -208,16 +264,19 @@ const setContainer = () => {
              <Text style= {{fontWeight: 'bold'}} selectable>
                 {secretMessage}
             </Text>
-    </View>}*/}<ScrollView style={{height: ['rsa', 'sdes'].includes(details.method)? 0.1*HEIGHT : 0.2 * HEIGHT}}>
+    </View>}*/}<ScrollView style={{height: ['rsa', 'sdes'].includes(method)? 0.1*HEIGHT : 0.2 * HEIGHT}}>
             {encryptedMessage && <View style = {{marginLeft: 15, marginTop: 5, marginRight: 10}}>
+                <TouchableOpacity style = {{marginRight: 40, backgroundColor: '#ddd'}} 
+                onPress = {() =>{  navigation.navigate("EncryptedMessageMethodChoice", {message: encryptedMessage, method, level, clearText, key, fromRiddles: true})}}>
              <Text style= {{fontWeight: 'bold'}} selectable>
                 {encryptedMessage}
             </Text>
+            </TouchableOpacity>
             </View>}
 
             </ScrollView>
 
-            {(details.method == 'rsa' && key) && <View style = {{marginLeft: 15, marginTop: 5, marginRight: 10}}>
+            {(method == 'rsa' && key) && <View style = {{marginLeft: 15, marginTop: 5, marginRight: 10}}>
              <Text style= {{fontWeight: 'bold'}} selectable>
                 public exponent: {key.public.exp}, modulus:  {key.public.mod} 
             </Text>
@@ -225,11 +284,17 @@ const setContainer = () => {
             {/*<View style ={{margin: 10}}>
             {!(details.method == undefined) && <Text> You selected the {details.method} cipher</Text>}
 </View>*/}
+
+<View style = {{margin: 10}}>
+    <Text style = {{fontSize: 16, fontWeight: '500'}}> Click message to analyze! </Text>
+</View>    
+
             <View style ={{margin: 20}}>
-            {details.allowHints? <Button label='give me a hint!' onPress={() => { 
+            {allowHints? <Button label='give me a hint!' onPress={() => { 
                 //console.log(details)
-                alert((method=='rsa'? 'Try factorizing the modulus!': 'Method: ' + method))
-                }} /> : <Text > Hints are not allowed </Text>}
+                setAllowHints(false);
+                //alert((method=='rsa'? 'Try factorizing the modulus!': 'Method: ' + method))
+                }} /> : <Text > {method}  {level}  {language} </Text>}
             </View>
             <View style ={{margin: 20}}>
             <Switch
@@ -242,7 +307,11 @@ const setContainer = () => {
                 <Button label='show key' onPress={showKey} /> 
                 <Button label='show solution' onPress={checkSolution} /> 
              </View>   }
-             
+             <View style = {{flexDirection: 'column', justifyContent: 'flex-end'}}>
+                 <View width = '25%' style = {{margin: 30}}>
+             <Button label='show last riddle' onPress={showLastRiddle} />
+                </View>
+             </View>
           </SafeAreaView>  
 
     );

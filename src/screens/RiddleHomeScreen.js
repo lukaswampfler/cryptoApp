@@ -42,7 +42,7 @@ export default function RiddleHomeScreen({ navigation }) {
             <TouchableOpacity onPress={() => {
                 let details = {};
                 if (item.short == "knownCipher"){
-                    details.allowHints = true;
+                    details.allowHints = false;
                     details.isRandom = false;
                     navigation.navigate("MethodChoice", {details})
                 } else if (item.short == "unknownCipher"){

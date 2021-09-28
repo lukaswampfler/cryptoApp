@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, Dimensions, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { Divider } from 'react-native-elements';
 import Button from '../components/Button';
 import { caesarEncrypt, isInteger } from '../utils/caesarMath';
 import AppContext from '../components/AppContext';
@@ -19,7 +20,7 @@ const screenWidth = 0.9 * Dimensions.get("window").width;
 
 
 
-export default function CaesarAnalysisScreen({ navigation }) {
+export default function CaesarAnalysisScreen({ route, navigation }) {
 
     const myContext = useContext(AppContext);
     const [secret, setSecret] = useState('');
@@ -32,8 +33,14 @@ export default function CaesarAnalysisScreen({ navigation }) {
         setDecypheredMessage(caesarEncrypt(text, key))
     }
 
-    const changeKey = key => {
+    useEffect(() => {
+        //console.log(route.params)
+        if (route.params){
+            setSecret(route.params.message)
+        }
+    }, [])
 
+    const changeKey = key => {
         const keyAsInt = parseInt(key, 10);
         if (isNaN(keyAsInt) || !isInteger(key)){
             setIsDecyphered(false);
@@ -41,9 +48,11 @@ export default function CaesarAnalysisScreen({ navigation }) {
         }
         else{
             const decyph = caesarEncrypt(secret, key);
+            setKey(key);
             setDecypheredMessage(decyph)
             setIsDecyphered(true); 
     }
+
 
 
         /*if(isInteger(key)){
@@ -76,13 +85,13 @@ export default function CaesarAnalysisScreen({ navigation }) {
 
     const freqDict = createFrequencyDict(secret)["0"];
     const sorted = sortDictionaryByKey(freqDict)
-    console.log("Frequencies", sorted);
+    //console.log("Frequencies", sorted);
 
     const data = {
         labels: Object.keys(sorted),
         datasets: [{ data: Object.values(sorted) }]
     };
-    console.log(data)
+    //console.log(data)
 
 
     const chartConfig = {
@@ -104,7 +113,12 @@ export default function CaesarAnalysisScreen({ navigation }) {
             <TouchableWithoutFeedback onPress = {Keyboard.dismiss} accessible={false}>
                 <View>
                     <Title title={title}/>
-                <Text>Enter secret message: </Text>
+                    <View style={{marginTop: 10, marginLeft: 10, marginBottom: 5}}>
+                <Text style={{
+                    fontSize: 20
+                }}> 
+                 Input (secret message)</Text>
+                </View>
             <TextInput
                 width={280}
                 multiline={true}
@@ -118,9 +132,12 @@ export default function CaesarAnalysisScreen({ navigation }) {
                 returnKeyType='next'
                 returnKeyLabel='next'
                 onChangeText={changeText}
-                onBlur={() => { }}
+                value = {secret}
+                //onBlur={() => { }}
             />
           
+          <Divider style={{ width: "100%", margin: 10 }} />
+
             {(!onlyNonAlpha(secret)) && (<BarChart
                 style={{
                     marginVertical: 8,
@@ -137,29 +154,40 @@ export default function CaesarAnalysisScreen({ navigation }) {
 </TouchableWithoutFeedback>
 
 
-<View style={{flexDirection: 'row'}}>
-                <Text>Try the following key:  </Text> 
+<View style={{flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center'}}>
+<View style={{marginTop: 10, marginLeft: 10, marginBottom: 5}}>
+                <Text style={{
+                    fontSize: 20
+                }}> 
+                 Key (number)</Text>
+                </View>
 <TextInput
                 width={60}
                 textAlignVertical='top'
                 placeholder='key'
                 autoCapitalize='none'
                 autoCorrect={false}
-                style={{ height: 30, borderColor: 'gray', borderWidth: 1, marginRight: 30 }}
+                style={{ height: 30, borderColor: 'gray', borderWidth: 1, marginRight: 30 , marginLeft: 30}}
                 keyboardType='numeric'
                 keyboardAppearance='dark'
                 returnKeyType='next'
                 returnKeyLabel='next'
                 onChangeText={changeKey}
-                onBlur={() => { }}
             />
          {/*}  <Button label='Go' onPress={decypher} width={80} /> */}
 </View>
+<Divider style={{ width: "100%", margin: 10 }} />
+
 <TouchableWithoutFeedback onPress = {Keyboard.dismiss} accessible={false}>
 <View>
 {(isDecyphered && !(isNaN(parseInt(key, 10)))) ? 
 <View style ={{marginTop: 20}}> 
-    <Text style ={{fontWeight: '500'}}> The decyphered message is: </Text>
+<View style={{marginTop: 10, marginLeft: 10, marginBottom: 5}}>
+                <Text style={{
+                    fontSize: 20
+                }}> 
+                Output (decyphered message) </Text>
+                </View>
     <Text> {decypheredMessage} </Text>
 </View> :
 <Text> Please enter valid key above (integer number)! </Text>}

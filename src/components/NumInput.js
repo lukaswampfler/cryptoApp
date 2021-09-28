@@ -2,7 +2,7 @@ import React from 'react';
 import { TextInput as RNTextInput, View, StyleSheet, Text } from 'react-native';
 import { Entypo as Icon } from '@expo/vector-icons';
 
-export default function NumInput({ icon, error, touched, width, ...otherProps }) {
+export default function NumInput({ icon, error, touched, width, bgColor, ...otherProps }) {
   const validationColor = !touched ? '#223e4b' : error ? '#FF5A5F' : '#223e4b';
   return (
     <View
@@ -14,7 +14,8 @@ export default function NumInput({ icon, error, touched, width, ...otherProps })
         borderRadius: 8,
         borderColor: validationColor,
         borderWidth: StyleSheet.hairlineWidth,
-        padding: 8
+        padding: 8,
+        backgroundColor: bgColor
       }}
     >
       <View style={{ padding: 8 }}>

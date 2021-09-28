@@ -5,7 +5,7 @@ import {
   DrawerItemList,
   DrawerItem,
 } from '@react-navigation/drawer';
-import { StackActions } from '@react-navigation/native';
+import { StackActions, useNavigationState } from '@react-navigation/native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Auth } from 'aws-amplify';
 
@@ -16,6 +16,10 @@ import AppContext from '../components/AppContext';
 
 export default function RootDrawerContent(props) {
   const myContext = useContext(AppContext);
+
+  const collapseAndNavigateToTop = () => {
+    v  
+  }
 
   async function signOut() {
     try {
@@ -41,18 +45,16 @@ export default function RootDrawerContent(props) {
         />
         <DrawerItem
         label="Encryption"
-        onPress={() => {
-          props.navigation.closeDrawer()
-          props.navigation.dispatch(StackActions.popToTop());          
-          props.navigation.navigate("Methods")
-        }}
+        onPress={() => {props.navigation.closeDrawer()
+          props.navigation.dispatch(StackActions.popToTop());
+          props.navigation.navigate("Methods", {screen: 'MethodsHome'})  }}
         />
         <DrawerItem
         label="Cryptoanalysis"
         onPress={() => {
           props.navigation.closeDrawer()
           props.navigation.dispatch(StackActions.popToTop());          
-          props.navigation.navigate("Analysis")
+          props.navigation.navigate("Analysis", {screen: "AnalysisHome"})
         }}/>
         
         <DrawerItem

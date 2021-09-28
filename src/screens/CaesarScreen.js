@@ -103,6 +103,14 @@ export default function CaesarScreen({ navigation }) {
             <ScrollView style={{ flex: 1 , margin: 10}}>
                 <Title title={method}/>
                 <IntroModal text={introText} method={method} />
+                <View style = {{margin: 10}}>
+                <Text style={{
+                    fontSize: 20,
+                    marginTop: 20, 
+                    marginLeft: 10
+                }}> 
+                Input </Text>
+                </View>
                 <TextInput
                     width={280}
                     multiline={true}
@@ -119,7 +127,14 @@ export default function CaesarScreen({ navigation }) {
                     onBlur={() => { }}
                     value={text}
                 />
-                <Text style={{ marginTop: 30 }}> Enter Key.</Text>
+<Divider style={{ width: "100%", margin: 10 }} />
+
+                <View style = {{marginTop: 20, marginLeft: 10, marginRight: 10, marginBottom: 10}}>
+                <Text style={{
+                    fontSize: 20
+                }}> 
+                Key (number) </Text>
+                </View>
                 <NumInput
                     //icon='pinterest'
                     width={200}
@@ -147,10 +162,14 @@ export default function CaesarScreen({ navigation }) {
                 </View>*/}
 
 
-                <Text style={{marginTop: 20}}>
+<Divider style={{ width: "100%", margin: 10 }} />
 
-                    encrypted message:
-                    </Text>
+<View style = {{marginTop: 20, marginLeft: 10, marginRight: 10, marginBottom: 10}}>
+<Text style={{
+    fontSize: 20
+}}> 
+Output </Text>
+</View>
 
                 <View style={{
                     flexDirection: 'row',

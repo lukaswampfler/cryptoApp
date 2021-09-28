@@ -394,10 +394,10 @@ const checkAndUsePubExp = () => {
             error={formikExponent.errors.exp}
             touched={formikExponent.touched.exp}
     />  */}
-<View style ={{flexDirection: 'column', alignItems: 'center', marginTop: 5, backgroundColor: '#fff'}}>
+<View style ={{flexDirection: 'column', alignItems: 'center', marginTop: 5, backgroundColor: '#fff', width: '50%'}}>
 <RNPickerSelect style={pickerSelectStyles}
+            useNativeAndroidPickerStyle={false}
             onValueChange={(value) => setExp(value)}
-            //placeholder={{label :"Select number of digits", value: 1}}
             placeholder={{label :"Select number of digits", value: ''}}
             items={[
                 { label: '1', value: 1},
@@ -514,20 +514,22 @@ const checkAndUsePubExp = () => {
 const pickerSelectStyles = StyleSheet.create({
     inputIOS: {
       fontSize: 16,
+      backgroundColor: 'orange',
       paddingVertical: 12,
       paddingHorizontal: 10,
       borderWidth: 1,
-      borderColor: 'gray',
+      borderColor: 'black',
       borderRadius: 4,
       color: 'black',
       paddingRight: 30, // to ensure the text is never behind the icon
     },
     inputAndroid: {
       fontSize: 16,
+      backgroundColor: 'orange',
       paddingHorizontal: 10,
       paddingVertical: 8,
-      borderWidth: 0.5,
-      borderColor: 'purple',
+      borderWidth: 1,
+      borderColor: 'black',
       borderRadius: 8,
       color: 'black',
       paddingRight: 30, // to ensure the text is never behind the icon
