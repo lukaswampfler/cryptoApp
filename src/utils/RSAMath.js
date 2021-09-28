@@ -24,12 +24,12 @@ export function extendedEuclid(e, f, useBigIntegerLibrary) {
 export function isPrime(n, useBigIntegerLibrary) {
     //n = Number(n);
     //n = BigInt(n)
-    console.log("Number n in isPrime: ", n)
-    console.log("n is BigInt: ", typeof BigInt(n))
+    //console.log("Number n in isPrime: ", n)
+    //console.log("n is BigInt: ", typeof BigInt(n))
     // returns true if n is probably prime
     const MILLER_RABIN_ITERATIONS = 20;
     if(useBigIntegerLibrary){
-        console.log("before isProbablePrime call")
+        //console.log("before isProbablePrime call")
         return BigInt(n).isProbablePrime(MILLER_RABIN_ITERATIONS);
     } 
     //console.log("so far, so good.")
@@ -60,6 +60,7 @@ export function isPrime(n, useBigIntegerLibrary) {
     
 }
 export function generatePrime(exp, useBigIntegerLibrary) {
+    console.log("exp in generatePrime: ", exp);
     // returns a prime number (as string)
     let min = exp < 1 ? 1 : Math.pow(10, exp-1);
     let max = 10 * min;

@@ -110,13 +110,6 @@ export const getUser = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      privateKey {
-        id
-        exponent
-        modulus
-        createdAt
-        updatedAt
-      }
       createdAt
       updatedAt
     }

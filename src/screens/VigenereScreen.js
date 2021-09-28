@@ -11,16 +11,12 @@ import { useFormik } from 'formik';
 
 import { VigenereKeyInputScheme } from '../utils/InputTests';
 import { IntroModal } from '../utils/Modals';
+import ClearButton from '../components/ClearButton';
 
 import styles from './styles'
 
 
 const BACKGROUND_COLOR = 'rgb(210, 220, 250)'
-
-const encryptVigenere = () => {
-    console.log("Vigenere encryption in progress")
-}
-
 
 
 
@@ -83,12 +79,12 @@ export default function VigenereScreen({ route, navigation }) {
         navigation.navigate('UsersList', { toSend: true, toImportKey: false })
     }
 
-    const decrypt = () => {
+    /*const decrypt = () => {
         //console.log("formikKey.values: ", formikKey.values);
         const currentKey = formikKey.values.key
         setKey(currentKey);
         setText(vigenereDecrypt(secret, currentKey)); 
-    }
+    }*/
 
     useEffect(() => {
         const message = myContext.ciphers.vigenere.message;
@@ -146,6 +142,8 @@ export default function VigenereScreen({ route, navigation }) {
                 }}> 
                 {isEncrypting? 'Input' : 'Output'}  </Text>
                 </View>
+
+                <View style ={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
                 <View style = {{width : '70%', backgroundColor: isEncrypting? BACKGROUND_COLOR: null}}>
                 <TextInput
                     width='100%'
@@ -164,6 +162,8 @@ export default function VigenereScreen({ route, navigation }) {
                     onBlur={() => { }}
                     value={text}
                 />
+                </View>
+                <ClearButton setInput = {isEncrypting? changeText: changeSecret} setKey = {setKey} defaultKey = ''/>
                 </View>
 
                 <Divider style={{ width: "100%", margin: 10 }} />

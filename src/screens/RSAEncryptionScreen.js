@@ -62,12 +62,10 @@ export default function RSAEncryptionScreen({ route, navigation }) {
             return myContext.ciphers.rsa.exp;
         } else if (route.params.user !== undefined) {  // importing other users public key
             return route.params.user.publicKey.exponent;
-        } /*else if (route.params.exp){
-            return route.params.exp.toString();
-        } */
-        else if (myContext.privateKey.exp !== undefined && route.params.usePrivateKey) {
-            console.log("myContext un getExpInitialValues(): ", myContext)
-            return myContext.privateKey.exp.toString();
+        } else if (route.params.usePersonalKey ) {
+            return route.params.key.exp.toString();
+        } else if (route.params.usePrivateKey){
+            return route.params.privateKey.exp.toString();
         } else if (myContext.publicKey.exp !== undefined && route.params.usePublicKey) {
             console.log("using public key as initial value", myContext.publicKey)
             return myContext.publicKey.exp.toString();
@@ -78,12 +76,17 @@ export default function RSAEncryptionScreen({ route, navigation }) {
     }
     //... and modulus ....
     const getModInitialValues = () => {
+        //console.log("getModInitialValues: ", route.params)
         if (route.params === undefined) {
             return myContext.ciphers.rsa.n;
         } else if (route.params.user !== undefined) {
-            console.log("getmodInitialValues: ", route.params.user);
+            //console.log("getmodInitialValues: ", route.params.user);
             return route.params.user.publicKey.modulus;
-        } else if (myContext.privateKey.mod !== undefined && route.params.usePrivateKey || (myContext.publicKey.mod !== undefined && route.params.usePublicKey)) {
+        } else if (route.params.usePersonalKey ) {
+            return route.params.key.mod.toString();
+        } else if (route.params.usePrivateKey){
+            return route.params.privateKey.mod.toString();
+        } else if (myContext.publicKey.mod !== undefined && route.params.usePublicKey) {
             return myContext.privateKey.mod.toString();
         } else {
             return '';
@@ -91,7 +94,7 @@ export default function RSAEncryptionScreen({ route, navigation }) {
     }
     //... and the message
     const getMessageInitialValue = () => {
-       if (route.params.fromRiddles){
+       if (route.params!== undefined && route.params.fromRiddles){
             return route.params.message
         } else {
         let m = myContext.ciphers.rsa.m;
@@ -289,7 +292,9 @@ export default function RSAEncryptionScreen({ route, navigation }) {
                 marginTop: 30,
                 marginLeft: 20
             }}>
-                <Button label='show introduction' onPress={() => { myContext.setIntroVisible(true) }} />
+                <Button label='show introduction' onPress={() => { 
+                    console.log(route.params)
+                    myContext.setIntroVisible(true) }} />
             </View>
         </ScrollView>
         //{/*</View>*/}

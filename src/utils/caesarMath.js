@@ -1,5 +1,6 @@
 export function caesarEncrypt(text, key) {
 
+    if (key == ''){return ''}
     // transform key s.t. it lies in the range 0 <= key <= 25
     key = parseInt(key)
     key = key % 26;
