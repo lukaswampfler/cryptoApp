@@ -29,6 +29,7 @@ export default function VigenereScreen({ route, navigation }) {
     const [secret, setSecret] = useState('');
     const [key, setKey] = useState('');
     const [isEncrypting, setIsEncrypting] = useState(true)
+    const [hasBackButton, setHasBackButton] = useState(false);
     const ref = useRef(key);
 
     const toggleEncryptionSwitch = (value) => {
@@ -91,12 +92,15 @@ export default function VigenereScreen({ route, navigation }) {
         if (typeof message != undefined) setText(message)
     
         if (route.params){
-                const {message, key} = route.params
-                console.log(message, key)
-                setSecret(message)
-                setKey(key)
-                setIsEncrypting(false)
-                setText(vigenereDecrypt(message, key)); 
+            if(route.params.fromAnalysis){
+                setHasBackButton(true)
+            }
+            const {message, key} = route.params
+            console.log(message, key)
+            setSecret(message)
+            setKey(key)
+            setIsEncrypting(false)
+            setText(vigenereDecrypt(message, key)); 
         }
     }, [])
 
@@ -144,7 +148,7 @@ export default function VigenereScreen({ route, navigation }) {
                 </View>
 
                 <View style ={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                <View style = {{width : '70%', backgroundColor: isEncrypting? BACKGROUND_COLOR: null}}>
+                <View style = {{width : '60%', backgroundColor: isEncrypting? BACKGROUND_COLOR: null}}>
                 <TextInput
                     width='100%'
                     editable = {isEncrypting}
@@ -223,40 +227,18 @@ export default function VigenereScreen({ route, navigation }) {
                 </View>
               
 
-               {/*} <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-around',
-                    marginTop: 10,
-                    marginBottom: 10,
-                }}>
-                    <Button label='use this key' onPress={formikKey.handleSubmit} />
-                    <Button label='send message' onPress={sendMessage} />
-                    <Button label='Decrypt' onPress={decrypt} />
-            </View>*/}
+              
 <Divider style={{ width: "100%", margin: 10 }} />
 
-                <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    marginTop: 10,
-                    marginBottom: 10,
-                    marginLeft: 20,
-                }}>
-
-                  {/*}  <Text
-                        style={{ padding: 10, fontSize: 25, borderColor: 'gray', borderWidth: 1, width: 280 }}
-                        selectable>
-                        {secret}
-            </Text>*/}
-                    
-                </View> 
+               
                 <View style={{marginTop: 10, marginLeft: 10, marginBottom: 5}}>
                 <Text style={{
                     fontSize: 20
                 }}> 
                 {isEncrypting? 'Output' : 'Input'}  </Text>
                 </View>
-                <View style={{width: '70%', backgroundColor: (!isEncrypting)? BACKGROUND_COLOR: null}}>
+                <View style ={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                <View style={{width: '60%', backgroundColor: (!isEncrypting)? BACKGROUND_COLOR: null}}>
                 <TextInput
                         width='100%'
                         editable = {!isEncrypting}
@@ -273,7 +255,14 @@ export default function VigenereScreen({ route, navigation }) {
                         onChangeText={changeSecret}
                         onBlur={() => { }}
                         value={secret}/>
-                    </View>    
+                    </View>
+                    {hasBackButton && <Button width={120} label="Back to Analysis" 
+                    onPress = {() => {
+                        //console.log("navigating back")
+                        navigation.navigate("Analysis", {screen: "VigenereAnalysis", params: {message: secret}})
+                    }
+                        }/>}
+                   </View>     
                    
                    <View style={{
                     flexDirection: 'row',

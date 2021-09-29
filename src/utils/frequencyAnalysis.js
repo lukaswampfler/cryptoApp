@@ -10,8 +10,9 @@ export const germanFreq = {'A' :  6.34 ,       'K' :  1.50  ,      'U' :  3.76,
     'G' :  3.02       , 'Q' :  0.04   ,     'H': 4.11, 'I': 7.60, 'J': 0.27, 
 'R': 7.71, 'S': 6.41 , 'T': 6.43 }
 
-export function createFrequencyDict(s, dist = 1) {
+export function createFrequencyDict(s, dist) {
     const parts = createParts(s, dist);
+    console.log("parts: ", parts, dist)
     //let allDics = {};
     let allDics = [];
     let numAlpha;
@@ -70,6 +71,8 @@ export function sortDictionaryByKey(dict) {
 }
 
 export function calculateKeyCharacter(mostFreqDict, mostFreqAlph){
+    //console.log("calculateKeyChar: ", mostFreqAlph, mostFreqDict);
+    
     const diff = mostFreqDict.charCodeAt(0)- mostFreqAlph.charCodeAt(0)
 
     const aNumber = 'a'.charCodeAt(0)
@@ -104,16 +107,17 @@ export function getFirstLetter(s){
     return 'e';
 }
 
-function createParts(s, dist = 1) {
+function createParts(s, dist ) {
     let parts = [];
+    let startIndex = 0
     for (let j = 0; j < dist; j++) {
         let part = '';
-        for (let i = j; i < s.length; i += dist) {
+        for (let i = startIndex; i < s.length; i += dist) {
             part = part.concat(s.charAt(i));
         }
+        startIndex++;
         parts.push(part.toLowerCase());
     }
-    //console.log(parts);
     return parts;
 }
 
@@ -133,12 +137,12 @@ export function kasiskiTest(secret, minLength = 3, maxLength = 5) {
     // verwende der Einfachheit halber nur das aktuelle und das letzte Vorkommen einer Zeichenkette der Länge len
     //let posDiff = {};
     let s = secret.toLowerCase().replace(/\s/g, '').replace(/[^\x20-\x7E]/g, ''); // remove all whitespace and non-Ascii from secret
-    console.log("s in kasiski : ",s)
+    //console.log("s in kasiski : ",s)
     
     let posDiff = testForEqualParts(s, minLength, maxLength);
     //console.log(posDiff)
     const gcd = gcdArray(Object.values(posDiff));
-    console.log("gcd for ", posDiff, " : ", gcd);
+    //console.log("gcd for ", posDiff, " : ", gcd);
     if (minLength == 2) return 1; 
     else if (posDiff.length == 0) {
         return kasiskiTest(secret, 2, 2);
@@ -167,7 +171,7 @@ function testForEqualParts(s, minLength, maxLength){
             } 
         }
     }
-    console.log("result of test for equal parts: ", result)
+    //console.log("result of test for equal parts: ", result)
     return result;
 }
 

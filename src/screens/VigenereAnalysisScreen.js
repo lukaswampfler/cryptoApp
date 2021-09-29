@@ -3,6 +3,7 @@ import { View, Text, Dimensions, TextInput, TouchableWithoutFeedback, FlatList, 
 import Button from '../components/Button';
 import Title from '../components/Title';
 import AppContext from '../components/AppContext';
+import ClearButton from '../components/ClearButton';
 
 import {
     BarChart
@@ -19,24 +20,23 @@ const screenWidth = 0.9 * Dimensions.get("window").width;
 export const SLIDER_WIDTH = Dimensions.get('window').width +50
 export const ITEM_WIDTH = Math.round(SLIDER_WIDTH )
 
-
+const mostFrequentLetter = 'e';
 
 export default function VigenereAnalysisScreen({ route, navigation }) {
     const [secret, setSecret] = useState('');
     const [kasiskiLength, setKasiskiLength] = useState(0)
     const [chosenLength, setChosenLength] = useState(0)
     const [data, setData] = useState([])
-    const [analysisDone, setAnalysisDone] = useState(false)
+    //const [analysisDone, setAnalysisDone] = useState(false)
     const [mostFrequentLetter, setMostFrequentLetter] = useState('e')
     const [factors, setFactors] = useState([])
     const [factorsCalculated, setFactorsCalculated] = useState(false);
     const [likelyKeyWord, setLikelyKeyWord] = useState('')
+    const [showBars, setShowBars] = useState(false)
 
    
 
     const BarChartItem = ({ data, index }) => {
-
-
         const mostFreqInDict = data.mostFrequentInDictionary
         const mostFreqInAlph = data.mostFrequentInAlphabet
 
@@ -50,7 +50,6 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
             barPercentage: 0.15,
             decimalPlaces:0,
             //useShadowColorFromDataset: false // optional
-          
           };
         
         
@@ -103,16 +102,23 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
         , [data])*/
 
     useEffect(() => {
-        if(chosenLength > 0){
-            let frequencyDictionaries = createFrequencyDict(secret, chosenLength)
+        const showBars = secret.length > 0 && chosenLength > 0 && chosenLength <= secret.length
+        setShowBars(showBars);
+        console.log(secret, chosenLength)
+        if(chosenLength >= 0 && chosenLength <= secret.length){
+            let frequencyDictionaries = createFrequencyDict(secret, parseInt(chosenLength))
+            console.log("frequency Dictionaries: ", frequencyDictionaries)
             const newData = createData(frequencyDictionaries, mostFrequentLetter)
             setData(newData);
             let candKeyWord = '';
-            console.log("newData", newData)
+            //console.log("newData", newData)
             for (let i = 0; i < newData.length; i++){
                 candKeyWord += calculateKeyCharacter(newData[i].mostFrequentInDictionary, mostFrequentLetter)
             }
             setLikelyKeyWord(candKeyWord)
+    } else {
+        alert("Please choose a length that is positive and not longer than the secret message!")
+        setChosenLength(0);
     }
 
     }, [secret, chosenLength])
@@ -123,7 +129,7 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
 
 
     const changeChosenLength = value => {
-        const mostFrequentLetter = 'e';
+        
         setChosenLength(value);
         //let frequencyDictionaries = createFrequencyDict(secret, value)
         //setData(createData(frequencyDictionaries, mostFrequentLetter));
@@ -142,24 +148,30 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
         //let frequencyDictionaries = createFrequencyDict(secret, likelyLength)
         //setData(createData(frequencyDictionaries, mostFrequentLetter));
         //analysisDone = true;
-        setAnalysisDone(true);
+        //setAnalysisDone(true);
     }
 
     const goToVigenereDecryption = () => {
-        console.log("Navigating to Vigenere Decryption...")
-        navigation.navigate("Methods", {screen: "VIGENERE", params: {message: secret, key: likelyKeyWord}})
+        //console.log("Navigating to Vigenere Decryption...")
+        navigation.navigate("Methods", {screen: "VIGENERE", params: {message: secret, key: likelyKeyWord, fromAnalysis: true}})
     }
 
+    const reset = (value) => {
+        setChosenLength(value);
+        setFactorsCalculated(false)
+        setFactors([])
+
+    }
     const renderItem = ({ item }) => (
         <BarChartItem data={item} />
     );
 
 
 
-    const freqDict = createFrequencyDict(secret)["0"];
-    const sorted = sortDictionaryByKey(freqDict)
+    //const freqDict = createFrequencyDict(secret)["0"];
+    //const sorted = sortDictionaryByKey(freqDict)
     
-    const germanSorted = sortDictionaryByKey(germanFreq)
+    //const germanSorted = sortDictionaryByKey(germanFreq)x
 
 
     /*const data = {
@@ -194,7 +206,13 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
 
             <View>
                 <Title title ={title}/>
-            <Text>Enter secret message below:</Text>
+                <Text style={{
+                    fontSize: 20
+                }}> 
+                 Input (secret message)
+            </Text>
+            
+                <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
             <TextInput
                 width={280}
                 multiline={true}
@@ -211,6 +229,8 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
                 onBlur={() => { }}
                 value = {secret}
             />
+              <ClearButton setInput={setSecret} setKey= {reset} defaultKey={0} />
+            </View>
 <View style = {{marginBottom: 20}}>
             <View style={{
                     flexDirection: 'row',
@@ -220,16 +240,20 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
                 }}>
                     <Button label='Analyze Text' onPress={handleAnalysis} width={240} />
                 </View>
-            {factorsCalculated &&  <Text> Most likely length of secret key word is one of the following (or products):</Text>  }
+            {factorsCalculated &&  <Text> Most likely length of secret key word is one of the following (or products thereof):</Text>  }
                 { factors.map((item, key)=>(
          <Text key={key} style={{fontWeight: '200'}} > { item } </Text>)) }  
                 
 </View>
 
 
-<View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+<View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
                 <View style={{flexDirection: 'column', alignItems: 'center'}}>
-                <Text>Choose length of keyword:   </Text> 
+                <Text style={{
+                    fontSize: 20
+                }}> 
+                 Length of keyword
+            </Text>
 
 <View style={{marginTop: 10}}>
 <TextInput 
@@ -244,6 +268,7 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
                 returnKeyType='next'
                 returnKeyLabel='next'
                 onChangeText={changeChosenLength}
+                value={chosenLength}
                 onBlur={() => { }}
             />
            </View>  
@@ -258,8 +283,8 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
 
     </TouchableWithoutFeedback>
     <View style = {{height: '50%'}}>
-    { analysisDone && <Text>Likely key word: {likelyKeyWord} </Text>}
-    { analysisDone ?
+    { showBars && <Text>Likely key word: {likelyKeyWord} </Text>}
+    { showBars ?
                         <FlatList removeClippedSubviews={false}
                             data={data}
                             renderItem={renderItem}

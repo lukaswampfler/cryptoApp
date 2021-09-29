@@ -6,6 +6,8 @@ import AppContext from '../components/AppContext';
 import Button from '../components/Button';
 import Title from '../components/Title';
 import { IntroModal } from '../utils/Modals';
+import ClearButton from '../components/ClearButton';
+
 
 import { alphabet, randomTransposition, shuffleAlphabet, encryptPermutation} from '../utils/permutationMath';
 
@@ -83,6 +85,7 @@ export default function PermutationScreen({ navigation }) {
                 }}> Input</Text>
                 </View>
                 
+                <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                 <TextInput
                     width={280}
                     multiline={true}
@@ -99,12 +102,10 @@ export default function PermutationScreen({ navigation }) {
                     onBlur={() => { }}
                     value={text}
                 />
-                {/*<Text>
-                    {alphabet}
-                 </Text> 
-                <Text>
-                    {key}
-                </Text>  */} 
+
+<ClearButton setInput={changeText} setKey = {setKey} defaultKey = {alphabet}/>
+
+                </View>
 <Divider style={{ width: "100%", margin: 10 }} />
 
                 
