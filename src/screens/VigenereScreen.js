@@ -14,9 +14,10 @@ import { IntroModal } from '../utils/Modals';
 import ClearButton from '../components/ClearButton';
 
 import styles from './styles'
+import GreySwitch from '../components/GreySwitch';
 
 
-const BACKGROUND_COLOR = 'rgb(210, 220, 250)'
+const BACKGROUND_COLOR = '#ddd'
 
 
 
@@ -217,13 +218,19 @@ export default function VigenereScreen({ route, navigation }) {
                     marginBottom: 10,
                 }}>
                 <Text style={{ marginTop: 20 }}> {isEncrypting?  'Encryption': 'Decryption'} </Text>
-                <Switch
+                {/*<Switch
                     
                             onValueChange={toggleEncryptionSwitch}
                             value={isEncrypting}
-                        />
+                            ios_backgroundColor={'#ddd'}
+                            thumbColor = {'#555'}
+                            trackColor={{false: '#222', true: '#ddd'}}
+                />*/}
+                <GreySwitch onValueChange={toggleEncryptionSwitch} value={isEncrypting}/>
+
 
                 </View>
+                
                 </View>
               
 
@@ -266,7 +273,7 @@ export default function VigenereScreen({ route, navigation }) {
                    
                    <View style={{
                     flexDirection: 'row',
-                    justifyContent: 'space-evenly', width: 350,
+                    justifyContent: 'space-between',
                     marginTop: 100
                 }}>
                     <View style = {{margin: 20}}>

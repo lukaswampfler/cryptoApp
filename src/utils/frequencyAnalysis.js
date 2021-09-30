@@ -1,5 +1,6 @@
-import { max } from "react-native-reanimated";
+import { max, min } from "react-native-reanimated";
 import { gcdArray } from "./CryptoMath";
+import { removeSpecialChars } from "./permutationMath";
 
 export const germanFreq = {'A' :  6.34 ,       'K' :  1.50  ,      'U' :  3.76,
     'D' :  4.92   ,     'N' :  9.59   ,     'X' :  0.07,
@@ -10,9 +11,9 @@ export const germanFreq = {'A' :  6.34 ,       'K' :  1.50  ,      'U' :  3.76,
     'G' :  3.02       , 'Q' :  0.04   ,     'H': 4.11, 'I': 7.60, 'J': 0.27, 
 'R': 7.71, 'S': 6.41 , 'T': 6.43 }
 
-export function createFrequencyDict(s, dist) {
+export function createFrequencyDict(s, dist = 1) {
     const parts = createParts(s, dist);
-    console.log("parts: ", parts, dist)
+    //console.log("parts: ", parts, dist)
     //let allDics = {};
     let allDics = [];
     let numAlpha;
@@ -107,7 +108,7 @@ export function getFirstLetter(s){
     return 'e';
 }
 
-function createParts(s, dist ) {
+function createParts(s, dist = 1) {
     let parts = [];
     let startIndex = 0
     for (let j = 0; j < dist; j++) {
@@ -132,30 +133,31 @@ export function onlyNonAlpha(s){
     return true;
 }
 
-export function kasiskiTest(secret, minLength = 3, maxLength = 5) {
+export function kasiskiTest(secret, minLength = 3, maxLength = 6) {
+    console.log("Kasiski Test, using: ", minLength, maxLength)
     if (secret.length < 6) return 1; 
-    // verwende der Einfachheit halber nur das aktuelle und das letzte Vorkommen einer Zeichenkette der Länge len
-    //let posDiff = {};
-    let s = secret.toLowerCase().replace(/\s/g, '').replace(/[^\x20-\x7E]/g, ''); // remove all whitespace and non-Ascii from secret
+    let s = secret.toLowerCase().replace(/\s/g, '').replace(/[^a-z]/g, ''); // remove all whitespace and non-Ascii from secret
     //console.log("s in kasiski : ",s)
-    
-    let posDiff = testForEqualParts(s, minLength, maxLength);
-    //console.log(posDiff)
-    const gcd = gcdArray(Object.values(posDiff));
-    //console.log("gcd for ", posDiff, " : ", gcd);
-    if (minLength == 2) return 1; 
+    // find substrings which occur more than once in secret text along with their difference in position.
+    let result = testForEqualParts(s, minLength, maxLength);
+    //const gcd = gcdArray(Object.values(posDiff));
+    return result
+    //return [{fragment: 'abc', posDiff:  24} , {fragment: 'cde', posDiff:  25}] 
+    /*if (minLength == 2) return 1; 
     else if (posDiff.length == 0) {
         return kasiskiTest(secret, 2, 2);
     }
     else if (gcd == 1)
+        console.log(posDiff)
         return kasiskiTest(secret, minLength + 1, maxLength + 1);
-    return gcd;
+    return gcd;*/
+
 }
 
 
 function testForEqualParts(s, minLength, maxLength){
-    const NUM_DIFFERENT_PARTS = 5
-    let result = {}
+    //const NUM_DIFFERENT_PARTS = 5
+    let result = []
     for (let len = maxLength; len >= minLength; len--) {
         for (let start = 0; start < s.length - len; start = start + len) {
             let part = s.substr(start, len);
@@ -163,15 +165,15 @@ function testForEqualParts(s, minLength, maxLength){
             let lastPos = s.lastIndexOf(part);
             if (lastPos != start && !(result.hasOwnProperty(part)) && !isSubstringOf(part, Object.keys(result)) ) {
                 //console.log(part, lastPos-start);
-                result[part] = lastPos - start;
+                result.push({fragment: part , posDiff:  lastPos - start});
                 //console.log(result)
-                if ( Object.entries(result).length == NUM_DIFFERENT_PARTS){
+                /*if ( Object.entries(result).length == NUM_DIFFERENT_PARTS){
                     return result;
-                }
+                }*/
             } 
         }
     }
-    //console.log("result of test for equal parts: ", result)
+    console.log("result of test for equal parts: ", result)
     return result;
 }
 

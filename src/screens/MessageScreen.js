@@ -12,7 +12,7 @@ import { onCreateMessageByReceiverID } from '../graphql/subscriptions'
 
 import AppContext from '../components/AppContext';
 
-const MessageItem = ({ message }) => (
+const MessageItem = ({ message, navigation }) => (
     <View style={{
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -20,10 +20,17 @@ const MessageItem = ({ message }) => (
         marginBottom: 3,
     }}
     >
-        <Text style={{ width: 250 }} selectable={true} selectionColor='yellow' >
+        <TouchableOpacity 
+        onPress = {() => {
+            //console.log("Message", message.text, "pressed.")
+            navigation.navigate("Riddles", 
+            {screen: "EncryptedMessageMethodChoice" , params: {message: message.text, fromRiddles: false}});
+        }}>
+        <Text style={{ width: 250, fontSize: 16}} selectable={true} selectionColor='yellow' >
             {message.text}  </Text>
+            </TouchableOpacity>
         <Text selectable={false}>  from {message.sender.name}</Text>
-        <Divider width={5} />
+        <Divider width={5} style={{margin: 7}}/>
     </View>
 );
 
@@ -97,7 +104,7 @@ export default function MessageScreen({ navigation }) {
 
 
     const renderItem = ({ item }) => (
-        <MessageItem message={item} />
+        <MessageItem message={item} navigation={navigation} />
     );
 
 

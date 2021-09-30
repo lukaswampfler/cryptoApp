@@ -17,11 +17,13 @@ const choose = (array) => {
     return array[ind];
 }
 
-const WIDTH = Dimensions.get('window').width;
-const HEIGHT = Dimensions.get('window').height;
+
 
 
 export default function RiddleDisplayScreen({ route,  navigation }) {
+
+    const WIDTH = Dimensions.get('window').width;
+    const HEIGHT = Dimensions.get('window').height;
     
     const myContext = useContext(AppContext);
 
@@ -207,6 +209,7 @@ const setContainer = () => {
     }*/
 
     useEffect( () => {
+        console.log(HEIGHT);
         details = route.params.details;
         console.log("Riddle display details: ", details)
         setLevel(details.level)
@@ -264,7 +267,8 @@ const setContainer = () => {
              <Text style= {{fontWeight: 'bold'}} selectable>
                 {secretMessage}
             </Text>
-    </View>}*/}<ScrollView style={{height: ['rsa', 'sdes'].includes(method)? 0.1*HEIGHT : 0.2 * HEIGHT}}>
+    </View>}*/}
+    <ScrollView style={{height: ['rsa', 'sdes'].includes(method)? 100 : 150}}>
             {encryptedMessage && <View style = {{marginLeft: 15, marginTop: 5, marginRight: 10}}>
                 <TouchableOpacity style = {{marginRight: 40, backgroundColor: '#ddd'}} 
                 onPress = {() =>{  navigation.navigate("EncryptedMessageMethodChoice", {message: encryptedMessage, method, level, clearText, key, fromRiddles: true})}}>
@@ -303,12 +307,12 @@ const setContainer = () => {
                             value={showSolution}
                         />
             </View>
-            {showSolution && <View style ={{backgroundColor: '#aaa', margin: 20, flexDirection: 'row', justifyContent: 'space-around'}}>
+            {showSolution && <View style ={{ margin: 20, flexDirection: 'row', justifyContent: 'space-around'}}>
                 <Button label='show key' onPress={showKey} /> 
                 <Button label='show solution' onPress={checkSolution} /> 
              </View>   }
              <View style = {{flexDirection: 'column', justifyContent: 'flex-end'}}>
-                 <View width = '25%' style = {{margin: 30}}>
+                 <View width = '45%' style = {{margin: 30}}>
              <Button label='show last riddle' onPress={showLastRiddle} />
                 </View>
              </View>

@@ -6,6 +6,7 @@ import NumInput from '../components/NumInput';
 import Button from '../components/Button';
 import Title from '../components/Title';
 import { IntroModal } from '../utils/Modals';
+import GreySwitch from '../components/GreySwitch';
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup'
@@ -241,11 +242,12 @@ export default function RSAEncryptionScreen({ route, navigation }) {
                         <Text>
                             {myContext.RSAInputSwitchisDecimal ? 'decimal' : 'binary'}
                         </Text>
-                        <Switch
+                       {/*} <Switch
                             style={{ marginTop: 5 }}
                             onValueChange={toggleRSAInputSwitch}
                             value={myContext.RSAInputSwitchisDecimal}
-                        />
+                />*/}
+                        <GreySwitch style={{marginTop: 5}} onValueChange={toggleRSAInputSwitch} value={myContext.RSAInputSwitchisDecimal}/>
                     </View>
                 </View>
                 <Divider style={{ width: "100%", margin: 10 }} />

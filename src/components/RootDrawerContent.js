@@ -17,10 +17,6 @@ import AppContext from '../components/AppContext';
 export default function RootDrawerContent(props) {
   const myContext = useContext(AppContext);
 
-  const collapseAndNavigateToTop = () => {
-    v  
-  }
-
   async function signOut() {
     try {
       await Auth.signOut();

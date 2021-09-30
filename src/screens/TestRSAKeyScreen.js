@@ -17,6 +17,7 @@ import PublicExponentRow from '../components/PublicExponentRow'
 import ButtonRow from '../components/ButtonRow';
 import { ExplanationModal } from '../utils/Modals';
 import Title from '../components/Title';
+import GreySwitch from '../components/GreySwitch';
 import { isInteger } from '../utils/caesarMath';
 import { gcd } from '../utils/CryptoMath';
 
@@ -428,11 +429,12 @@ const checkAndUsePubExp = () => {
                         <Text>
                             {isRandom ? 'random primes' : 'enter primes'}
                         </Text>
-                        <Switch
+                        <GreySwitch
                             style={{ marginTop: 5 }}
                             onValueChange={toggleRandomSwitch}
                             value={isRandom}
                         />
+                        
      {isRandom ? 
        /* <View
        style={{
@@ -524,7 +526,7 @@ const checkAndUsePubExp = () => {
                         <Text>
                             {isDefault ? 'default value' : 'choose public exponent'}
                         </Text>
-                        <Switch
+                        <GreySwitch
                             style={{ marginTop: 5 }}
                             onValueChange={togglePubExpSwitch}
                             value={isDefault}
@@ -607,7 +609,7 @@ const checkAndUsePubExp = () => {
 const pickerSelectStyles = StyleSheet.create({
     inputIOS: {
       fontSize: 16,
-      backgroundColor: 'orange',
+      backgroundColor: '#999',
       paddingVertical: 12,
       paddingHorizontal: 10,
       borderWidth: 1,
@@ -618,7 +620,7 @@ const pickerSelectStyles = StyleSheet.create({
     },
     inputAndroid: {
       fontSize: 16,
-      backgroundColor: 'orange',
+      backgroundColor: '#999',
       paddingHorizontal: 10,
       paddingVertical: 8,
       borderWidth: 1,

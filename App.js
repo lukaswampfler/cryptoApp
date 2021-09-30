@@ -48,6 +48,9 @@ import RiddleMethodChoiceScreen from './src/screens/RiddleMethodChoiceScreen';
 import RiddleDisplayScreen from './src/screens/RiddleDisplayScreen';
 import EncryptedMessageMethodChoiceScreen from './src/screens/EncryptedMessageMethodChoiceScreen';
 
+import Header from './src/components/Header';
+import Icon from 'react-native-vector-icons/Ionicons';
+
 
 
 Amplify.configure({
@@ -106,7 +109,9 @@ const AuthenticationNavigator = props => {
 
 const MethodNavigator = props => {
   return (
-    <MethodStack.Navigator  screenOptions={{ headerShown: false }}>
+    <MethodStack.Navigator  screenOptions={{ 
+      headerShown: false 
+    }}>
       <MethodStack.Screen
         name="MethodsHome"
         component={MethodsHomeScreen}
@@ -208,13 +213,16 @@ const RiddleNavigator = props => {
 const RootDrawerNavigator = props => {
   return (
     <RootDrawer.Navigator 
-    drawerContent = {(props) => <RootDrawerContent {...props} updateAuthState={props.updateAuthState} screenOptions={{ headerShown: false }}/> }>
+    drawerContent = {(props) => <RootDrawerContent {...props} updateAuthState={props.updateAuthState} 
+    screenOptions={{}} 
+    /> }>
             <RootDrawer.Screen name="Home" >
             {screenProps => (
             <HomeScreen {...screenProps} updateAuthState={props.updateAuthState} />
            )} 
         </RootDrawer.Screen>
-            <RootDrawer.Screen name="Methods" component={MethodNavigator} options={{title: "Encryption", unmountOnBlur: true}} />
+            <RootDrawer.Screen name="Methods" component={MethodNavigator} 
+            options={{title: "Encryption", unmountOnBlur: true}} />
             <RootDrawer.Screen name="Analysis" component={AnalysisNavigator} options={{title: "Cryptoanalysis", unmountOnBlur: true}}/>
             <RootDrawer.Screen name="Messages" component={MessageScreen} options={{ title: "My Messages" }} />
             <RootDrawer.Screen name="Riddles" component={RiddleNavigator} options={{ title: "Riddles", unmountOnBlur: true }} />
@@ -360,7 +368,7 @@ export default function App() {
   }, []);
 
   //TO TEST
-  useEffect(() => {console.log(isUserLoggedIn)}, [isUserLoggedIn])
+  //useEffect(() => {console.log(isUserLoggedIn)}, [isUserLoggedIn])
 
   async function checkAuthState() {
     if (isFirstTime){

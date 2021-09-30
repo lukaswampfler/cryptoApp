@@ -3,6 +3,8 @@ import { View, Text, Dimensions, TextInput, TouchableWithoutFeedback, FlatList, 
 import Button from '../components/Button';
 import Title from '../components/Title';
 import AppContext from '../components/AppContext';
+import { Divider } from 'react-native-elements';
+
 import ClearButton from '../components/ClearButton';
 
 import {
@@ -33,6 +35,8 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
     const [factorsCalculated, setFactorsCalculated] = useState(false);
     const [likelyKeyWord, setLikelyKeyWord] = useState('')
     const [showBars, setShowBars] = useState(false)
+    const [repeatedParts, setRepeatedParts] = useState([]);
+    const [showFragments , setShowFragments ] = useState(false);
 
    
 
@@ -80,7 +84,9 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
 
     
 
-    let likelyLength = 0
+   const toggleShowFragments = ()  => {
+       setShowFragments(!showFragments);
+   }
 
 
     useEffect(() => {
@@ -92,7 +98,7 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
     useEffect(() => {
         setFactors(factorize(kasiskiLength));
         setFactorsCalculated(true);
-        console.log("factors: ", kasiskiLength)
+        //console.log("factors: ", kasiskiLength)
     }, [kasiskiLength])
 
 
@@ -104,10 +110,10 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
     useEffect(() => {
         const showBars = secret.length > 0 && chosenLength > 0 && chosenLength <= secret.length
         setShowBars(showBars);
-        console.log(secret, chosenLength)
+        //console.log(secret, chosenLength)
         if(chosenLength >= 0 && chosenLength <= secret.length){
             let frequencyDictionaries = createFrequencyDict(secret, parseInt(chosenLength))
-            console.log("frequency Dictionaries: ", frequencyDictionaries)
+            //console.log("frequency Dictionaries: ", frequencyDictionaries)
             const newData = createData(frequencyDictionaries, mostFrequentLetter)
             setData(newData);
             let candKeyWord = '';
@@ -141,10 +147,18 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
     }
 
     const handleAnalysis = () => {
-        //TODO: clean secret of whitespace, punctuation etc.
-        likelyLength = kasiskiTest(secret);
+        const NUM_FRAGMENTS = 5
+        //TODO: clean secret of whitespace, punctuation etc. - done in kasiskiTest
+        //likelyLength = kasiskiTest(secret);
+        if (secret.length > 0 ){
+        toggleShowFragments()
+        console.log("secret", secret);
+        const fragmentList = kasiskiTest(secret)
+        setRepeatedParts(fragmentList.slice(0, NUM_FRAGMENTS));
+        console.log("return from kasiski: ", repeatedParts);
+    }
         //console.log(likelyLength);
-        setKasiskiLength(likelyLength);
+        //setKasiskiLength(likelyLength);
         //let frequencyDictionaries = createFrequencyDict(secret, likelyLength)
         //setData(createData(frequencyDictionaries, mostFrequentLetter));
         //analysisDone = true;
@@ -158,13 +172,23 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
 
     const reset = (value) => {
         setChosenLength(value);
-        setFactorsCalculated(false)
-        setFactors([])
+        setShowFragments(false)
 
     }
     const renderItem = ({ item }) => (
         <BarChartItem data={item} />
     );
+
+
+    const renderFragment = ({item}) => (
+        <View style = {{flexDirection: 'row'}}>
+            <Text style={{ width: 250, fontSize: 16}} selectable={true} selectionColor='yellow' >
+                {item.fragment}  </Text>
+        
+            <Text selectable={false}>  Difference:  {item.posDiff}</Text>
+            <Divider width={5} style={{margin: 7}}/>
+      </View>
+    )
 
 
 
@@ -238,13 +262,19 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
                     marginTop: 10,
                     marginBottom: 10,
                 }}>
-                    <Button label='Analyze Text' onPress={handleAnalysis} width={240} />
+                    <Button label={showFragments?  'Hide Fragments': 'Analyze Text'} onPress={handleAnalysis} width={240} />
                 </View>
-            {factorsCalculated &&  <Text> Most likely length of secret key word is one of the following (or products thereof):</Text>  }
-                { factors.map((item, key)=>(
-         <Text key={key} style={{fontWeight: '200'}} > { item } </Text>)) }  
+            
                 
 </View>
+{showFragments &&  <Text> The following fragments were found more than once (distances on the right): </Text>  }
+            
+        {showFragments &&                <FlatList style ={{}} 
+                            removeClippedSubviews={false}
+                            data={repeatedParts}
+                            renderItem={renderFragment}
+                            keyExtractor={item => item.fragment}
+                        /> }
 
 
 <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>

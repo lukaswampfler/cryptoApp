@@ -182,18 +182,19 @@ Output </Text>
                     marginBottom: 10,
                     marginLeft: 0,
                 }}>
-                   
+                   <ScrollView style ={{height: 100}}>
 
                     <Text
-                        style={{ padding: 10, fontSize: 25, borderColor: 'gray', borderWidth: 1, width: 280 }}
+                        style={{ padding: 10, fontSize: 20, borderColor: 'gray', borderWidth: 1, width: 280 }}
                         selectable>
                         {secret}
                     </Text>
+                    </ScrollView>
 
                 </View>
                 <View style={{
                     flexDirection: 'row',
-                    justifyContent: 'space-evenly', width: 350,
+                    justifyContent: 'space-between',
                     marginTop: 100
                 }}>
                     <View style = {{margin: 20}}>

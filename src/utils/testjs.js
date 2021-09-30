@@ -1,3 +1,4 @@
+
 function kasiskiTest(secret, minLength = 3, maxLength = 5) {
     if (secret.length < 6) return 1; 
     // verwende der Einfachheit halber nur das aktuelle und das letzte Vorkommen einer Zeichenkette der Länge len
@@ -50,155 +51,42 @@ function gcdArray(a) {
 }
 
 
-function smartExponentiation(base, exp, m) {
-    // calculates the power base**exp mod m efficiently
-    // takes three inputs: all of them are BigInts
-    // 1) calculate binary rep of exponent, but in REVERSED ORDER
-    var binExponent = '';
-    while (exp > 0) {
-        binExponent = binExponent + exp % BigInt(2);
-        exp = exp / BigInt(2);
-    }
-    // 2) calculate squares, include in result if needed (ie if corresponding bit equals 1)
-    var res = BigInt(1);
-    for (let i = 0; i < binExponent.length; i++) {
-        if (binExponent.charAt(i) == '1') {
-            res = (res * base) % m;
-        }
-        base = (base * base) % m;
-    }
-    return res.toString();
-}
 
 
-function bytesToString(byteArray) {
-    result = ''
-    for (let byte of byteArray) {
-        console.log(byte)
-        if (byte < 32) {// handle non printable characters
-            byte += 8032
-        }
-        result += String.fromCharCode(byte);
-    }
-    return result
-}
-
-
-function applyPermutation(s, perm) {
-    const permuted = perm.reduce((a, e) => Array.isArray(s) ? a.concat(s[e]) : a.concat(s.charAt(e)), []);
-    return permuted.join('');
-}
-
-console.log(applyPermutation(['a', 'b', 'c', 'd'], [0, 2, 1, 3]))
-
-
-let base = BigInt(3);
-let exp = BigInt(63317);
-let mod = BigInt(127382153712531287);
-
-keys = {k1: '00001111', k2: '11110000'}
-
-const message = '11111111'
-
-
-const decryptionDict = {'a': 'x', 'b': 'y', 'c': 'z'}
-
-const text = 'abcdabcejfkdjahfjakshvjbhfjkadhvjhvcyxhvj'
-
-
-function partialDecryption(text, decryptionDict){
-    let secret = ''; 
-    for (let ind = 0; ind < text.length; ind++){
-        if (text.charAt(ind) in decryptionDict){
-            secret += decryptionDict[text.charAt(ind)]
-        } else {
-            secret += '*'
-            // alternatively: secret += text.charAt(i)
-            // plus eintrag in Dokument, dass dieser Teil nicht entschlüsselt ist.
+function testForEqualParts(s, minLength, maxLength){
+    //const NUM_DIFFERENT_PARTS = 5
+    let result = []
+    for (let len = maxLength; len >= minLength; len--) {
+        for (let start = 0; start < s.length - len; start = start + len) {
+            let part = s.substr(start, len);
+            //console.log(part)
+            let lastPos = s.lastIndexOf(part);
+            if (lastPos != start && !(result.hasOwnProperty(part)) && !isSubstringOf(part, Object.keys(result)) ) {
+                //console.log(part, lastPos-start);
+                result.push({fragment: part , posDiff:  lastPos - start});
+                //console.log(result)
+                /*if ( Object.entries(result).length == NUM_DIFFERENT_PARTS){
+                    return result;
+                }*/
+            } 
         }
     }
-    
-    return secret; 
+    console.log("result of test for equal parts: ", result)
+    return result;
 }
 
-console.log(partialDecryption(text, decryptionDict));
-
-
-function isInteger(s){
-    let result = true;
-    for (let ind = 0; ind< s.length; ind++){
-        result = result && (s.charAt(ind) >= '0' && s.charAt(ind) <= '9')
+function isSubstringOf(part, arrayOfWholes){
+    for (let ind = 0 ; ind < arrayOfWholes.length; ind++){
+        if (arrayOfWholes[ind].includes(part)) return true; 
     }
-    return result
-}
-
-function isAlphabetic(s){
-    let result = true;
-    for (let ind = 0; ind< s.length; ind++){
-        result = result && ((s.charAt(ind) >= 'a' && s.charAt(ind) <= 'z') || (s.charAt(ind) >= 'A' && s.charAt(ind) <= 'Z'))
-    }
-    return result
+    return false; 
 }
 
 
 
-let s1 = '34'
-let s2 = 'a'
-let s3 = '34 '
-let s4 = 'abcd4'
-let s5 = 'abcddfajvbcjvksADSFJASDKFDJSFKSDAJF'
-
-console.log(s1, "isInteger: ", isInteger(s1))
-console.log(s2, "isInteger: ", isInteger(s2))
-console.log(s3, "isInteger: ", isInteger(s3))
-
-console.log(s2, "isAlphabetic: ", isAlphabetic(s2))
-console.log(s4, "isAlphabetic: ", isAlphabetic(s4))
-console.log(s5, "isAlphabetic: ", isAlphabetic(s5))
+const secret = "lukaslukaswampflerwampfler"
 
 
-let method = 'caesar'
-const setIsText = (method) => {
-    let isText = false;
-    if(['caesar', 'vigenere', 'permutation'].includes(method)  || (method == 'sdes' && level =='extreme')){
-            isText = true
-        }
-        console.log(isText)
-}
-
-setIsText(method)
-
-
-const value = ' abc14633925tedghjdft38747   39edjkgfuitr72034'
-const isalpha = value.match(/^[a-zA-Z]*$/);
-
-
-if (isalpha){
-    console.log(value , "is alphabetic")
-} else {
-    console.log(value , "is not alphabetic, replace")
-    console.log(value.replace(/[^a-zA-Z]/gi, ''))
-}
-
-function transpose(text, i, j){
-    if (i >= text.length || j >= text.length) return text; 
-    const maxIndex = Math.max(i, j)
-    const minIndex = Math.min(i, j)
-    console.log(minIndex, maxIndex, text.substring(0, minIndex),text.charAt(maxIndex) , text.substring(minIndex+1 , maxIndex) , text.charAt(minIndex) , text.substring(maxIndex+1) )
-    const newText = text.substring(0, minIndex) + text.charAt(maxIndex) + text.substring(minIndex+1 , maxIndex) + text.charAt(minIndex) + text.substring(maxIndex+1);
-    console.log(newText.length)
-    return newText
-}
-
-const alph = 'abcdefghijklmnopqrstuvwxyz'
-for (let i = 0; i<10; i++){
-    let rand1 = Math.floor(alph.length* Math.random())
-    let rand2 = Math.floor(alph.length*Math.random())
-    console.log(transpose(alph, rand1, rand2));
-}
-
-const prod = BigInt(671284177) * BigInt(806774921)
-console.log(prod.toString())
-
-const test = 'öüäöäüöä'
-console.log(test.replace(/ö/g, 'oe'))
+const minl = 2
+const maxl = 3
+testForEqualParts(secret, 4, 6);
