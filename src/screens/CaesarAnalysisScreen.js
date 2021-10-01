@@ -29,7 +29,6 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
     const [key, setKey] = useState(0);
     const [decypheredMessage, setDecypheredMessage] =useState('')
     const [isDecyphered, setIsDecyphered] = useState(false)
-    const [keyGhost, setKeyGhost] = useState(0);
 
     const changeText = text => {
         setSecret(text);
@@ -43,60 +42,34 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
         }
     }, [])
 
+    
+
     const changeKey = key => {
-        const keyAsInt = parseInt(key, 10);
-        if (isNaN(keyAsInt) || !isInteger(key)){
-            setIsDecyphered(false);
-            setDecypheredMessage("Please enter a valid key (integer number)")
-        }
-        else{
+        if(isInteger(key)){
             const decyph = caesarEncrypt(secret, key);
-            setKey(key);
-            setKeyGhost(key)
+            setKey(key)
             setDecypheredMessage(decyph)
             console.log("change Key: ", key, decypheredMessage)
             setIsDecyphered(true); 
-    }
+    } else {
+        console.log("key not integer")
+            setIsDecyphered(false);
+            alert("Please enter a valid key (number!)")
+            setDecypheredMessage("")
+            setKey("")
+    }}
 
-
-
-        /*if(isInteger(key)){
-            setKey(key);
-            setDecypheredMessage(caesarEncrypt(secret, key))
-         } else {
-             setDecypheredMessage('')
-             alert("Please use only positive integers for keys!")
-         }*/
-    }
-
-    /*const decypher = () => {
-        setIsDecyphered(false);
-        const keyAsInt = parseInt(key, 10);
-        console.log(keyAsInt)
-        if (isNaN(keyAsInt)){
-            setDecypheredMessage("Please enter a valid key (integer number)")
-        }
-        else{
-            const decyph = caesarEncrypt(secret, key);
-            setDecypheredMessage(decyph)
-            setIsDecyphered(true); 
-    }
-        console.log(decypheredMessage)
-        
-        return; 
-    }*/
+  
 
 
 
     const freqDict = createFrequencyDict(secret)["0"];
     const sorted = sortDictionaryByKey(freqDict)
-    //console.log("Frequencies", sorted);
 
     const data = {
         labels: Object.keys(sorted),
         datasets: [{ data: Object.values(sorted) }]
     };
-    //console.log(data)
 
 
     const chartConfig = {
@@ -179,24 +152,10 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
                 returnKeyLabel='next'
                 //onChangeText={formikKey.handleChange('key')}
                 onChangeText= {changeKey}
-                value = {keyGhost}
+                value = {key}
                 />
 
-{/*<TextInput
-                width={60}
-                textAlignVertical='top'
-                placeholder='key'
-                autoCapitalize='none'
-                autoCorrect={false}
-                style={{ height: 30, borderColor: 'gray', borderWidth: 1, marginRight: 30 , marginLeft: 30}}
-                keyboardType='numeric'
-                keyboardAppearance='dark'
-                returnKeyType='next'
-                returnKeyLabel='next'
-                onChangeText={changeKey}
-                value = {key}
-/> */}
-         {/*}  <Button label='Go' onPress={decypher} width={80} /> */}
+
 </View>
 <Divider style={{ width: "100%", margin: 10 }} />
 
@@ -210,7 +169,7 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
                 }}> 
                 Output (decyphered message) </Text>
                 </View>
-    <Text> {decypheredMessage} </Text>
+    <Text style ={{fontSize: 20, margin: 5}}> {decypheredMessage} </Text>
 </View> :
 <Text> Please enter valid key above (integer number)! </Text>}
 </View>
