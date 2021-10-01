@@ -119,7 +119,7 @@ export default function CaesarScreen({ navigation }) {
                     placeholder='Enter plain text message'
                     autoCapitalize='none'
                     autoCorrect={false}
-                    style={{ height: 80, borderColor: 'gray', borderWidth: 1 }}
+                    style={{ height: 80, borderColor: 'gray', borderWidth: 1 , borderRadius: 8, padding: 4}}
                     keyboardType='default'
                     keyboardAppearance='dark'
                     returnKeyType='next'
@@ -185,7 +185,7 @@ Output </Text>
                    <ScrollView style ={{height: 100}}>
 
                     <Text
-                        style={{ padding: 10, fontSize: 20, borderColor: 'gray', borderWidth: 1, width: 280 }}
+                        style={{ padding: 10, fontSize: 20, borderColor: 'gray', borderWidth: 1, width: 280 , borderRadius: 8}}
                         selectable>
                         {secret}
                     </Text>

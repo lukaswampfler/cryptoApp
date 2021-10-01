@@ -32,7 +32,7 @@ export default function AppTextInput({ leftIcon, rightIcon,  toggleVisibility,  
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#f9f9f9',
-    borderRadius: 25,
+    borderRadius: 8,
     flexDirection: 'row',
     padding: 15,
     marginVertical: 10,

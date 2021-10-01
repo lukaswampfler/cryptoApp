@@ -74,7 +74,7 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
             />
             
       <Text style={styles.header}>{data.title}</Text>
-      <Text style ={styles.body}> most frequent letter in Dictionary: {mostFreqInDict} </Text>
+      <Text style ={styles.body}> most frequent letter in subset: {mostFreqInDict} </Text>
       {/*<Text style ={styles.body}> most frequent letter in Alphabet: {mostFreqInAlph} </Text>*/}
       <Text style ={styles.body}> most likely corresponding letter in secret key: {calculateKeyCharacter(mostFreqInDict, mostFreqInAlph)} </Text>
     </View>
@@ -244,7 +244,7 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
                 placeholder='Enter secret vigenere message'
                 autoCapitalize='none'
                 autoCorrect={false}
-                style={{ height: 80, borderColor: 'gray', borderWidth: 1 }}
+                style={{ height: 80, borderColor: 'gray', borderWidth: 1 , borderRadius: 8, padding: 4}}
                 keyboardType='default'
                 keyboardAppearance='dark'
                 returnKeyType='next'
@@ -292,7 +292,7 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
                 placeholder='length'
                 autoCapitalize='none'
                 autoCorrect={false}
-                style={{ height: 30, borderColor: 'gray', borderWidth: 1 }}
+                style={{ height: 30, borderColor: 'gray', borderWidth: 1 , borderRadius: 8, padding: 4}}
                 keyboardType='numeric'
                 keyboardAppearance='dark'
                 returnKeyType='next'
@@ -313,7 +313,7 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
 
     </TouchableWithoutFeedback>
     <View style = {{height: '50%'}}>
-    { showBars && <Text>Likely key word: {likelyKeyWord} </Text>}
+    { showBars && <View style ={{marginBottom: 10, marginTop: 5}}><Text style ={{fontSize: 16}}>Likely key word: {likelyKeyWord} </Text></View>}
     { showBars ?
                         <FlatList removeClippedSubviews={false}
                             data={data}

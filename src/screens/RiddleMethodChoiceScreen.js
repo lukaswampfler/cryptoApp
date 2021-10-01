@@ -130,7 +130,7 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
 <View>
 <Title title ={titleLanguage}/>
 
-<View style = {{margin: 15, borderColor: 'green'}}>
+<View style = {{margin: 15, borderColor: '#aaa'}}>
     <RNPickerSelect
     onValueChange={(value) => setSelectedLanguage(value)}
     disabled = {languageDisabled}
@@ -180,7 +180,7 @@ const pickerSelectStyles = StyleSheet.create({
         paddingBottom: 12,
         borderWidth: 1,
         borderColor: 'gray',
-        borderRadius: 4,
+        borderRadius: 8,
         backgroundColor: 'white',
         color: 'black',
     },
@@ -191,7 +191,7 @@ const pickerSelectStyles = StyleSheet.create({
         paddingBottom: 12,
         borderWidth: 1,
         borderColor: 'gray',
-        borderRadius: 4,
+        borderRadius: 8,
         backgroundColor: 'white',
         color: 'black',
     },

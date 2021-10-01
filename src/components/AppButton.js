@@ -10,7 +10,7 @@ export default function AppButton({ title, onPress }) {
 const styles = StyleSheet.create({
   button: {
     marginVertical: 10,
-    borderRadius: 25,
+    borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 15,

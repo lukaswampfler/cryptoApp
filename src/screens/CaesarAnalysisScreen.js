@@ -132,7 +132,7 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
                 placeholder='secret'
                 autoCapitalize='none'
                 autoCorrect={false}
-                style={{ height: 80, borderColor: 'gray', borderWidth: 1 }}
+                style={{ height: 80, borderColor: 'gray', borderWidth: 1, borderRadius: 8, padding: 4 }}
                 keyboardType='default'
                 keyboardAppearance='dark'
                 returnKeyType='next'
@@ -163,7 +163,7 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
 
 
 <View style={{flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center'}}>
-<View style={{marginTop: 10, marginLeft: 10, marginBottom: 5}}>
+<View style={{marginTop: 10, marginLeft: 10, marginBottom: 5, marginRight: 10}}>
                 <Text style={{
                     fontSize: 20
                 }}> 

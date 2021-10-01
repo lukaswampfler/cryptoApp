@@ -158,7 +158,7 @@ export default function VigenereScreen({ route, navigation }) {
                     placeholder='plain text message'
                     autoCapitalize='none'
                     autoCorrect={false}
-                    style={{ height: 80, borderColor: 'gray', borderWidth: 1 }}
+                    style={{ height: 80, borderColor: 'gray', borderWidth: 1 , borderRadius: 8, padding: 4}}
                     keyboardType='default'
                     keyboardAppearance='dark'
                     returnKeyType='next'
@@ -254,7 +254,7 @@ export default function VigenereScreen({ route, navigation }) {
                         placeholder='secret message'
                         autoCapitalize='none'
                         autoCorrect={false}
-                        style={{ height: 80, borderColor: 'gray', borderWidth: 1 }}
+                        style={{ height: 80, borderColor: 'gray', borderWidth: 1,  borderRadius: 8, padding: 4 }}
                         keyboardType='default'
                         keyboardAppearance='dark'
                         returnKeyType='next'

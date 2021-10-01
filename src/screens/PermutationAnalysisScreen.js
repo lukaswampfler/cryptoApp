@@ -188,8 +188,8 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
         //console.log("known clear", knownClearLetters);
         //console.log("inverse: ", inverseDict)
             return ( knownSecretLetters.includes(char) ? 
-            <Text style={{ color: '#0000ff', fontSize: 20}}> {decryptionDict[char]} </Text> :
-            <Text style={{ color: '#ff0000', fontSize: 20}}> {char} </Text>  
+           <Text style={{  fontSize: 20}}> {decryptionDict[char]} </Text> :
+            <Text style={{ padding: 8, fontSize: 20, backgroundColor: '#bbb'}}> {char} </Text> 
                 )
         })
     
@@ -220,7 +220,7 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
                 placeholder='permuted message'
                 autoCapitalize='none'
                 autoCorrect={false}
-                style={{ height: 80, borderColor: 'gray', borderWidth: 1 }}
+                style={{ height: 80, borderColor: 'gray', borderWidth: 1, borderRadius: 8, padding: 4 }}
                 keyboardType='default'
                 keyboardAppearance='dark'
                 returnKeyType='next'
@@ -300,7 +300,9 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
         {/*<Text width={100} style={{fontSize:18}}> partially decrypted String</Text>
         <Text width={100} style={{fontSize:16}}> {decypheredMessage}</Text>
         <Divider/>*/}
-         <View><Text width={100} style={{fontSize:18, marginBottom: 5, marginTop:5}}> Decyphered Message: <Text style={{color: '#0000ff'}}>known </Text><Text style={{color: '#ff0000'}}>unknown </Text></Text>
+         <View>
+         <View><Text width={100} style={{fontSize:20, marginBottom: 5, marginTop:5}}> Output (decyphered Message) <Text style={{fontSize: 16}}>known <Text style={{backgroundColor: '#bbb'}}>unknown </Text></Text></Text></View>
+         {/*<View><Text style={{fontSize: 16}}>known <Text style={{backgroundColor: '#bbb'}}>unknown </Text></Text></View>*/}
         <View style= {{flexDirection: 'row'}}><Text >{textList}</Text></View></View>
 
 
