@@ -105,6 +105,7 @@ export default function EncryptedMessageMethodChoiceScreen({ route, navigation }
           <View style ={{margin: 15, marginTop: 0}}>
           <Text style={{fontWeight: 'bold'}}> {message} </Text>
         </View>
+        {route.params.fromMessage && <View style={{margin: 20}}><Text> from    {route.params.sender} </Text></View>}
         <View style={{margin: 15}}>
         <Title title ={title2}/>
           </View>  

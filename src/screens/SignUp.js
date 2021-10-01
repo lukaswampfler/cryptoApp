@@ -4,11 +4,22 @@ import { Auth } from 'aws-amplify';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AppTextInput from '../components/AppTextInput';
 import AppButton from '../components/AppButton';
+import Title from '../components/Title';
+
+
+const title = "Create a new account for CryptoApp"
+
 
 export default function SignUp({ navigation }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
+  const [hidePassword, setHidePassword] = useState(true);
+
+
+  const togglePasswordVisibility = () => {
+    setHidePassword(!hidePassword);
+  }
   
   async function signUp() {
     try {
@@ -21,8 +32,9 @@ export default function SignUp({ navigation }) {
   }
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
+     <Title title ={title}/>
       <View style={styles.container}>
-        <Text style={styles.title}>Create a new account</Text>
+        {/*<Text style={styles.title}>Create a new account for CryptoApp</Text>*/}
         <AppTextInput
           value={username}
           onChangeText={text => setUsername(text)}
@@ -36,10 +48,12 @@ export default function SignUp({ navigation }) {
           value={password}
           onChangeText={text => setPassword(text)}
           leftIcon="lock"
+          rightIcon={hidePassword? "eye-outline": "eye-off-outline"}
           placeholder="Enter password"
           autoCapitalize="none"
           autoCorrect={false}
-          secureTextEntry
+          secureTextEntry = {hidePassword}
+          toggleVisibility = { togglePasswordVisibility }
           textContentType="password"
         />
         <AppTextInput
@@ -53,7 +67,7 @@ export default function SignUp({ navigation }) {
         />
         <AppButton title="Sign Up" onPress={signUp} />
         <View style={styles.footerButtonContainer}>
-          <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
+           <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
             <Text style={styles.forgotPasswordButtonText}>
               Already have an account? Sign In
             </Text>
@@ -85,7 +99,7 @@ const styles = StyleSheet.create({
       alignItems: 'center'
     },
     forgotPasswordButtonText: {
-      color: 'tomato',
+      color: '#666',
       fontSize: 18,
       fontWeight: '600'
     }

@@ -8,6 +8,7 @@ export default function Title({title, ...otherProps}){
         <View style={{
             width: 0.9*windowWidth,
             flexDirection: 'row',
+            justifyContent: 'center',
             alignItems: 'center',
             borderRadius: 8,
             padding: 8

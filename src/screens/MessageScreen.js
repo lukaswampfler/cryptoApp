@@ -24,7 +24,7 @@ const MessageItem = ({ message, navigation }) => (
         onPress = {() => {
             //console.log("Message", message.text, "pressed.")
             navigation.navigate("Riddles", 
-            {screen: "EncryptedMessageMethodChoice" , params: {message: message.text, fromRiddles: false}});
+            {screen: "EncryptedMessageMethodChoice" , params: {message: message.text, fromRiddles: false, fromMessage: true, sender: message.sender.name}});
         }}>
         <Text style={{ width: 250, fontSize: 16}} selectable={true} selectionColor='yellow' >
             {message.text}  </Text>

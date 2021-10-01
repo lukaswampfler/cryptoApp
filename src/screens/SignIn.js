@@ -6,6 +6,7 @@ import AppTextInput from '../components/AppTextInput';
 import AppButton from '../components/AppButton';
 import AppContext from '../components/AppContext';
 import { IntroModal } from '../utils/Modals';
+import Title from '../components/Title';
 
 export default function SignIn({ navigation, updateAuthState }) {
   
@@ -38,11 +39,15 @@ export default function SignIn({ navigation, updateAuthState }) {
   const introText = "Here comes the introduction to the Error";
   const method = "Error!"
 
+  const title = "Sign in to your CryptoApp - account"
+
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
+      <Title title ={title}/>
       <View style={styles.container}>
       <IntroModal text={errorMessage} method={method} transparent/>
-        <Text style={styles.title}>Sign in to your account</Text>
+
+        {/*<Text style={styles.title}></Text>*/}
         <AppTextInput
           value={userName}
           onChangeText={text => {
@@ -68,7 +73,7 @@ export default function SignIn({ navigation, updateAuthState }) {
         />
         <AppButton title="Login" onPress={signIn} />
         <View style={styles.footerButtonContainer}>
-          <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+         <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
             <Text style={styles.forgotPasswordButtonText}>
               Don't have an account, {userName}? Sign Up
             </Text>
@@ -100,7 +105,7 @@ const styles = StyleSheet.create({
       alignItems: 'center'
     },
     forgotPasswordButtonText: {
-      color: 'tomato',
+      color: '#666',
       fontSize: 18,
       fontWeight: '600'
     }
