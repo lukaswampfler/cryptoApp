@@ -270,3 +270,18 @@ export function getRandomKeys(){
     //console.log("SDES-Keys: ", keys)
 
 }
+
+export function isBitStringMultipleOf8(text){
+    // returns true if text is a bit-String of length multiple of 8, else false
+    return isBitString(text) && text.length % 8 == 0;
+}
+
+export function is8BitString(text){
+    return isBitString(text) && text.length == 8 ;
+}
+
+function isBitString(text){
+    return text.match((/^[0-1]*$/))
+}
+
+

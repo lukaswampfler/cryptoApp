@@ -226,8 +226,12 @@ const toggleRandomSwitch = () => {
           setVerifiedPubExp(pow16+1)
       } else {
         //console.log("setting to small default")
-          setPubExp((phi - 1).toString())
-          setVerifiedPubExp(phi-1);
+        let cand = 2;
+        while (gcd(cand, phi) > 1){
+          cand = Math.floor(Math.random() * phi)
+        }
+          setPubExp(cand.toString())
+          setVerifiedPubExp(cand);
       }
 }
 
@@ -268,11 +272,12 @@ const checkPrime = value => {
 // 4) use my primes - button should be using this function: 
 
 const checkAndUsePrimes = () => {
-  if (checkPrime(p)){
+  if (checkPrime(p) && checkPrime(q)){
     setPConfirmed(p)
-    if (checkPrime(q)){
+    setQConfirmed(q)
+    /*if (checkPrime(q)){
       setQConfirmed(q)
-    }
+    }*/
   } else {
     alert("please enter prime numbers for p and q!")
     setPConfirmed('')
@@ -383,7 +388,7 @@ const showKeyModal = () => {
   });
   
   
-    const formikExponent = useFormik({
+   /*const formikExponent = useFormik({
       validationSchema: ExpInputScheme,
       initialValues: { exp: NUM_DIGITS },
       onSubmit: values => {
@@ -395,7 +400,7 @@ const showKeyModal = () => {
         setQ(q);
         
       }
-    });
+    });*/
   
 
       

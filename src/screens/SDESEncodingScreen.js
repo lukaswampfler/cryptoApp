@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView, Text, View, TextInput } from 'react-native';
 import { Divider } from 'react-native-elements';
 import AppContext from '../components/AppContext';
@@ -9,21 +9,32 @@ import { encode, decode, bitsStringFromBytes } from '../utils/sdesMath';
 import { ExplanationModal } from '../utils/Modals';
 import { useFormik } from 'formik';
 import * as Yup from 'yup'
+import { sdesEncodingIntroText } from '../utils/introTexts';
 
 
-export default function SDESEncodingScreen({ navigation }) {
+export default function SDESEncodingScreen({ navigation, route }) {
     const myContext = useContext(AppContext);
     const [text, setText] = useState('');
     const [encoded, setEncoded] = useState('');
 
 
+
+    const getMessageInitialValue = () => {
+        if (route.params === undefined) {
+          return '';
+        } else {
+           return route.params.message;
+        }
+      }
+
     const changeText = text => {
         setText(text);
-        setEncoded(encode(text));
+        setEncoded(bitsStringFromBytes(encode(text)));
     }
 
     const useMessage = () => {
-        const bitString = bitsStringFromBytes(encoded);
+        //const bitString = bitsStringFromBytes(encoded);
+        const bitString = encoded;
         let ciphers = myContext.ciphers;
         ciphers.sdes.message = bitString;
         myContext.setCiphers(ciphers);
@@ -31,7 +42,15 @@ export default function SDESEncodingScreen({ navigation }) {
     }
 
 
-    const introText = "Here comes the introduction to S-DES encoding ..., please use only characters from latin-1 encoding, i.e. no emojis";
+    useEffect(() => {
+        console.log(route)
+        setText(getMessageInitialValue())
+        setEncoded(bitsStringFromBytes(encode(text)));
+    }, [])
+
+
+    const introText = sdesEncodingIntroText
+    
     const method = "Encoding a message"
 
     const title = "S-DES Encoding"
@@ -45,6 +64,14 @@ export default function SDESEncodingScreen({ navigation }) {
             <ScrollView style={{ flex: 1 , margin: 10}}>
                 <Title title = {title}/>
                 <ExplanationModal text={introText} title={method} />
+                <View style = {{margin: 10}}>
+                <Text style={{
+                    fontSize: 20,
+                    marginTop: 20, 
+                    marginLeft: 10
+                }}> 
+                Enter your message: </Text>
+                </View>
                 <View style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
@@ -52,6 +79,8 @@ export default function SDESEncodingScreen({ navigation }) {
                     marginBottom: 10,
                     marginLeft: 20,
                 }}>
+                    
+
 
                     <TextInput
                         width={240}
@@ -67,8 +96,17 @@ export default function SDESEncodingScreen({ navigation }) {
                         returnKeyLabel='next'
                         onChangeText={changeText}
                         onBlur={() => { }}
+                        value={text}
                     />
                     <Button label='use message' onPress={useMessage} />
+                </View>
+                <View style = {{margin: 10}}>
+                <Text style={{
+                    fontSize: 20,
+                    marginTop: 20, 
+                    marginLeft: 10
+                }}> 
+                ASCII-Encoding of the above message </Text>
                 </View>
                 <View style={{
                     flexDirection: 'row',

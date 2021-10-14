@@ -7,7 +7,7 @@ import Button from '../components/Button';
 import Title from '../components/Title';
 import { IntroModal } from '../utils/Modals';
 import ClearButton from '../components/ClearButton';
-
+import { permutationIntroText } from '../utils/introTexts';
 
 import { alphabet, randomTransposition, shuffleAlphabet, encryptPermutation} from '../utils/permutationMath';
 
@@ -23,7 +23,7 @@ export default function PermutationScreen({ navigation }) {
 
     const myContext = useContext(AppContext);
 
-    const introText = "Here comes the introduction to the Permutation method...";
+    const introText = permutationIntroText;
     const method = "The Permutation cipher"
 
     useEffect(() => {

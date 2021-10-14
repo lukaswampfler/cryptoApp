@@ -11,6 +11,7 @@ import RNPickerSelect from 'react-native-picker-select';
 
 import AppContext from '../components/AppContext';
 import { TabRouter } from '@react-navigation/native';
+import { riddlesMethodChoiceIntroText } from '../utils/introTexts'; 
 
 
 
@@ -20,23 +21,6 @@ const methods = ['rsa', 'sdes', 'caesar', 'vigenere', 'permutation' ]
 const options = ["secret with known cipher", "secret with unknown cipher", "random message from server"]
 
 
-/*onst renderItem = ({ item }) => (
-        
-    <View style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        borderBottomWidth: 1,
-        margin: 5,
-    }}
-    >
-        <TouchableOpacity onPress={()=> console.log({item})}>
-        <Text style={{fontSize: 18 , width: 350, marginBottom: 10, marginTop: 5 }}  >
-            {item.toUpperCase()}  </Text>
-        
-      
-        </TouchableOpacity>
-    </View>
-);*/
 
 
 export default function RiddleMethodChoiceScreen({ navigation }) {
@@ -55,10 +39,9 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
     },[selectedMethod])
     
     const method = "Your choice"
-    const introText = "Please select a language in any case, even if your message is just a number.\n"
-    const introSDES = "- SDES easy is just an 8-bit string \n- SDES hard is ONE ASCII-encoded character\n- SDES extreme: a larger text first encoded and then encrypted."
-    const introRSA = "- RSA easy is the result of the encryption using YOUR public key\n- RSA hard: you will get the public key and the result, primes not larger than 1000\n- RSA extreme: the same with larger primes - good luck!"
-    const intro = introText + '\n' + introSDES + '\n' + introRSA;
+
+    const intro =  riddlesMethodChoiceIntroText
+    
 
     const languageDisabled = selectedMethod == null || ['rsa', 'sdes'].includes(selectedMethod);
     

@@ -112,8 +112,16 @@ export default function HomeScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <Title title={title}/>
-      <Title title="Open the menu to see your options"/>
-      {/*<View style={styles.homeScreen}>
+      <Title title="Open the menu to see the following options: "/>
+      
+      <Text style ={{margin: 5, fontSize: 15}}> <Text style={{fontWeight: 'bold'}}>Encryption: </Text>Choose a text-based symmetric method like Caesar, Vigenère or Permutation to encrypt a message and send it to a friend. You can also choose RSA or S-DES encryption.</Text>
+      <Text style ={{margin: 5, fontSize: 15}}> <Text style={{fontWeight: 'bold'}}>Cryptoanalysis: </Text> Do you have an encrypted message? Go to cryptoanalysis to perform an analysis and decypher the message.</Text>
+      <Text style ={{margin: 5, fontSize: 15}}> <Text style={{fontWeight: 'bold'}}>My Messages: </Text> Here you can find the last messages that were sent to you. Click on any one to analyze.</Text>
+      <Text style ={{margin: 5, fontSize: 15}}> <Text style={{fontWeight: 'bold'}}>Riddles: </Text> Try to break an encrypted secret message.</Text>
+
+
+      {/*
+      <View style={styles.homeScreen}>
        {/* <Button onPress={signOut} title="Sign Out" />
         {userID ? <Text>userID: {userID}</Text> : <Text> no userID set </Text>}*/}
        {/*} <Text style={{ fontSize: 18, marginBottom: 50 }}> What would you like to do?  </Text>

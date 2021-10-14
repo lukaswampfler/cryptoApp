@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { View, Text, Dimensions, TextInput, TouchableWithoutFeedback, Keyboard, StyleSheet } from 'react-native';
+import { View, Text, Dimensions, TextInput, TouchableWithoutFeedback, Keyboard, StyleSheet, ScrollView } from 'react-native';
 import Button from '../components/Button';
 import { Divider } from 'react-native-elements';
 
@@ -301,7 +301,7 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
          <View>
          <View><Text width={100} style={{fontSize:20, marginBottom: 5, marginTop:5}}> Output (decyphered Message) <Text style={{fontSize: 16}}>known <Text style={{backgroundColor: '#bbb'}}>unknown </Text></Text></Text></View>
          {/*<View><Text style={{fontSize: 16}}>known <Text style={{backgroundColor: '#bbb'}}>unknown </Text></Text></View>*/}
-        <View style= {{flexDirection: 'row'}}><Text >{textList}</Text></View></View>
+        <ScrollView style= {{height: '30%', marginTop: 5}}><Text >{textList}</Text></ScrollView></View>
 
 
         <View style={{

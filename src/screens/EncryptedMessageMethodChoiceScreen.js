@@ -7,6 +7,7 @@ import styles from './styles'
 
 import AppContext from '../components/AppContext';
 import App from '../../App';
+import { isBitStringMultipleOf8 } from '../utils/sdesMath';
 
 
 
@@ -60,8 +61,11 @@ export default function EncryptedMessageMethodChoiceScreen({ route, navigation }
             navigation.navigate("Methods", 
             {screen: 'RSA', params: {message: message, fromRiddles: true}});
         } else if (method == 'sdes') {
-            navigation.navigate("Methods", 
-            {screen : "SDES",  params: {message: message} });
+            if(!isBitStringMultipleOf8(message)){
+                navigation.navigate("Methods", {screen: "SDESEncoding", params: {message: message}})
+            } else {navigation.navigate("Methods", 
+            {screen : "SDES",  params: {message: message} });}
+            
         } else if (method == 'caesar') {
             navigation.navigate("Analysis", 
             {screen: 'CaesarAnalysis', params: {message: message}});

@@ -7,7 +7,7 @@ import * as dataEng from '../data/jeopardy_questions_eng.json';
 import {getRandomKeys, encryptSDESMessage, encode, bitsStringFromBytes, getRandomBitString} from './sdesMath';
 import { smartExponentiation } from './RSAMath';
 
-import AppContext from '../components/AppContext';
+//import AppContext from '../components/AppContext';
 
 
 const alphabet = 'abcdefghijklmnopqrstuvwxyz'
@@ -20,8 +20,8 @@ export default function getSecretContainer(details, message = ''){
 
     
 
-    console.log("details: ", details)
-    console.log("message: ", message)
+    //console.log("details: ", details)
+    //console.log("message: ", message)
 
     if(details.isText){
         message = cleanMessage(message);
@@ -102,45 +102,8 @@ export default function getSecretContainer(details, message = ''){
     return secretContainer;
 }
 
-/*const getEnglishMessage = () => { 
-    const allMessages = dataEng.clear;
-    return allMessages[randomNumber(allMessages.length)];
-};
-
-const getMessage = async (language) => {
-    
-    //let language = 'german'
-    const languageShort = language == 'german' ? 'de' : 'en'; 
-    const API = 'https://' + languageShort + '.wikipedia.org/w/api.php?action=query&generator=random&grnnamespace=0&prop=extracts&exchars=1000&explaintext&utf8=&format=json';
 
 
-    try {
-        
-    const body = { method: 'GET', dataType: 'json'};
-    const myRequest = new Request(API, body);
-    
-    const response = await fetch(myRequest)
-    const json = await response.json();
-    console.log(json);
-    const pageInfo = json["query"]["pages"]
-    const pageIDs = Object.keys(pageInfo)
-    const extract = pageInfo[pageIDs[0]]  // first page
-    return extract['extract'];
-
-    } catch (error){
-        console.log(error)
-    }
-
-    
-}*/
-
-
-/*function chooseClearMessage(language){
-    const message = getMessage(language)
-    console.log(message)
-    return message;
-
-}*/
 
 function randomNumber(max){
     // returns random Number between 0, 1, ..., max-1
@@ -154,7 +117,7 @@ function createVigenereKey(length) {
     for (let ind = 0; ind < length; ind++){
         key = key + alphabet.charAt(randomNumber(alphabet.length))
     }
-    console.log("vigenere key of length ", length, " is ", key)
+    //console.log("vigenere key of length ", length, " is ", key)
     return key;
 }   
 
@@ -163,7 +126,7 @@ function getMessagesFromServer(num){
 }
 
 function cleanMessage(text){
-    console.log("text: ", text)
+    //console.log("text: ", text)
 
     const newText = Platform.OS == 'ios' ? text.replaceAll('=', '') : text.replace(/=/g, '')
     return newText.replace(/(\r\n|\r|\n)/g, '');
@@ -184,6 +147,6 @@ function adjustMessage(text, level){
 
 function removeNonAscii(text){
     text = text.toLowerCase();
-    text = text.replace(/[^\x20-\x7E]/g, '') // remove all non ASCII-characters
+    text = text.replace(/[^\x21-\x7E]/g, '') // remove all non ASCII-characters
     return text
 }

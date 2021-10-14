@@ -18,6 +18,7 @@ import {
 import RSA from '../utils/RSA'
 import RSAKeyInput from '../components/RSAKeyInput';
 import { smartExponentiation } from '../utils/RSAMath';
+import { rsaIntroText } from '../utils/introTexts';
 
 
 
@@ -181,7 +182,7 @@ export default function RSAEncryptionScreen({ route, navigation }) {
         } else return '';
     }
 
-    const introText = "Here comes the introduction to the RSA method...";
+    const introText = rsaIntroText;
     const method = "The RSA cipher"
 
 
@@ -198,7 +199,7 @@ export default function RSAEncryptionScreen({ route, navigation }) {
             <View
                 style={{
                     flex: 1,
-                    backgroundColor: '#fff',
+                    //backgroundColor: '#fff',
                     //alignItems: 'center',
                     justifyContent: 'center', 
                 }}
@@ -235,7 +236,7 @@ export default function RSAEncryptionScreen({ route, navigation }) {
                     />
                     <View style={{
                         flex: 1,
-                        backgroundColor: '#fff',
+                        //backgroundColor: '#fff',
                         alignItems: 'center',
                         justifyContent: 'center'
                     }}>

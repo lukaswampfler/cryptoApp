@@ -13,7 +13,8 @@ import * as Yup from 'yup'
 
 
 import { SDESKeyInputScheme, SDESK12InputScheme, SDESMessageInputScheme } from '../utils/InputTests';
-import { encryptSDESMessage, generateSDESKeys, decodeBinaryString, encodeEncrypted } from '../utils/sdesMath';
+import { encryptSDESMessage, generateSDESKeys, decodeBinaryString, encodeEncrypted, is8BitString } from '../utils/sdesMath';
+import { sdesIntroText } from '../utils/introTexts';
 
 
 const INVALID_FORMAT_ERROR_MESSAGE = 'invalid format';
@@ -31,6 +32,8 @@ export default function SDESScreen({ route, navigation }) {
   const [encryptedMessage, setEncryptedMessage] = useState('');
   const [decryptedMessage, setDecryptedMessage] = useState('');
   const [isMessageBinary, setIsMessageBinary] = useState(false);
+  const [k1, setK1] = useState('')
+  const [k2, setK2] = useState('')
 
 
   useEffect(() => {
@@ -85,6 +88,33 @@ export default function SDESScreen({ route, navigation }) {
     }
   }
 
+  const getKeyInitialValue = () => {
+    let ciphers = myContext.ciphers;
+      if (ciphers.sdes === undefined) {
+        return '';
+      } else if (!route) {
+      return myContext.ciphers.sdes.key10;
+    } else {
+      ciphers.sdes.key = ''
+      myContext.setCiphers(ciphers);
+      return ''
+    }
+      
+  }
+
+  const getK1K2InitialValues = () => {
+    //alert("getting k1 k2 initial values" + getKeyInitialValue())
+    let ciphers = myContext.ciphers;
+      if (ciphers.sdes === undefined) {
+        return {k1: '', k2: ''};
+      } else if (!route) {
+      return generateSDESKeys(myContext.ciphers.sdes.key10);
+    } else {
+      return {k1: '', k2: ''}
+    }
+      
+  }
+
   const encryptKey = () => {
     myContext.setRSAInputSwitchisDecimal(false);
     let ciphers = myContext.ciphers;
@@ -95,9 +125,55 @@ export default function SDESScreen({ route, navigation }) {
 
   }
 
+
+  const changeK1 = text => {
+    setK1(text);
+  }
+
+  const changeK2 = text => {
+    setK2(text)
+  }
+
   const handleEncryption = () => {
+
+
+    /*used to be: 
     formikKey.handleSubmit(formikKey.values)
     formikMessage.handleSubmit(formikMessage.values)
+    
+    */
+
+    if (!is8BitString(k1) || !is8BitString(k2)){return
+    } else {
+
+   let ciphers = myContext.ciphers;
+      if (ciphers.sdes === undefined) {
+        ciphers.sdes = { key: formikKey.values.key };
+      } else {
+        ciphers.sdes.key10 = formikKey.values.key;
+      }
+      setKeyEntered(true);
+      const keys = generateSDESKeys(formikKey.values.key);
+      ciphers.sdes.keys = keys
+      ciphers.sdes.message = formikMessage.values.message;
+      setMessage(formikMessage.values.message);
+      //console.log("message", values.message);
+      //console.log("keys: ", myContext.ciphers.sdes.keys);
+      const encrypted = encryptSDESMessage(formikMessage.values.message, keys)
+      const decryptionKeys = { k1: keys.k2, k2: keys.k1 }
+      ciphers.sdes.encryptedMessage = encrypted;
+      const encryptedAsText = decodeBinaryString(encrypted);
+      const encryptedEncoded = encodeEncrypted(encryptedAsText);
+      console.log("encrypted encoded", encryptedEncoded);
+      console.log("decryption keys: ", decryptionKeys);
+      console.log("Encrypted decrypted", encryptSDESMessage(encryptedEncoded, decryptionKeys))
+      const decrypted = encryptSDESMessage(encodeEncrypted(decodeBinaryString(encrypted)), decryptionKeys);
+      myContext.setCiphers(ciphers);
+      setIsEncrypted(true);
+      setEncryptedMessage(encrypted);
+      setDecryptedMessage(decodeBinaryString(decrypted));
+    }
+    
   }
 
   /*formikKey has properties: handleChange,
@@ -111,7 +187,7 @@ export default function SDESScreen({ route, navigation }) {
   const formikKey = useFormik({
     enableReinitialize: true, 
     validationSchema: SDESKeyInputScheme,
-    initialValues: myContext.ciphers.sdes.key10 === undefined ? {key: ''} : {key: myContext.ciphers.sdes.key10},
+    initialValues: {key: getKeyInitialValue()},
     onSubmit: values => {
       let ciphers = myContext.ciphers;
       if (ciphers.sdes === undefined) {
@@ -120,7 +196,10 @@ export default function SDESScreen({ route, navigation }) {
         ciphers.sdes.key10 = values.key;
       }
       setKeyEntered(true);
-      ciphers.sdes.keys = generateSDESKeys(values.key);
+      const keys = generateSDESKeys(values.key)
+      ciphers.sdes.keys = keys;
+      setK1(keys.k1)
+      setK2(keys.k2)
       myContext.setCiphers(ciphers);
       console.log(myContext.ciphers);
       // TODO: also create both keys and input them into the next form. AND: refactor into an own function
@@ -130,7 +209,8 @@ export default function SDESScreen({ route, navigation }) {
   const formikK12 = useFormik({
     enableReinitialize: true,
     validationSchema: SDESK12InputScheme,
-    initialValues: myContext.ciphers.sdes.keys === undefined ? { k1: '', k2: '' } : myContext.ciphers.sdes.keys,
+    initialValues: getK1K2InitialValues(),
+    //initialValues: generateSDESKeys(myContext.ciphers.sdes.key10),
     onSubmit: values => {
       let ciphers = myContext.ciphers;
       ciphers.sdes.keys = values;
@@ -167,18 +247,18 @@ export default function SDESScreen({ route, navigation }) {
   });
 
 
-  const introText = "Introduction to the S-DES method ...."
+  const introText = sdesIntroText
   const method = "The S-DES cipher"
 
   return (
     <View style={{ flex: 1 }}>
       <ScrollView style={{ flex: 1 , margin: 10}}>
        <Title title={method} />
-        <IntroModal text={introText} method={method} />
+        <IntroModal text={sdesIntroText} method={method} />
         <View
                 style={{
                     flex: 1,
-                    backgroundColor: '#fff',
+                    //backgroundColor: '#fff',
                     //alignItems: 'center',
                     justifyContent: 'center', 
                 }}
@@ -272,11 +352,13 @@ export default function SDESScreen({ route, navigation }) {
             keyboardAppearance='dark'
             returnKeyType='next'
             returnKeyLabel='next'
-            onChangeText={formikK12.handleChange('k1')}
-            onBlur={formikK12.handleBlur('k1')}
-            error={formikK12.errors.k1}
-            touched={formikK12.touched.k1}
-            value={formikK12.values.k1}
+            onChangeText={changeK1}
+            value = {k1}
+            //onChangeText={formikK12.handleChange('k1')}
+            //onBlur={formikK12.handleBlur('k1')}
+            //error={formikK12.errors.k1}
+            //touched={formikK12.touched.k1}
+            //value={formikK12.values.k1}
           />
 
        </View>   
@@ -291,11 +373,13 @@ export default function SDESScreen({ route, navigation }) {
           keyboardAppearance='dark'
           returnKeyType='next'
           returnKeyLabel='next'
-          onChangeText={formikK12.handleChange('k2')}
-          onBlur={formikK12.handleBlur('k2')}
-          error={formikK12.errors.k2}
-          touched={formikK12.touched.k2}
-          value={formikK12.values.k2}
+          onChangeText={changeK2}
+          value = {k2}
+          //onChangeText={formikK12.handleChange('k2')}
+          //onBlur={formikK12.handleBlur('k2')}
+          //error={formikK12.errors.k2}
+          //touched={formikK12.touched.k2}
+          //value={formikK12.values.k2}
         />
 </View>
 

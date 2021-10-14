@@ -38,6 +38,7 @@ export default function RiddleDisplayScreen({ route,  navigation }) {
     const [clearText, setClearText] = useState('')
     const [showSolution, setShowSolution] = useState(false);
     const [lastRiddle, setLastRiddle] = useState({})
+    const [displayShowLastRiddle, setDisplayShowLastRiddle] = useState(true);
 
 
     //let secretContainer = {message: secretMessage, method: 'keine', secret: 'secret'}; 
@@ -73,6 +74,7 @@ export default function RiddleDisplayScreen({ route,  navigation }) {
             setKey(myContext.lastRiddle.key)}
             setLevel(myContext.lastRiddle.level)
             setLanguage(myContext.lastRiddle.language)
+            setDisplayShowLastRiddle(false);
         
     }
 
@@ -313,7 +315,7 @@ const setContainer = () => {
              </View>   }
              <View style = {{flexDirection: 'column', justifyContent: 'flex-end'}}>
                  <View width = '45%' style = {{margin: 30}}>
-             <Button label='show last riddle' onPress={showLastRiddle} />
+            {displayShowLastRiddle &&  <Button label='show last riddle' onPress={showLastRiddle} />}
                 </View>
              </View>
           </SafeAreaView>  

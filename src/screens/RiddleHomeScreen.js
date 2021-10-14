@@ -5,6 +5,7 @@ import Title from '../components/Title';
 import Button from '../components/Button';
 import { IntroModal } from '../utils/Modals';
 import styles from './styles'
+import { riddlesHomeIntroText } from '../utils/introTexts';
 import { useNavigation } from '@react-navigation/core';
 
 import AppContext from '../components/AppContext';
@@ -69,9 +70,9 @@ export default function RiddleHomeScreen({ navigation }) {
 
 
     const title = "Riddles ..."
-    const introText = "You can either \n- solve a riddle with a method of your liking,\n- create a random riddle or\n- download a few of the last sent messages from other people.";
+    //const introText = "You can either \n- solve a riddle with a method of your liking,\n- create a random riddle or\n- download a few of the last sent messages from other people.";
     const method = "Solving riddles"
-
+    const introText = riddlesHomeIntroText;
 
     return (
         <SafeAreaView style={styles.container}>
