@@ -46,7 +46,9 @@ export function caesarEncrypt(text, key) {
 
 export function isInteger(s){
     let result = true;
-    for (let ind = 0; ind< s.length; ind++){
+    let start = 0;
+    if (s.charAt(0) == '-') start = 1;
+    for (let ind = start; ind < s.length; ind++){
         result = result && (s.charAt(ind) >= '0' && s.charAt(ind) <= '9')
     }
     return result

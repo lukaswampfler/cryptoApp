@@ -34,7 +34,6 @@ export default function VigenereScreen({ route, navigation }) {
     const ref = useRef(key);
 
     const toggleEncryptionSwitch = (value) => {
-        console.log(BACKGROUND_COLOR);
         //To handle switch toggle
         setIsEncrypting(!isEncrypting);
         //State changes according to switch
@@ -218,14 +217,7 @@ export default function VigenereScreen({ route, navigation }) {
                     marginBottom: 10,
                 }}>
                 <Text style={{ marginTop: 20 }}> {isEncrypting?  'Encryption': 'Decryption'} </Text>
-                {/*<Switch
-                    
-                            onValueChange={toggleEncryptionSwitch}
-                            value={isEncrypting}
-                            ios_backgroundColor={'#ddd'}
-                            thumbColor = {'#555'}
-                            trackColor={{false: '#222', true: '#ddd'}}
-                />*/}
+                
                 <GreySwitch onValueChange={toggleEncryptionSwitch} value={isEncrypting}/>
 
 

@@ -35,3 +35,9 @@ RSA ENCRYPT 10-BIT KEY: in a real scenario, the key of the symmetric method woul
 export const sdesEncodingIntroText = `
 Here comes the introduction to S-DES encoding ..., please use only characters from latin-1 encoding, i.e. no emojis
 `
+
+
+export const caesarIntroText = `
+Input: A text containing any kind of characters. Attention: Only alphabetic characters will be encyphered. \n
+Key: an integer number\n key = 0, 26, 52, ... -> secret will be equal to clear text.
+`

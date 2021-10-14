@@ -9,14 +9,16 @@ import { IntroModal } from '../utils/Modals';
 import { caesarEncrypt, isInteger } from '../utils/caesarMath';
 import { useFormik } from 'formik';
 import ClearButton from '../components/ClearButton';
+import GreySwitch from '../components/GreySwitch';
 
 import { CaesarKeyInputScheme } from '../utils/InputTests';
+import { caesarIntroText } from '../utils/introTexts';
 
 import styles from './styles'
 
 
 
-
+const BACKGROUND_COLOR = '#ddd'
 
 export default function CaesarScreen({ navigation }) {
     const myContext = useContext(AppContext);
@@ -24,21 +26,41 @@ export default function CaesarScreen({ navigation }) {
     const [text, setText] = useState('');
     const [secret, setSecret] = useState('');
     const [key, setKey] = useState('');
+    const [isEncrypting, setIsEncrypting] = useState(true);
 
 
-    const changeText = text => {
-        setText(text);
-        setSecret(caesarEncrypt(text, key));
+    const changeText = newText => {
+        setText(newText);
+        if(isEncrypting) updateTextAndSecret(newText, '', key);
+        //setSecret(caesarEncrypt(text, key));
     }
 
-    const changeKey = key =>{
-        if(isInteger(key)){
-           setKey(key);
-           setSecret(caesarEncrypt(text, key))
+    const changeKey = newKey =>{
+        if(isInteger(newKey)){
+           setKey(newKey);
+           updateTextAndSecret(text, secret, newKey)
         } else {
             setSecret('')
-            alert("Please use only positive integers for keys!")
+            alert("Please use only integers for keys!")
+            updateTextAndSecret('', '', newKey)
         }
+    }
+
+    const changeSecret = newSecret => {
+        setSecret(newSecret);
+        if(!isEncrypting) updateTextAndSecret('', newSecret, key, false);
+    }
+
+    const updateTextAndSecret = (text, secret, newKey, encrypting = isEncrypting) => {
+        if(encrypting){
+            setSecret(caesarEncrypt(text, newKey));
+        } else {
+            setText(caesarEncrypt(secret, -newKey)); 
+        }
+    }
+
+    const toggleEncryptionSwitch = () =>{
+        setIsEncrypting(!isEncrypting);
     }
 
 
@@ -93,7 +115,7 @@ export default function CaesarScreen({ navigation }) {
         }
     });
 
-    const introText = "Important: The key should be a positive integer number.";
+    const introText = caesarIntroText;
     const method = "The Caesar cipher"
 
     return (
@@ -109,12 +131,14 @@ export default function CaesarScreen({ navigation }) {
                     marginTop: 20, 
                     marginLeft: 10
                 }}> 
-                Input </Text>
+                {isEncrypting? 'Input' : 'Output'}  </Text>
                 </View>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                <View style = {{width : '60%', backgroundColor: isEncrypting? BACKGROUND_COLOR: null}}>
                 <TextInput
-                    width={280}
+                    width='100%'
                     multiline={true}
+                    editable = {isEncrypting}
                     textAlignVertical='top'
                     placeholder='Enter plain text message'
                     autoCapitalize='none'
@@ -128,19 +152,21 @@ export default function CaesarScreen({ navigation }) {
                     onBlur={() => { }}
                     value={text}
                 />
+                </View>
             <ClearButton setInput={setText} setKey = {setKey} defaultKey = {0}/>
                 </View>
 <Divider style={{ width: "100%", margin: 10 }} />
 
-                <View style = {{marginTop: 20, marginLeft: 10, marginRight: 10, marginBottom: 10}}>
+<View style = {{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <View  style = {{flexDirection: 'column', marginTop: 20, marginLeft: 10, marginRight: 10, marginBottom: 10}}>
                 <Text style={{
                     fontSize: 20
                 }}> 
                 Key (number) </Text>
-                </View>
+                <View style = {{ marginTop: 5, width : '100%', backgroundColor:  BACKGROUND_COLOR}}>
                 <NumInput
                     //icon='pinterest'
-                    width={200}
+                    width='100%'
                     placeholder='Enter Caesar key'
                     autoCapitalize='none'
                     keyboardType='number-pad'
@@ -150,21 +176,24 @@ export default function CaesarScreen({ navigation }) {
                     //onChangeText={formikKey.handleChange('key')}
                     onChangeText= {changeKey}
                     value = {key}/>
-                    {/*onBlur={formikKey.handleBlur('key')}
-                    //error={formikKey.errors.key}
-                    //touched={formikKey.touched.key}
-    //value={formikKey.values.key}*/} 
+                    </View>
+                  </View> 
 
-                {/*<View style={{
-                    flexDirection: 'row',
+                  <View style={{
+                    flexDirection: 'column',
                     justifyContent: 'space-around',
                     marginTop: 10,
                     marginBottom: 10,
                 }}>
-                  }  <Button label='use this key' onPress={formikKey.handleSubmit} />
-                    
-                </View>*/}
+                <Text style={{ marginTop: 20 }}> {isEncrypting?  'Encryption': 'Decryption'} </Text>
+                
+                <GreySwitch onValueChange={toggleEncryptionSwitch} value={isEncrypting}/>
 
+
+                </View>          
+
+
+</View>
 
 <Divider style={{ width: "100%", margin: 10 }} />
 
@@ -172,7 +201,7 @@ export default function CaesarScreen({ navigation }) {
 <Text style={{
     fontSize: 20
 }}> 
-Output </Text>
+{isEncrypting? 'Output' : 'Input'}  </Text>
 </View>
 
                 <View style={{
@@ -183,12 +212,24 @@ Output </Text>
                     marginLeft: 0,
                 }}>
                    <ScrollView style ={{height: 100}}>
-
-                    <Text
-                        style={{ padding: 10, fontSize: 20, borderColor: 'gray', borderWidth: 1, width: 280 , borderRadius: 8}}
-                        selectable>
-                        {secret}
-                    </Text>
+                   <View style = {{width : '60%', backgroundColor: isEncrypting? null: BACKGROUND_COLOR}}>
+                   <TextInput
+                        width='100%'
+                        editable = {!isEncrypting}
+                        multiline={true}
+                        textAlignVertical='top'
+                        placeholder='secret message'
+                        autoCapitalize='none'
+                        autoCorrect={false}
+                        style={{ height: 80, borderColor: 'gray', borderWidth: 1,  borderRadius: 8, padding: 4 }}
+                        keyboardType='default'
+                        keyboardAppearance='dark'
+                        returnKeyType='next'
+                        returnKeyLabel='next'
+                        onChangeText={changeSecret}
+                        onBlur={() => { }}
+                        value={secret}/>
+                        </View>
                     </ScrollView>
 
                 </View>
