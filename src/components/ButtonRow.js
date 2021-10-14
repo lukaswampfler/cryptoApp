@@ -14,7 +14,7 @@ import * as SecureStore from 'expo-secure-store';
 
 
 
-export default function ButtonRow({ navigation }) {
+export default function ButtonRow({ navigation, updatePersonalKeyText }) {
 
     const myContext = useContext(AppContext);
 
@@ -35,7 +35,7 @@ export default function ButtonRow({ navigation }) {
     async function updateKeys() {
 
         // save public key on server
-        const publicKey = await API.graphql({
+        const promise1 = await API.graphql({
             query: updateKey,
             variables: {
                 input: {
@@ -47,8 +47,10 @@ export default function ButtonRow({ navigation }) {
         });
 
         // save personal key on device 
-        save("privateKey", JSON.stringify({exponent: myContext.privateKey.exp, modulus: myContext.privateKey.mod}))
+        const promise2 = save("privateKey", JSON.stringify({exponent: myContext.privateKey.exp, modulus: myContext.privateKey.mod}))
         
+        Promise.all([promise1, promise2]).then(values => {updatePersonalKeyText()})
+        //updatePersonalKeyText()
         /*const privateKey = await API.graphql({
             query: updateKey,
             variables: {

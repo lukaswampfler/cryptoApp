@@ -154,7 +154,13 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
         toggleShowFragments()
         console.log("secret", secret);
         const fragmentList = kasiskiTest(secret)
-        setRepeatedParts(fragmentList.slice(0, NUM_FRAGMENTS));
+        if(fragmentList.length > 0){
+            console.log(fragmentList)
+            setRepeatedParts(fragmentList.slice(0, NUM_FRAGMENTS));
+        }else{
+            setRepeatedParts([])
+        }
+        
         console.log("return from kasiski: ", repeatedParts);
     }
         //console.log(likelyLength);
@@ -185,7 +191,7 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
             <Text style={{ width: 250, fontSize: 16}} selectable={true} selectionColor='yellow' >
                 {item.fragment}  </Text>
         
-            <Text selectable={false}>  Difference:  {item.posDiff}</Text>
+            <Text selectable={false}>  Distance:  {item.posDiff}</Text>
             <Divider width={5} style={{margin: 7}}/>
       </View>
     )
@@ -267,16 +273,18 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
             
                 
 </View>
-{showFragments &&  <Text> The following fragments were found more than once (distances on the right): </Text>  }
+<View style ={{marginBottom: 10}}>
+{(showFragments && repeatedParts.length > 0 ) &&  <Text> The following fragments were found more than once (distances on the right): </Text>  }
             
-        {showFragments &&                <FlatList style ={{}} 
+        {(showFragments && repeatedParts.length > 0  ) &&                <FlatList style ={{}} 
                             removeClippedSubviews={false}
                             data={repeatedParts}
                             renderItem={renderFragment}
                             keyExtractor={item => item.fragment}
                         /> }
+ {(showFragments && repeatedParts.length == 0  ) &&      <Text style={{fontSize: 20}}> No repeating fragments were found. </Text>  }                        
 
-
+</View >
 <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
                 <View style={{flexDirection: 'column', alignItems: 'center'}}>
                 <Text style={{

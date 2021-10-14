@@ -5,34 +5,16 @@ import { listMessages, listUsers, messagesByReceiver } from '../graphql/queries'
 //import { createUser } from '../graphql/mutations';
 import { Divider } from 'react-native-elements';
 import { API, Auth, graphqlOperation } from 'aws-amplify'
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import styles from './styles'
 
 import { onCreateMessageByReceiverID } from '../graphql/subscriptions'
+import { deleteMessage } from '../graphql/mutations';
 
 import AppContext from '../components/AppContext';
 
-const MessageItem = ({ message, navigation }) => (
-    <View style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        borderBottomWidth: 1,
-        marginBottom: 3,
-    }}
-    >
-        <TouchableOpacity 
-        onPress = {() => {
-            //console.log("Message", message.text, "pressed.")
-            navigation.navigate("Riddles", 
-            {screen: "EncryptedMessageMethodChoice" , params: {message: message.text, fromRiddles: false, fromMessage: true, sender: message.sender.name}});
-        }}>
-        <Text style={{ width: 250, fontSize: 16}} selectable={true} selectionColor='yellow' >
-            {message.text}  </Text>
-            </TouchableOpacity>
-        <Text selectable={false}>  from {message.sender.name}</Text>
-        <Divider width={5} style={{margin: 7}}/>
-    </View>
-);
+
 
 
 export default function MessageScreen({ navigation }) {
@@ -42,6 +24,50 @@ export default function MessageScreen({ navigation }) {
     const [latestMessage, updateLatestMessage] = useState("No message yet...");
 
     const myContext = useContext(AppContext);
+
+    const MessageItem = ({ message, navigation }) => (
+        <View style={{
+            width: '100%',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center', 
+            borderBottomWidth: 1,
+            marginBottom: 3,
+        }}
+        >
+            <View style = {{width: '80%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+    
+            <TouchableOpacity 
+            onPress = {() => {
+                //console.log("Message", message.text, "pressed.")
+                navigation.navigate("Riddles", 
+                {screen: "EncryptedMessageMethodChoice" , params: {message: message.text, fromRiddles: false, fromMessage: true, sender: message.sender.name}});
+            }}>
+            <Text style={{ width: 200, fontSize: 16}} selectable={true} selectionColor='yellow' >
+                {message.text}  </Text>
+                </TouchableOpacity>
+           
+            <View >
+            <Text selectable={false}>  from {message.sender.name}</Text>
+           </View>
+           
+           </View>
+    
+           <View style={{width:80, flexDirection: 'row-reverse'}}>
+           
+            <MaterialCommunityIcons 
+                size = {32}
+                color = '#888'
+                name = 'delete' 
+                onPress ={() => { 
+                    console.log("Delete message with id: ", message.id)
+                    deleteMessages(message.id)}} />
+                    </View>
+                  
+            <Divider width={5} style={{margin: 7}}/>
+        </View>
+    );
+
 
 
     function subscribe() {
@@ -76,10 +102,18 @@ export default function MessageScreen({ navigation }) {
         } catch (err) { console.log('error fetching messages: ', err) }
     }
 
+    async function deleteMessages(id) {
+        try {
+            const messagesData = await API.graphql({ query: deleteMessage, variables: {input: {id: id}  } })
+            fetchMessages()
+        } catch (err) { console.log('error deleting messages: ', err) }
+    }
+
+
     useEffect(() => {
         console.log("running fetch messages effect ....");
         fetchMessages();
-        //console.log("messages: ", messages)
+        console.log("messages: ", messages)
         /*const subscription = subscribe()
 
         return () => { subscription.unsubscribe() }*/
@@ -118,20 +152,16 @@ export default function MessageScreen({ navigation }) {
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.homeScreen}>
+            <View style={styles.homeScreen, {margin: 10}}>
                 {/*<Button onPress={signOut} title="Sign Out" />*/}
-                {myContext.userID ? <Text>userID: {myContext.userID}</Text> : <Text> no userID set </Text>}
+               {/*} {myContext.userID ? <Text>userID: {myContext.userID}</Text> : <Text> no userID set </Text>}*/}
                 {/*{messages        ?  
             <FlatList
               data = {messages}
               renderItem={renderItem}
               keyExtractor={item => item.createdAt}
         /> : <Loading/> }*/}
-                <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    margin: 20
-                }}>
+                
                     {messages ?
                         <FlatList removeClippedSubviews={false}
                             data={messages}
@@ -140,7 +170,7 @@ export default function MessageScreen({ navigation }) {
                         /> :
                         <Text> No messages yet... </Text>}
 
-                </View>
+              
             </View>
         </SafeAreaView>
 

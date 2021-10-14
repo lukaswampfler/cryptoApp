@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, Dimensions, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { View, Text, Dimensions, TextInput, TouchableWithoutFeedback, ScrollView, Keyboard } from 'react-native';
 import { Divider } from 'react-native-elements';
 import Button from '../components/Button';
 import { caesarEncrypt, isInteger } from '../utils/caesarMath';
@@ -87,7 +87,7 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
 
 
     return (
-        <View style = {{margin: 10}}>
+        <ScrollView style = {{margin: 10}}>
             <TouchableWithoutFeedback onPress = {Keyboard.dismiss} accessible={false}>
                 <View>
                     <Title title={title}/>
@@ -176,7 +176,7 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
 </TouchableWithoutFeedback>
 
 
-</View>
+</ScrollView>
 
 
     );

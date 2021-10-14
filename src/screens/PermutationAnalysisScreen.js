@@ -42,7 +42,7 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
     const alphaShort = 'ENIRSTADHULC'.split('');
     const MAX_NUM_LETTERS = 15;
     const alphaShortExtended = extend(alphaShort, MAX_NUM_LETTERS - alphaShort.length)
-    const alphaShortExtendedWithIndex = alphaShortExtended.map((value, index) => { return {index: index, value: value};})
+    const alphaShortExtendedWithIndex = alphaShortExtended.map((value, index) => { return {index: index.toString(), value: value};})
 
     useEffect(() => {
 
@@ -63,7 +63,7 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
 
 
   useEffect(() => {
-    const alphaSecretWithIndex = alphaSecret.map((value, index) => { return {index: index, value: value};})
+    const alphaSecretWithIndex = alphaSecret.map((value, index) => { return {index: index.toString(), value: value};})
     setAlphaSecretWithIndex(alphaSecretWithIndex);
   }, [alphaSecret])
 
@@ -179,9 +179,10 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
     };
 
     const textList  = secret.split('').map((char) => {
-      //console.log(alphaSecret);
-        //TODO: define knownClearLetters
-        //const knownClearLetters = 'abcdul'
+        if (char == " ") {
+          return "  ";
+        }
+
         const knownSecretLetters = alphaSecret.join('').toLowerCase().substring(0, alphaShort.length);
         console.log("known secret: ", knownSecretLetters)
         const decryptionDict = createDecryptionDict(alphaShort, alphaSecret) ;
@@ -189,7 +190,7 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
         //console.log("inverse: ", inverseDict)
             return ( knownSecretLetters.includes(char) ? 
            <Text style={{  fontSize: 20}}> {decryptionDict[char]} </Text> :
-            <Text style={{ padding: 8, fontSize: 20, backgroundColor: '#bbb'}}> {char} </Text> 
+            <Text style={{ padding: 5, fontSize: 20, backgroundColor: '#bbb'}}> {char} </Text> 
                 )
         })
     
@@ -244,7 +245,7 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
                     {secretHasAlpha && 
                     <View style ={{marginTop: 10, flexDirection: 'row', justifyContent: 'space-between'}}>
                     <Button label={!showBarChart? 'show chart': 'hide chart'} onPress={changeChartStatus} width={150} />
-                    <Button label={'sort secret letters'} onPress={() => {alert("Button pressed!")}} width={150} />
+                    {/*<Button label={'sort secret letters'} onPress={() => {alert("Button pressed!")}} width={150} />*/}
                     </View>}
 </View>
 {(showBarChart) && (<BarChart
@@ -276,9 +277,6 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
       )}
        keyExtractor = {(item) => item.index}
        />
-       
-
-
 </View>
     {secretHasAlpha && 
       <View style={styles.container}>

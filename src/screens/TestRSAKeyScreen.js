@@ -10,6 +10,7 @@ import { Chevron } from 'react-native-shapes';
 import { isPrime, generatePrime , extendedEuclid} from '../utils/RSAMath';
 import NumInput from '../components/NumInput';
 import Button from '../components/Button';
+import { IntroModal } from '../utils/Modals';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import RandomPrimeRow from '../components/RandomPrimeRow';
@@ -42,7 +43,9 @@ export default function TestRSAKeyScreen({ navigation }) {
   const [publicKey, setPublicKey] = useState({})
   const [pConfirmed, setPConfirmed] = useState(myContext.RSAKeyGenState.p);
   const [qConfirmed, setQConfirmed] = useState(myContext.RSAKeyGenState.q);
-
+  const [personalPrivateKey, setPersonalPrivateKey] = useState({})
+  const [personalPublicKey, setPersonalPublicKey] = useState({})
+  const [introText, setIntroText] = useState("")
 
 
   async function getValueFor(key) {
@@ -65,7 +68,33 @@ export default function TestRSAKeyScreen({ navigation }) {
     return result.data.getUser.publicKey;
   }
 
-  //{ query: queries.getTodo, variables: { id: 'some id' }}
+
+  useEffect(() => {
+    let introText = ''
+    const promisePublic = getPublicKey();
+    const promisePrivate = getValueFor("privateKey");
+    Promise.all([promisePublic, promisePrivate]).then((values) =>{
+      console.log(values)
+      const publicKey = values[0]
+      const privateKey = JSON.parse(values[1])
+      introText += "public Exponent: " + publicKey.exponent.toString() + "\nprivate Exponent: " + privateKey.exponent.toString()+ "\nModulus: " + publicKey.modulus.toString()
+      setIntroText(introText)
+    })
+
+    getPublicKey().then((res) => {
+      //personalPublicKey = {mod: res.modulus, exp: res.exponent}
+      setPersonalPublicKey({mod: res.modulus, exp: res.exponent})
+      
+      
+    })
+    getValueFor("privateKey").then( (res) => {
+      res = JSON.parse(res)
+      //personalPrivateKey={mod: res.modulus, exp: res.exponent}
+      setPersonalPrivateKey({mod: res.modulus, exp: res.exponent})
+      
+    })
+  }, [])
+
 
   useEffect(() => {
     console.log("exp in its own useEffect: ", exp);
@@ -147,6 +176,19 @@ useEffect(() => {
       };
     }, [])
   );*/
+
+const updatePersonalKeyText = () => {
+  let introText = ''
+  const promisePublic = getPublicKey();
+  const promisePrivate = getValueFor("privateKey");
+  Promise.all([promisePublic, promisePrivate]).then((values) =>{
+    //console.log(values)
+    const publicKey = values[0]
+    const privateKey = JSON.parse(values[1])
+    introText += "public Exponent: " + publicKey.exponent.toString() + "\nprivate Exponent: " + privateKey.exponent.toString()+ "\nModulus: " + publicKey.modulus.toString()
+    setIntroText(introText)
+  })
+}
 
 
 const updateContextVariables = () => {
@@ -289,7 +331,9 @@ const checkAndUsePubExp = () => {
        alert("phi " + phi + " and e: " + pubExp + " are NOT relatively prime \n Please choose different value of e.")
        // reset keys
    }
- 
+}
+
+const showKeyModal = () => {
 
 }
 
@@ -358,25 +402,35 @@ const checkAndUsePubExp = () => {
 
   const keyText = "Here comes the introduction to the RSA key generation...";
   const keyTitle = "RSA keys"
-  const title = "RSA-key generation - TEST"
-
+  const title = "RSA-key generation"
+  const method = "Your personal Key Pair"
+  //let introText = ''
+  //const introText = "public Exponent: " + personalPublicKey.exp.toString() + "\nprivate Exponent: " + personalPrivateKey.exp.toString()
 
   return (
     <View style={{ flex: 1 }}>
       <ExplanationModal text={keyText} title={keyTitle} />
       <Title title = {title}/>
+      <IntroModal text={introText} method={method} />
       <ScrollView style={{ flex: 1, margin: 10 }}>
 
         {/*new here!*/} 
-        <View style ={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <View style ={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
         
         
         
         <View
           style={{
-            backgroundColor: '#fff',
             flexDirection: 'column'
           }}>
+            <View style = {{margin: 10}}>
+                <Text style={{
+                    fontSize: 20,
+                    marginTop: 0, 
+                    marginLeft: 10
+                }}> 
+                Prime Numbers </Text>
+                </View>
 
           <View style={{ paddingHorizontal: 32, marginBottom: 16, marginTop: 20, width: '60%' }}>
             <NumInput
@@ -421,7 +475,6 @@ const checkAndUsePubExp = () => {
 
       <View style={{
                         flex: 1,
-                        backgroundColor: '#fff',
                         flexDirection: 'column', 
                         alignItems: 'center', 
                         width: '35%'
@@ -452,20 +505,7 @@ const checkAndUsePubExp = () => {
      <View style={{marginTop: 5}}>   
   <Text> Decimal Digits
       </Text>
-   {/*}  <NumInput 
-   
-            width = {'80%'}
-            //placeholder='Exp. (min 1, max 10)'
-            keyboardType='number-pad'
-            keyboardAppearance='dark'
-            returnKeyType='next'
-            enablesReturnKeyAutomatically= {true}
-            returnKeyLabel='next'
-            onChangeText={changeExponent}
-            onBlur={formikExponent.handleBlur('exp')}
-            error={formikExponent.errors.exp}
-            touched={formikExponent.touched.exp}
-    />  */}
+  
 <View style ={{flexDirection: 'column', alignItems: 'center', marginTop: 5, backgroundColor: '#fff', width: '50%'}}>
 <RNPickerSelect style={pickerSelectStyles}
             useNativeAndroidPickerStyle={false}
@@ -515,7 +555,14 @@ const checkAndUsePubExp = () => {
 <View style ={{ flexDirection: 'column'}}>
 
  <View style ={{flexDirection: 'row', justifyContent: 'space-around'}}>   
-<Text> Public exponent </Text>
+ <View style = {{margin: 10}}>
+                <Text style={{
+                    fontSize: 20,
+                    marginTop: 0, 
+                    marginLeft: 10
+                }}> 
+                Public Exponent </Text>
+                </View>
 <View style={{
                         flex: 1,
                         //backgroundColor: '#fff',
@@ -557,7 +604,14 @@ const checkAndUsePubExp = () => {
 </View>
 
 <Divider style={{ width: "100%", margin: 10 }} />
-       {/*} <PublicExponentRow />*/}
+<View style = {{margin: 10}}>
+                <Text style={{
+                    fontSize: 20,
+                    marginTop: 0, 
+                    marginLeft: 10
+                }}> 
+                Calculated Key Pair </Text>
+                </View>
           <Text>Exponent: <Text style ={{fontWeight: 'bold'}} > public: {myContext.publicKey.exp} </Text> <Text style ={{fontWeight: 'bold'}} > private: {myContext.privateKey.exp} </Text> 
           </Text>
           <Text>Modulus: <Text style = {{fontWeight: 'bold'}}>  {myContext.publicKey.mod} </Text>
@@ -565,7 +619,7 @@ const checkAndUsePubExp = () => {
 </View>
 
     
-      <ButtonRow navigation={navigation} />
+      <ButtonRow navigation={navigation} updatePersonalKeyText={updatePersonalKeyText}/>
 
       <Divider style={{ width: "100%", margin: 10 , marginTop: 0}} />
        {/*} <View style={{
@@ -575,6 +629,22 @@ const checkAndUsePubExp = () => {
         }}>
           <Button label='show explanation' onPress={() => { myContext.setExplVisible(true) }} />
     </View>*/}
+    <View style ={{flexDirection: 'row', justifyContent: 'space-around', marginBottom: 10}}>   
+    <View style = {{margin: 10}}>
+                <Text style={{
+                    fontSize: 20,
+                    marginTop: 0, 
+                    marginLeft: 10
+                }}> 
+                Personal Key Pair </Text>
+                </View>
+<Button label='show personal keys' onPress = {() => {myContext.setIntroVisible(true)}}/>
+</View>
+
+              {/*}  <Text>Exponent: <Text style ={{fontWeight: 'bold'}} > public: {personalPublicKey.exp} </Text> <Text style ={{fontWeight: 'bold'}} > private: {personalPrivateKey.exp} </Text> 
+          </Text>
+          <Text>Modulus: <Text style = {{fontWeight: 'bold'}}>  {personalPublicKey.mod} </Text>
+              </Text>*/}
     <View style = {{flexDirection: 'row', justifyContent: 'space-between'}}>
         <Button style = {{width: '45%'}} label = 'use my private key' onPress={() => {
           getValueFor("privateKey").then( (res) => {

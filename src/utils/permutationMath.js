@@ -54,16 +54,17 @@ export function encryptPermutation(text, key){
 export function getMostFrequent(text, num = 10){
     let res = {}
     const uni = unique((text.toUpperCase()));
-    if (uni.length <= num){
+    /*if (uni.length <= num){
         for (let ind = 0; ind < uni.length; ind++){
             res[uni.charAt(ind)] = 1
         }
-    } else { // more than 10 distinct characters - choose most frequent ones.
+    } else { // more than num distinct characters - choose most frequent ones.
         const frequencyDict = createFrequencyDict(text);
-        //TODO : check out createFrequencyDict - no: these values are relative frequencies.
         res = pickHighest(frequencyDict[0], num);
         
-    }
+    }*/
+    const frequencyDict = createFrequencyDict(text);
+    res = pickHighest(frequencyDict[0], Math.min(uni.length, num));
     return res;
 
 }

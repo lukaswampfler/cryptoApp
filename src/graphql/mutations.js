@@ -130,13 +130,6 @@ export const deleteMessage = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        privateKey {
-          id
-          exponent
-          modulus
-          createdAt
-          updatedAt
-        }
         createdAt
         updatedAt
       }
@@ -146,13 +139,6 @@ export const deleteMessage = /* GraphQL */ `
         publicKeyID
         privateKeyID
         publicKey {
-          id
-          exponent
-          modulus
-          createdAt
-          updatedAt
-        }
-        privateKey {
           id
           exponent
           modulus

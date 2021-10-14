@@ -295,7 +295,7 @@ export default function RSAEncryptionScreen({ route, navigation }) {
                 marginLeft: 20
             }}>
                 <Button label='show introduction' onPress={() => { 
-                    console.log(route.params)
+                    //console.log(route.params)
                     myContext.setIntroVisible(true) }} />
             </View>
         </ScrollView>
