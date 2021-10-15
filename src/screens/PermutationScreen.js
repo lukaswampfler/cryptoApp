@@ -10,6 +10,7 @@ import ClearButton from '../components/ClearButton';
 import { permutationIntroText } from '../utils/introTexts';
 
 import { alphabet, randomTransposition, shuffleAlphabet, encryptPermutation} from '../utils/permutationMath';
+import { useTranslation } from 'react-i18next';
 
 
 export default function PermutationScreen({ navigation }) {
@@ -20,6 +21,8 @@ export default function PermutationScreen({ navigation }) {
         tableTitle: ['clear', 'secret' ], 
         tableData: [alphabet.split(""), key.split("")]
 });
+
+    const {t} = useTranslation();
 
     const myContext = useContext(AppContext);
 
@@ -197,8 +200,8 @@ export default function PermutationScreen({ navigation }) {
                     width: '95%',
                     marginTop: 100
                 }}>
-                    <Button label='show introduction' onPress={() => { myContext.setIntroVisible(true) }} />
-                    <Button label = 'send message' onPress = {sendMessage} />
+                    <Button label={`${t('SI')}`} onPress={() => { myContext.setIntroVisible(true) }} />
+                    <Button label = {`${t('SM')}`} onPress = {sendMessage} />
                 </View>
             </ScrollView>
         </View>

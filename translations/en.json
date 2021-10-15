@@ -2,4 +2,21 @@
     "HELLO": "Hello",
     "PRESS": "Press",
     "selectLanguage": "Select your Language",
-  }
+    "HOME": "Home", 
+    "ENC": "Encryption", 
+    "ANA": "Cryptoanalysis", 
+    "MES": "My Messages", 
+    "RID": "Riddles", 
+    "SET": "Settings", 
+    "LO": "Logout", 
+    "SI": "show introduction", 
+    "SM": "send message", 
+    "SBM" : "send binary message", 
+    "HOMETEXTENC": "Choose a text-based symmetric method like Caesar, Vigenère or Permutation to encrypt a message and send it to a friend. You can also choose RSA or S-DES encryption.",
+    "HOMETEXTANA": "Do you have an encrypted message? Go to cryptoanalysis to perform an analysis and decypher the message.", 
+    "HOMETEXTMES": "Here you can find the last messages that were sent to you. Click on any one to analyze.",  
+    "HOMETEXTRID": "Try to break an encrypted secret message.", 
+    "HOMETEXTSET": "Change the language of the application.", 
+    "HOMETITLE": "Welcome to CryptoApp", 
+    "HOMESUBTITLE": "Open the menu to see the following options: "
+}

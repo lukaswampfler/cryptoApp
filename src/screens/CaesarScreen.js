@@ -14,6 +14,8 @@ import GreySwitch from '../components/GreySwitch';
 import { CaesarKeyInputScheme } from '../utils/InputTests';
 import { caesarIntroText } from '../utils/introTexts';
 
+import { useTranslation } from 'react-i18next';
+
 import styles from './styles'
 
 
@@ -28,6 +30,7 @@ export default function CaesarScreen({ navigation }) {
     const [key, setKey] = useState('');
     const [isEncrypting, setIsEncrypting] = useState(true);
 
+    const { t } = useTranslation();
 
     const changeText = newText => {
         setText(newText);
@@ -239,10 +242,10 @@ export default function CaesarScreen({ navigation }) {
                     marginTop: 100
                 }}>
                     <View style = {{margin: 20}}>
-                    <Button  label='show introduction' onPress={() => { myContext.setIntroVisible(true) }} width = '80%' />
+                    <Button  label={`${t('SI')}`} onPress={() => { myContext.setIntroVisible(true) }} width = '80%' />
                     </View>
                     <View style = {{margin: 20}}>
-                    <Button label='send message' onPress={sendMessage} width = '80%'/>
+                    <Button label={`${t('SM')}`} onPress={sendMessage} width = '80%'/>
                     </View>
                 </View>
             </ScrollView>

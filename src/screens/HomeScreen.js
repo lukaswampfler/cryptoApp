@@ -35,7 +35,6 @@ export default function HomeScreen({ navigation }) {
     }
   }*/
 
-  const title = "Welcome to CryptoApp"
 
   function pressSelectButton() {
     console.log("Your choice: ", choice);
@@ -113,14 +112,14 @@ export default function HomeScreen({ navigation }) {
   
   return (
     <SafeAreaView style={styles.container}>
-      <Title title={title}/>
-      <Title title="Open the menu to see the following options: "/>
+      <Title title={`${t('HOMETITLE')}`}/>
+      <Title title={`${t('HOMESUBTITLE')}`}/>
       
-      <Text style ={{margin: 5, fontSize: 15}}> <Text style={{fontWeight: 'bold'}}>Encryption: </Text>Choose a text-based symmetric method like Caesar, Vigenère or Permutation to encrypt a message and send it to a friend. You can also choose RSA or S-DES encryption.</Text>
-      <Text style ={{margin: 5, fontSize: 15}}> <Text style={{fontWeight: 'bold'}}>Cryptoanalysis: </Text> Do you have an encrypted message? Go to cryptoanalysis to perform an analysis and decypher the message.</Text>
-      <Text style ={{margin: 5, fontSize: 15}}> <Text style={{fontWeight: 'bold'}}>My Messages: </Text> Here you can find the last messages that were sent to you. Click on any one to analyze.</Text>
-      <Text style ={{margin: 5, fontSize: 15}}> <Text style={{fontWeight: 'bold'}}>Riddles: </Text> Try to break an encrypted secret message.</Text>
-
+      <Text style ={{margin: 5, fontSize: 15}}> <Text style={{fontWeight: 'bold'}}>{`${t('ENC')}`}: </Text>{`${t('HOMETEXTENC')}`}</Text>
+      <Text style ={{margin: 5, fontSize: 15}}> <Text style={{fontWeight: 'bold'}}>{`${t('ANA')}`}: </Text> {`${t('HOMETEXTANA')}`}</Text>
+      <Text style ={{margin: 5, fontSize: 15}}> <Text style={{fontWeight: 'bold'}}>{`${t('MES')}`}: </Text> {`${t('HOMETEXTMES')}`}</Text>
+      <Text style ={{margin: 5, fontSize: 15}}> <Text style={{fontWeight: 'bold'}}>{`${t('RID')}`}: </Text>{`${t('HOMETEXTRID')}`} </Text>
+      <Text style ={{margin: 5, fontSize: 15}}> <Text style={{fontWeight: 'bold'}}>{`${t('SET')}`}: </Text> {`${t('HOMETEXTSET')}`}</Text>
 
 
       {/*

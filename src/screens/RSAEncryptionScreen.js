@@ -19,6 +19,7 @@ import RSA from '../utils/RSA'
 import RSAKeyInput from '../components/RSAKeyInput';
 import { smartExponentiation } from '../utils/RSAMath';
 import { rsaIntroText } from '../utils/introTexts';
+import { useTranslation } from 'react-i18next';
 
 
 
@@ -36,6 +37,8 @@ import { rsaIntroText } from '../utils/introTexts';
 export default function RSAEncryptionScreen({ route, navigation }) {
     // get the context
     const myContext = useContext(AppContext);
+
+    const {t} = useTranslation();
 
     useEffect(() => {
         console.log("route params in RSA encryption: ", route.params);
@@ -285,7 +288,7 @@ export default function RSAEncryptionScreen({ route, navigation }) {
                     keyboardAppearance='dark'
                     defaultValue={getRSAOutputValue()}
                 />
-                <Button label='Send message' onPress={() => { navigation.navigate('UsersList', { toSend: true, toImportKey: false }) }} width={100} />
+                <Button label={`${t('SM')}`} onPress={() => { navigation.navigate('UsersList', { toSend: true, toImportKey: false }) }} width={100} />
                 {/*} <ShareButton message={myContext.ciphers.rsa.isEncrypted ? myContext.ciphers.rsa.encrypted.toString() : 'No Encryption done yet'} />*/}
             </View>
             </View>
@@ -295,7 +298,7 @@ export default function RSAEncryptionScreen({ route, navigation }) {
                 marginTop: 30,
                 marginLeft: 20
             }}>
-                <Button label='show introduction' onPress={() => { 
+                <Button label={`${t('SI')}`} onPress={() => { 
                     //console.log(route.params)
                     myContext.setIntroVisible(true) }} />
             </View>

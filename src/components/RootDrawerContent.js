@@ -8,13 +8,15 @@ import {
 import { StackActions, useNavigationState } from '@react-navigation/native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Auth } from 'aws-amplify';
-
+import { useTranslation } from 'react-i18next';
 
 import AppContext from '../components/AppContext';
 
 
 
 export default function RootDrawerContent(props) {
+
+  const { t } = useTranslation();
   const myContext = useContext(AppContext);
 
   async function signOut() {
@@ -32,7 +34,7 @@ export default function RootDrawerContent(props) {
       <DrawerContentScrollView {...props}>
         {/*<DrawerItemList {...props}  />*/}
         <DrawerItem
-        label="Home"
+        label={`${t('HOME')}`}
         onPress={() => {
           props.navigation.closeDrawer()
           //props.navigation.dispatch(StackActions.popToTop());          
@@ -40,13 +42,13 @@ export default function RootDrawerContent(props) {
         }}
         />
         <DrawerItem
-        label="Encryption"
+        label={`${t('ENC')}`}
         onPress={() => {props.navigation.closeDrawer()
           props.navigation.dispatch(StackActions.popToTop());
           props.navigation.navigate("Methods", {screen: 'MethodsHome'})  }}
         />
         <DrawerItem
-        label="Cryptoanalysis"
+        label={`${t('ANA')}`}
         onPress={() => {
           props.navigation.closeDrawer()
           props.navigation.dispatch(StackActions.popToTop());          
@@ -54,14 +56,14 @@ export default function RootDrawerContent(props) {
         }}/>
         
         <DrawerItem
-          label="My Messages"
+          label={`${t('MES')}`}
           onPress={() => {
             props.navigation.closeDrawer()
             props.navigation.navigate("Messages")
           }}
         />
         <DrawerItem
-          label="Riddles"
+          label={`${t('RID')}`}
           onPress={() => {
             props.navigation.closeDrawer()
             props.navigation.dispatch(StackActions.popToTop()); 
@@ -69,7 +71,7 @@ export default function RootDrawerContent(props) {
           }}
         />
         <DrawerItem
-          label="Settings"
+          label={`${t('SET')}`}
           onPress={() => {
             props.navigation.closeDrawer()
             //props.navigation.dispatch(StackActions.popToTop()); 
@@ -89,7 +91,7 @@ export default function RootDrawerContent(props) {
             style={styles.icon}
           />
       </View>
-          <Text style={styles.label}>Logout</Text>
+          <Text style={styles.label}>{`${t('LO')}`}</Text>
         </View>
         </SafeAreaView>
       </TouchableOpacity>

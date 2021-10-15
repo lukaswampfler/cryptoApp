@@ -15,6 +15,7 @@ import ClearButton from '../components/ClearButton';
 
 import styles from './styles'
 import GreySwitch from '../components/GreySwitch';
+import { useTranslation } from 'react-i18next';
 
 
 const BACKGROUND_COLOR = '#ddd'
@@ -32,6 +33,8 @@ export default function VigenereScreen({ route, navigation }) {
     const [isEncrypting, setIsEncrypting] = useState(true)
     const [hasBackButton, setHasBackButton] = useState(false);
     const ref = useRef(key);
+
+    const {t} = useTranslation();
 
     const toggleEncryptionSwitch = (value) => {
         //To handle switch toggle
@@ -269,10 +272,10 @@ export default function VigenereScreen({ route, navigation }) {
                     marginTop: 100
                 }}>
                     <View style = {{margin: 20}}>
-                    <Button  label='show introduction' onPress={() => { myContext.setIntroVisible(true) }} />
+                    <Button  label={`${t('SI')}`} onPress={() => { myContext.setIntroVisible(true) }} />
                     </View>
                     <View style = {{margin: 20}}>
-                    <Button label='send message' onPress={sendMessage} />
+                    <Button label={`${t('SM')}`} onPress={sendMessage} />
                     </View>
                 </View>
             </ScrollView>

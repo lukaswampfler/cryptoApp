@@ -15,6 +15,7 @@ import * as Yup from 'yup'
 import { SDESKeyInputScheme, SDESK12InputScheme, SDESMessageInputScheme } from '../utils/InputTests';
 import { encryptSDESMessage, generateSDESKeys, decodeBinaryString, encodeEncrypted, is8BitString } from '../utils/sdesMath';
 import { sdesIntroText } from '../utils/introTexts';
+import { useTranslation } from 'react-i18next';
 
 
 const INVALID_FORMAT_ERROR_MESSAGE = 'invalid format';
@@ -34,6 +35,8 @@ export default function SDESScreen({ route, navigation }) {
   const [isMessageBinary, setIsMessageBinary] = useState(false);
   const [k1, setK1] = useState('')
   const [k2, setK2] = useState('')
+
+  const {t} = useTranslation();
 
 
   useEffect(() => {
@@ -416,7 +419,7 @@ export default function SDESScreen({ route, navigation }) {
                             onValueChange={toggleSendMessageState}
                             value={isMessageBinary}
                         />
-<Button label={'send ' + (isMessageBinary ? 'binary ': '') + 'message'} onPress={sendMessage} width = '40%'/>
+<Button label= {isMessageBinary? `${t('SBM')}` : `${t('SM')}`} onPress={sendMessage} width = '40%'/>
 
 </View>
 
@@ -431,7 +434,7 @@ export default function SDESScreen({ route, navigation }) {
           justifyContent: 'center', width: 150,
           marginTop: 100
         }}>
-          <Button label='show introduction' onPress={() => { myContext.setIntroVisible(true) }} />
+          <Button label={`${t('SI')}`} onPress={() => { myContext.setIntroVisible(true) }} />
         </View>
         <View style={{
           flexDirection: 'row',
