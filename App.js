@@ -47,10 +47,13 @@ import { SafeAreaView } from 'react-native';
 import RiddleMethodChoiceScreen from './src/screens/RiddleMethodChoiceScreen';
 import RiddleDisplayScreen from './src/screens/RiddleDisplayScreen';
 import EncryptedMessageMethodChoiceScreen from './src/screens/EncryptedMessageMethodChoiceScreen';
+import SettingsScreen from './src/screens/SettingsScreen';
+
 
 import Header from './src/components/Header';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+import './i18n.config';
 
 
 Amplify.configure({
@@ -226,6 +229,7 @@ const RootDrawerNavigator = props => {
             <RootDrawer.Screen name="Analysis" component={AnalysisNavigator} options={{title: "Cryptoanalysis", unmountOnBlur: true}}/>
             <RootDrawer.Screen name="Messages" component={MessageScreen} options={{ title: "My Messages" }} />
             <RootDrawer.Screen name="Riddles" component={RiddleNavigator} options={{ title: "Riddles", unmountOnBlur: true }} />
+            <RootDrawer.Screen name="Settings" component={SettingsScreen} options={{ title: "Settings", unmountOnBlur: true }} />
     </RootDrawer.Navigator>
   );
 }

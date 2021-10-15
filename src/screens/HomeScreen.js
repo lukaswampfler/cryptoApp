@@ -14,8 +14,9 @@ import { onCreateMessageByReceiverID } from '../graphql/subscriptions'
 
 import AppContext from '../components/AppContext';
 
-
-
+import { useTranslation } from "react-i18next";
+import LanguagePicker from '../components/LanguagePicker';
+//import LanguageSelector from '../components/LanguagePicker';
 
 export default function HomeScreen({ navigation }) {
 
@@ -108,7 +109,8 @@ export default function HomeScreen({ navigation }) {
     myContext.setUserID(userID);
   }, [userID])
 
-
+  const { t } = useTranslation();
+  
   return (
     <SafeAreaView style={styles.container}>
       <Title title={title}/>
@@ -118,6 +120,7 @@ export default function HomeScreen({ navigation }) {
       <Text style ={{margin: 5, fontSize: 15}}> <Text style={{fontWeight: 'bold'}}>Cryptoanalysis: </Text> Do you have an encrypted message? Go to cryptoanalysis to perform an analysis and decypher the message.</Text>
       <Text style ={{margin: 5, fontSize: 15}}> <Text style={{fontWeight: 'bold'}}>My Messages: </Text> Here you can find the last messages that were sent to you. Click on any one to analyze.</Text>
       <Text style ={{margin: 5, fontSize: 15}}> <Text style={{fontWeight: 'bold'}}>Riddles: </Text> Try to break an encrypted secret message.</Text>
+
 
 
       {/*

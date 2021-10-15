@@ -68,10 +68,15 @@ export default function RootDrawerContent(props) {
             props.navigation.navigate("Riddles")
           }}
         />
-        {/*<DrawerItem
-          label="Toggle drawer"
-          onPress={() => props.navigation.toggleDrawer()}
-        />*/}
+        <DrawerItem
+          label="Settings"
+          onPress={() => {
+            props.navigation.closeDrawer()
+            //props.navigation.dispatch(StackActions.popToTop()); 
+            props.navigation.navigate("Settings")
+          }}
+        />
+        
       </DrawerContentScrollView>
       <TouchableOpacity onPress = {signOut}>
         <SafeAreaView>
