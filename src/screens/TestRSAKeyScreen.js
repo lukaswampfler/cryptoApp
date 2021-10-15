@@ -21,10 +21,12 @@ import Title from '../components/Title';
 import GreySwitch from '../components/GreySwitch';
 import { isInteger } from '../utils/caesarMath';
 import { gcd } from '../utils/CryptoMath';
+import Line from '../components/Line';
 
 import * as SecureStore from 'expo-secure-store';
 import API from '@aws-amplify/api';
 import { getUser } from '../graphql/queries';
+import { useTranslation } from 'react-i18next';
 
 const NOPRIME_MESSAGE = 'not a prime number'
 const REQUIRED_ERROR_MESSAGE = 'this field is required';
@@ -47,6 +49,8 @@ export default function TestRSAKeyScreen({ navigation }) {
   const [personalPublicKey, setPersonalPublicKey] = useState({})
   const [introText, setIntroText] = useState("")
 
+
+  const {t} = useTranslation();
 
   async function getValueFor(key) {
     let result = await SecureStore.getItemAsync(key);
@@ -221,11 +225,9 @@ const toggleRandomSwitch = () => {
       const phi = (pConfirmed-1) * (qConfirmed-1);
       const pow16 = Math.pow(2, 16)
       if( phi > pow16){
-          //console.log("setting to large default")
           setPubExp((pow16 + 1).toString());
           setVerifiedPubExp(pow16+1)
       } else {
-        //console.log("setting to small default")
         let cand = 2;
         while (gcd(cand, phi) > 1){
           cand = Math.floor(Math.random() * phi)
@@ -406,8 +408,8 @@ const showKeyModal = () => {
       
 
   const keyText = "Here comes the introduction to the RSA key generation...";
-  const keyTitle = "RSA keys"
-  const title = "RSA-key generation"
+  const keyTitle = "RSA" + `${t('KEY')}`
+  const title = `${t('RSA_KEY_GEN')}`
   const method = "Your personal Key Pair"
   //let introText = ''
   //const introText = "public Exponent: " + personalPublicKey.exp.toString() + "\nprivate Exponent: " + personalPrivateKey.exp.toString()
@@ -434,7 +436,7 @@ const showKeyModal = () => {
                     marginTop: 0, 
                     marginLeft: 10
                 }}> 
-                Prime Numbers </Text>
+                {`${t('PRIMES')}`} </Text>
                 </View>
 
           <View style={{ paddingHorizontal: 32, marginBottom: 16, marginTop: 20, width: '60%' }}>
@@ -485,7 +487,7 @@ const showKeyModal = () => {
                         width: '35%'
                     }}>
                         <Text>
-                            {isRandom ? 'random primes' : 'enter primes'}
+                            {isRandom ? `${t('RAND_PR')}` : `${t('ENTER_PR')}`}
                         </Text>
                         <GreySwitch
                             style={{ marginTop: 5 }}
@@ -555,8 +557,7 @@ const showKeyModal = () => {
          </Text>
 </View>
 
-          <Divider style={{ width: "100%", margin: 10 }} />
-
+<Line />
 <View style ={{ flexDirection: 'column'}}>
 
  <View style ={{flexDirection: 'row', justifyContent: 'space-around'}}>   
@@ -608,7 +609,7 @@ const showKeyModal = () => {
 
 </View>
 
-<Divider style={{ width: "100%", margin: 10 }} />
+<Line/>
 <View style = {{margin: 10}}>
                 <Text style={{
                     fontSize: 20,

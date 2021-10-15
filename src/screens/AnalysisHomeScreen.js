@@ -8,10 +8,13 @@ import styles from './styles'
 
 import AppContext from '../components/AppContext';
 import Title from '../components/Title';
+import { useTranslation } from 'react-i18next';
 
 const analysisMethods = ['caesar', 'vigenere', 'permutation']
 
 export default function AnalysisHomeScreen({ navigation }) {
+
+    const {t} = useTranslation();
 
     const myContext = useContext(AppContext);
 
@@ -63,11 +66,11 @@ export default function AnalysisHomeScreen({ navigation }) {
 
     }
 
-    const title = "Which method do you want to analyze?"
+    //const title = "Which method do you want to analyze?"
 
     return (
         <SafeAreaView style={styles.container}>
-            <Title title={title}/>
+            <Title title= {`${t('ANALYZE_TITLE')}`}/>
             {/*<View style={{margin: 15}}>
             <Text style={{ fontSize: 20 }}>   </Text>
     </View>*/}

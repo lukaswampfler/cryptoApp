@@ -141,8 +141,8 @@ export default function VigenereScreen({ route, navigation }) {
 
         <View style={{ flex: 1 }}>
             <ScrollView style={{ flex: 1 , margin: 10}}>
-                <Title title={method} />
-                <IntroModal text={introText} method={method} />
+                <Title title= {`${t('VIG_TIT')}`}/>
+                <IntroModal text={introText} method={`${t('VIG_TIT')}`} />
                 <View style={{marginTop: 10, marginLeft: 10, marginBottom: 5}}>
                 <Text style={{
                     fontSize: 20
@@ -174,29 +174,30 @@ export default function VigenereScreen({ route, navigation }) {
                 </View>
 
                 <Divider style={{ width: "100%", margin: 10 }} />
-
+                <Text style={{
+                    fontSize: 20, marginBottom: 10
+                }}> 
+                {`${t('VIG_KEY')}`}  </Text>
 
             <View style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
+                    alignItems: 'center'
                 }}>
-                <View style={{
+               {/*<View style={{
                     flexDirection: 'column',
                     justifyContent: 'space-around',
                     marginTop: 10,
                     marginBottom: 10,
                     width: '35%'
-                }}>
-                <Text style={{
-                    fontSize: 20, marginBottom: 10
-                }}> 
-                Key (letters a-z)  </Text>
+                }}>*/}
+                
                 
 
                 <NumInput
                     //icon='pinterest'
                     bgColor = {BACKGROUND_COLOR}
-                    width='100%'
+                    width='35%'
                     placeholder='Vigenere key'
                     autoCapitalize='none'
                     keyboardType='default'
@@ -212,14 +213,14 @@ export default function VigenereScreen({ route, navigation }) {
                     value={key}
                     />
                     
-                   </View> 
+                   {/*</View> */}
                    <View style={{
                     flexDirection: 'column',
-                    justifyContent: 'space-around',
+                    justifyContent: 'space-between',
                     marginTop: 10,
                     marginBottom: 10,
                 }}>
-                <Text style={{ marginTop: 20 }}> {isEncrypting?  'Encryption': 'Decryption'} </Text>
+                <Text style={{ marginTop: 20, marginBottom: 10 }}> {isEncrypting?  `${t('ENC')}`: `${t('DEC')}`} </Text>
                 
                 <GreySwitch onValueChange={toggleEncryptionSwitch} value={isEncrypting}/>
 

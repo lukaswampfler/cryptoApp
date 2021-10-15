@@ -12,6 +12,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import AppContext from '../components/AppContext';
 import { TabRouter } from '@react-navigation/native';
 import { riddlesMethodChoiceIntroText } from '../utils/introTexts'; 
+import { useTranslation } from 'react-i18next';
 
 
 
@@ -24,15 +25,17 @@ const options = ["secret with known cipher", "secret with unknown cipher", "rand
 
 
 export default function RiddleMethodChoiceScreen({ navigation }) {
+
+    const {t} = useTranslation();
     const myContext = useContext(AppContext);
     const [selectedMethod, setSelectedMethod] = useState('')
     const [selectedLevel, setSelectedLevel] = useState('')
     const [selectedLanguage, setSelectedLanguage] = useState('')
 
     
-    const titleMethod = "Choose your method!"
-    const titleLevel = "Choose your level!"
-    const titleLanguage = "Choose your language!"
+    const titleMethod = `${t('RIDDLEMETHODCHOICE')}`
+    const titleLevel = `${t('RIDDLELEVELCHOICE')}`
+    const titleLanguage = `${t('RIDDLELANGUAGECHOICE')}`
 
     useEffect(()=>{
         console.log(selectedMethod)
@@ -147,7 +150,7 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
                     justifyContent: 'center', width: 150,
                     marginTop: 100
                 }}>
-                    <Button label='show introduction' onPress={() => { myContext.setIntroVisible(true) }} />
+                    <Button label={`${t('SI')}`} onPress={() => { myContext.setIntroVisible(true) }} />
                 </View>
         </SafeAreaView>
     );

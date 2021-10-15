@@ -5,21 +5,18 @@ import Title from '../components/Title';
 import Button from '../components/Button';
 import { IntroModal } from '../utils/Modals';
 import styles from './styles'
-import { riddlesHomeIntroText } from '../utils/introTexts';
+//import { riddlesHomeIntroText } from '../utils/introTexts';
 import { useNavigation } from '@react-navigation/core';
 
 import AppContext from '../components/AppContext';
+import { useTranslation } from 'react-i18next';
 
 
 
 const methods = ['rsa', 'sdes', 'caesar', 'vigenere', 'permutation' ]
 
 
-const options = [
-    {name: "secret with given cipher", short: "knownCipher"}, 
-    {name: "secret with unknown cipher", short: "unknownCipher"}, 
-    {name:  "random message from server", short: "randomMessage"},
-]
+
 
 
 
@@ -29,6 +26,12 @@ const options = [
 
 export default function RiddleHomeScreen({ navigation }) {
 
+    const {t} = useTranslation();
+    const options = [
+        {name: `${t('SECGIVEN')}`, short: "knownCipher"}, 
+        {name: `${t('SECUNKNOWN')}`, short: "unknownCipher"}, 
+        {name:  `${t('RANDOMMESS')}`, short: "randomMessage"},
+    ]
 
     const renderItem = ({ item }) => {
 
@@ -69,15 +72,16 @@ export default function RiddleHomeScreen({ navigation }) {
     const myContext = useContext(AppContext);
 
 
-    const title = "Riddles ..."
-    //const introText = "You can either \n- solve a riddle with a method of your liking,\n- create a random riddle or\n- download a few of the last sent messages from other people.";
+    const riddlesHomeIntroText = 
+    `${t('SECGIVEN')}`.toUpperCase() + ': ' + `${t('SECGIVENEXP')}` + `\n\n`  + `${t('SECUNKNOWN')}`.toUpperCase() + ': ' +  `${t('SECUNKNOWNEXP')}` + `\n\n`   + `${t('RANDOMMESS')}`.toUpperCase() +  ': ' + `${t('RANDOMMESSEXP')}`
+
     const method = "Solving riddles"
     const introText = riddlesHomeIntroText;
 
     return (
         <SafeAreaView style={styles.container}>
-            <Title title ={title}/>
-            <IntroModal text={introText} method={method} />
+            <Title title ={`${t('RID')}`}/>
+            <IntroModal text={introText} method={`${t('RIDMETHOD')}`} />
             <FlatList removeClippedSubviews={false}
                             data={options}
                             renderItem={renderItem}
@@ -88,7 +92,7 @@ export default function RiddleHomeScreen({ navigation }) {
                     justifyContent: 'center', width: 150,
                     marginTop: 100
                 }}>
-                    <Button label='show introduction' onPress={() => { myContext.setIntroVisible(true) }} />
+                    <Button label={`${t('SI')}`} onPress={() => { myContext.setIntroVisible(true) }} />
                 </View>
         </SafeAreaView>
     );

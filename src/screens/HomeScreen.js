@@ -119,7 +119,7 @@ export default function HomeScreen({ navigation }) {
       <Text style ={{margin: 5, fontSize: 15}}> <Text style={{fontWeight: 'bold'}}>{`${t('ANA')}`}: </Text> {`${t('HOMETEXTANA')}`}</Text>
       <Text style ={{margin: 5, fontSize: 15}}> <Text style={{fontWeight: 'bold'}}>{`${t('MES')}`}: </Text> {`${t('HOMETEXTMES')}`}</Text>
       <Text style ={{margin: 5, fontSize: 15}}> <Text style={{fontWeight: 'bold'}}>{`${t('RID')}`}: </Text>{`${t('HOMETEXTRID')}`} </Text>
-      <Text style ={{margin: 5, fontSize: 15}}> <Text style={{fontWeight: 'bold'}}>{`${t('SET')}`}: </Text> {`${t('HOMETEXTSET')}`}</Text>
+      <Text style ={{margin: 5, fontSize: 15}}> <Text style={{fontWeight: 'bold'}}>{`${t('LAN')}`}: </Text> {`${t('LAN_TEXT')}`}</Text>
 
 
       {/*

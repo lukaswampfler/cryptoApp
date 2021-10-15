@@ -48,6 +48,7 @@ import RiddleMethodChoiceScreen from './src/screens/RiddleMethodChoiceScreen';
 import RiddleDisplayScreen from './src/screens/RiddleDisplayScreen';
 import EncryptedMessageMethodChoiceScreen from './src/screens/EncryptedMessageMethodChoiceScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
+import { LP2 } from './src/components/LanguagePicker';
 
 
 import Header from './src/components/Header';
@@ -218,19 +219,19 @@ const RootDrawerNavigator = props => {
   return (
     <RootDrawer.Navigator 
     drawerContent = {(props) => <RootDrawerContent {...props} updateAuthState={props.updateAuthState} 
-    screenOptions={{headerShown: false}} 
+    screenOptions={{headerShown: true}} 
     /> }>
-            <RootDrawer.Screen name="Home" >
+            <RootDrawer.Screen name="Home" options ={{headerTitle: '', headerRight: LP2, headerRightContainerStyle: {marginRight: 20}, headerStyle: {backgroundColor: '#eee'}, headerTintColor: '#000', headerTitleStyle: {fontWeight: 'bold',}}}>
             {screenProps => (
             <HomeScreen {...screenProps} updateAuthState={props.updateAuthState} />
            )} 
         </RootDrawer.Screen>
             <RootDrawer.Screen name="Methods" component={MethodNavigator} 
-            options={{headerTitle: '', title: "Encryption", unmountOnBlur: true, drawerLabel: () => null}} />
-            <RootDrawer.Screen name="Analysis" component={AnalysisNavigator} options={{headerTitle: '', title: "Cryptoanalysis", unmountOnBlur: true}}/>
-            <RootDrawer.Screen name="Messages" component={MessageScreen} options={{headerTitle: '', title: "My Messages" }} />
-            <RootDrawer.Screen name="Riddles" component={RiddleNavigator} options={{headerTitle: '', title: "Riddles", unmountOnBlur: true }} />
-            <RootDrawer.Screen name="Settings" component={SettingsScreen} options={{headerTitle: '', title: "Settings", unmountOnBlur: true }} />
+            options={{headerTitle: '', title: "Encryption", unmountOnBlur: true, headerRight: LP2, headerRightContainerStyle: {marginRight: 20}, headerStyle: {backgroundColor: '#eee'}, headerTintColor: '#000', headerTitleStyle: {fontWeight: 'bold',}}} />
+            <RootDrawer.Screen name="Analysis" component={AnalysisNavigator} options={{headerTitle: '', title: "Cryptoanalysis", unmountOnBlur: true, headerRight: LP2, headerRightContainerStyle: {marginRight: 20}, headerStyle: {backgroundColor: '#eee'}, headerTintColor: '#000', headerTitleStyle: {fontWeight: 'bold',}}}/>
+            <RootDrawer.Screen name="Messages" component={MessageScreen} options={{headerTitle: '', title: "My Messages", headerRight: LP2, headerRightContainerStyle: {marginRight: 20} , headerStyle: {backgroundColor: '#eee'}, headerTintColor: '#000', headerTitleStyle: {fontWeight: 'bold',}}} />
+            <RootDrawer.Screen name="Riddles" component={RiddleNavigator} options={{headerTitle: '', title: "Riddles", unmountOnBlur: true , headerRight: LP2, headerRightContainerStyle: {marginRight: 20}, headerStyle: {backgroundColor: '#eee'}, headerTintColor: '#000', headerTitleStyle: {fontWeight: 'bold',}}} />
+           {/* <RootDrawer.Screen name="Settings" component={SettingsScreen} options={{headerTitle: '', title: "Settings", unmountOnBlur: true, headerRight: LP2, headerRightContainerStyle: {marginRight: 20} }} />*/}
     </RootDrawer.Navigator>
   );
 }

@@ -3,10 +3,10 @@ import { View } from 'react-native';
 
 import LanguagePicker from '../components/LanguagePicker';
 
-export default function SettingsScreen() {
+export default function SettingsScreen({route, navigation}) {
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
-      <LanguagePicker />
+      <LanguagePicker navigation = {navigation}/>
     </View>
   );
 }

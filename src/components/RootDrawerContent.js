@@ -70,14 +70,14 @@ export default function RootDrawerContent(props) {
             props.navigation.navigate("Riddles")
           }}
         />
-        <DrawerItem
+       {/*} <DrawerItem
           label={`${t('SET')}`}
           onPress={() => {
             props.navigation.closeDrawer()
             //props.navigation.dispatch(StackActions.popToTop()); 
             props.navigation.navigate("Settings")
           }}
-        />
+        />*/}
         
       </DrawerContentScrollView>
       <TouchableOpacity onPress = {signOut}>

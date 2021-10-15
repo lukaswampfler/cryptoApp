@@ -33,7 +33,7 @@ export function IntroModal({ text, method , transparent = false}) {
         <View style={styles.modalFooter}>
             <View style={styles.divider}></View>
             <View style={{ flexDirection: "row-reverse", margin: 10 }}>
-                <TouchableOpacity style={{ ...styles.actions, backgroundColor: "#db2828" }}
+                <TouchableOpacity style={{ ...styles.actions, backgroundColor: "#888" }}
                     onPress={() => {
                         myContext.setIntroVisible(!myContext.introVisible);
                     }}>

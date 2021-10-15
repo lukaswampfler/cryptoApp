@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Modal, View, Text, Pressable, StyleSheet } from "react-native";
 import Title from "./Title";
@@ -58,11 +58,14 @@ const LanguagePicker2 = () => {
 
 //export default LanguageSelector;
 
-const LanguagePicker = () => {
+const LanguagePicker = ({ navigation}) => {
+
+
         const { i18n, t } = useTranslation();
         const selectedLanguageName = i18n.language;
       
         const setLanguage = name => {
+          console.log(name)
           return i18n.changeLanguage(name);
         };
       
@@ -79,7 +82,8 @@ const LanguagePicker = () => {
                   key={language.name}
                   style={styles2.buttonContainer}
                   disabled={selectedLanguage}
-                  onPress={() => setLanguage(language.name)}
+                  onPress={() => {setLanguage(language.name)
+                                navigation.goBack()}}
                 >
                   <Text
                     style={[selectedLanguage ? styles2.selectedText : styles2.text]}
@@ -95,6 +99,35 @@ const LanguagePicker = () => {
 }
 
 export default LanguagePicker;
+
+
+export const LP2 = () => {
+  const { i18n, t } = useTranslation();
+  const [isEnglish, setIsEnglish] = useState(true);
+  const selectedLanguageName = i18n.language;
+
+  const changeLanguage = () => {
+    const result =  isEnglish? i18n.changeLanguage('de') : i18n.changeLanguage('en') ;
+    setIsEnglish(!isEnglish);
+    return result; 
+  }
+  return (
+    <View style={{margin: 10}}>
+    <Pressable
+      
+      onPress={() => {changeLanguage()
+                    console.log("Language changed!")}}
+    >
+      <Text
+        style={{fontSize: 24}}
+      >
+        {isEnglish? 'en' : 'de'}
+      </Text>
+    </Pressable>
+    </View>
+  );
+
+}
 
 
 const styles2 = StyleSheet.create({
@@ -113,7 +146,8 @@ const styles2 = StyleSheet.create({
       fontWeight: '600'
     },
     buttonContainer: {
-      marginTop: 10
+      marginTop: 10,
+      marginRight: 10
     },
     text: {
       fontSize: 18,

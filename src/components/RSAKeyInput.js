@@ -6,11 +6,14 @@ import ButtonRow from '../components/ButtonRow';
 
 import { setNestedObjectValues } from 'formik';
 import AppContext from '../components/AppContext';
+import { useTranslation } from 'react-i18next';
 
 //import { getData } from '../utils/Storage';
 
 export default function RSAKeyInput({ values, errors, touched, handleChange, handleBlur, navigation, route }) {
 
+
+  const {t} = useTranslation();
   const myContext = useContext(AppContext);
 
   /*const showKeys = async () => {
@@ -38,7 +41,7 @@ export default function RSAKeyInput({ values, errors, touched, handleChange, han
  {/*<View style={{
           marginLeft: 10,
         }}>*/}
-          <Button label='Generate / use own Keys'  onPress={() => {
+          <Button label={`${t('RSA_GEN')}`}  onPress={() => {
             console.log("navigating to RSAKey: ", myContext)
             const ciphers = myContext.ciphers;
             ciphers.rsa.m = values.m;
@@ -50,7 +53,7 @@ export default function RSAKeyInput({ values, errors, touched, handleChange, han
        {/*} <View style={{
           marginLeft: 10,
         }}>*/}
-          <Button label='Import Key' onPress={() => { navigation.navigate('UsersList', { toSend: false, toImportKey: true }) }} width='40%' />
+          <Button label={`${t('RSA_IMP')}`} onPress={() => { navigation.navigate('UsersList', { toSend: false, toImportKey: true }) }} width='40%' />
        {/*} </View>*/}
 
 

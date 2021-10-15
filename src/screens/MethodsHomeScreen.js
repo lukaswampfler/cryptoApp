@@ -6,6 +6,7 @@ import Title from '../components/Title';
 import styles from './styles'
 
 import AppContext from '../components/AppContext';
+import { useTranslation } from 'react-i18next';
 
 
 
@@ -17,7 +18,7 @@ const methods = ['caesar', 'vigenere', 'permutation', 'rsa', 'sdes']
 
 export default function MethodsHomeScreen({ navigation }) {
 
-
+    const {t} = useTranslation();
 
     const [selectedMethod, setSelectedMethod] = useState('rsa');
 
@@ -81,7 +82,7 @@ export default function MethodsHomeScreen({ navigation }) {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Title title ={title}/>
+            <Title title ={`${t('METH_CHOICE_TITLE')}`}/>
            
             {/*{(Platform.OS === 'android')
                 && <View style={{ backgroundColor: '#DDD', height: 50 }}>
