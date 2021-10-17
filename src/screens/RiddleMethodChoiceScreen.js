@@ -80,6 +80,7 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
             onValueChange={(value) => setSelectedMethod(value)}
             placeholder={{label :"Select the encryption method", value: null}}
             style={{ ...pickerSelectStyles }}
+            InputAccessoryView={() => null}
             items={[
                 { label: 'Caesar', value: 'caesar' },
                 { label: 'Vigenère', value: 'vigenere' },
@@ -100,6 +101,7 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
             onValueChange={(value) => setSelectedLevel(value)}
             placeholder={{label :"Select the difficulty", value: null}}
             style={{ ...pickerSelectStyles }}
+            InputAccessoryView={() => null}
             items={[
                 { label: 'Easy', value: 'easy' },
                 { label: 'Hard', value: 'hard' },
@@ -122,6 +124,7 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
     disabled = {languageDisabled}
     placeholder={{label :"Select your language", value: null}}
     style={{ ...pickerSelectStyles }}
+    InputAccessoryView={() => null}
     items={[
         { label: 'German', value: 'german' },
         { label: 'English', value: 'english' },

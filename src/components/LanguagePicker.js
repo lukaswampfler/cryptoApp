@@ -115,8 +115,7 @@ export const LP2 = () => {
     <View style={{margin: 10}}>
     <Pressable
       
-      onPress={() => {changeLanguage()
-                    console.log("Language changed!")}}
+      onPress={() => {changeLanguage()}}
     >
       <Text
         style={{fontSize: 24}}
