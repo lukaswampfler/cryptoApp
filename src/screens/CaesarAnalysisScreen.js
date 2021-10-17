@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, Dimensions, TextInput, TouchableWithoutFeedback, ScrollView, Keyboard } from 'react-native';
-import { Divider } from 'react-native-elements';
 import Button from '../components/Button';
 import { caesarEncrypt, isInteger } from '../utils/caesarMath';
 import AppContext from '../components/AppContext';
@@ -13,7 +12,7 @@ import {
 import { createFrequencyDict, sortDictionaryByKey, onlyNonAlpha } from '../utils/frequencyAnalysis';
 import ClearButton from '../components/ClearButton';
 import NumInput from '../components/NumInput';
-
+import Line from '../components/Line';
 
 
 const screenWidth = 0.9 * Dimensions.get("window").width;
@@ -117,7 +116,8 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
             <ClearButton setInput={changeText} setKey= {changeKey} defaultKey={0} />
             </View>
           
-          <Divider style={{ width: "100%", margin: 10 }} />
+          
+          <Line/>
 
             {(!onlyNonAlpha(secret)) && (<BarChart
                 style={{
@@ -157,7 +157,8 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
 
 
 </View>
-<Divider style={{ width: "100%", margin: 10 }} />
+
+<Line/>
 
 <TouchableWithoutFeedback onPress = {Keyboard.dismiss} accessible={false}>
 <View>

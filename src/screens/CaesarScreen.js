@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView, Text, View, TextInput, Modal, TouchableOpacity } from 'react-native';
-import { Divider } from 'react-native-elements';
 import AppContext from '../components/AppContext';
 import Button from '../components/Button';
 import NumInput from '../components/NumInput';
@@ -161,7 +160,6 @@ export default function CaesarScreen({ navigation }) {
                 </View>
             <ClearButton setInput={setText} setKey = {setKey} defaultKey = {0}/>
                 </View>
-{/*<Divider style={{ width: "100%", margin: 10 }} />*/}
 
 <View style ={{marginTop: 10}}>
 <Line />
@@ -204,7 +202,6 @@ export default function CaesarScreen({ navigation }) {
 
 </View>
 
-{/*<Divider style={{ width: "100%", margin: 10 }} />*/}
 <Line />
 <View style = {{marginTop: 20, marginLeft: 10, marginRight: 10, marginBottom: 10}}>
 <Text style={{
