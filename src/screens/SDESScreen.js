@@ -6,6 +6,7 @@ import Button from '../components/Button';
 import NumInput from '../components/NumInput';
 import Title from '../components/Title';
 import { IntroModal } from '../utils/Modals';
+import Line from '../components/Line';
 
 
 import { useFormik } from 'formik';
@@ -15,6 +16,7 @@ import * as Yup from 'yup'
 import { SDESKeyInputScheme, SDESK12InputScheme, SDESMessageInputScheme } from '../utils/InputTests';
 import { encryptSDESMessage, generateSDESKeys, decodeBinaryString, encodeEncrypted, is8BitString } from '../utils/sdesMath';
 import { sdesIntroText } from '../utils/introTexts';
+import { useTranslation } from 'react-i18next';
 
 
 const INVALID_FORMAT_ERROR_MESSAGE = 'invalid format';
@@ -34,6 +36,8 @@ export default function SDESScreen({ route, navigation }) {
   const [isMessageBinary, setIsMessageBinary] = useState(false);
   const [k1, setK1] = useState('')
   const [k2, setK2] = useState('')
+
+  const {t} = useTranslation();
 
 
   useEffect(() => {
@@ -247,14 +251,14 @@ export default function SDESScreen({ route, navigation }) {
   });
 
 
-  const introText = sdesIntroText
-  const method = "The S-DES cipher"
+  //const introText = sdesIntroText
+  //const method = "The S-DES cipher"
 
   return (
     <View style={{ flex: 1 }}>
       <ScrollView style={{ flex: 1 , margin: 10}}>
-       <Title title={method} />
-        <IntroModal text={sdesIntroText} method={method} />
+       <Title title={`${t('SDES_TIT')}`} />
+        <IntroModal text={sdesIntroText} method={`${t('SDES_TIT')}`} />
         <View
                 style={{
                     flex: 1,
@@ -300,11 +304,11 @@ export default function SDESScreen({ route, navigation }) {
                 </View>
 
                 </View>
-                <Divider style={{ width: "100%", margin: 10 }} />
-
+               {/*} <Divider  style={{ width: "100%", margin: 10 }} />*/}
+                <Line />
                 <View style ={{margin: 10}}>
 
-          <Text style={{ fontSize: 20 }}>Key</Text>
+          <Text style={{ fontSize: 20 }}>{`${t('KEY')}`}</Text>
         <View style = {{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}> 
         <Text style = {{fontSize: 16, fontWeight: '500'}}> 10-bit key: </Text>
         
@@ -392,7 +396,10 @@ export default function SDESScreen({ route, navigation }) {
         <View style ={{flexDirection: 'row', justifyContent: 'center'}}>
         <Button label='encrypt' onPress={handleEncryption} width = '50%'/>
         </View>
-        <Divider style={{ width: "100%", margin: 10 }} />
+        {/*<Divider style={{ width: "100%", margin: 10 }} />*/}
+        <View style ={{marginTop: 10}}>
+        <Line/>
+        </View>
         <View style ={{margin: 10}}>
 
           <Text style={{ fontSize: 20 }}>Output</Text>
@@ -416,7 +423,7 @@ export default function SDESScreen({ route, navigation }) {
                             onValueChange={toggleSendMessageState}
                             value={isMessageBinary}
                         />
-<Button label={'send ' + (isMessageBinary ? 'binary ': '') + 'message'} onPress={sendMessage} width = '40%'/>
+<Button label= {isMessageBinary? `${t('SBM')}` : `${t('SM')}`} onPress={sendMessage} width = '40%'/>
 
 </View>
 
@@ -431,7 +438,7 @@ export default function SDESScreen({ route, navigation }) {
           justifyContent: 'center', width: 150,
           marginTop: 100
         }}>
-          <Button label='show introduction' onPress={() => { myContext.setIntroVisible(true) }} />
+          <Button label={`${t('SI')}`} onPress={() => { myContext.setIntroVisible(true) }} />
         </View>
         <View style={{
           flexDirection: 'row',

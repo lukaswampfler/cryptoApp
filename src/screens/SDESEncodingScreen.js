@@ -10,6 +10,7 @@ import { ExplanationModal } from '../utils/Modals';
 import { useFormik } from 'formik';
 import * as Yup from 'yup'
 import { sdesEncodingIntroText } from '../utils/introTexts';
+import { useTranslation } from 'react-i18next';
 
 
 export default function SDESEncodingScreen({ navigation, route }) {
@@ -17,6 +18,7 @@ export default function SDESEncodingScreen({ navigation, route }) {
     const [text, setText] = useState('');
     const [encoded, setEncoded] = useState('');
 
+    const {t} = useTranslation();
 
 
     const getMessageInitialValue = () => {

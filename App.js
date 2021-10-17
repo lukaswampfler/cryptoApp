@@ -13,7 +13,7 @@ import {
 
 import Amplify, { Auth, API } from 'aws-amplify';
 import config from './src/aws-exports';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+//import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
 
@@ -47,10 +47,15 @@ import { SafeAreaView } from 'react-native';
 import RiddleMethodChoiceScreen from './src/screens/RiddleMethodChoiceScreen';
 import RiddleDisplayScreen from './src/screens/RiddleDisplayScreen';
 import EncryptedMessageMethodChoiceScreen from './src/screens/EncryptedMessageMethodChoiceScreen';
+import SettingsScreen from './src/screens/SettingsScreen';
+import { LP2 } from './src/components/LanguagePicker';
+
 
 import Header from './src/components/Header';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+import { useTranslation } from 'react-i18next';
+import './i18n.config';
 
 
 Amplify.configure({
@@ -214,51 +219,25 @@ const RootDrawerNavigator = props => {
   return (
     <RootDrawer.Navigator 
     drawerContent = {(props) => <RootDrawerContent {...props} updateAuthState={props.updateAuthState} 
-    screenOptions={{}} 
+    screenOptions={{headerShown: true}} 
     /> }>
-            <RootDrawer.Screen name="Home" >
+            <RootDrawer.Screen name="Home" options ={{headerTitle: '', headerRight: LP2, headerRightContainerStyle: {marginRight: 20}, headerStyle: {backgroundColor: '#eee'}, headerTintColor: '#000', headerTitleStyle: {fontWeight: 'bold',}}}>
             {screenProps => (
             <HomeScreen {...screenProps} updateAuthState={props.updateAuthState} />
            )} 
         </RootDrawer.Screen>
             <RootDrawer.Screen name="Methods" component={MethodNavigator} 
-            options={{title: "Encryption", unmountOnBlur: true}} />
-            <RootDrawer.Screen name="Analysis" component={AnalysisNavigator} options={{title: "Cryptoanalysis", unmountOnBlur: true}}/>
-            <RootDrawer.Screen name="Messages" component={MessageScreen} options={{ title: "My Messages" }} />
-            <RootDrawer.Screen name="Riddles" component={RiddleNavigator} options={{ title: "Riddles", unmountOnBlur: true }} />
+            options={{headerTitle: '', title: "Encryption", unmountOnBlur: true, headerRight: LP2, headerRightContainerStyle: {marginRight: 20}, headerStyle: {backgroundColor: '#eee'}, headerTintColor: '#000', headerTitleStyle: {fontWeight: 'bold',}}} />
+            <RootDrawer.Screen name="Analysis" component={AnalysisNavigator} options={{headerTitle: '', title: "Cryptoanalysis", unmountOnBlur: true, headerRight: LP2, headerRightContainerStyle: {marginRight: 20}, headerStyle: {backgroundColor: '#eee'}, headerTintColor: '#000', headerTitleStyle: {fontWeight: 'bold',}}}/>
+            <RootDrawer.Screen name="Messages" component={MessageScreen} options={{headerTitle: '', title: "My Messages", headerRight: LP2, headerRightContainerStyle: {marginRight: 20} , headerStyle: {backgroundColor: '#eee'}, headerTintColor: '#000', headerTitleStyle: {fontWeight: 'bold',}}} />
+            <RootDrawer.Screen name="Riddles" component={RiddleNavigator} options={{headerTitle: '', title: "Riddles", unmountOnBlur: true , headerRight: LP2, headerRightContainerStyle: {marginRight: 20}, headerStyle: {backgroundColor: '#eee'}, headerTintColor: '#000', headerTitleStyle: {fontWeight: 'bold',}}} />
+           {/* <RootDrawer.Screen name="Settings" component={SettingsScreen} options={{headerTitle: '', title: "Settings", unmountOnBlur: true, headerRight: LP2, headerRightContainerStyle: {marginRight: 20} }} />*/}
     </RootDrawer.Navigator>
   );
 }
 
 
 
-
-
-
-
-
-
-/*const RSANavigator = props => {
-  return (
-    <RSAStack.Navigator>
-      <RSAStack.Screen
-        name="RSAEncryption"
-        component={RSAEncryptionScreen}
-        options={{ title: 'RSA Encryption' }}
-      />
-      <RSAStack.Screen
-        name="RSAKey"
-        component={RSAKeyScreen}
-        options={{ title: 'RSA Key Generation' }}
-      />
-      <RSAStack.Screen
-        name="UsersList"
-        component={UsersListScreen}
-        options={{ title: 'Users of CryptoApp' }}
-      />
-    </RSAStack.Navigator>
-  );
-}*/
 
 
 const Initializing = () => {
@@ -274,6 +253,8 @@ const Initializing = () => {
 
 
 export default function App() {
+
+  const { t } = useTranslation();
 
   // use array destructuring to get hold of data and functions to change data
   const [isUserLoggedIn, setUserLoggedIn] = useState('loggedOut'); 
@@ -345,6 +326,9 @@ export default function App() {
     setLastRiddle,
     setRSAKeyGenState,
   };
+
+
+ 
 
   async function signOut() {
     try {

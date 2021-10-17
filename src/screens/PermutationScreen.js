@@ -7,9 +7,11 @@ import Button from '../components/Button';
 import Title from '../components/Title';
 import { IntroModal } from '../utils/Modals';
 import ClearButton from '../components/ClearButton';
-import { permutationIntroText } from '../utils/introTexts';
+//import { permutationIntroText } from '../utils/introTexts';
+import Line from '../components/Line';
 
 import { alphabet, randomTransposition, shuffleAlphabet, encryptPermutation} from '../utils/permutationMath';
+import { useTranslation } from 'react-i18next';
 
 
 export default function PermutationScreen({ navigation }) {
@@ -21,8 +23,12 @@ export default function PermutationScreen({ navigation }) {
         tableData: [alphabet.split(""), key.split("")]
 });
 
+    const {t} = useTranslation();
+
     const myContext = useContext(AppContext);
 
+
+    const permutationIntroText = `${t('PERMEXP_P1')}\n\n` + `\n\n TRANSPOSITION: ` + `${t('PERMEXP_P2')}`  + `\n\n${t('SHUFFLE')}: ` + `${t('PERMEXP_P3')}` + `\n\n${t('ID')}: `+ `${t('PERMEXP_P4')}` + `\n\n${t('PERMEXP_P5')}`
     const introText = permutationIntroText;
     const method = "The Permutation cipher"
 
@@ -77,8 +83,8 @@ export default function PermutationScreen({ navigation }) {
 
         <View style={{ flex: 1 }}>
             <ScrollView style={{ flex: 1 , margin: 10}}>
-                <Title title={method} />
-                <IntroModal text={introText} method={method} />
+                <Title title={`${t('PER_TIT')}`} />
+                <IntroModal text={introText} method={`${t('PER_TIT')}`} />
                 <View style={{marginTop: 10, marginLeft: 10, marginBottom: 5}}>
                 <Text style={{
                     fontSize: 20
@@ -106,10 +112,11 @@ export default function PermutationScreen({ navigation }) {
 <ClearButton setInput={changeText} setKey = {setKey} defaultKey = {alphabet}/>
 
                 </View>
-<Divider style={{ width: "100%", margin: 10 }} />
+{/*<Divider style={{ width: "100%", margin: 10 }} />*/}
+<Line />
 
                 
-                <Text style={{ marginTop: 30, marginBottom: 20 }}> <Text style ={{fontSize: 20}}>  KEY: </Text>All the letters of the alphabet (above) are permuted in some way (below)</Text>
+                <Text style={{ marginTop: 30, marginBottom: 20 }}> <Text style ={{fontSize: 20}}>  {`${t('KEY')}`} </Text>{`${t('PER_KEY_DETAILS')}`}</Text>
 
                 {/*<View style={styles.container}>
                     <Table borderStyle={{borderWidth: 1}}>
@@ -155,9 +162,9 @@ export default function PermutationScreen({ navigation }) {
                     marginTop: 10,
                     marginBottom: 10,
                 }}>
-                    <Button label='identity' onPress={changeKeyToId} />
+                    <Button label={`${t('ID')}`} onPress={changeKeyToId} />
                     <Button label='transposition' onPress={transposeKey} />
-                    <Button label='shuffle' onPress={shuffleKey} />
+                    <Button label={`${t('SHUFFLE')}`} onPress={shuffleKey} />
                 </View>
 
 
@@ -171,7 +178,7 @@ export default function PermutationScreen({ navigation }) {
                     <Button label='use this key' onPress={encrypt} />
                   
             </View>*/}
-            <Divider style={{ width: "100%", margin: 10 }} />
+            <Line />
 
                 <View style={{
                     flexDirection: 'column',
@@ -197,8 +204,8 @@ export default function PermutationScreen({ navigation }) {
                     width: '95%',
                     marginTop: 100
                 }}>
-                    <Button label='show introduction' onPress={() => { myContext.setIntroVisible(true) }} />
-                    <Button label = 'send message' onPress = {sendMessage} />
+                    <Button label={`${t('SI')}`} onPress={() => { myContext.setIntroVisible(true) }} />
+                    <Button label = {`${t('SM')}`} onPress = {sendMessage} />
                 </View>
             </ScrollView>
         </View>

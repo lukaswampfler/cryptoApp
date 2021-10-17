@@ -7,6 +7,7 @@ import Button from '../components/Button';
 import Title from '../components/Title';
 import { IntroModal } from '../utils/Modals';
 import GreySwitch from '../components/GreySwitch';
+import Line from '../components/Line';
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup'
@@ -19,6 +20,7 @@ import RSA from '../utils/RSA'
 import RSAKeyInput from '../components/RSAKeyInput';
 import { smartExponentiation } from '../utils/RSAMath';
 import { rsaIntroText } from '../utils/introTexts';
+import { useTranslation } from 'react-i18next';
 
 
 
@@ -36,6 +38,8 @@ import { rsaIntroText } from '../utils/introTexts';
 export default function RSAEncryptionScreen({ route, navigation }) {
     // get the context
     const myContext = useContext(AppContext);
+
+    const {t} = useTranslation();
 
     useEffect(() => {
         console.log("route params in RSA encryption: ", route.params);
@@ -183,7 +187,7 @@ export default function RSAEncryptionScreen({ route, navigation }) {
     }
 
     const introText = rsaIntroText;
-    const method = "The RSA cipher"
+    //const method = "The RSA cipher"
 
 
 
@@ -194,8 +198,8 @@ export default function RSAEncryptionScreen({ route, navigation }) {
         <ScrollView style={{
             flex: 1, margin: 0
         }}>
-            <Title title={method} />
-            <IntroModal text={introText} method={method} />
+            <Title title={`${t('RSA_TIT')}`}/>
+            <IntroModal text={introText} method={`${t('RSA_TIT')}`} />
             <View
                 style={{
                     flex: 1,
@@ -210,7 +214,7 @@ export default function RSAEncryptionScreen({ route, navigation }) {
                     marginTop: 20, 
                     marginLeft: 10
                 }}> 
-                Input (decimal or binary number) </Text>
+                Input {`${t('RSA_DECBIN')}`} </Text>
                 <View style={{
                     paddingHorizontal: 32,
                     marginBottom: 16,
@@ -241,7 +245,7 @@ export default function RSAEncryptionScreen({ route, navigation }) {
                         justifyContent: 'center'
                     }}>
                         <Text>
-                            {myContext.RSAInputSwitchisDecimal ? 'decimal' : 'binary'}
+                            {myContext.RSAInputSwitchisDecimal ? `${t('DECIMAL')}` : `${t('BINARY')}`}
                         </Text>
                        {/*} <Switch
                             style={{ marginTop: 5 }}
@@ -251,10 +255,11 @@ export default function RSAEncryptionScreen({ route, navigation }) {
                         <GreySwitch style={{marginTop: 5}} onValueChange={toggleRSAInputSwitch} value={myContext.RSAInputSwitchisDecimal}/>
                     </View>
                 </View>
-                <Divider style={{ width: "100%", margin: 10 }} />
+
+                <Line/>
 <View style ={{margin: 10}}>
 
-                <Text style={{ fontSize: 20 }}>Key</Text>
+                <Text style={{ fontSize: 20 }}>{`${t('KEY')}`}</Text>
                 <RSAKeyInput values={values} errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur} navigation={navigation} route={route} />
                 <View style={{
                     flexDirection: 'row',
@@ -262,11 +267,11 @@ export default function RSAEncryptionScreen({ route, navigation }) {
                     marginTop: 10,
                     marginBottom: 10,
                 }}>
-                    <Button label='Encrypt / Decrypt' onPress={handleSubmit} width={240} />
+                    <Button label={`${t('ENC_DEC')}`} onPress={handleSubmit} width={240} />
                 </View>
               </View>  
             </View>
-            <Divider style={{ width: "100%", margin: 10 }} />
+            <Line />
             <View style ={{margin: 10}}>
             <Text style={{ fontSize: 20 }}>Output</Text>
 
@@ -285,7 +290,7 @@ export default function RSAEncryptionScreen({ route, navigation }) {
                     keyboardAppearance='dark'
                     defaultValue={getRSAOutputValue()}
                 />
-                <Button label='Send message' onPress={() => { navigation.navigate('UsersList', { toSend: true, toImportKey: false }) }} width={100} />
+                <Button label={`${t('SM')}`} onPress={() => { navigation.navigate('UsersList', { toSend: true, toImportKey: false }) }} width={100} />
                 {/*} <ShareButton message={myContext.ciphers.rsa.isEncrypted ? myContext.ciphers.rsa.encrypted.toString() : 'No Encryption done yet'} />*/}
             </View>
             </View>
@@ -295,7 +300,7 @@ export default function RSAEncryptionScreen({ route, navigation }) {
                 marginTop: 30,
                 marginLeft: 20
             }}>
-                <Button label='show introduction' onPress={() => { 
+                <Button label={`${t('SI')}`} onPress={() => { 
                     //console.log(route.params)
                     myContext.setIntroVisible(true) }} />
             </View>

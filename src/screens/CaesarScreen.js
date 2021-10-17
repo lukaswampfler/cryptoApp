@@ -10,9 +10,12 @@ import { caesarEncrypt, isInteger } from '../utils/caesarMath';
 import { useFormik } from 'formik';
 import ClearButton from '../components/ClearButton';
 import GreySwitch from '../components/GreySwitch';
+import Line from '../components/Line';
 
 import { CaesarKeyInputScheme } from '../utils/InputTests';
 import { caesarIntroText } from '../utils/introTexts';
+
+import { useTranslation } from 'react-i18next';
 
 import styles from './styles'
 
@@ -28,6 +31,7 @@ export default function CaesarScreen({ navigation }) {
     const [key, setKey] = useState('');
     const [isEncrypting, setIsEncrypting] = useState(true);
 
+    const { t } = useTranslation();
 
     const changeText = newText => {
         setText(newText);
@@ -115,6 +119,8 @@ export default function CaesarScreen({ navigation }) {
         }
     });
 
+
+    const caesarIntroText = `Input: ${t('CAESEXP_P1')}` +  `\n\n${t('KEY')}: ${t('CAESEXP_P2')}`
     const introText = caesarIntroText;
     const method = "The Caesar cipher"
 
@@ -123,8 +129,8 @@ export default function CaesarScreen({ navigation }) {
         <View style={{ flex: 1 }}>
             <ScrollView contentContainerStyle={{flex: 1,  flexDirection: 'column', justifyContent: 'space-between' }}>
             <ScrollView style={{ flex: 1 , margin: 10}}>
-                <Title title={method}/>
-                <IntroModal text={introText} method={method} />
+                <Title title={`${t('CAES_TIT')}`}/>
+                <IntroModal text={introText} method={`${t('CAES_TIT')}`} />
                 <View style = {{margin: 10}}>
                 <Text style={{
                     fontSize: 20,
@@ -155,14 +161,17 @@ export default function CaesarScreen({ navigation }) {
                 </View>
             <ClearButton setInput={setText} setKey = {setKey} defaultKey = {0}/>
                 </View>
-<Divider style={{ width: "100%", margin: 10 }} />
+{/*<Divider style={{ width: "100%", margin: 10 }} />*/}
 
+<View style ={{marginTop: 10}}>
+<Line />
+</View>
 <View style = {{flexDirection: 'row', justifyContent: 'space-between'}}>
                 <View  style = {{flexDirection: 'column', marginTop: 20, marginLeft: 10, marginRight: 10, marginBottom: 10}}>
                 <Text style={{
                     fontSize: 20
                 }}> 
-                Key (number) </Text>
+                {`${t('CAES_KEY')}`} </Text>
                 <View style = {{ marginTop: 5, width : '100%', backgroundColor:  BACKGROUND_COLOR}}>
                 <NumInput
                     //icon='pinterest'
@@ -185,7 +194,7 @@ export default function CaesarScreen({ navigation }) {
                     marginTop: 10,
                     marginBottom: 10,
                 }}>
-                <Text style={{ marginTop: 20 }}> {isEncrypting?  'Encryption': 'Decryption'} </Text>
+                <Text style={{ marginTop: 20 }}> {isEncrypting?  `${t('ENC')}`: `${t('DEC')}`} </Text>
                 
                 <GreySwitch onValueChange={toggleEncryptionSwitch} value={isEncrypting}/>
 
@@ -195,8 +204,8 @@ export default function CaesarScreen({ navigation }) {
 
 </View>
 
-<Divider style={{ width: "100%", margin: 10 }} />
-
+{/*<Divider style={{ width: "100%", margin: 10 }} />*/}
+<Line />
 <View style = {{marginTop: 20, marginLeft: 10, marginRight: 10, marginBottom: 10}}>
 <Text style={{
     fontSize: 20
@@ -239,10 +248,10 @@ export default function CaesarScreen({ navigation }) {
                     marginTop: 100
                 }}>
                     <View style = {{margin: 20}}>
-                    <Button  label='show introduction' onPress={() => { myContext.setIntroVisible(true) }} width = '80%' />
+                    <Button  label={`${t('SI')}`} onPress={() => { myContext.setIntroVisible(true) }} width = '80%' />
                     </View>
                     <View style = {{margin: 20}}>
-                    <Button label='send message' onPress={sendMessage} width = '80%'/>
+                    <Button label={`${t('SM')}`} onPress={sendMessage} width = '80%'/>
                     </View>
                 </View>
             </ScrollView>

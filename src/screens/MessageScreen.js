@@ -11,8 +11,9 @@ import styles from './styles'
 
 import { onCreateMessageByReceiverID } from '../graphql/subscriptions'
 import { deleteMessage } from '../graphql/mutations';
-
+import Title from '../components/Title';
 import AppContext from '../components/AppContext';
+import { useTranslation } from 'react-i18next';
 
 
 
@@ -24,6 +25,8 @@ export default function MessageScreen({ navigation }) {
     const [latestMessage, updateLatestMessage] = useState("No message yet...");
 
     const myContext = useContext(AppContext);
+
+    const {t} = useTranslation();
 
     const MessageItem = ({ message, navigation }) => (
         <View style={{
@@ -161,7 +164,7 @@ export default function MessageScreen({ navigation }) {
               renderItem={renderItem}
               keyExtractor={item => item.createdAt}
         /> : <Loading/> }*/}
-                
+                <Title title={`${t('MES')}`}/>
                     {messages ?
                         <FlatList removeClippedSubviews={false}
                             data={messages}
