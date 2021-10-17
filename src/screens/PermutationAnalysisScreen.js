@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, Dimensions, TextInput, TouchableWithoutFeedback, Keyboard, StyleSheet, ScrollView } from 'react-native';
 import Button from '../components/Button';
-import { Divider } from 'react-native-elements';
 
 import { DraxProvider, DraxList } from 'react-native-drax';
 import AppContext from '../components/AppContext';
@@ -14,6 +13,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native';
 import { IntroModal } from '../utils/Modals';
 import ClearButton from '../components/ClearButton';
+import Line from '../components/Line';
 
 const screenWidth = 0.9 * Dimensions.get("window").width;
 
@@ -264,7 +264,7 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
     </View>
     </TouchableWithoutFeedback>
     <View style={{padding: 12}}>
-    <Divider/>
+    <Line/>
     <Text width={100} style={{fontSize:20}}> {alphaShort.length} most frequent german letters: </Text>
     
     
@@ -293,7 +293,7 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
         />
         <View style = {{marginBottom: 10}}>
         <Text width={100} style={{fontSize:20}}> Most frequent secret letters (drag to switch)</Text>
-        <Divider/>
+        <Line/>
         </View>
         {/*<Text width={100} style={{fontSize:18}}> partially decrypted String</Text>
         <Text width={100} style={{fontSize:16}}> {decypheredMessage}</Text>

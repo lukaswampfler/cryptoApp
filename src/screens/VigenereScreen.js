@@ -7,6 +7,7 @@ import NumInput from '../components/NumInput';
 import Title from '../components/Title';
 import { vigenereEncrypt, vigenereDecrypt, isAlphabetic } from '../utils/vigenereMath';
 import { useFormik } from 'formik';
+import Line from '../components/Line';
 
 
 import { VigenereKeyInputScheme } from '../utils/InputTests';
@@ -173,7 +174,8 @@ export default function VigenereScreen({ route, navigation }) {
                 <ClearButton setInput = {isEncrypting? changeText: changeSecret} setKey = {setKey} defaultKey = ''/>
                 </View>
 
-                <Divider style={{ width: "100%", margin: 10 }} />
+                
+                <Line/>
                 <Text style={{
                     fontSize: 20, marginBottom: 10
                 }}> 
@@ -231,7 +233,8 @@ export default function VigenereScreen({ route, navigation }) {
               
 
               
-<Divider style={{ width: "100%", margin: 10 }} />
+
+<Line/>
 
                
                 <View style={{marginTop: 10, marginLeft: 10, marginBottom: 5}}>

@@ -192,7 +192,7 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
                 {item.fragment}  </Text>
         
             <Text selectable={false}>  Distance:  {item.posDiff}</Text>
-            <Divider width={5} style={{margin: 7}}/>
+            {/*<Divider width={'100%'} style={{margin: 7}}/>*/}
       </View>
     )
 

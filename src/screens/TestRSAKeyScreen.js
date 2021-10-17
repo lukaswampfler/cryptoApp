@@ -517,6 +517,7 @@ const showKeyModal = () => {
 <RNPickerSelect style={pickerSelectStyles}
             useNativeAndroidPickerStyle={false}
             onValueChange={(value) => setExp(value)}
+            InputAccessoryView={() => null}
             placeholder={{label :"Select number of digits", value: ''}}
             items={[
                 { label: '1', value: 1},
@@ -627,7 +628,8 @@ const showKeyModal = () => {
     
       <ButtonRow navigation={navigation} updatePersonalKeyText={updatePersonalKeyText}/>
 
-      <Divider style={{ width: "100%", margin: 10 , marginTop: 0}} />
+      
+      <Line/>
        {/*} <View style={{
           flexDirection: 'center',
           justifyContent: 'center', width: 150,
@@ -635,7 +637,7 @@ const showKeyModal = () => {
         }}>
           <Button label='show explanation' onPress={() => { myContext.setExplVisible(true) }} />
     </View>*/}
-    <View style ={{flexDirection: 'row', justifyContent: 'space-around', marginBottom: 10}}>   
+    <View style ={{flexDirection: 'row', justifyContent: 'space-around', marginBottom: 10, marginTop: 10}}>   
     <View style = {{margin: 10}}>
                 <Text style={{
                     fontSize: 20,
