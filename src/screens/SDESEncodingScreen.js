@@ -55,7 +55,7 @@ export default function SDESEncodingScreen({ navigation, route }) {
     
     const method = "Encoding a message"
 
-    const title = "S-DES Encoding"
+    const title = `${t('SDES_ENC')}`
 
     return (
 
@@ -72,7 +72,7 @@ export default function SDESEncodingScreen({ navigation, route }) {
                     marginTop: 20, 
                     marginLeft: 10
                 }}> 
-                Enter your message: </Text>
+               {t('ENTER_MES')} </Text>
                 </View>
                 <View style={{
                     flexDirection: 'row',
@@ -100,7 +100,9 @@ export default function SDESEncodingScreen({ navigation, route }) {
                         onBlur={() => { }}
                         value={text}
                     />
-                    <Button label='use message' onPress={useMessage} />
+                    <View style ={{width:  '30%'}}>
+                    <Button label={t('USE_MES')} onPress={useMessage} />
+                    </View>
                 </View>
                 <View style = {{margin: 10}}>
                 <Text style={{
@@ -108,7 +110,7 @@ export default function SDESEncodingScreen({ navigation, route }) {
                     marginTop: 20, 
                     marginLeft: 10
                 }}> 
-                ASCII-Encoding of the above message </Text>
+                {t('ASCII')} </Text>
                 </View>
                 <View style={{
                     flexDirection: 'row',
@@ -130,7 +132,7 @@ export default function SDESEncodingScreen({ navigation, route }) {
                     justifyContent: 'center', width: 150,
                     marginTop: 100
                 }}>
-                    <Button label='show explanation' onPress={() => { myContext.setExplVisible(true) }} />
+                    <Button label={t('SI')} onPress={() => { myContext.setExplVisible(true) }} />
                 </View>
             </ScrollView>
         </View>

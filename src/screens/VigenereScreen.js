@@ -135,8 +135,11 @@ export default function VigenereScreen({ route, navigation }) {
         }
     });
 
-    const introText = "Important: Please use only letters for the Vigenere key.";
-    const method = "The Vigenère cipher"
+
+    const vigenereIntroText = `Input: ${t('CAESEXP_P1')}` +  `\n\n${t('KEY')}: ${t('VIGEXP_P2')}`
+
+    const introText = vigenereIntroText
+    const method = `${t('VIG_TIT')}`
 
     return (
 
@@ -177,7 +180,7 @@ export default function VigenereScreen({ route, navigation }) {
                 
                 <Line/>
                 <Text style={{
-                    fontSize: 20, marginBottom: 10
+                    fontSize: 20, marginBottom: 10, marginTop: 10
                 }}> 
                 {`${t('VIG_KEY')}`}  </Text>
 
@@ -273,12 +276,12 @@ export default function VigenereScreen({ route, navigation }) {
                    <View style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
-                    marginTop: 100
+                    marginTop: 50
                 }}>
-                    <View style = {{margin: 20}}>
+                    <View style = {{margin: 20, width: '30%'}}>
                     <Button  label={`${t('SI')}`} onPress={() => { myContext.setIntroVisible(true) }} />
                     </View>
-                    <View style = {{margin: 20}}>
+                    <View style = {{margin: 20, width: '30%'}}>
                     <Button label={`${t('SM')}`} onPress={sendMessage} />
                     </View>
                 </View>

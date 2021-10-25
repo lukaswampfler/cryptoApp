@@ -8,6 +8,7 @@ import styles from './styles'
 import AppContext from '../components/AppContext';
 import App from '../../App';
 import { isBitStringMultipleOf8 } from '../utils/sdesMath';
+import { useTranslation } from 'react-i18next';
 
 
 
@@ -21,6 +22,8 @@ export default function EncryptedMessageMethodChoiceScreen({ route, navigation }
 
     const myContext = useContext(AppContext);
 
+    const {t} = useTranslation();
+
     const [selectedMethod, setSelectedMethod] = useState('rsa');
 
     
@@ -32,6 +35,7 @@ export default function EncryptedMessageMethodChoiceScreen({ route, navigation }
         if (route.params.fromRiddles){
             console.log("changing lastRiddle....")
             myContext.setLastRiddle(route.params);
+            myContext.setIsLastRiddle(true);
         }
         
     }, [])
@@ -97,8 +101,8 @@ export default function EncryptedMessageMethodChoiceScreen({ route, navigation }
     }
 
     //const title = "Choice of method: "
-    const title = "Secret message"
-    const title2 = "Try the following method for decryption: "
+    const title = `${t("SEC")}`
+    const title2 =  `${t("TRY")}`
 
     return (
         <SafeAreaView style={styles.container}>
@@ -109,7 +113,7 @@ export default function EncryptedMessageMethodChoiceScreen({ route, navigation }
           <View style ={{margin: 15, marginTop: 0}}>
           <Text style={{fontWeight: 'bold'}}> {message} </Text>
         </View>
-        {route.params.fromMessage && <View style={{margin: 20}}><Text> from    {route.params.sender} </Text></View>}
+        {route.params.fromMessage && <View style={{margin: 20}}><Text> {t("FROM")}    {route.params.sender} </Text></View>}
         <View style={{margin: 15}}>
         <Title title ={title2}/>
           </View>  

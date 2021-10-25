@@ -16,6 +16,7 @@ import {
 
 import { createFrequencyDict, sortDictionaryByKey, calculateKeyCharacter , kasiskiTest, germanFreq, createData, getFirstLetter, factorize} from '../utils/frequencyAnalysis';
 import CarouselCards from '../components/CarouselCards';
+import { useTranslation } from 'react-i18next';
 
 const screenWidth = 0.9 * Dimensions.get("window").width;
 
@@ -38,7 +39,7 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
     const [repeatedParts, setRepeatedParts] = useState([]);
     const [showFragments , setShowFragments ] = useState(false);
 
-   
+   const {t} = useTranslation();
 
     const BarChartItem = ({ data, index }) => {
         const mostFreqInDict = data.mostFrequentInDictionary
@@ -228,7 +229,7 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
         //useShadowColorFromDataset: false // optional
     };
 
-    const title = "Analyzing the Vigenère Cipher"
+    const title = `${t("VIG_ANA_TIT")}`
 
     return (
         <View style = {{margin: 10}}>   
@@ -239,10 +240,10 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
                 <Text style={{
                     fontSize: 20
                 }}> 
-                 Input (secret message)
+                 Input ({t("SEC")})
             </Text>
             
-                <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                <View style={{marginTop: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
             <TextInput
                 width={280}
                 multiline={true}
@@ -268,7 +269,7 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
                     marginTop: 10,
                     marginBottom: 10,
                 }}>
-                    <Button label={showFragments?  'Hide Fragments': 'Analyze Text'} onPress={handleAnalysis} width={240} />
+                    <Button label={showFragments? `${t("HIDE")}` : `${t("ANALYZE")}`} onPress={handleAnalysis} width={240} />
                 </View>
             
                 
@@ -290,7 +291,7 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
                 <Text style={{
                     fontSize: 20
                 }}> 
-                 Length of keyword
+                 {t("LEN_KEY")}
             </Text>
 
 <View style={{marginTop: 10}}>
@@ -312,7 +313,7 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
            </View>  
 </View>
 <View >
-<Button label='Go to decryption' onPress={goToVigenereDecryption} width={140}/>
+<Button label={t("TO_DEC")} onPress={goToVigenereDecryption} width={150}/>
 </View>
 </View>
     </View>

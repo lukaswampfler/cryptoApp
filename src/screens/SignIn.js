@@ -7,6 +7,7 @@ import AppButton from '../components/AppButton';
 import AppContext from '../components/AppContext';
 import { IntroModal } from '../utils/Modals';
 import Title from '../components/Title';
+import { useTranslation } from 'react-i18next';
 
 export default function SignIn({ navigation, updateAuthState }) {
   
@@ -17,6 +18,7 @@ export default function SignIn({ navigation, updateAuthState }) {
   const [hidePassword, setHidePassword] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
   
+  const {t} = useTranslation();
 
   const togglePasswordVisibility = () => {
     setHidePassword(!hidePassword);
@@ -39,7 +41,8 @@ export default function SignIn({ navigation, updateAuthState }) {
   const introText = "Here comes the introduction to the Error";
   const method = "Error!"
 
-  const title = "Sign in to your CryptoApp - account"
+  //const title = "Sign in to your CryptoApp - account"
+  const title = `${t("SIGN_IN")}`
 
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
@@ -75,7 +78,7 @@ export default function SignIn({ navigation, updateAuthState }) {
         <View style={styles.footerButtonContainer}>
          <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
             <Text style={styles.forgotPasswordButtonText}>
-              Don't have an account, {userName}? Sign Up
+            {t("NO_ACC")}, {userName}? {t("SIGN_UP")}
             </Text>
           </TouchableOpacity>
         </View>

@@ -1,14 +1,17 @@
 import React, { useContext } from 'react';
-import { View, StyleSheet, Text, TextInput } from 'react-native';
+import { View, StyleSheet, Text, Dimensions} from 'react-native';
 import NumInput from '../components/NumInput';
 import Button from '../components/Button';
-import ButtonRow from '../components/ButtonRow';
+
 
 import { setNestedObjectValues } from 'formik';
 import AppContext from '../components/AppContext';
 import { useTranslation } from 'react-i18next';
 
 //import { getData } from '../utils/Storage';
+
+const screenWidth = 0.9 * Dimensions.get("window").width;
+
 
 export default function RSAKeyInput({ values, errors, touched, handleChange, handleBlur, navigation, route }) {
 
@@ -36,7 +39,7 @@ export default function RSAKeyInput({ values, errors, touched, handleChange, han
  <View style={{
         flexDirection: 'row',
         justifyContent: 'space-between',
-        margin: 20
+        marginTop: 20
       }}>
  {/*<View style={{
           marginLeft: 10,
@@ -47,13 +50,13 @@ export default function RSAKeyInput({ values, errors, touched, handleChange, han
             ciphers.rsa.m = values.m;
             myContext.setCiphers(ciphers);
             navigation.navigate('RSAKey');
-          }} width = '40%' />
+          }} width = {.45*screenWidth} />
       {/*}  </View>*/}
 
        {/*} <View style={{
           marginLeft: 10,
         }}>*/}
-          <Button label={`${t('RSA_IMP')}`} onPress={() => { navigation.navigate('UsersList', { toSend: false, toImportKey: true }) }} width='40%' />
+          <Button label={`${t('RSA_IMP')}`} onPress={() => { navigation.navigate('UsersList', { toSend: false, toImportKey: true }) }} width={.45*screenWidth} />
        {/*} </View>*/}
 
 
@@ -70,11 +73,12 @@ export default function RSAKeyInput({ values, errors, touched, handleChange, han
         justifyContent: 'space-between',
         marginTop: 10,
         marginBottom: 10,
+        marginRight: 5
       }}><Text> Exponent </Text>
 
         <NumInput
           //icon='pinterest'
-          width={200}
+          width={.45*screenWidth}
           placeholder='Enter exponent'
           autoCapitalize='none'
           keyboardType='number-pad'
@@ -108,7 +112,7 @@ export default function RSAKeyInput({ values, errors, touched, handleChange, han
   <Text> Modulus </Text>
         <NumInput
           //icon='pinterest'
-          width={200}
+          width={.45*screenWidth}
           placeholder='Enter modulus n'
           autoCapitalize='none'
           keyboardType='number-pad'

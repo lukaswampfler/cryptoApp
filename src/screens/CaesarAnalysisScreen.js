@@ -4,6 +4,7 @@ import Button from '../components/Button';
 import { caesarEncrypt, isInteger } from '../utils/caesarMath';
 import AppContext from '../components/AppContext';
 import Title from '../components/Title';
+import {MaterialCommunityIcons} from '@expo/vector-icons'
 
 import {
     BarChart
@@ -13,6 +14,7 @@ import { createFrequencyDict, sortDictionaryByKey, onlyNonAlpha } from '../utils
 import ClearButton from '../components/ClearButton';
 import NumInput from '../components/NumInput';
 import Line from '../components/Line';
+import { useTranslation } from 'react-i18next';
 
 
 const screenWidth = 0.9 * Dimensions.get("window").width;
@@ -28,6 +30,8 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
     const [key, setKey] = useState(0);
     const [decypheredMessage, setDecypheredMessage] =useState('')
     const [isDecyphered, setIsDecyphered] = useState(false)
+
+    const {t} = useTranslation();
 
     const changeText = text => {
         setSecret(text);
@@ -58,7 +62,15 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
             setKey("")
     }}
 
-  
+    const addKey = (num) => {
+        let keyInt = parseInt(key)
+        setKey((keyInt + num).toString())
+        setDecypheredMessage(caesarEncrypt(secret, keyInt + num))
+        if (keyInt + num == 0){
+            setDecypheredMessage(secret)
+        }
+    }
+
 
 
 
@@ -82,7 +94,7 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
     };
 
 
-    const title = "Analyzing the Caesar Cipher"
+    const title = `${t('CAES_ANA_TIT')}`
 
 
     return (
@@ -94,7 +106,7 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
                 <Text style={{
                     fontSize: 20
                 }}> 
-                 Input (secret message)</Text>
+                 Input ({t('SEC')})</Text>
                 </View>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
             <TextInput
@@ -135,15 +147,27 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
 </TouchableWithoutFeedback>
 
 
-<View style={{flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center'}}>
+<View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10}}>
 <View style={{marginTop: 10, marginLeft: 10, marginBottom: 5, marginRight: 10}}>
                 <Text style={{
                     fontSize: 20
                 }}> 
-                 Key (number)</Text>
+                 {t('CAES_KEY')}</Text>
                 </View>
+
+                <View style = {{margin: 20}}>
+            <MaterialCommunityIcons 
+            size = {32}
+            color = '#888'
+            name = 'minus' 
+            onPress ={() => { 
+                addKey(-1);
+                console.log("Icon pressed")}} />
+        </View>
+
+
                 <NumInput
-                width={200}
+                width='15%'
                 placeholder='Enter key'
                 autoCapitalize='none'
                 keyboardType='number-pad'
@@ -154,6 +178,15 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
                 onChangeText= {changeKey}
                 value = {key}
                 />
+    <View style = {{margin: 20}}>
+    <MaterialCommunityIcons 
+            size = {32}
+            color = '#888'
+            name = 'plus'    
+            onPress ={() => { 
+                addKey(1);
+                console.log("Icon pressed")}} />
+        </View>
 
 
 </View>
@@ -162,17 +195,18 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
 
 <TouchableWithoutFeedback onPress = {Keyboard.dismiss} accessible={false}>
 <View>
-{(isDecyphered && !(isNaN(parseInt(key, 10)))) ? 
+{(isDecyphered && !(isNaN(parseInt(key, 10)))) &&
 <View style ={{marginTop: 20}}> 
 <View style={{marginTop: 10, marginLeft: 10, marginBottom: 5}}>
                 <Text style={{
                     fontSize: 20
                 }}> 
-                Output (decyphered message) </Text>
+                Output ({t("DEC_MES")})</Text>
                 </View>
     <Text style ={{fontSize: 20, margin: 5}}> {decypheredMessage} </Text>
-</View> :
-<Text> Please enter valid key above (integer number)! </Text>}
+</View> }
+{/*<Text> Please enter valid key above (integer number)! </Text>}*/}
+
 </View>
 </TouchableWithoutFeedback>
 

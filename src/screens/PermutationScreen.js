@@ -116,7 +116,7 @@ export default function PermutationScreen({ navigation }) {
 <Line />
 
                 
-                <Text style={{ marginTop: 30, marginBottom: 20 }}> <Text style ={{fontSize: 20}}>  {`${t('KEY')}`} </Text>{`${t('PER_KEY_DETAILS')}`}</Text>
+ <Text style={{ marginTop: 10, marginBottom: 20 }}> <Text style ={{fontSize: 20}}>  {`${t('KEY')}`} </Text>{`${t('PER_KEY_DETAILS')}`}</Text>
 
                 {/*<View style={styles.container}>
                     <Table borderStyle={{borderWidth: 1}}>
@@ -200,12 +200,15 @@ export default function PermutationScreen({ navigation }) {
                 </View>
                 <View style={{
                     flexDirection: 'row',
-                    justifyContent: 'space-between', 
-                    width: '95%',
-                    marginTop: 100
+                    justifyContent: 'space-between',
+                    marginTop: 20
                 }}>
-                    <Button label={`${t('SI')}`} onPress={() => { myContext.setIntroVisible(true) }} />
-                    <Button label = {`${t('SM')}`} onPress = {sendMessage} />
+                    <View style = {{margin: 20, width: '30%'}}>
+                    <Button  label={`${t('SI')}`} onPress={() => { myContext.setIntroVisible(true) }} />
+                    </View>
+                    <View style = {{margin: 20, width: '30%'}}>
+                    <Button label={`${t('SM')}`} onPress={sendMessage} />
+                    </View>
                 </View>
             </ScrollView>
         </View>

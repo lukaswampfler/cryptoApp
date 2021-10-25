@@ -5,9 +5,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import AppTextInput from '../components/AppTextInput';
 import AppButton from '../components/AppButton';
 import Title from '../components/Title';
+import { useTranslation } from 'react-i18next';
 
 
-const title = "Create a new account for CryptoApp"
 
 
 export default function SignUp({ navigation }) {
@@ -16,6 +16,9 @@ export default function SignUp({ navigation }) {
   const [email, setEmail] = useState('');
   const [hidePassword, setHidePassword] = useState(true);
 
+
+  const {t} = useTranslation();
+  const title = `${t("CREATE_ACC")}` 
 
   const togglePasswordVisibility = () => {
     setHidePassword(!hidePassword);
@@ -27,6 +30,7 @@ export default function SignUp({ navigation }) {
       console.log('Sign-up Confirmed');
       navigation.navigate('ConfirmSignUp');
     } catch (error) {
+      alert(error.message)
       console.log('Error signing up...', error);
     }
   }
@@ -65,11 +69,11 @@ export default function SignUp({ navigation }) {
           keyboardType="email-address"
           textContentType="emailAddress"
         />
-        <AppButton title="Sign Up" onPress={signUp} />
+        <AppButton title={t("SIGN_UP")} onPress={signUp} />
         <View style={styles.footerButtonContainer}>
            <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
             <Text style={styles.forgotPasswordButtonText}>
-              Already have an account? Sign In
+              {t("ALREADY")}
             </Text>
           </TouchableOpacity>
         </View>

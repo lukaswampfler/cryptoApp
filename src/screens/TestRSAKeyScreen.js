@@ -510,7 +510,7 @@ const showKeyModal = () => {
     > */
       /*} <Button label='Random' onPress={formikExponent.handleSubmit} width={80} />*/
      <View style={{marginTop: 5}}>   
-  <Text> Decimal Digits
+  <Text> {t('DEC_DIG')}
       </Text>
   
 <View style ={{flexDirection: 'column', alignItems: 'center', marginTop: 5, backgroundColor: '#fff', width: '50%'}}>
@@ -559,6 +559,7 @@ const showKeyModal = () => {
 </View>
 
 <Line />
+{/*
 <View style ={{ flexDirection: 'column'}}>
 
  <View style ={{flexDirection: 'row', justifyContent: 'space-around'}}>   
@@ -568,7 +569,7 @@ const showKeyModal = () => {
                     marginTop: 0, 
                     marginLeft: 10
                 }}> 
-                Public Exponent </Text>
+              {t('PUB_EXP')}</Text>
                 </View>
 <View style={{
                         flex: 1,
@@ -578,7 +579,7 @@ const showKeyModal = () => {
                         width: '35%'
                     }}>
                         <Text>
-                            {isDefault ? 'default value' : 'choose public exponent'}
+                            {isDefault ? `${t('DEFAULT')}` : `${t('CHOOSE_PUB_EXP')}`}
                         </Text>
                         <GreySwitch
                             style={{ marginTop: 5 }}
@@ -606,9 +607,54 @@ const showKeyModal = () => {
                 //touched={formikPublicExponent.touched.e}
                 value = {pubExp}
                 />
-{!isDefault && <Button label ='Use Exponent' onPress = {checkAndUsePubExp}/>}
+{!isDefault && <Button label ={t('USE_EXP')} onPress = {checkAndUsePubExp}/>}
 
 </View>
+</View>
+
+<Line/>*/}
+<View style ={{ flexDirection: 'row', justifyContent: 'flex-start'}}>
+<View style = {{width: '60%', flexDirection: 'column', justifyContent: 'flex-start'}}>
+<Text style={{
+                    fontSize: 20,
+                    margin: 10
+                }}> 
+              {t('PUB_EXP')}</Text>
+
+<NumInput 
+                //icon='key'
+                width = {180}
+                editable = {!isDefault}
+                //placeholder='public exponent e '
+                keyboardType='number-pad'
+                keyboardAppearance='dark'
+                returnKeyType='next'
+                returnKeyLabel='next'
+                autoCompleteType='off'
+                onChangeText={changePubExp}
+                //onBlur={formikPublicExponent.handleBlur('e')}
+                //error={formikPublicExponent.errors.e}
+                //touched={formikPublicExponent.touched.e}
+                value = {pubExp}
+                />
+  </View>
+
+  <View style = {{margin: 5,width: '40%', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center'}}>
+  <Text>
+                            {isDefault ? `${t('DEFAULT')}` : `${t('CHOOSE_PUB_EXP')}`}
+                        </Text>
+                        <GreySwitch
+                            style={{ marginTop: 5 }}
+                            onValueChange={togglePubExpSwitch}
+                            value={isDefault}
+                        />
+                        {!isDefault && <Button label ={t('USE_EXP')} onPress = {checkAndUsePubExp}/>}
+
+  </View>
+
+ </View> 
+
+
 
 <Line/>
 <View style = {{margin: 10}}>
@@ -617,13 +663,13 @@ const showKeyModal = () => {
                     marginTop: 0, 
                     marginLeft: 10
                 }}> 
-                Calculated Key Pair </Text>
+                {t('CALC_KEY_PAIR')} </Text>
                 </View>
           <Text>Exponent: <Text style ={{fontWeight: 'bold'}} > public: {myContext.publicKey.exp} </Text> <Text style ={{fontWeight: 'bold'}} > private: {myContext.privateKey.exp} </Text> 
           </Text>
           <Text>Modulus: <Text style = {{fontWeight: 'bold'}}>  {myContext.publicKey.mod} </Text>
                 </Text>
-</View>
+
 
     
       <ButtonRow navigation={navigation} updatePersonalKeyText={updatePersonalKeyText}/>
@@ -644,9 +690,9 @@ const showKeyModal = () => {
                     marginTop: 0, 
                     marginLeft: 10
                 }}> 
-                Personal Key Pair </Text>
+                {t('PERS_KEY_PAIR')} </Text>
                 </View>
-<Button label='show personal keys' onPress = {() => {myContext.setIntroVisible(true)}}/>
+<Button label={t('SHOW_PERS')} onPress = {() => {myContext.setIntroVisible(true)}}/>
 </View>
 
               {/*}  <Text>Exponent: <Text style ={{fontWeight: 'bold'}} > public: {personalPublicKey.exp} </Text> <Text style ={{fontWeight: 'bold'}} > private: {personalPrivateKey.exp} </Text> 
@@ -654,7 +700,8 @@ const showKeyModal = () => {
           <Text>Modulus: <Text style = {{fontWeight: 'bold'}}>  {personalPublicKey.mod} </Text>
               </Text>*/}
     <View style = {{flexDirection: 'row', justifyContent: 'space-between'}}>
-        <Button style = {{width: '45%'}} label = 'use my private key' onPress={() => {
+      <View style ={{width: '45%'}}>
+        <Button style = {{width: '45%'}} label = {t('USE_OWN_PRI')} onPress={() => {
           getValueFor("privateKey").then( (res) => {
             console.log("result: ", res)
             res = JSON.parse(res)
@@ -664,15 +711,16 @@ const showKeyModal = () => {
           //alert("exp: " + privateKey.exponent)}
         }}
          />
-         <Button style = {{width: 150}}label = 'use my public key' onPress={() => {
+         </View>
+         <View style = {{width: '45%'}}>
+         <Button style = {{width: '45%'}}label = {t('USE_OWN_PUB')}onPress={() => {
           getPublicKey().then( (res) => {
             console.log("result: ", res)
             navigation.navigate("RSA", {key: {mod: res.modulus, exp: res.exponent}, usePersonalKey: true})
 
-          //console.log()
-          //alert("exp: " + privateKey.exponent)}
         })}}
          />
+         </View>
       </View>
       </ScrollView>
       {/*</SafeAreaView>*/}

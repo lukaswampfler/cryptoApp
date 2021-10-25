@@ -11,6 +11,7 @@ import { useNavigation } from '@react-navigation/core';
 import AppContext from '../components/AppContext';
 import { listMessages, messagesBySent } from '../graphql/queries';
 import { API, graphqlOperation } from 'aws-amplify'
+import { useTranslation } from 'react-i18next';
 
 
 
@@ -19,9 +20,13 @@ import { API, graphqlOperation } from 'aws-amplify'
 
 
 
-const title = "The following messages were intercepted from the server: ";
+
 
 export default function RiddlesFromServerScreen({ navigation }) {
+
+    const {t} = useTranslation();
+
+    const title = `${t("INTERCEPTED_TIT")}`;
 
     const MessageItem = ({ message }) => (
         <View style={{
@@ -65,7 +70,7 @@ export default function RiddlesFromServerScreen({ navigation }) {
 
     return (
         <SafeAreaView style={{margin: 0}}>
-            <View style = {{margin: 10}}>
+            <View style = {{margin: 10, height: 140 }}>
             <Title title ={title}/>
             </View>
             <View style={{
@@ -84,7 +89,7 @@ export default function RiddlesFromServerScreen({ navigation }) {
                         
 }
 {riddles &&                <View style = {{margin: 10}}>
-    <Text style = {{fontSize: 16, fontWeight: '500'}}> Click message to analyze! </Text>
+    <Text style = {{fontSize: 16, fontWeight: '500'}}> {t("CLICK")} </Text>
 </View>  }
 
                 </View>

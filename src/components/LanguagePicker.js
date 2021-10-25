@@ -1,3 +1,4 @@
+import { ConsoleLogger } from "@aws-amplify/core";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Modal, View, Text, Pressable, StyleSheet } from "react-native";
@@ -104,11 +105,20 @@ export default LanguagePicker;
 export const LP2 = () => {
   const { i18n, t } = useTranslation();
   const [isEnglish, setIsEnglish] = useState(true);
+
+
+  useEffect( () => {
+    const eng = i18n.language == 'en' 
+    //console.log(eng);
+    setIsEnglish(eng);
+  }, [])
+  //const [isEnglish, setIsEnglish] = useState(i18n.language);
   const selectedLanguageName = i18n.language;
 
   const changeLanguage = () => {
     const result =  isEnglish? i18n.changeLanguage('de') : i18n.changeLanguage('en') ;
     setIsEnglish(!isEnglish);
+    console.log("englisch: "+ isEnglish);
     return result; 
   }
   return (

@@ -11,11 +11,13 @@ import { updateKey } from '../graphql/mutations';
 import { listUsers } from '../graphql/queries';
 
 import * as SecureStore from 'expo-secure-store';
+import { useTranslation } from 'react-i18next';
 
 
 
 export default function ButtonRow({ navigation, updatePersonalKeyText }) {
 
+    const {t} = useTranslation();
     const myContext = useContext(AppContext);
 
     async function save(key, value) {
@@ -90,11 +92,11 @@ export default function ButtonRow({ navigation, updatePersonalKeyText }) {
         <View style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
-            margin: 40
+            margin: 10
         }}>
-            <Button style={{ margin: 20 }} label='update personal keys' onPress={updateKeys} width={140} />
-            <Button label='Use private' onPress={() => { navigation.navigate('RSA', { usePublicKey: false, usePrivateKey: true, user: undefined , privateKey: {exp: myContext.privateKey.exp, mod: myContext.privateKey.mod}}) }} width={70} />
-            <Button label='Use public' onPress={() => { navigation.navigate('RSA', { usePublicKey: true, usePrivateKey: false, user: undefined , publicKey: {exp: myContext.publicKey.exp, mod: myContext.publicKey.mod }}) }} width={70} />
+            <Button style={{ margin: 10 }} label={t('UP_PERS')} onPress={updateKeys} width='35%' />
+            <Button label={t('USE_PRI')} onPress={() => { navigation.navigate('RSA', { usePublicKey: false, usePrivateKey: true, user: undefined , privateKey: {exp: myContext.privateKey.exp, mod: myContext.privateKey.mod}}) }} width='30%' />
+            <Button label={t('USE_PUB')} onPress={() => { navigation.navigate('RSA', { usePublicKey: true, usePrivateKey: false, user: undefined , publicKey: {exp: myContext.publicKey.exp, mod: myContext.publicKey.mod }}) }} width= '30%' />
         </View>
     );
 }

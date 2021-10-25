@@ -41,9 +41,10 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
         console.log(selectedMethod)
     },[selectedMethod])
     
-    const method = "Your choice"
+    //const method = "Your choice"
+    const method = `${t("CHOICE")}`
 
-    const intro =  riddlesMethodChoiceIntroText
+    const intro =  `${t("RIDDLE_CHOICE_DETAILS")}`
     
 
     const languageDisabled = selectedMethod == null || ['rsa', 'sdes'].includes(selectedMethod);
@@ -78,7 +79,8 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
     <View style = {{margin: 15, borderColor: 'green'}}>
             <RNPickerSelect
             onValueChange={(value) => setSelectedMethod(value)}
-            placeholder={{label :"Select the encryption method", value: null}}
+            placeholder={{}}
+            //placeholder={{label :`${t('SEL_METH')}`, value: null}}
             style={{ ...pickerSelectStyles }}
             InputAccessoryView={() => null}
             items={[
@@ -99,7 +101,8 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
         <View style = {{margin: 15, borderColor: 'green'}}>
             <RNPickerSelect
             onValueChange={(value) => setSelectedLevel(value)}
-            placeholder={{label :"Select the difficulty", value: null}}
+            placeholder={{}}
+            //placeholder={{label :"Select the difficulty", value: null}}
             style={{ ...pickerSelectStyles }}
             InputAccessoryView={() => null}
             items={[
@@ -122,7 +125,8 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
     <RNPickerSelect
     onValueChange={(value) => setSelectedLanguage(value)}
     disabled = {languageDisabled}
-    placeholder={{label :"Select your language", value: null}}
+    placeholder={{}}
+    //placeholder={{label :"Select your language", value: null}}
     style={{ ...pickerSelectStyles }}
     InputAccessoryView={() => null}
     items={[
@@ -136,8 +140,8 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
 </View>
 </View>
 }
-<View style = {{margin: 20, width : '40%'}}>
-<Button disabled={!buttonEnabled} label='create secret message' onPress={() => { 
+<View style = {{margin: 20, width : '50%'}}>
+<Button disabled={!buttonEnabled} label={t("CREATE")} onPress={() => { 
     const details = {
         allowHints: false, 
         isRandom: false,
@@ -148,13 +152,9 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
     navigation.navigate("RiddleDisplay", {details}) }} />
 
 </View>
-                <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'center', width: 150,
-                    marginTop: 100
-                }}>
-                    <Button label={`${t('SI')}`} onPress={() => { myContext.setIntroVisible(true) }} />
-                </View>
+<View style = {{margin: 20, width: '30%', marginTop: 150}}>
+                    <Button  label={`${t('SI')}`} onPress={() => { myContext.setIntroVisible(true) }} width = '80%' />
+             </View>
         </SafeAreaView>
     );
 

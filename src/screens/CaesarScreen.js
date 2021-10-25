@@ -242,12 +242,12 @@ export default function CaesarScreen({ navigation }) {
                 <View style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
-                    marginTop: 100
+                    marginTop: 20
                 }}>
-                    <View style = {{margin: 20}}>
+                    <View style = {{margin: 20, width: '30%'}}>
                     <Button  label={`${t('SI')}`} onPress={() => { myContext.setIntroVisible(true) }} width = '80%' />
                     </View>
-                    <View style = {{margin: 20}}>
+                    <View style = {{margin: 20, width: '30%'}}>
                     <Button label={`${t('SM')}`} onPress={sendMessage} width = '80%'/>
                     </View>
                 </View>

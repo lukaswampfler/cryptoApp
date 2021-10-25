@@ -14,6 +14,7 @@ import { SafeAreaView } from 'react-native';
 import { IntroModal } from '../utils/Modals';
 import ClearButton from '../components/ClearButton';
 import Line from '../components/Line';
+import { useTranslation } from 'react-i18next';
 
 const screenWidth = 0.9 * Dimensions.get("window").width;
 
@@ -37,9 +38,10 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
     const [inverseDict, setInverseDict] = useState({})
     const [mostFrequentGerman, setMostFrequentGerman] = useState() 
 
+    const {t} = useTranslation();
 
-
-    const alphaShort = 'ENIRSTADHULC'.split('');
+    //const alphaShort = 'ENIRSTADHULC'.split('');
+    const alphaShort = `${t("MOST_FREQ_LETTERS")}`.toUpperCase().split('');
     const MAX_NUM_LETTERS = 15;
     const alphaShortExtended = extend(alphaShort, MAX_NUM_LETTERS - alphaShort.length)
     const alphaShortExtendedWithIndex = alphaShortExtended.map((value, index) => { return {index: index.toString(), value: value};})
@@ -194,9 +196,11 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
                 )
         })
     
-      const title = "Analyzing the Permutation Cipher"
-      const introText = "Here comes the introduction to the Permutation analysis...";
-      const method = "Permutation Analysis"
+      //const title = "Analyzing the Permutation Cipher"
+      const title = `${t('PERM_ANA_TIT')}`
+      //const introText = "Here comes the introduction to the Permutation analysis...";
+      const introText = `${t('PERM_HELP')}`
+      const method = `${t('PERM_ANA_TIT_LONG')}`
 
 
     return (
@@ -205,12 +209,14 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
          <TouchableWithoutFeedback onPress = {Keyboard.dismiss} accessible={false}>
           
             <View style = {{margin: 10, marginBottom: 0}}>
+              <View style ={{height: 90}}>
               <Title title = {title}/>
+              </View>
               <IntroModal text={introText} method={method} />
               <Text style={{
                     fontSize: 20, marginBottom: 5
                 }}> 
-                 Input (secret message)
+                 Input ({t("SEC")})
             </Text>
             <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
 
@@ -244,7 +250,7 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
                    {/*} <Button label='Analyze Text' onPress={handleAnalysis} width={240} />*/}
                     {secretHasAlpha && 
                     <View style ={{marginTop: 10, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Button label={!showBarChart? 'show chart': 'hide chart'} onPress={changeChartStatus} width={150} />
+                    <Button label={!showBarChart? `${t("SHOW_CHART")}`: `${t("HIDE_CHART")}`} onPress={changeChartStatus} width={150} />
                     {/*<Button label={'sort secret letters'} onPress={() => {alert("Button pressed!")}} width={150} />*/}
                     </View>}
 </View>
@@ -265,7 +271,7 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
     </TouchableWithoutFeedback>
     <View style={{padding: 12}}>
     <Line/>
-    <Text width={100} style={{fontSize:20}}> {alphaShort.length} most frequent german letters: </Text>
+    <Text width={100} style={{fontSize:20}}>  {t("THE")} {alphaShort.length} {t("MOST_FREQ")} </Text>
     
     
       <FlatList horizontal={true}
@@ -292,14 +298,14 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
           keyExtractor={(item) => item.index.toString()}
         />
         <View style = {{marginBottom: 10}}>
-        <Text width={100} style={{fontSize:20}}> Most frequent secret letters (drag to switch)</Text>
+        <Text width={100} style={{fontSize:20}}>{t("MOST_FREQ_SEC")}</Text>
         <Line/>
         </View>
         {/*<Text width={100} style={{fontSize:18}}> partially decrypted String</Text>
         <Text width={100} style={{fontSize:16}}> {decypheredMessage}</Text>
         <Divider/>*/}
          <View>
-         <View><Text width={100} style={{fontSize:20, marginBottom: 5, marginTop:5}}> Output (decyphered Message) <Text style={{fontSize: 16}}>known <Text style={{backgroundColor: '#bbb'}}>unknown </Text></Text></Text></View>
+         <View style ={{height: 60}}><Text width={100} style={{fontSize:20, marginBottom: 5, marginTop:5}}> Output ({t("DEC_MES")}) <Text style={{fontSize: 16}}>{t("KN")} <Text style={{backgroundColor: '#bbb'}}>{t("UNKN")} </Text></Text></Text></View>
          {/*<View><Text style={{fontSize: 16}}>known <Text style={{backgroundColor: '#bbb'}}>unknown </Text></Text></View>*/}
         <ScrollView style= {{height: '30%', marginTop: 5}}><Text >{textList}</Text></ScrollView></View>
 
@@ -307,10 +313,10 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
         <View style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between', 
-                    width: '95%',
-                    marginTop: 100
+                    width: '30%',
+                    marginTop: 20
                 }}>
-                    <Button label='show introduction' onPress={() => { myContext.setIntroVisible(true) }} />
+                    <Button  label={t("SI")} onPress={() => { myContext.setIntroVisible(true) }} width= '80%' />
                    {/*} <Button label = 'send message' onPress = {sendMessage} />*/}
                 </View>
 

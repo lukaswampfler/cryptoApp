@@ -273,7 +273,7 @@ export default function SDESScreen({ route, navigation }) {
                     marginTop: 20, 
                     marginLeft: 10
                 }}> 
-                Input (Multiples of 8 Bits) </Text>
+                {t('SDES_INPUT')} </Text>
                 <View style={{
                     paddingHorizontal: 32,
                     marginBottom: 16,
@@ -298,8 +298,9 @@ export default function SDESScreen({ route, navigation }) {
                         value={formikMessage.values.message}
                     />
                     
-                    <Button label='encode message' onPress={() => { navigation.navigate('SDESEncoding') }} />
-                        
+                    <View style ={{width: '30%'}}>
+                    <Button  label={t('ENCODE')} onPress={() => { navigation.navigate('SDESEncoding') }} />
+                        </View>
                     
                 </View>
 
@@ -310,7 +311,7 @@ export default function SDESScreen({ route, navigation }) {
 
           <Text style={{ fontSize: 20 }}>{`${t('KEY')}`}</Text>
         <View style = {{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}> 
-        <Text style = {{fontSize: 16, fontWeight: '500'}}> 10-bit key: </Text>
+        <Text style = {{fontSize: 16, fontWeight: '500'}}> {t('K10')} </Text>
         
          <NumInput
             //icon='pinterest'
@@ -334,8 +335,8 @@ export default function SDESScreen({ route, navigation }) {
     marginTop: 5,
     marginBottom: 10,
 }}>
-             <Button label='Calculate       k1, k2' onPress={formikKey.handleSubmit}  width = '40%'/>
-             <Button label='RSA encrypt  10-bit key' onPress={encryptKey} width = '40%'/>
+             <Button label={t('K12')} onPress={formikKey.handleSubmit}  width = '40%'/>
+             <Button label={t('RSA_ENC')} onPress={encryptKey} width = '40%'/>
 
 
 </View>
@@ -394,7 +395,7 @@ export default function SDESScreen({ route, navigation }) {
        {/*} <Button label='Use k1, k2' onPress={formikK12.handleSubmit} />*/}
        
         <View style ={{flexDirection: 'row', justifyContent: 'center'}}>
-        <Button label='encrypt' onPress={handleEncryption} width = '50%'/>
+        <Button label={t('ENC')} onPress={handleEncryption} width = '50%'/>
         </View>
         {/*<Divider style={{ width: "100%", margin: 10 }} />*/}
         <View style ={{marginTop: 10}}>

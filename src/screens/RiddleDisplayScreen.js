@@ -4,6 +4,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
 import Title from '../components/Title';
 import Button from '../components/Button';
+import GreySwitch from '../components/GreySwitch';
 
 import getSecretContainer from '../utils/getSecretContainer';
 import { calculateKeyPair, generatePrime } from '../utils/RSAMath';
@@ -11,6 +12,7 @@ import AppContext from '../components/AppContext';
 import { getRandomKeys } from '../utils/sdesMath';
 import { TextInput } from 'react-native-gesture-handler';
 import { encryptPermutation } from '../utils/permutationMath';
+import { useTranslation } from 'react-i18next';
 
 const choose = (array) => {
     const ind = Math.floor(Math.random()*array.length);
@@ -41,7 +43,7 @@ export default function RiddleDisplayScreen({ route,  navigation }) {
     const [displayShowLastRiddle, setDisplayShowLastRiddle] = useState(true);
 
 
-    //let secretContainer = {message: secretMessage, method: 'keine', secret: 'secret'}; 
+    const {t} = useTranslation();    //let secretContainer = {message: secretMessage, method: 'keine', secret: 'secret'}; 
 
     let secretContainer = {secret: 'encrypted message', method: 'unknown'};
 
@@ -204,7 +206,8 @@ const setContainer = () => {
     let details;
 
 
-    const title = "I challenge you to decrypt the message below!";
+    //const title = "I challenge you to decrypt the message below!";
+    const title = `${t("CHALLENGE_TIT")}`
     /*if (details.isRandom){
         console.log("getting 10 random messages from server, render them in Flatlist")
         details.method = 'random';
@@ -292,30 +295,31 @@ const setContainer = () => {
 </View>*/}
 
 <View style = {{margin: 10}}>
-    <Text style = {{fontSize: 16, fontWeight: '500'}}> Click message to analyze! </Text>
+    <Text style = {{fontSize: 16, fontWeight: '500'}}> {t("CLICK")} </Text>
 </View>    
 
             <View style ={{margin: 20}}>
-            {allowHints? <Button label='give me a hint!' onPress={() => { 
+            {allowHints? <Button label={t("HINT")} onPress={() => { 
                 //console.log(details)
                 setAllowHints(false);
                 //alert((method=='rsa'? 'Try factorizing the modulus!': 'Method: ' + method))
                 }} /> : <Text > {method}  {level}  {language} </Text>}
             </View>
             <View style ={{margin: 20}}>
-            <Switch
+           {/*} <Switch
                             style={{ marginTop: 5 }}
                             onValueChange={toggleShowSolution}
                             value={showSolution}
-                        />
+            />*/}
+                <GreySwitch onValueChange={toggleShowSolution} value={showSolution}/>
             </View>
             {showSolution && <View style ={{ margin: 20, flexDirection: 'row', justifyContent: 'space-around'}}>
-                <Button label='show key' onPress={showKey} /> 
-                <Button label='show solution' onPress={checkSolution} /> 
+                <Button width={'40%'} label={t("SHOW_KEY")} onPress={showKey} /> 
+                <Button width={'40%'} label={t("SHOW_SOL")} onPress={checkSolution} /> 
              </View>   }
              <View style = {{flexDirection: 'column', justifyContent: 'flex-end'}}>
                  <View width = '45%' style = {{margin: 30}}>
-            {displayShowLastRiddle &&  <Button label='show last riddle' onPress={showLastRiddle} />}
+            {myContext.isLastRiddle &&  <Button label={t("SHOW_LAST")}onPress={showLastRiddle} />}
                 </View>
              </View>
           </SafeAreaView>  

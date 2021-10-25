@@ -115,11 +115,11 @@ export default function HomeScreen({ navigation }) {
       <Title title={`${t('HOMETITLE')}`}/>
       <Title title={`${t('HOMESUBTITLE')}`}/>
       
-      <Text style ={{margin: 5, fontSize: 15}}> <Text style={{fontWeight: 'bold'}}>{`${t('ENC')}`}: </Text>{`${t('HOMETEXTENC')}`}</Text>
-      <Text style ={{margin: 5, fontSize: 15}}> <Text style={{fontWeight: 'bold'}}>{`${t('ANA')}`}: </Text> {`${t('HOMETEXTANA')}`}</Text>
-      <Text style ={{margin: 5, fontSize: 15}}> <Text style={{fontWeight: 'bold'}}>{`${t('MES')}`}: </Text> {`${t('HOMETEXTMES')}`}</Text>
-      <Text style ={{margin: 5, fontSize: 15}}> <Text style={{fontWeight: 'bold'}}>{`${t('RID')}`}: </Text>{`${t('HOMETEXTRID')}`} </Text>
-      <Text style ={{margin: 5, fontSize: 15}}> <Text style={{fontWeight: 'bold'}}>{`${t('LAN')}`}: </Text> {`${t('LAN_TEXT')}`}</Text>
+      <Text style ={{margin: 5, fontSize: 15}}><Text style={{fontWeight: 'bold'}}>{`${t('ENC')}`}: </Text>{`${t('HOMETEXTENC')}`}</Text>
+      <Text style ={{margin: 5, fontSize: 15}}><Text style={{fontWeight: 'bold'}}>{`${t('ANA')}`}: </Text> {`${t('HOMETEXTANA')}`}</Text>
+      <Text style ={{margin: 5, fontSize: 15}}><Text style={{fontWeight: 'bold'}}>{`${t('MES')}`}: </Text> {`${t('HOMETEXTMES')}`}</Text>
+      <Text style ={{margin: 5, fontSize: 15}}><Text style={{fontWeight: 'bold'}}>{`${t('RID')}`}: </Text>{`${t('HOMETEXTRID')}`} </Text>
+      <Text style ={{margin: 5, fontSize: 15}}><Text style={{fontWeight: 'bold'}}>{`${t('LAN')}`}: </Text> {`${t('LAN_TEXT')}`}</Text>
 
 
       {/*

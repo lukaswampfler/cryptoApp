@@ -87,13 +87,11 @@ export default function RiddleHomeScreen({ navigation }) {
                             renderItem={renderItem}
                             keyExtractor={item => item.name}
                         /> 
-                <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'center', width: 150,
-                    marginTop: 100
-                }}>
-                    <Button label={`${t('SI')}`} onPress={() => { myContext.setIntroVisible(true) }} />
-                </View>
+                
+                    <View style = {{margin: 20, width: '30%', marginTop: 150}}>
+                    <Button  label={`${t('SI')}`} onPress={() => { myContext.setIntroVisible(true) }} width = '80%' />
+                    </View>
+                    
         </SafeAreaView>
     );
 

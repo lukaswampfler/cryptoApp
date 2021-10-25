@@ -81,7 +81,7 @@ const RiddleStack = createStackNavigator();
 
 const AuthenticationNavigator = props => {
   return (
-    <AuthenticationStack.Navigator screenOptions={{ headerShown: false }}>
+    <AuthenticationStack.Navigator screenOptions={{headerShown: false}}> 
       <AuthenticationStack.Screen name="SignIn">
         {screenProps => (
           <SignIn {...screenProps} updateAuthState={props.updateAuthState} />
@@ -286,6 +286,7 @@ export default function App() {
   const [useBigIntegerLibrary, setUseBigIntegerLibrary] = useState(false);
   const [isFirstTime, setIsFirstTime] = useState(true);
   const [lastRiddle, setLastRiddle] = useState({})
+  const [isLastRiddle, setIsLastRiddle] = useState(false);
 
 
   const userSettings = {
@@ -306,6 +307,7 @@ export default function App() {
     explVisible: explVisible,
     secretContainer: secretContainer,
     lastRiddle: lastRiddle,
+    isLastRiddle: isLastRiddle,
     RSAKeyGenState: RSAKeyGenState,
     setUserName,
     setUserID,
@@ -324,6 +326,7 @@ export default function App() {
     setExplVisible,
     setSecretContainer,
     setLastRiddle,
+    setIsLastRiddle,
     setRSAKeyGenState,
   };
 

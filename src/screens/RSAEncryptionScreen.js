@@ -19,7 +19,6 @@ import {
 import RSA from '../utils/RSA'
 import RSAKeyInput from '../components/RSAKeyInput';
 import { smartExponentiation } from '../utils/RSAMath';
-import { rsaIntroText } from '../utils/introTexts';
 import { useTranslation } from 'react-i18next';
 
 
@@ -143,7 +142,12 @@ export default function RSAEncryptionScreen({ route, navigation }) {
         ciphers.rsa['encrypted'] = encryptedMessage;
         ciphers.rsa['isEncrypted'] = true;
         ciphers.currentMethod = 'RSA';
-        ciphers.currentMessage = encryptedMessage;
+        if(myContext.RSAInputSwitchisDecimal){
+            ciphers.currentMessage = encryptedMessage;
+        } else {
+            ciphers.currentMessage = BigInt(encryptedMessage).toString(2)
+        }
+        
         myContext.setCiphers(ciphers);
     }
 
@@ -186,6 +190,7 @@ export default function RSAEncryptionScreen({ route, navigation }) {
         } else return '';
     }
 
+    const rsaIntroText = `Input: ${t('RSAEXP_P2')}\n\n` + `${t('KEY')}: ${t('RSAEXP_P1')}\n\n`  + `${t('RSAEXP_P3')}\n\n` + `${t('RSAEXP_P4')}`
     const introText = rsaIntroText;
     //const method = "The RSA cipher"
 
@@ -216,12 +221,11 @@ export default function RSAEncryptionScreen({ route, navigation }) {
                 }}> 
                 Input {`${t('RSA_DECBIN')}`} </Text>
                 <View style={{
-                    paddingHorizontal: 32,
                     marginBottom: 16,
                     width: '100%',
                     flexDirection: 'row',
                     justifyContent: 'space-between',
-                    margin: 40
+                    margin: 10
                 }}>
                     <NumInput
                         //icon='new-message'
@@ -267,7 +271,7 @@ export default function RSAEncryptionScreen({ route, navigation }) {
                     marginTop: 10,
                     marginBottom: 10,
                 }}>
-                    <Button label={`${t('ENC_DEC')}`} onPress={handleSubmit} width={240} />
+                    <Button label={`${t('ENC_DEC')}`} onPress={handleSubmit}  />
                 </View>
               </View>  
             </View>
@@ -290,11 +294,11 @@ export default function RSAEncryptionScreen({ route, navigation }) {
                     keyboardAppearance='dark'
                     defaultValue={getRSAOutputValue()}
                 />
-                <Button label={`${t('SM')}`} onPress={() => { navigation.navigate('UsersList', { toSend: true, toImportKey: false }) }} width={100} />
+               {/*} <Button label={`${t('SM')}`} onPress={() => { navigation.navigate('UsersList', { toSend: true, toImportKey: false }) }} width={100} />*/}
                 {/*} <ShareButton message={myContext.ciphers.rsa.isEncrypted ? myContext.ciphers.rsa.encrypted.toString() : 'No Encryption done yet'} />*/}
             </View>
             </View>
-            <View style={{
+           {/*} <View style={{
                 flexDirection: 'row',
                 justifyContent: 'space-around', width: 150,
                 marginTop: 30,
@@ -303,7 +307,23 @@ export default function RSAEncryptionScreen({ route, navigation }) {
                 <Button label={`${t('SI')}`} onPress={() => { 
                     //console.log(route.params)
                     myContext.setIntroVisible(true) }} />
-            </View>
+                </View>*/}
+            <View style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    marginTop: 20
+                }}>
+                    <View style = {{margin: 20, width: '30%'}}>
+                    <Button  label={`${t('SI')}`} onPress={() => { myContext.setIntroVisible(true) }} />
+                    </View>
+                    <View style = {{margin: 20, width: '30%'}}>
+                    <Button label={`${t('SM')}`} onPress={() => { 
+                        navigation.navigate('UsersList', { toSend: true, toImportKey: false }) 
+                        }} />
+                    </View>
+                </View>
+
+
         </ScrollView>
         //{/*</View>*/}
     );
