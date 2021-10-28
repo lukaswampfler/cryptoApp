@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, Text, View , Switch} from 'react-native';
+import { SafeAreaView, ScrollView, Text, View, Switch } from 'react-native';
 import { Divider } from 'react-native-elements';
 import AppContext from '../components/AppContext';
 import Button from '../components/Button';
@@ -7,6 +7,7 @@ import NumInput from '../components/NumInput';
 import Title from '../components/Title';
 import { IntroModal } from '../utils/Modals';
 import Line from '../components/Line';
+import GreySwitch from '../components/GreySwitch';
 
 
 import { useFormik } from 'formik';
@@ -258,7 +259,7 @@ export default function SDESScreen({ route, navigation }) {
     <View style={{ flex: 1 }}>
       <ScrollView style={{ flex: 1 , margin: 10}}>
        <Title title={`${t('SDES_TIT')}`} />
-        <IntroModal text={sdesIntroText} method={`${t('SDES_TIT')}`} />
+        <IntroModal text={t('SDES_HELP')} method={`${t('SDES_TIT')}`} />
         <View
                 style={{
                     flex: 1,
@@ -419,12 +420,16 @@ export default function SDESScreen({ route, navigation }) {
             <Text style={{ fontSize: 20 }}>Message decrypted </Text>
         <Text style={{ fontSize: 20 }} selectable> {decryptedMessage} </Text>*/}
 <View style ={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
-<Switch
+{/*<Switch
                             style={{ marginTop: 5 }}
                             onValueChange={toggleSendMessageState}
                             value={isMessageBinary}
-                        />
-<Button label= {isMessageBinary? `${t('SBM')}` : `${t('SM')}`} onPress={sendMessage} width = '40%'/>
+                        
+/>*/}
+
+<GreySwitch  onValueChange={toggleSendMessageState}
+              value={isMessageBinary}/>
+<Button label= {isMessageBinary? `${t('SBM')}` : `${t('SM')}`} onPress={sendMessage} width = '45%'/>
 
 </View>
 
@@ -433,20 +438,25 @@ export default function SDESScreen({ route, navigation }) {
 
          </View> 
 
+         <View style = {{margin: 20, width: '30%'}}>
+                    <Button  label={`${t('SI')}`} onPress={() => { myContext.setIntroVisible(true) }} width = '80%' />
+                    </View>
+
          <View style ={{flexDirection: 'row', justifyContent: 'space-between'}} >
-        <View style={{
+         
+        {/*<View style={{
           flexDirection: 'row',
           justifyContent: 'center', width: 150,
           marginTop: 100
         }}>
           <Button label={`${t('SI')}`} onPress={() => { myContext.setIntroVisible(true) }} />
-        </View>
-        <View style={{
+      </View>*/}
+        {/*<View style={{
           flexDirection: 'row',
           justifyContent: 'center', width: 150,
           marginTop: 100
         }}>
-        </View>              
+      </View>              */}
                     </View>
 
       </ScrollView>

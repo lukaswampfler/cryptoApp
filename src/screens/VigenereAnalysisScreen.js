@@ -286,8 +286,8 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
  {(showFragments && repeatedParts.length == 0  ) &&      <Text style={{fontSize: 20}}> No repeating fragments were found. </Text>  }                        
 
 </View >
-<View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
-                <View style={{flexDirection: 'column', alignItems: 'center'}}>
+<View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                <View style={{flexDirection: 'column', alignItems: 'center', width: '50%'}}>
                 <Text style={{
                     fontSize: 20
                 }}> 
@@ -312,8 +312,8 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
             />
            </View>  
 </View>
-<View >
-<Button label={t("TO_DEC")} onPress={goToVigenereDecryption} width={150}/>
+<View style = {{width:'45%'}} >
+<Button label={t("TO_DEC")} onPress={goToVigenereDecryption} />
 </View>
 </View>
     </View>

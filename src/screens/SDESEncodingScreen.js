@@ -127,13 +127,17 @@ export default function SDESEncodingScreen({ navigation, route }) {
                     </Text>
                 </View>
 
-                <View style={{
+                <View style = {{margin: 20, width: '30%'}}>
+                    <Button  label={`${t('SI')}`} onPress={() => { myContext.setExplVisible(true) }} width = '80%' />
+                    </View>
+
+                {/*<View style={{
                     flexDirection: 'row',
                     justifyContent: 'center', width: 150,
                     marginTop: 100
                 }}>
                     <Button label={t('SI')} onPress={() => { myContext.setExplVisible(true) }} />
-                </View>
+            </View>*/}
             </ScrollView>
         </View>
     );

@@ -28,9 +28,9 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
 
     const {t} = useTranslation();
     const myContext = useContext(AppContext);
-    const [selectedMethod, setSelectedMethod] = useState('')
-    const [selectedLevel, setSelectedLevel] = useState('')
-    const [selectedLanguage, setSelectedLanguage] = useState('')
+    const [selectedMethod, setSelectedMethod] = useState('caesar')
+    const [selectedLevel, setSelectedLevel] = useState('easy')
+    const [selectedLanguage, setSelectedLanguage] = useState('german')
 
     
     const titleMethod = `${t('RIDDLEMETHODCHOICE')}`
@@ -44,7 +44,7 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
     //const method = "Your choice"
     const method = `${t("CHOICE")}`
 
-    const intro =  `${t("RIDDLE_CHOICE_DETAILS")}`
+    const intro =  `${t("RIDDLE_CHOICE_DETAILS_P1")}\n\n${t("RIDDLE_CHOICE_DETAILS_P2")}\n\n${t("RIDDLE_CHOICE_DETAILS_P3")}`
     
 
     const languageDisabled = selectedMethod == null || ['rsa', 'sdes'].includes(selectedMethod);

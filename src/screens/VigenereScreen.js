@@ -203,7 +203,7 @@ export default function VigenereScreen({ route, navigation }) {
                     //icon='pinterest'
                     bgColor = {BACKGROUND_COLOR}
                     width='35%'
-                    placeholder='Vigenere key'
+                    placeholder=''
                     autoCapitalize='none'
                     keyboardType='default'
                     keyboardAppearance='dark'
@@ -221,9 +221,11 @@ export default function VigenereScreen({ route, navigation }) {
                    {/*</View> */}
                    <View style={{
                     flexDirection: 'column',
+                    alignItems: 'center',
                     justifyContent: 'space-between',
                     marginTop: 10,
                     marginBottom: 10,
+                    width: '30%'
                 }}>
                 <Text style={{ marginTop: 20, marginBottom: 10 }}> {isEncrypting?  `${t('ENC')}`: `${t('DEC')}`} </Text>
                 

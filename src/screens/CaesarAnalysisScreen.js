@@ -27,9 +27,8 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
 
     const myContext = useContext(AppContext);
     const [secret, setSecret] = useState('');
-    const [key, setKey] = useState(0);
+    const [key, setKey] = useState("0");
     const [decypheredMessage, setDecypheredMessage] =useState('')
-    const [isDecyphered, setIsDecyphered] = useState(false)
 
     const {t} = useTranslation();
 
@@ -53,10 +52,10 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
             setKey(key)
             setDecypheredMessage(decyph)
             console.log("change Key: ", key, decypheredMessage)
-            setIsDecyphered(true); 
+            //setIsDecyphered(true); 
     } else {
         console.log("key not integer")
-            setIsDecyphered(false);
+            //setIsDecyphered(false);
             alert("Please enter a valid key (number!)")
             setDecypheredMessage("")
             setKey("")
@@ -148,7 +147,7 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
 
 
 <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10}}>
-<View style={{marginTop: 10, marginLeft: 10, marginBottom: 5, marginRight: 10}}>
+<View style={{marginTop: 10, marginLeft: 10, marginBottom: 5, marginRight: 10, width: '50%'}}>
                 <Text style={{
                     fontSize: 20
                 }}> 
@@ -162,13 +161,14 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
             name = 'minus' 
             onPress ={() => { 
                 addKey(-1);
-                console.log("Icon pressed")}} />
+                //console.log("Icon pressed")
+            }} />
         </View>
 
 
                 <NumInput
                 width='15%'
-                placeholder='Enter key'
+                value = {key}
                 autoCapitalize='none'
                 keyboardType='number-pad'
                 keyboardAppearance='dark'
@@ -176,8 +176,18 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
                 returnKeyLabel='next'
                 //onChangeText={formikKey.handleChange('key')}
                 onChangeText= {changeKey}
-                value = {key}
-                />
+                
+        />
+      {/*}  <TextInput
+                width='15%'
+                keyboardType='number-pad'
+                keyboardAppearance='dark'
+                returnKeyType='next'
+                returnKeyLabel='next'
+                onChangeText={changeKey}
+                value = {key + ''}
+                //onBlur={() => { }}
+            />*/}
     <View style = {{margin: 20}}>
     <MaterialCommunityIcons 
             size = {32}
@@ -195,7 +205,7 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
 
 <TouchableWithoutFeedback onPress = {Keyboard.dismiss} accessible={false}>
 <View>
-{(isDecyphered && !(isNaN(parseInt(key, 10)))) &&
+{(!(isNaN(parseInt(key, 10)))) &&
 <View style ={{marginTop: 20}}> 
 <View style={{marginTop: 10, marginLeft: 10, marginBottom: 5}}>
                 <Text style={{

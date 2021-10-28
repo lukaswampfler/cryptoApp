@@ -139,7 +139,7 @@ export default function CaesarScreen({ navigation }) {
                 {isEncrypting? 'Input' : 'Output'}  </Text>
                 </View>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-                <View style = {{width : '60%', backgroundColor: isEncrypting? BACKGROUND_COLOR: null}}>
+                <View style = {{width : '60%', backgroundColor: isEncrypting? BACKGROUND_COLOR: null, borderRadius: 8, padding: 0}}>
                 <TextInput
                     width='100%'
                     multiline={true}
@@ -170,7 +170,7 @@ export default function CaesarScreen({ navigation }) {
                     fontSize: 20
                 }}> 
                 {`${t('CAES_KEY')}`} </Text>
-                <View style = {{ marginTop: 5, width : '100%', backgroundColor:  BACKGROUND_COLOR}}>
+                <View style = {{ marginTop: 5, width : '100%', backgroundColor:  BACKGROUND_COLOR,  borderRadius: 8}}>
                 <NumInput
                     //icon='pinterest'
                     width='100%'
@@ -218,7 +218,7 @@ export default function CaesarScreen({ navigation }) {
                     marginLeft: 0,
                 }}>
                    <ScrollView style ={{height: 100}}>
-                   <View style = {{width : '60%', backgroundColor: isEncrypting? null: BACKGROUND_COLOR}}>
+                   <View style = {{width : '60%', backgroundColor: isEncrypting? null: BACKGROUND_COLOR, borderRadius: 8}}>
                    <TextInput
                         width='100%'
                         editable = {!isEncrypting}
