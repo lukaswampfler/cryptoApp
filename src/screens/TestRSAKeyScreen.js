@@ -71,6 +71,7 @@ export default function TestRSAKeyScreen({ navigation }) {
       query: getUser, 
       variables: {id: myContext.userID}
     })
+    console.log(result.data.getUser.publicKey)
     return result.data.getUser.publicKey;
   }
 

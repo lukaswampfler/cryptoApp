@@ -1,7 +1,3 @@
-import { diff, max, min } from "react-native-reanimated";
-import { gcdArray } from "./CryptoMath";
-import { removeSpecialChars } from "./permutationMath";
-
 export const germanFreq = {'A' :  6.34 ,       'K' :  1.50  ,      'U' :  3.76,
     'D' :  4.92   ,     'N' :  9.59   ,     'X' :  0.07,
     'B' :  2.21     ,   'L' :  3.72   ,     'V' :  0.94,

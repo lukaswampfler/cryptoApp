@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Platform, View, Text, FlatList, Pressable, SafeAreaView, TouchableOpacity, Button } from 'react-native'
-import { Picker } from '@react-native-picker/picker';
 import Title from '../components/Title';
 
 import styles from './styles'
 
 import AppContext from '../components/AppContext';
-import App from '../../App';
 import { isBitStringMultipleOf8 } from '../utils/sdesMath';
 import { useTranslation } from 'react-i18next';
 
