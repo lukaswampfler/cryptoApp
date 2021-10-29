@@ -12,7 +12,9 @@ export default function ClearButton({setInput, setKey, defaultKey, ...props}){
             onPress ={() => { 
                 setInput("");
                 setKey(defaultKey);
-                console.log("Icon pressed")}} />
+                //if(props.additionalFunction()!==null) props.additionalFunction()
+                //console.log("Icon pressed")
+                }} />
         </View>
     );
 }

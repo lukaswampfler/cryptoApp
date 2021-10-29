@@ -1,4 +1,4 @@
-import React, {  useState, useEffect, useContext } from 'react'
+import React, {  useState, useEffect, useContext, useCallback } from 'react'
 import { StyleSheet, Platform, View, Text, FlatList, Pressable, SafeAreaView, TouchableOpacity } from 'react-native'
 import { Picker } from '@react-native-picker/picker';
 import Title from '../components/Title';
@@ -32,6 +32,8 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
     const [selectedLevel, setSelectedLevel] = useState('easy')
     const [selectedLanguage, setSelectedLanguage] = useState('german')
 
+    const [, updateState] = useState();
+    const forceUpdate = useCallback(() => updateState({}), []);
     
     const titleMethod = `${t('RIDDLEMETHODCHOICE')}`
     const titleLevel = `${t('RIDDLELEVELCHOICE')}`
@@ -40,6 +42,8 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
     useEffect(()=>{
         console.log(selectedMethod)
     },[selectedMethod])
+
+    useEffect(() => {forceUpdate()}, [myContext.appLanguage])
     
     //const method = "Your choice"
     const method = `${t("CHOICE")}`

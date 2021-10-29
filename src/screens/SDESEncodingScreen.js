@@ -51,9 +51,9 @@ export default function SDESEncodingScreen({ navigation, route }) {
     }, [])
 
 
-    const introText = sdesEncodingIntroText
+    const introText = `${t("ENCODING_HELP")}`
     
-    const method = "Encoding a message"
+    const method = `${t("ENCODING_TITLE")}`
 
     const title = `${t('SDES_ENC')}`
 

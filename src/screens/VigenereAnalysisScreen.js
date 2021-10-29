@@ -15,7 +15,7 @@ import {
 
 
 import { createFrequencyDict, sortDictionaryByKey, calculateKeyCharacter , kasiskiTest, germanFreq, createData, getFirstLetter, factorize} from '../utils/frequencyAnalysis';
-import CarouselCards from '../components/CarouselCards';
+//import CarouselCards from '../components/CarouselCards';
 import { useTranslation } from 'react-i18next';
 
 const screenWidth = 0.9 * Dimensions.get("window").width;
@@ -23,7 +23,7 @@ const screenWidth = 0.9 * Dimensions.get("window").width;
 export const SLIDER_WIDTH = Dimensions.get('window').width +50
 export const ITEM_WIDTH = Math.round(SLIDER_WIDTH )
 
-const mostFrequentLetter = 'e';
+//const mostFrequentLetter = 'e';
 
 export default function VigenereAnalysisScreen({ route, navigation }) {
     const [secret, setSecret] = useState('');
@@ -124,7 +124,7 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
             }
             setLikelyKeyWord(candKeyWord)
     } else {
-        alert("Please choose a length that is positive and not longer than the secret message!")
+        alert(`${t("VIG_ANA_ALERT")}`)
         setChosenLength(0);
     }
 
@@ -192,7 +192,7 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
             <Text style={{ width: 250, fontSize: 16}} selectable={true} selectionColor='yellow' >
                 {item.fragment}  </Text>
         
-            <Text selectable={false}>  Distance:  {item.posDiff}</Text>
+            <Text selectable={false}>  {t("DIST")}{item.posDiff}</Text>
             {/*<Divider width={'100%'} style={{margin: 7}}/>*/}
       </View>
     )
@@ -275,7 +275,7 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
                 
 </View>
 <View style ={{marginBottom: 10}}>
-{(showFragments && repeatedParts.length > 0 ) &&  <Text> The following fragments were found more than once (distances on the right): </Text>  }
+{(showFragments && repeatedParts.length > 0 ) &&  <Text> {t("FRAG")} </Text>  }
             
         {(showFragments && repeatedParts.length > 0  ) &&                <FlatList style ={{}} 
                             removeClippedSubviews={false}
@@ -283,7 +283,7 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
                             renderItem={renderFragment}
                             keyExtractor={item => item.fragment}
                         /> }
- {(showFragments && repeatedParts.length == 0  ) &&      <Text style={{fontSize: 20}}> No repeating fragments were found. </Text>  }                        
+ {(showFragments && repeatedParts.length == 0  ) &&      <Text style={{fontSize: 20}}> {t("NO_REP")}</Text>  }                        
 
 </View >
 <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>

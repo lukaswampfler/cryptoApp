@@ -86,7 +86,7 @@
     "RSA_ENC": "10-bit schlüssel RSA verschl. ", 
     "SDES_ENC": "S-DES Kodierung",
     "ENTER_MES": "Gib die Nachricht ein", 
-    "USE_MES": "Nachricht verwenden", 
+    "USE_MES": "Kodierung verwenden", 
     "ASCII": "ASCII-Kodierung der Nachricht oben", 
     "CAES_ANA_TIT": "Caesar analysieren", 
     "SEC": "geheime Nachricht", 
@@ -127,9 +127,19 @@
     "RIDDLE_CHOICE_DETAILS_P1": "Textbasierte Methoden (Caesar, Permutation, Vigenere):\n-hard: weniger Zeichen als easy\n-extreme: nur ASCII-Zeichen und keine Leerschläge werden angezeigt.",
     "RIDDLE_CHOICE_DETAILS_P2": "SDES:\n-easy: ein String bestehend aus 8 Bits\n-hard: EIN ASCII-codiertes Zeichen\n-extreme: ein längerer Text, der zuerst kodiert und anschliessend verschlüsselt wurde.\n\n",
     "RIDDLE_CHOICE_DETAILS_P3": "RSA:\n-easy: Resultat der Verschlüsselung mit DEINEM öffentlichen Schlüssel\n-hard: Anzeige von Resultat und öffentlichem Schlüssel mit Primzahlen nicht grösser als 1000\n-extreme: dasselbe mit grösseren Primzahlen", 
-    "NO_REP": "Keine wiederholten Textteile wurden gefunden.", 
-    "SDES_HELP": "NACHRICHT CODIEREN: Wechsle zum Bildschirm und gib dort eine Nachricht ein, die dann (ASCII-)codiert und als Input für SDES verwendet wird. Als Alternative kannst Du eine Bitfolge der Länge 8, 16, 24, ... als Input verwenden.\nDer Schlüssel für S-DES ist eine Bitfolge der Länge 10.\nK1, K2 BERECHNEN: die zwei Schlüssel (der Länge 8) werden aus dem 10-Bit-Schlüssel berechnet.\n10-BIT SCHLÜSSEL RSA-VERSCHLÜSSELN: in a real scenario, the key of the symmetric method would be encrypted using an asymmetric method (i.e. RSA)", 
+    "NO_REP": "Keine wiederholten Textteile gefunden.", 
+    "SDES_HELP": "NACHRICHT CODIEREN: Wechsle zum Bildschirm und gib dort eine Nachricht ein, die dann (ASCII-)codiert und als Input für SDES verwendet wird. Als Alternative kannst Du eine Bitfolge der Länge 8, 16, 24, ... als Input verwenden.\n\nDer Schlüssel für S-DES ist eine Bitfolge der Länge 10.\n\nK1, K2 BERECHNEN: die zwei Schlüssel (der Länge 8) werden aus dem 10-Bit-Schlüssel berechnet.\n\n10-BIT SCHLÜSSEL RSA-VERSCHLÜSSELN: In der Realität wird der Schlüssel der symmetrischen (hier SDES) Methode mit einer asymmetrischen Methode (RSA) verschlüsselt und dann gemeinsam verschickt.", 
     "USE_PRIMES": "Primzahlen verwenden", 
     "ALERT_PRIME_ENTER": "Bitte Werte für p und q eingeben!", 
-    "ALERT_EXP": "Bitte einen Wert für Exponent, p und q eingeben!"
+    "ALERT_EXP": "Bitte einen Wert für Exponent, p und q eingeben!", 
+    "GERMAN": "Deutsch", 
+    "ENCODING_HELP": "Du kannst einen Text bestehend aus Latin1-Zeichen (d.h. keine Emojis) eingeben. Dieser wird anschliessend ASCII-codiert.", 
+    "ENCODING_TITLE": "Eine Nachricht kodieren", 
+    "DIFF_1": "Der Unterschied vom Buchstaben 'e' zum häufigsten Buchstaben ",
+    "DIFF_2": " beträgt: ", 
+    "FRAG": "Die folgenden Fragmente wurden mehr als einmal gefunden (Abstände rechts):", 
+    "DIST": "Abstand: ", 
+    "VIG_ANA_ALERT": "Bitte eine positive Länge wählen, die nicht länger ist als der Geheimtext!", 
+    "VIG_ALERT": "Bitte für den Schlüssel nur Buchstaben a-z (A-Z) verwenden!"
+    
   }

@@ -1,7 +1,8 @@
 import { ConsoleLogger } from "@aws-amplify/core";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { Modal, View, Text, Pressable, StyleSheet } from "react-native";
+import AppContext from "./AppContext";
 import Title from "./Title";
 
   //array with all supported languages
@@ -13,7 +14,6 @@ import Title from "./Title";
 const LanguagePicker2 = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const { i18n } = useTranslation(); //i18n instance
-
 
 
   const LanguageItem = ({ name, label }) => (
@@ -106,12 +106,20 @@ export const LP2 = () => {
   const { i18n, t } = useTranslation();
   const [isEnglish, setIsEnglish] = useState(true);
 
+  const myContext = useContext(AppContext)
+
 
   useEffect( () => {
     const eng = i18n.language == 'en' 
     //console.log(eng);
     setIsEnglish(eng);
   }, [])
+
+  useEffect(() => {
+    if(isEnglish) myContext.setAppLanguage('en')
+    else myContext.setAppLanguage('de')
+  }, [isEnglish])
+
   //const [isEnglish, setIsEnglish] = useState(i18n.language);
   const selectedLanguageName = i18n.language;
 
@@ -119,6 +127,7 @@ export const LP2 = () => {
     const result =  isEnglish? i18n.changeLanguage('de') : i18n.changeLanguage('en') ;
     setIsEnglish(!isEnglish);
     console.log("englisch: "+ isEnglish);
+    console.log("from myContext: ", myContext.appLanguage);
     return result; 
   }
   return (

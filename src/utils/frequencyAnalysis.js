@@ -1,4 +1,4 @@
-import { max, min } from "react-native-reanimated";
+import { diff, max, min } from "react-native-reanimated";
 import { gcdArray } from "./CryptoMath";
 import { removeSpecialChars } from "./permutationMath";
 
@@ -70,6 +70,9 @@ export function sortDictionaryByKey(dict) {
         return a[0].localeCompare(b[0]);
     }))
 }
+
+
+
 
 export function calculateKeyCharacter(mostFreqDict, mostFreqAlph){
     //console.log("calculateKeyChar: ", mostFreqAlph, mostFreqDict);
@@ -197,4 +200,14 @@ export function factorize(num){
     }
     console.log(result);
     return result;
+}
+
+export function getDifference(letter1, letter2){
+    // calculates the difference in position between the two letters, will always be > 0.
+    if(letter1 && letter2){
+    const diffCand = letter1.charCodeAt(0) - letter2.charCodeAt(0)
+    return diffCand > 0 ? diffCand : diffCand + 26
+    } else {
+        return 0
+    }
 }

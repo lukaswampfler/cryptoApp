@@ -288,6 +288,8 @@ export default function App() {
   const [lastRiddle, setLastRiddle] = useState({})
   const [isLastRiddle, setIsLastRiddle] = useState(false);
 
+  const [appLanguage, setAppLanguage] = useState('de');
+
 
   const userSettings = {
     userName: userName,
@@ -309,6 +311,7 @@ export default function App() {
     lastRiddle: lastRiddle,
     isLastRiddle: isLastRiddle,
     RSAKeyGenState: RSAKeyGenState,
+    appLanguage: appLanguage,
     setUserName,
     setUserID,
     setPassword,
@@ -328,6 +331,7 @@ export default function App() {
     setLastRiddle,
     setIsLastRiddle,
     setRSAKeyGenState,
+    setAppLanguage
   };
 
 

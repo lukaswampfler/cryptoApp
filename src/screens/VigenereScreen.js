@@ -62,7 +62,7 @@ export default function VigenereScreen({ route, navigation }) {
             updateTextAndSecret(text, secret, newKey)
 
         } else {
-            alert("Please use only letters for the key!")
+            alert(`${t("VIG_ALERT")}`)
             updateTextAndSecret('', '', newKey)
         }
     }

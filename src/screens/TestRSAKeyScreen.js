@@ -610,7 +610,7 @@ const showKeyModal = () => {
 
                   <Text>You are using the two prime numbers: p: {pConfirmed}, q: {qConfirmed}
           </Text>
-         <Text>Their product is equal to n =  {pConfirmed * qConfirmed}
+         <Text>Their product is equal to n =  {(BigInt(pConfirmed) * BigInt(qConfirmed)).toString()}
          </Text> 
 </View>}
 

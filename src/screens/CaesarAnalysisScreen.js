@@ -10,7 +10,7 @@ import {
     BarChart
 } from "react-native-chart-kit";
 
-import { createFrequencyDict, sortDictionaryByKey, onlyNonAlpha } from '../utils/frequencyAnalysis';
+import { createFrequencyDict, sortDictionaryByKey, onlyNonAlpha, getMaxKey, getDifference } from '../utils/frequencyAnalysis';
 import ClearButton from '../components/ClearButton';
 import NumInput from '../components/NumInput';
 import Line from '../components/Line';
@@ -29,6 +29,7 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
     const [secret, setSecret] = useState('');
     const [key, setKey] = useState("0");
     const [decypheredMessage, setDecypheredMessage] =useState('')
+    const [showDecyphered, setShowDecyphered] = useState(false)
 
     const {t} = useTranslation();
 
@@ -41,13 +42,19 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
         //console.log(route.params)
         if (route.params){
             setSecret(route.params.message)
+            setDecypheredMessage(route.params.message)
         }
+        if (secret.length > 0 && !(isNaN(parseInt(key, 10)))) setShowDecyphered(true)
     }, [])
+
+    useEffect(() => {
+        setShowDecyphered(secret.length > 0 && !(isNaN(parseInt(key, 10))))
+    }, [secret, key])
 
     
 
     const changeKey = key => {
-        if(isInteger(key)){
+        if(!isNaN(parseInt(key, 10))){
             const decyph = caesarEncrypt(secret, key);
             setKey(key)
             setDecypheredMessage(decyph)
@@ -74,8 +81,11 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
 
 
     const freqDict = createFrequencyDict(secret)["0"];
+    //const mostFrequentSecretLetter = secret? '' : getMaxKey(freqDict)
+    
+    //const diffCand = 'e'.charCodeAt(0)-mostFrequentSecretLetter.charCodeAt(0)
+    //const diff =  diffCand > 0     const sorted = sortDictionaryByKey(freqDict)
     const sorted = sortDictionaryByKey(freqDict)
-
     const data = {
         labels: Object.keys(sorted),
         datasets: [{ data: Object.values(sorted) }]
@@ -97,7 +107,7 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
 
 
     return (
-        <ScrollView style = {{margin: 10}}>
+        <View style = {{margin: 10}}>
             <TouchableWithoutFeedback onPress = {Keyboard.dismiss} accessible={false}>
                 <View>
                     <Title title={title}/>
@@ -124,7 +134,7 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
                 value = {secret}
                 //onBlur={() => { }}
             />
-            <ClearButton setInput={changeText} setKey= {changeKey} defaultKey={0} />
+            <ClearButton setInput={changeText} setKey= {changeKey} defaultKey={"0"} additionalFunction = {() => {setShowDifference(false)}} />
             </View>
           
           
@@ -144,7 +154,14 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
             />)}
  </View> 
 </TouchableWithoutFeedback>
+{showDecyphered && <View style ={{height: '4%'}}>
+<Text >
+{t("DIFF_1")}{getMaxKey(freqDict)}{t("DIFF_2")}{getDifference('e', getMaxKey(freqDict))}
 
+  </Text>  
+
+
+    </View>}
 
 <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10}}>
 <View style={{marginTop: 10, marginLeft: 10, marginBottom: 5, marginRight: 10, width: '50%'}}>
@@ -202,10 +219,10 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
 </View>
 
 <Line/>
-
-<TouchableWithoutFeedback onPress = {Keyboard.dismiss} accessible={false}>
+{/*}
+<TouchableWithoutFeedback onPress = {Keyboard.dismiss} accessible={false}></TouchableWithoutFeedback>*/}
 <View>
-{(!(isNaN(parseInt(key, 10)))) &&
+{showDecyphered &&
 <View style ={{marginTop: 20}}> 
 <View style={{marginTop: 10, marginLeft: 10, marginBottom: 5}}>
                 <Text style={{
@@ -213,15 +230,14 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
                 }}> 
                 Output ({t("DEC_MES")})</Text>
                 </View>
-    <Text style ={{fontSize: 20, margin: 5}}> {decypheredMessage} </Text>
-</View> }
-{/*<Text> Please enter valid key above (integer number)! </Text>}*/}
+      <ScrollView style = {{height: '50%'}}>          
+    <Text style ={{fontSize: 14, margin: 5}} selectable={true}> {decypheredMessage} </Text>
+</ScrollView></View> }
+</View>
+
+
 
 </View>
-</TouchableWithoutFeedback>
-
-
-</ScrollView>
 
 
     );
