@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Platform, View, Text, FlatList, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native'
-import { Picker } from '@react-native-picker/picker';
 import Title from '../components/Title';
 import Button from '../components/Button';
 import { IntroModal } from '../utils/Modals';

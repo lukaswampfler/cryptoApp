@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Platform, View, Text, FlatList, Pressable, SafeAreaView, TouchableOpacity, Button } from 'react-native'
-import { Picker } from '@react-native-picker/picker';
 import Loading from './Loading'
 import Title from '../components/Title';
 import { listMessages, listUsers, messagesByReceiver } from '../graphql/queries';

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react'
 import { Platform, View, ScrollView, Text, TouchableOpacity, Switch, SafeAreaView, Dimensions } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native';
-import { Picker } from '@react-native-picker/picker';
 import Title from '../components/Title';
 import Button from '../components/Button';
 import GreySwitch from '../components/GreySwitch';
