@@ -28,16 +28,6 @@ function kasiskiTest(secret, minLength = 3, maxLength = 5) {
     return gcd;
 }
 
-
-function gcd(a, b) {
-    if (b > a) {
-        [a, b] = [b, a];
-    }
-    while (b > 0) {
-        [a, b] = [b, a % b];
-    }
-    return a;
-}
 function gcdArray(a) {
     if (a.length == 0)
         return 1;
@@ -90,3 +80,27 @@ const secret = "lukaslukaswampflerwampfler"
 const minl = 2
 const maxl = 3
 testForEqualParts(secret, 4, 6);
+
+
+function gcd(a, b) {
+    if (b > a) {
+        [a, b] = [b, a];
+    }
+    while (b > 0) {
+        [a, b] = [b, a % b];
+    }
+    return a;
+}
+
+function calculatePubExp(phi){
+    let cand = 2
+    while (gcd(cand, phi) > 1){
+            console.log(cand)
+          cand += 1
+        }
+    return cand.toString()
+}
+
+console.log(calculatePubExp(34))
+
+//console.log(4%3)

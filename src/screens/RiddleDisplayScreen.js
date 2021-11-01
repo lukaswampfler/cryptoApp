@@ -8,9 +8,9 @@ import GreySwitch from '../components/GreySwitch';
 import getSecretContainer from '../utils/getSecretContainer';
 import { calculateKeyPair, generatePrime } from '../utils/RSAMath';
 import AppContext from '../components/AppContext';
-import { getRandomKeys } from '../utils/sdesMath';
-import { TextInput } from 'react-native-gesture-handler';
-import { encryptPermutation } from '../utils/permutationMath';
+//import { getRandomKeys } from '../utils/sdesMath';
+//import { TextInput } from 'react-native-gesture-handler';
+//import { encryptPermutation } from '../utils/permutationMath';
 import { useTranslation } from 'react-i18next';
 
 const choose = (array) => {

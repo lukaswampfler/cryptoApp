@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
-import { SafeAreaView, ScrollView, Text, View, TextInput, Switch, Modal } from 'react-native';
-import { Divider } from 'react-native-elements';
+import { ScrollView, Text, View, TextInput, Switch, Modal } from 'react-native';
 import AppContext from '../components/AppContext';
 import Button from '../components/Button';
 import NumInput from '../components/NumInput';
@@ -46,13 +45,11 @@ export default function VigenereScreen({ route, navigation }) {
 
     const changeText = newText => {
         setText(newText);
-        //encryptVigenere();
         if(isEncrypting) updateTextAndSecret(newText, '', key);
     }
 
     const changeSecret = newSecret => {
         setSecret(newSecret);
-        //encryptVigenere();
         if(!isEncrypting) updateTextAndSecret('', newSecret, key, false);
     }
 
@@ -63,7 +60,6 @@ export default function VigenereScreen({ route, navigation }) {
 
         } else {
             alert(`${t("VIG_ALERT")}`)
-            updateTextAndSecret('', '', newKey)
         }
     }
 

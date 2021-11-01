@@ -23,13 +23,7 @@ import { useTranslation } from 'react-i18next';
 
 
 
-/*function createRSAObject(m, exp, n) {
-    if (typeof m === "undefined") {
-        alert(`m is undefined!`);
-    }
-    const rsa = new RSA(m, exp, n);
-    return rsa;
-}*/
+
 
 
 
@@ -44,23 +38,7 @@ export default function RSAEncryptionScreen({ route, navigation }) {
         console.log("route params in RSA encryption: ", route.params);
     }, [])
 
-    /*let expInitialValue; 
-    useEffect(() => {
-        if (route.params === undefined) {
-            expInitialValue =  myContext.ciphers.rsa.exp;
-        } else if (route.params.user !== undefined) {
-            returnexpInitialValue =  route.params.user.publicKey.exponent;
-        } else if (route.params.usePrivateKey) {
-            expInitialValue =  myContext.privateKey.exp.toString();
-        } else if (route.params.usePublicKey) {
-            console.log("using public key as initial value", myContext.publicKey)
-            expInitialValue =  myContext.publicKey.exp.toString();
-        } else {
-            expInitialValue =  '';
-        }
-        console.log("expInitialValue: ", expInitialValue)
-    }, [])
-*/
+    
     // get initial values for Form: exponent ...
     const getExpInitialValue = () => {
         if (route.params === undefined) {
@@ -108,7 +86,6 @@ export default function RSAEncryptionScreen({ route, navigation }) {
         }
         return m;
     }
-    //return "123";
     }
 
     const toggleRSAInputSwitch = (value) => {
@@ -117,11 +94,7 @@ export default function RSAEncryptionScreen({ route, navigation }) {
         //State changes according to switch
     };
 
-    //just for tests:
-    useEffect(() => {
-        console.log("route params", route);
-        
-      }, [])
+    
 
     // Submission function 
     const RSASubmit = values => {

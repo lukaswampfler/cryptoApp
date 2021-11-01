@@ -9,6 +9,7 @@ export function vigenereEncrypt(text, key) {
         let secret = '';
         for (let index = 0; index < text.length; index++) {
             let shift = key.charCodeAt(keyIndex) - 'a'.charCodeAt(0);
+            //console.log("Letter ", key.charAt(keyIndex) , " shift: ", shift, "letter: ", text[index],  " add: ", caesarEncrypt(text[index], shift))
             secret += caesarEncrypt(text[index], shift);
             // if current character is not a letter, then keyIndex will not change
             if (isAlpha(text[index]))

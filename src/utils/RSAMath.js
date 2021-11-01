@@ -1,3 +1,5 @@
+import { gcd } from '../utils/CryptoMath';
+
 export function extendedEuclid(e, f, useBigIntegerLibrary) {
     //alert("ext. euclid, e: " + e + " f: " + f);
     //console.log("ext. euclid, e: " + e + " f: " + f);
@@ -143,11 +145,19 @@ function millerRabin(n, millerRabinIterations, useBigIntegerLibrary) {
 }
 
 
+function calculatePubExp(phi){
+    let cand = 2;
+        while (gcd(cand, phi) > 1){
+          cand += 1
+        }
+    return cand.toString()
+}
+
 export function calculateKeyPair(p, q, useBigIntegerLibrary) {
     const phi = (BigInt(p) - BigInt(1)) * (BigInt(q) - BigInt(1));
     const n = (BigInt(p) * BigInt(q)).toString();
     console.log("p: ", p, "q: ", q, "n: ", n);
-    const expPublic = phi > Math.pow(2, 16) ?  (Math.pow(2, 16) + 1).toString() : (phi - BigInt(1)).toString()
+    const expPublic = phi > Math.pow(2, 16) ?  (Math.pow(2, 16) + 1).toString() : calculatePubExp(Number(phi))
     
     let { inverse, gcd } = extendedEuclid(BigInt(expPublic), phi, useBigIntegerLibrary);
 
@@ -165,6 +175,15 @@ export function calculateKeyPair(p, q, useBigIntegerLibrary) {
     return keys;
             
  }
+
+ export function generateDummyKeys(useBigInt) {
+     console.log("in generatedummyKeys")
+    const p = 11; 
+    const q = 17; 
+    const keys = calculateKeyPair(p, q, useBigInt)
+    console.log("In generateDummyKeys: ", keys.private.exp, keys.public.exp)
+    return keys
+  }
         
 
 

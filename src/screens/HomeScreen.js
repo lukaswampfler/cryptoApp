@@ -3,18 +3,21 @@ import { Platform, View, Text, FlatList, Pressable, SafeAreaView, TouchableOpaci
 import Loading from './Loading'
 import Title from '../components/Title';
 import { listMessages, listUsers, messagesByReceiver } from '../graphql/queries';
-import { createUser, createKey } from '../graphql/mutations';
+import { createUser, createKey, updateKey } from '../graphql/mutations';
 
 import { API, Auth, graphqlOperation } from 'aws-amplify'
+import * as SecureStore from 'expo-secure-store';
+
 
 import styles from './styles'
 
-import { onCreateMessageByReceiverID } from '../graphql/subscriptions'
+//import { onCreateMessageByReceiverID } from '../graphql/subscriptions'
 
 import AppContext from '../components/AppContext';
 
 import { useTranslation } from "react-i18next";
-import LanguagePicker from '../components/LanguagePicker';
+//import LanguagePicker from '../components/LanguagePicker';
+import { generateDummyKeys } from '../utils/RSAMath';
 //import LanguageSelector from '../components/LanguagePicker';
 
 export default function HomeScreen({ navigation }) {
@@ -33,6 +36,59 @@ export default function HomeScreen({ navigation }) {
       console.log('error signing out: ', error);
     }
   }*/
+
+
+  async function updateKeys(isNewUser, publicKeyID = null) {
+
+    const keys = generateDummyKeys(myContext.useBigIntegerLibrary);
+
+    // first generate public (and private key -> not necessary, but need to change GraphQL-schema)
+    const publicKeyInput = {exponent: keys.public.exp, modulus: keys.public.mod} 
+    const privateKeyInput = {exponent: keys.private.exp, modulus: keys.private.mod}
+     // save public key on server
+    const newPublicKey = await API.graphql({ query: createKey, variables: { input: publicKeyInput} });
+    const newPrivateKey = await API.graphql({ query: createKey, variables: { input: publicKeyInput } }); // comment: this is not the real private key!!
+
+    
+    
+    // save private key on device
+    const saveKeyPromise = await SecureStore.setItemAsync("privateKey", JSON.stringify(privateKeyInput));
+    let userPromise
+
+
+    if (isNewUser){
+      //user has to be generated as well as keys
+
+      //create new user
+      const userInput = { name: myContext.userName, publicKeyID: newPublicKey.data.createKey.id, privateKeyID: newPrivateKey.data.createKey.id }
+      userPromise = await API.graphql({ query: createUser, variables: { input: userInput } });
+      const userData = userPromise.data.createUser;
+      setUserID(userData.id);
+      myContext.setPublicKeyID(userData.publicKeyID);
+      myContext.setPrivateKeyID(userData.privateKeyID);
+
+    } else {
+      //update public Key of current user
+      const updateInput = {
+        id: publicKeyID,
+        exponent: keys.public.exp,
+        modulus: keys.public.mod
+      }
+      userPromise = await API.graphql({query: updateKey, variables: {input: updateInput} })
+      }
+
+    Promise.all([userPromise, saveKeyPromise]).then(values => {
+      if (isNewUser) {
+        alert("New user " + userPromise.data.createUser.name + " generated. \n Attention: If you can factor the number " + publicKeyInput.modulus + ", then so can your opponent -> change your RSA-keys!")
+      } else {
+        alert("Your keys were updated with a small modulus of " + publicKeyInput.modulus + "\nPlease consider updating your keys again.")
+      }
+  
+  })
+}
+
+    
+    
 
 
   function pressSelectButton() {
@@ -57,6 +113,14 @@ export default function HomeScreen({ navigation }) {
     } catch (err) { console.log('error fetching users: ', err) }
   }
 
+  /*async function generateAndStoreNewKeys(isCreating) {
+    const keys = generateDummyKeys(myContext.useBigIntegerLibrary)
+    //updateKeys(keys, isCreating)
+
+  }*/
+ 
+
+
   //check if user with userName aleady exists in database: if not -> create new User.
   async function checkForUser(users) {
     //console.log("inside check for User: ", users);
@@ -64,28 +128,65 @@ export default function HomeScreen({ navigation }) {
     console.log("userName from Context: ", myContext.userName);
     //console.log("users in checkForUser: ", users);
     const checkUsers = users.filter(user => (user.name === myContext.userName))
+    console.log("checkUsers: ", checkUsers)
+    
     if (checkUsers.length === 0) {
-      // first generate public and private key
-      const KeyInput = { exponent: '4575', modulus: '4717' }
-      const newPublicKey = await API.graphql({ query: createKey, variables: { input: KeyInput } });
-      const newPrivateKey = await API.graphql({ query: createKey, variables: { input: KeyInput } });
+
+
+      updateKeys(true)
+
+      //const keys = generateDummyKeys(myContext.useBigIntegerLibrary)
+
+
+/*
+      // first generate public (and private key -> not necessary, but need to change GraphQL-schema)
+      const publicKeyInput = {exponent: keys.public.exp, modulus: keys.public.mod} 
+      const privateKeyInput = {exponent: keys.private.exp, modulus: keys.private.mod}
+      const newPublicKey = await API.graphql({ query: createKey, variables: { input: publicKeyInput} });
+      const newPrivateKey = await API.graphql({ query: createKey, variables: { input: publicKeyInput } }); // comment: this is not the real private key!!
 
       // now create new user
       const userInput = { name: myContext.userName, publicKeyID: newPublicKey.data.createKey.id, privateKeyID: newPrivateKey.data.createKey.id }
-      const newUser = await API.graphql({ query: createUser, variables: { input: userInput } });
-      const userData = newUser.data.createUser;
+      const userPromise = await API.graphql({ query: createUser, variables: { input: userInput } });
+      const userData = userPromise.data.createUser;
       setUserID(userData.id);
       myContext.setPublicKeyID(userData.publicKeyID);
       myContext.setPrivateKeyID(userData.privateKeyID);
       //alert("New user " + newUser.data.createUser.name + " successfully generated.")
-      alert("New user " + newUser.data.createUser.name + " generated. \n Attention: If you can factor the number " + KeyInput.modulus + ", then so can your opponent -> change your RSA-keys!")
+      const saveKeyPromise = await SecureStore.setItemAsync("privateKey", JSON.stringify(privateKeyInput));
+
+
+      Promise.all([userPromise, saveKeyPromise]).then(values => {alert("New user " + newUserPromise.data.createUser.name + " generated. \n Attention: If you can factor the number " + publicKeyInput.modulus + ", then so can your opponent -> change your RSA-keys!")})
+      //alert("New user " + newUserPromise.data.createUser.name + " generated. \n Attention: If you can factor the number " + publicKeyInput.modulus + ", then so can your opponent -> change your RSA-keys!")
+
+      */
+      //TODO: 
+      // 1) replace this by call to generateAndStoreNewKeys()
+      // 2) private key needs to be stored on device - asyncStorage
+      // 3) in else -> check if "privateKey"- entry already exists in Storage - if not: create and store new pair - call to generateNewKeys()
+
+      //generateAndStoreNewKeys(true)
+
     } else {
       console.log("User " + myContext.userName + " already exists");
-      //console.log(checkUsers[0]);
       const userData = checkUsers[0]
       setUserID(userData.id);
+      
+      //TODO: now check if private key is stored on device - if not - create keyPair with 
+
+      let result = await SecureStore.getItemAsync("privateKey");
+      if(!result){  //i.e. user exists on database, but no key saved on current device
+        alert("You seem to be using this device for the first time, generating a pair of dummy keys...")
+        updateKeys(false, userData.publicKeyID)
+      } else {
+        alert("Found private keys on device!")
+      }
+
       myContext.setPublicKeyID(userData.publicKeyID);
       myContext.setPrivateKeyID(userData.privateKeyID);
+
+
+
     }
 
 

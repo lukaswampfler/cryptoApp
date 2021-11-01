@@ -3,8 +3,6 @@ import { SafeAreaView, ScrollView, Text, View , StyleSheet, Switch} from 'react-
 import { Divider } from 'react-native-elements';
 import RNPickerSelect from 'react-native-picker-select';
 import AppContext from '../components/AppContext';
-import { useFocusEffect } from '@react-navigation/native';
-import { Chevron } from 'react-native-shapes';
 
 
 import { isPrime, generatePrime , extendedEuclid} from '../utils/RSAMath';
@@ -58,7 +56,7 @@ export default function TestRSAKeyScreen({ navigation }) {
     let result = await SecureStore.getItemAsync(key);
     if (result) {
       //alert("🔐 Here's your value 🔐 \n" + result);
-      console.log("🔐 Here's your value 🔐 \n" + result)
+      //console.log("🔐 Here's your value 🔐 \n" + result)
       return result;
     } else {
       alert('No values stored under that key.');
