@@ -1,7 +1,5 @@
 export function caesarEncrypt(text, key) {
-    console.log("casesarEncrypt, ", text, key)
     if (key === ''){
-        console.log("empty key")
         return ''
     }
     // transform key s.t. it lies in the range 0 <= key <= 25
@@ -12,7 +10,7 @@ export function caesarEncrypt(text, key) {
     if (typeof text == "string") {
         
         let geheim = '';
-        
+
         for (let index = 0; index < text.length; index++) {
             const zeichen = text.charAt(index);
             const zahl = zeichen.charCodeAt(0);
