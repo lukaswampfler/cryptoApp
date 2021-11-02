@@ -41,7 +41,7 @@ export default function SignIn({ navigation, updateAuthState }) {
   const introText = "Here comes the introduction to the Error";
   const method = "Error!"
 
-  //const title = "Sign in to your CryptoApp - account"
+  //const title = "Sign in to your encypher - account"
   const title = `${t("SIGN_IN")}`
 
   return (
