@@ -140,7 +140,10 @@
     "FRAG": "The following fragments were found more than once (distances on the right):", 
     "DIST": "Distance: ", 
     "VIG_ANA_ALERT": "Please enter a positive length which is not larger than the length of the secret message!", 
-    "VIG_ALERT": "Please use only letters a-z (A-Z) for the key!"
+    "VIG_ALERT": "Please use only letters a-z (A-Z) for the key!", 
+    "BACK_ANA": "Back to analysis", 
+    "VALUE_TOO_LARGE": "Message value too large!", 
+    "ENCR": "encrypted message"
 
 
 }

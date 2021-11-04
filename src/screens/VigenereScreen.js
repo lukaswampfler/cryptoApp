@@ -8,6 +8,8 @@ import { vigenereEncrypt, vigenereDecrypt, isAlphabetic } from '../utils/vigener
 import { useFormik } from 'formik';
 import Line from '../components/Line';
 
+import {useNavigation} from '@react-navigation/native';
+
 
 import { VigenereKeyInputScheme } from '../utils/InputTests';
 import { IntroModal } from '../utils/Modals';
@@ -22,9 +24,13 @@ const BACKGROUND_COLOR = '#ddd'
 
 
 
+
+
+
 export default function VigenereScreen({ route, navigation }) {
     const myContext = useContext(AppContext);
     
+    const nav = useNavigation();
 
 
     const [text, setText] = useState('');
@@ -84,23 +90,30 @@ export default function VigenereScreen({ route, navigation }) {
         //console.log("formikKey.values: ", formikKey.values);
         const currentKey = formikKey.values.key
         setKey(currentKey);
-        setText(vigenereDecrypt(secret, currentKey)); 
+        setText(vigenereDecrypt(secret, cfromAnalysisurrentKey)); 
     }*/
 
     useEffect(() => {
+        
         const message = myContext.ciphers.vigenere.message;
         if (typeof message != undefined) setText(message)
     
         if (route.params){
+            console.log("params: ", route.params)
             if(route.params.fromAnalysis){
                 setHasBackButton(true)
             }
             const {message, key} = route.params
             console.log(message, key)
             setSecret(message)
-            setKey(key)
+            if(key.length == 0) setKey('a')
+            else setKey(key)
+
             setIsEncrypting(false)
             setText(vigenereDecrypt(message, key)); 
+        }
+        else {
+            setText('')
         }
     }, [])
 
@@ -263,10 +276,19 @@ export default function VigenereScreen({ route, navigation }) {
                         onBlur={() => { }}
                         value={secret}/>
                     </View>
-                    {hasBackButton && <Button width={120} label="Back to Analysis" 
+                    {hasBackButton && <Button width={120} label={t("BACK_ANA")}
+                    
                     onPress = {() => {
                         //console.log("navigating back")
-                        navigation.navigate("Analysis", {screen: "VigenereAnalysis", params: {message: secret}})
+                        //navigation.navigate("Analysis", {screen: "VigenereAnalysis", params: {message: secret}})
+                        // better: like this, Vigenere Screen is empty when called from MethodsHome
+                        nav.reset({
+                            index: 0,
+                            routes: [{name: 'Analysis', params: {screen: "VigenereAnalysis", params: {message: secret}}}],
+                            
+                          });
+
+                        
                     }
                         }/>}
                    </View>     

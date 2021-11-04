@@ -31,6 +31,9 @@ import { useTranslation } from 'react-i18next';
 export default function RSAEncryptionScreen({ route, navigation }) {
     // get the context
     const myContext = useContext(AppContext);
+    const [isEncrypted , setIsEncrypted] = useState(false);
+    const [secret, setSecret] = useState(null);
+
 
     const {t} = useTranslation();
 
@@ -103,9 +106,13 @@ export default function RSAEncryptionScreen({ route, navigation }) {
             m = '0b' + values.m;
         }
         const rsa = { m: m, exp: values.exp, n: values.n };
+        let decimalValue;
+        if (!myContext.RSAInputSwitchisDecimal)  decimalValue = parseInt(rsa.m.substr(2), 2)  // remove '0b' in front
         // create warning if message larger than modulus
-        if (BigInt(rsa.m) > BigInt(rsa.n)) {
-            alert("Message value too large!")
+        if (myContext.RSAInputSwitchisDecimal && (BigInt(rsa.m) > BigInt(rsa.n)) || (!myContext.RSAInputSwitchisDecimal && (decimalValue > BigInt(rsa.n)))) {
+            alert(`${t("VALUE_TOO_LARGE")}`)
+            setSecret('')
+            return;
         }
         let ciphers = myContext.ciphers;
         ciphers.rsa = rsa;
@@ -122,6 +129,11 @@ export default function RSAEncryptionScreen({ route, navigation }) {
         }
         
         myContext.setCiphers(ciphers);
+        if(myContext.RSAInputSwitchisDecimal) setSecret(encryptedMessage);
+        else setSecret(Number(encryptedMessage).toString(2));
+        
+        setIsEncrypted(true);
+        myContext.setRSAIsEncrypted(true)
     }
 
 
@@ -251,7 +263,15 @@ export default function RSAEncryptionScreen({ route, navigation }) {
             <Line />
             <View style ={{margin: 10}}>
             <Text style={{ fontSize: 20 }}>Output</Text>
-
+            
+            {myContext.RSAIsEncrypted &&
+          <View style={{ flex: 1 }}>
+            <View style ={{flexDirection: 'row', justifyContent: 'flex-start', marginBottom: 10, marginTop: 10}}>
+            <Text style={{ fontSize: 16, fontWeight: '500' }}> {t("ENCR")}: </Text>
+            <Text style={{ fontSize: 16 }} selectable> {secret} </Text>
+            </View>
+            </View>
+            }
 
             <View style={{
                 flexDirection: 'row',

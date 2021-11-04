@@ -140,6 +140,9 @@
     "FRAG": "Die folgenden Fragmente wurden mehr als einmal gefunden (Abstände rechts):", 
     "DIST": "Abstand: ", 
     "VIG_ANA_ALERT": "Bitte eine positive Länge wählen, die nicht länger ist als der Geheimtext!", 
-    "VIG_ALERT": "Bitte für den Schlüssel nur Buchstaben a-z (A-Z) verwenden!"
+    "VIG_ALERT": "Bitte für den Schlüssel nur Buchstaben a-z (A-Z) verwenden!", 
+    "BACK_ANA": "Zurück zur Analyse", 
+    "VALUE_TOO_LARGE": "Der Wert der Nachricht ist zu gross!", 
+    "ENCR": "verschlüsselte Nachricht"
     
   }

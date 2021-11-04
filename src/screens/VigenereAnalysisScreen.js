@@ -28,7 +28,7 @@ export const ITEM_WIDTH = Math.round(SLIDER_WIDTH )
 export default function VigenereAnalysisScreen({ route, navigation }) {
     const [secret, setSecret] = useState('');
     const [kasiskiLength, setKasiskiLength] = useState(0)
-    const [chosenLength, setChosenLength] = useState(0)
+    const [chosenLength, setChosenLength] = useState("0")
     const [data, setData] = useState([])
     //const [analysisDone, setAnalysisDone] = useState(false)
     const [mostFrequentLetter, setMostFrequentLetter] = useState('e')

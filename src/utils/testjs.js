@@ -103,4 +103,4 @@ function calculatePubExp(phi){
 
 console.log(calculatePubExp(34))
 
-//console.log(4%3)
+console.log("Hello", parseInt('11', 2))

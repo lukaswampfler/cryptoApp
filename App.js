@@ -268,6 +268,7 @@ export default function App() {
   const [primes, setPrimes] = useState({ p: '2', q: '3' })
   const [exp, setExp] = useState(3)
   const [RSAInputSwitchisDecimal, setRSAInputSwitchisDecimal] = useState(true);
+  const [RSAIsEncrypted, setRSAIsEncrypted] = useState(false);
   const [introVisible, setIntroVisible] = useState(false);
   const [explVisible, setExplVisible] = useState(false);
   const [secretContainer, setSecretContainer] = useState({});
@@ -312,6 +313,7 @@ export default function App() {
     isLastRiddle: isLastRiddle,
     RSAKeyGenState: RSAKeyGenState,
     appLanguage: appLanguage,
+    RSAIsEncrypted: RSAIsEncrypted,
     setUserName,
     setUserID,
     setPassword,
@@ -331,7 +333,8 @@ export default function App() {
     setLastRiddle,
     setIsLastRiddle,
     setRSAKeyGenState,
-    setAppLanguage
+    setAppLanguage, 
+    setRSAIsEncrypted
   };
 
 

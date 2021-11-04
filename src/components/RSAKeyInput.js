@@ -50,13 +50,16 @@ export default function RSAKeyInput({ values, errors, touched, handleChange, han
             ciphers.rsa.m = values.m;
             myContext.setCiphers(ciphers);
             navigation.navigate('RSAKey');
+            myContext.setRSAIsEncrypted(false);
           }} width = {.45*screenWidth} />
       {/*}  </View>*/}
 
        {/*} <View style={{
           marginLeft: 10,
         }}>*/}
-          <Button label={`${t('RSA_IMP')}`} onPress={() => { navigation.navigate('UsersList', { toSend: false, toImportKey: true }) }} width={.45*screenWidth} />
+          <Button label={`${t('RSA_IMP')}`}  width={.45*screenWidth} onPress={() => { 
+            myContext.setRSAIsEncrypted(false);
+            navigation.navigate('UsersList', { toSend: false, toImportKey: true }) }} />
        {/*} </View>*/}
 
 

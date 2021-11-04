@@ -67,7 +67,7 @@ export default function MethodsHomeScreen({ navigation }) {
         } else if (selectedMethod == 'caesar') {
             navigation.navigate("CAESAR");
         } else if (selectedMethod == 'vigenere') {
-            navigation.navigate("VIGENERE");
+            navigation.navigate("VIGENERE", {fromHome: true});
         } else if (selectedMethod == 'permutation') {
             navigation.navigate("PERMUTATION");
         } else {
@@ -77,7 +77,7 @@ export default function MethodsHomeScreen({ navigation }) {
 
     }
 
-    const title = "Select your encryption method"
+    //const title = "Select your encryption method"
 
     return (
         <SafeAreaView style={styles.container}>
