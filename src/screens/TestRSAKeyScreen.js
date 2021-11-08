@@ -338,19 +338,20 @@ const changePublicKey = () => {
     console.log("verified public exp: ", verifiedPubExp)
     console.log(qConfirmed, pConfirmed)
     if(verifiedPubExp != ''){
-        myContext.setPublicKey({exp: verifiedPubExp, mod: pConfirmed*qConfirmed})
-        setPublicKey({exp: verifiedPubExp, mod: pConfirmed*qConfirmed})
+      const modulus = BigInt(pConfirmed)*BigInt(qConfirmed)
+        myContext.setPublicKey({exp: verifiedPubExp, mod: modulus.toString()})
+        setPublicKey({exp: verifiedPubExp, mod: modulus.toString()})
     } else {
         myContext.setPublicKey({})
         setPublicKey({})
     }
     // 
-    console.log("new public key: ", {exp: verifiedPubExp, mod: pConfirmed*qConfirmed})
+    //console.log("new public key: ", {exp: verifiedPubExp, mod: pConfirmed*qConfirmed})
 }
 
 const setPrivateKey = () => {
     console.log(verifiedPubExp)
-    const phi = (pConfirmed-1)*(qConfirmed-1)
+    const phi = (BigInt(pConfirmed)-BigInt(1))*(BigInt(qConfirmed)-BigInt(1))
     if(verifiedPubExp && verifiedPubExp != ''){
 
         //console.log("p-1*q-1: ",(p-1)*(q-1) )
@@ -366,7 +367,7 @@ const setPrivateKey = () => {
             } 
         }
         console.log("new Private Key: ,exp ", Number(inverse), " mod: ", (pConfirmed*qConfirmed) );
-        myContext.setPrivateKey({ exp: Number(inverse), mod: (pConfirmed*qConfirmed) });
+        myContext.setPrivateKey({ exp: Number(inverse), mod: (BigInt(pConfirmed)*BigInt(qConfirmed)).toString() });
     } else {
         myContext.setPrivateKey({})
     }
@@ -488,7 +489,7 @@ const showKeyModal = () => {
                 </View>
 
           <View style={{ paddingHorizontal: 32, marginBottom: 16, marginTop: 20, width: '60%' }}>
-          <View style = {{width : '180%', backgroundColor: isRandom? null: '#CCC', borderRadius: 8}}>
+          <View style = {{width : '180%', backgroundColor: isRandom? null: '#ddd', borderRadius: 8}}>
 
             <NumInput
               //icon='pinterest'
@@ -509,7 +510,7 @@ const showKeyModal = () => {
             </View>
           </View>
           <View style={{ paddingHorizontal: 32, marginBottom: 16, width: '60%'}}>
-          <View style = {{width : '180%', backgroundColor: isRandom? null: '#CCC', borderRadius: 8}}>
+          <View style = {{width : '180%', backgroundColor: isRandom? null: '#ddd', borderRadius: 8}}>
             <NumInput
               //icon='pinterest-with-circle'
               width='100%'
@@ -675,7 +676,7 @@ const showKeyModal = () => {
                     margin: 10
                 }}> 
               {t('PUB_EXP')}</Text>
-<View style = {{width: '60%', backgroundColor: isDefault? null: '#CCC', marginLeft: 20, borderRadius: 8}}>
+<View style = {{width: '60%', backgroundColor: isDefault? null: '#ddd', marginLeft: 20, borderRadius: 8}}>
 <NumInput 
                 //icon='key'
                 width = '100%'
@@ -791,7 +792,7 @@ const showKeyModal = () => {
 const pickerSelectStyles = StyleSheet.create({
     inputIOS: {
       fontSize: 16,
-      backgroundColor: '#999',
+      backgroundColor: '#ddd',
       paddingVertical: 12,
       paddingHorizontal: 10,
       borderWidth: 1,
@@ -803,7 +804,7 @@ const pickerSelectStyles = StyleSheet.create({
     },
     inputAndroid: {
       fontSize: 16,
-      backgroundColor: '#999',
+      backgroundColor: '#ddd',
       paddingHorizontal: 10,
       paddingVertical: 8,
       borderWidth: 1,

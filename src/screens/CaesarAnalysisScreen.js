@@ -63,7 +63,7 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
     } else {
         console.log("key not integer")
             //setIsDecyphered(false);
-            alert("Please enter a valid key (number!)")
+            alert(`${t("VALID_KEY")}`)
             setDecypheredMessage("")
             setKey("")
     }}
@@ -86,8 +86,14 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
     //const diffCand = 'e'.charCodeAt(0)-mostFrequentSecretLetter.charCodeAt(0)
     //const diff =  diffCand > 0     const sorted = sortDictionaryByKey(freqDict)
     const sorted = sortDictionaryByKey(freqDict)
+    const keys = Object.keys(sorted)
+    for (let ind = 0; ind < keys.length; ind++){
+        keys[ind] = keys[ind] + ":" + (ind+1).toString()
+    }
+    
+    console.log("keys:", Object.values(sorted))
     const data = {
-        labels: Object.keys(sorted),
+        labels: keys,
         datasets: [{ data: Object.values(sorted) }]
     };
 
@@ -99,7 +105,8 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
         backgroundGradientToOpacity: 0,
         color: (opacity = 1) => `rgba(20, 20, 20, ${opacity})`,
         strokeWidth: 2, // optional, default 3
-        barPercentage: 0.2,
+        barPercentage: 0.15,
+        decimalPlaces: 0
     };
 
 
@@ -111,7 +118,7 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
             <TouchableWithoutFeedback onPress = {Keyboard.dismiss} accessible={false}>
                 <View>
                     <Title title={title}/>
-                    <View style={{marginTop: 10, marginLeft: 10, marginBottom: 5}}>
+                <View style={{marginTop: 10, marginLeft: 10, marginBottom: 5}}>
                 <Text style={{
                     fontSize: 20
                 }}> 
@@ -142,15 +149,19 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
 
             {(!onlyNonAlpha(secret)) && (<BarChart
                 style={{
-                    marginVertical: 8,
-                    borderRadius: 16
+                    marginVertical: 4,
+                    borderRadius: 16, 
+                    paddingRight: 40, 
+                    paddingLeft: 0,
                 }}
                 data={data}
                 width={screenWidth}
                 height={240}
                 yAxisSuffix="%"
+                xLabelsOffset={-10}
                 chartConfig={chartConfig}
                 verticalLabelRotation={90}
+                withOuterLines = {false}
             />)}
  </View> 
 </TouchableWithoutFeedback>
@@ -163,7 +174,7 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
 
     </View>}
 
-<View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10}}>
+<View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', margin: 10, marginRight: 40}}>
 <View style={{marginTop: 10, marginLeft: 10, marginBottom: 5, marginRight: 10, width: '50%'}}>
                 <Text style={{
                     fontSize: 20

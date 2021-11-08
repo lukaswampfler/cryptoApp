@@ -123,6 +123,11 @@ export default function MessageScreen({ navigation }) {
         //console.log(messages);
     }, [])
 
+    useEffect(()=> {
+        console.log(messages)
+
+    }, [messages])
+
 
     
     //PAUSE FOR THE MOMENT
@@ -165,13 +170,14 @@ export default function MessageScreen({ navigation }) {
               keyExtractor={item => item.createdAt}
         /> : <Loading/> }*/}
                 <Title title={`${t('MES')}`}/>
-                    {messages ?
+                    {messages.length > 0 ?
                         <FlatList removeClippedSubviews={false}
                             data={messages}
                             renderItem={renderItem}
                             keyExtractor={item => item.createdAt}
                         /> :
-                        <Text> No messages yet... </Text>}
+
+                        <Text> {t("NO_MESS")} </Text> }
 
               
             </View>

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, Text, View, TextInput } from 'react-native';
+import { Dimensions, ScrollView, Text, View, TextInput } from 'react-native';
 import { Divider } from 'react-native-elements';
 import AppContext from '../components/AppContext';
 import Button from '../components/Button';
@@ -7,6 +7,7 @@ import NumInput from '../components/NumInput';
 import Title from '../components/Title';
 import { encode, decode, bitsStringFromBytes } from '../utils/sdesMath';
 import { ExplanationModal } from '../utils/Modals';
+import Line from '../components/Line';
 import { useFormik } from 'formik';
 import * as Yup from 'yup'
 import { sdesEncodingIntroText } from '../utils/introTexts';
@@ -19,6 +20,8 @@ export default function SDESEncodingScreen({ navigation, route }) {
     const [encoded, setEncoded] = useState('');
 
     const {t} = useTranslation();
+
+    const screenWidth = 0.9 * Dimensions.get("window").width;
 
 
     const getMessageInitialValue = () => {
@@ -85,7 +88,7 @@ export default function SDESEncodingScreen({ navigation, route }) {
 
 
                     <TextInput
-                        width={240}
+                        width={0.5*screenWidth}
                         multiline={true}
                         textAlignVertical='top'
                         placeholder='Enter plain text message'
@@ -100,10 +103,11 @@ export default function SDESEncodingScreen({ navigation, route }) {
                         onBlur={() => { }}
                         value={text}
                     />
-                    <View style ={{width:  '30%'}}>
+                    <View style ={{width: 0.4*screenWidth}}>
                     <Button label={t('USE_MES')} onPress={useMessage} />
                     </View>
                 </View>
+                <Line />
                 <View style = {{margin: 10}}>
                 <Text style={{
                     fontSize: 20,
@@ -121,7 +125,7 @@ export default function SDESEncodingScreen({ navigation, route }) {
                 }}>
 
                     <Text
-                        style={{ padding: 10, fontSize: 25, borderColor: 'gray', borderWidth: 1, width: 240 }}
+                        style={{ padding: 10, fontSize: 15, borderColor: 'gray', borderWidth: 1, width: 240 }}
                         selectable>
                         {encoded}
                     </Text>

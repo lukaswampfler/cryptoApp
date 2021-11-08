@@ -186,4 +186,8 @@ export function calculateKeyPair(p, q, useBigIntegerLibrary) {
   }
         
 
+  export function isNotBinary(text){
+      return true;
+  }
+
 

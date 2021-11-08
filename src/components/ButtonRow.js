@@ -69,7 +69,7 @@ export default function ButtonRow({ navigation, updatePersonalKeyText }) {
         // Alte Schlüssel löschen! - nicht nötig, da nur update gemacht.
         //const updatedUser = await API.graphql({ query: listUsers, variables: { input: userDetails } });
         //console.log("user updated: ", updatedUser.data.listUsers);
-        alert("Keys updated!");
+        alert(`${t("KEYS_UPDATED")}`);
     }
 
     const saveKeys = () => {

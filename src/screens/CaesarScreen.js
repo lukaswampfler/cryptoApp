@@ -44,7 +44,7 @@ export default function CaesarScreen({ navigation }) {
            updateTextAndSecret(text, secret, newKey)
         } else {
             setSecret('')
-            alert("Please use only integers for keys!")
+            alert(`${t("VALID_KEY")}`)
             updateTextAndSecret('', '', newKey)
         }
     }
@@ -99,7 +99,7 @@ export default function CaesarScreen({ navigation }) {
     }, [key])
 
 
-    const formikKey = useFormik({
+    /*const formikKey = useFormik({
         validationSchema: CaesarKeyInputScheme,
         initialValues: {
             key: '0'
@@ -117,11 +117,12 @@ export default function CaesarScreen({ navigation }) {
             setSecret(caesarEncrypt(text, values.key));
         }
     });
+    */
 
 
     const caesarIntroText = `Input: ${t('CAESEXP_P1')}` +  `\n\n${t('KEY')}: ${t('CAESEXP_P2')}`
     const introText = caesarIntroText;
-    const method = "The Caesar cipher"
+    //const method = "The Caesar cipher"
 
     return (
 
@@ -139,7 +140,7 @@ export default function CaesarScreen({ navigation }) {
                 {isEncrypting? 'Input' : 'Output'}  </Text>
                 </View>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-                <View style = {{width : '60%', backgroundColor: isEncrypting? BACKGROUND_COLOR: null, borderRadius: 8, padding: 0}}>
+                <View style = {{width : '60%', backgroundColor: isEncrypting? BACKGROUND_COLOR: '#fff', borderRadius: 8, padding: 0}}>
                 <TextInput
                     width='100%'
                     multiline={true}
@@ -218,7 +219,7 @@ export default function CaesarScreen({ navigation }) {
                     marginLeft: 0,
                 }}>
                    <ScrollView style ={{height: 100}}>
-                   <View style = {{width : '60%', backgroundColor: isEncrypting? null: BACKGROUND_COLOR, borderRadius: 8}}>
+                   <View style = {{width : '60%', backgroundColor: isEncrypting? '#fff': BACKGROUND_COLOR, borderRadius: 8}}>
                    <TextInput
                         width='100%'
                         editable = {!isEncrypting}

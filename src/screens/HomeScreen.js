@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Platform, View, Text, FlatList, Pressable, SafeAreaView, TouchableOpacity, Button } from 'react-native'
+import { Platform, View, Text, FlatList, Pressable, SafeAreaView, TouchableOpacity, ScrollView } from 'react-native'
 import Loading from './Loading'
 import Title from '../components/Title';
 import { listMessages, listUsers, messagesByReceiver } from '../graphql/queries';
@@ -79,7 +79,8 @@ export default function HomeScreen({ navigation }) {
 
     Promise.all([userPromise, saveKeyPromise]).then(values => {
       if (isNewUser) {
-        alert("New user " + userPromise.data.createUser.name + " generated. \n Attention: If you can factor the number " + publicKeyInput.modulus + ", then so can your opponent -> change your RSA-keys!")
+        alert(`${t("NEW_USER1")}` + userPromise.data.createUser.name + `${t("NEW_USER2")}`+ publicKeyInput.modulus + `${t("NEW_USER3")}`)
+        //alert("New user " + userPromise.data.createUser.name + " generated. \n Attention: If you can factor the number " + publicKeyInput.modulus + ", then so can your opponent -> change your RSA-keys!")
       } else {
         alert("Your keys were updated with a small modulus of " + publicKeyInput.modulus + "\nPlease consider updating your keys again.")
       }
@@ -176,10 +177,10 @@ export default function HomeScreen({ navigation }) {
 
       let result = await SecureStore.getItemAsync("privateKey");
       if(!result){  //i.e. user exists on database, but no key saved on current device
-        alert("You seem to be using this device for the first time, generating a pair of dummy keys...")
+        alert(`${t("KEYS_FOUND")}`)
         updateKeys(false, userData.publicKeyID)
       } else {
-        alert("Found private keys on device!")
+        alert(`${t("KEYS_FOUND")}`)
       }
 
       myContext.setPublicKeyID(userData.publicKeyID);
@@ -214,6 +215,8 @@ export default function HomeScreen({ navigation }) {
     <SafeAreaView style={styles.container}>
       <Title title={`${t('HOMETITLE')}`}/>
       <Title title={`${t('HOMESUBTITLE')}`}/>
+
+    <ScrollView>
       
       <Text style ={{margin: 5, fontSize: 15}}><Text style={{fontWeight: 'bold'}}>{`${t('ENC')}`}: </Text>{`${t('HOMETEXTENC')}`}</Text>
       <Text style ={{margin: 5, fontSize: 15}}><Text style={{fontWeight: 'bold'}}>{`${t('ANA')}`}: </Text> {`${t('HOMETEXTANA')}`}</Text>
@@ -221,7 +224,7 @@ export default function HomeScreen({ navigation }) {
       <Text style ={{margin: 5, fontSize: 15}}><Text style={{fontWeight: 'bold'}}>{`${t('RID')}`}: </Text>{`${t('HOMETEXTRID')}`} </Text>
       <Text style ={{margin: 5, fontSize: 15}}><Text style={{fontWeight: 'bold'}}>{`${t('LAN')}`}: </Text> {`${t('LAN_TEXT')}`}</Text>
 
-
+</ScrollView>
       {/*
       <View style={styles.homeScreen}>
        {/* <Button onPress={signOut} title="Sign Out" />

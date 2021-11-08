@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Platform, View, Text, FlatList, Pressable, SafeAreaView, TouchableOpacity, Button } from 'react-native'
+import { ScrollView, View, Text, FlatList, Pressable, SafeAreaView, TouchableOpacity, Button } from 'react-native'
 import Title from '../components/Title';
 
 import styles from './styles'
@@ -108,9 +108,11 @@ export default function EncryptedMessageMethodChoiceScreen({ route, navigation }
             {/*<View style ={{marginLeft: 15}}> 
           <Text style ={{fontSize: 18, fontWeight: '300'}}> Encrypted message: </Text>
     </View>*/}
+    <ScrollView style={{height: 200}}>
           <View style ={{margin: 15, marginTop: 0}}>
           <Text style={{fontWeight: 'bold'}}> {message} </Text>
         </View>
+        </ScrollView>
         {route.params.fromMessage && <View style={{margin: 20}}><Text> {t("FROM")}    {route.params.sender} </Text></View>}
         <View style={{margin: 15}}>
         <Title title ={title2}/>

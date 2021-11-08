@@ -15,8 +15,8 @@ import * as Yup from 'yup'
 
 
 import { SDESKeyInputScheme, SDESK12InputScheme, SDESMessageInputScheme } from '../utils/InputTests';
-import { encryptSDESMessage, generateSDESKeys, decodeBinaryString, encodeEncrypted, is8BitString } from '../utils/sdesMath';
-import { sdesIntroText } from '../utils/introTexts';
+import { encryptSDESMessage, generateSDESKeys, decodeBinaryString, encodeEncrypted, is8BitString, is10BitString, isBitString } from '../utils/sdesMath';
+//import { sdesIntroText } from '../utils/introTexts';
 import { useTranslation } from 'react-i18next';
 
 
@@ -29,7 +29,7 @@ export default function SDESScreen({ route, navigation }) {
   const myContext = useContext(AppContext);
 
   const [isEncrypted, setIsEncrypted] = useState(false);
-  const [isDecrypted, setIsDecrypted] = useState(false);
+  //const [isDecrypted, setIsDecrypted] = useState(false);
   const [keyEntered, setKeyEntered] = useState(false);
   const [message, setMessage] = useState('');
   const [encryptedMessage, setEncryptedMessage] = useState('');
@@ -37,6 +37,7 @@ export default function SDESScreen({ route, navigation }) {
   const [isMessageBinary, setIsMessageBinary] = useState(false);
   const [k1, setK1] = useState('')
   const [k2, setK2] = useState('')
+  const [key, setKey] = useState('')
 
   const {t} = useTranslation();
 
@@ -54,17 +55,21 @@ export default function SDESScreen({ route, navigation }) {
 
 
 
-  const toggleSendMessageState = () => {
+  const toggleIsBinary = () => {
     setIsMessageBinary(!isMessageBinary);
   }
 
   const sendMessage = () => {
+    if(encryptedMessage.trim().length == 0){
+      alert(`${t("NO_MESS_WO_CHAR")}`)
+    } else {
     let ciphers = myContext.ciphers;
     ciphers.currentMethod = 'SDES';
     ciphers.currentMessage = isMessageBinary? encryptedMessage : decodeBinaryString(encryptedMessage);
     ciphers.sdes.secret = encryptedMessage;
     myContext.setCiphers(ciphers);
     navigation.navigate('UsersList', { toSend: true, toImportKey: false })
+  }
 }
 
 
@@ -131,6 +136,14 @@ export default function SDESScreen({ route, navigation }) {
   }
 
 
+  const changeKey = text => {
+    if(!isBitString(text)){
+      alert(`${t("ONLY_BITS")}`)
+    } else {
+    setKey(text)
+  }
+  }
+
   const changeK1 = text => {
     setK1(text);
   }
@@ -138,6 +151,28 @@ export default function SDESScreen({ route, navigation }) {
   const changeK2 = text => {
     setK2(text)
   }
+
+  const calculateK1K2 = () => {
+
+    if(is10BitString(key)){
+    let ciphers = myContext.ciphers;
+    if (ciphers.sdes === undefined) {
+      ciphers.sdes = { key: key };
+    } else {
+      ciphers.sdes.key10 = key;
+    }
+    setKeyEntered(true);
+    const keys = generateSDESKeys(key)
+    ciphers.sdes.keys = keys;
+    setK1(keys.k1)
+    setK2(keys.k2)
+    myContext.setCiphers(ciphers);
+  } else {
+    alert(`${t("10_BIT")}`)
+  }
+    //console.log(myContext.ciphers);
+  }
+
 
   const handleEncryption = () => {
 
@@ -299,7 +334,7 @@ export default function SDESScreen({ route, navigation }) {
                         value={formikMessage.values.message}
                     />
                     
-                    <View style ={{width: '30%'}}>
+                    <View style ={{width: '45%'}}>
                     <Button  label={t('ENCODE')} onPress={() => { navigation.navigate('SDESEncoding') }} />
                         </View>
                     
@@ -323,11 +358,13 @@ export default function SDESScreen({ route, navigation }) {
             keyboardAppearance='dark'
             returnKeyType='next'
             returnKeyLabel='next'
-            onChangeText={formikKey.handleChange('key')}
+            //onChangeText={formikKey.handleChange('key')}
+            onChangeText = {changeKey}
             onBlur={formikKey.handleBlur('key')}
-            error={formikKey.errors.key}
+            //error={formikKey.errors.key}
             touched={formikKey.touched.key}
-            value={formikKey.values.key}
+            //value={formikKey.values.key}
+            value = {key}
           />
           </View>
           <View style={{
@@ -336,8 +373,11 @@ export default function SDESScreen({ route, navigation }) {
     marginTop: 5,
     marginBottom: 10,
 }}>
-             <Button label={t('K12')} onPress={formikKey.handleSubmit}  width = '40%'/>
-             <Button label={t('RSA_ENC')} onPress={encryptKey} width = '40%'/>
+             <Button label={t('K12')} 
+             //onPress={formikKey.handleSubmit}  
+             onPress = {calculateK1K2}
+             width = '40%'/>
+             <Button label={t('RSA_ENC')} onPress={encryptKey} width = '50%'/>
 
 
 </View>
@@ -404,17 +444,30 @@ export default function SDESScreen({ route, navigation }) {
         </View>
         <View style ={{margin: 10}}>
 
-          <Text style={{ fontSize: 20 }}>Output</Text>
+
+      <View style ={{ flexDirection: 'row', justifyContent: 'space-between', height: 50}}>  
+       <Text style={{ fontSize: 20 }}>Output</Text>
+
+       <View style = {{flexDirection: 'row', width: 150}}>
+      <Text style={{ fontSize: 15}}> {isMessageBinary?  `${t('BINARY')}`: `${t('AS_STRING')}`} </Text>
+      <GreySwitch onValueChange={toggleIsBinary} value={isMessageBinary}/>
+      </View>
+    </View>
+   
         {isEncrypted ?
           <View style={{ flex: 1 }}>
-            <View style ={{flexDirection: 'row', justifyContent: 'flex-start', marginBottom: 10, marginTop: 10}}>
-            <Text style={{ fontSize: 16, fontWeight: '500' }}>encrypted message binary:  </Text>
+
+            {isMessageBinary?
+            <View style ={{flexDirection: 'column', justifyContent: 'flex-start'}}>
+            <Text style={{ fontSize: 16, fontWeight: '500' }}>{t("ENC_MES_BIN")} </Text>
             <Text style={{ fontSize: 16 }} selectable> {myContext.ciphers.sdes.encryptedMessage} </Text>
             </View>
-            <View style ={{flexDirection: 'row', justifyContent: 'flex-start', marginBottom: 10}}>
-            <Text style={{ fontSize: 16, fontWeight: '500' }}>encrypted message as String:  </Text>
+            :
+            <View style ={{flexDirection: 'column', justifyContent: 'flex-start'}}>
+            <Text style={{ fontSize: 16, fontWeight: '500' }}>{t("ENC_MES_STR")} </Text>
             <Text style={{ fontSize: 16 }} selectable> {decodeBinaryString(myContext.ciphers.sdes.encryptedMessage)} </Text>
             </View>
+          }
             {/*<Text style={{ fontSize: 20 }}>encrypted message encoded </Text>
             <Text style={{ fontSize: 20 }} selectable> {encodeEncrypted(decodeBinaryString(myContext.ciphers.sdes.encryptedMessage))} </Text>
             <Text style={{ fontSize: 20 }}>Message decrypted </Text>
@@ -422,14 +475,13 @@ export default function SDESScreen({ route, navigation }) {
 <View style ={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
 {/*<Switch
                             style={{ marginTop: 5 }}
-                            onValueChange={toggleSendMessageState}
+                            onValueChange={toggleIsBinary}
                             value={isMessageBinary}
                         
 />*/}
 
-<GreySwitch  onValueChange={toggleSendMessageState}
-              value={isMessageBinary}/>
-<Button label= {isMessageBinary? `${t('SBM')}` : `${t('SM')}`} onPress={sendMessage} width = '45%'/>
+
+{/*<Button label= {isMessageBinary? `${t('SBM')}` : `${t('SM')}`} onPress={sendMessage} width = '45%'/>*/}
 
 </View>
 
@@ -437,27 +489,18 @@ export default function SDESScreen({ route, navigation }) {
           </View> : null}
 
          </View> 
-
-         <View style = {{margin: 20, width: '30%'}}>
+         <View style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    marginTop: 20
+                }}>
+                    <View style = {{margin: 20, width: '30%'}}>
                     <Button  label={`${t('SI')}`} onPress={() => { myContext.setIntroVisible(true) }} width = '80%' />
                     </View>
-
-         <View style ={{flexDirection: 'row', justifyContent: 'space-between'}} >
-         
-        {/*<View style={{
-          flexDirection: 'row',
-          justifyContent: 'center', width: 150,
-          marginTop: 100
-        }}>
-          <Button label={`${t('SI')}`} onPress={() => { myContext.setIntroVisible(true) }} />
-      </View>*/}
-        {/*<View style={{
-          flexDirection: 'row',
-          justifyContent: 'center', width: 150,
-          marginTop: 100
-        }}>
-      </View>              */}
+                    <View style = {{margin: 20, width: '45%'}}>
+                    <Button label= {isMessageBinary? `${t('SBM')}` : `${t('SM')}`} onPress={sendMessage} width = '80%'/>
                     </View>
+                </View>
 
       </ScrollView>
     </View>

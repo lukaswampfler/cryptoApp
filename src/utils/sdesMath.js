@@ -280,8 +280,14 @@ export function is8BitString(text){
     return isBitString(text) && text.length == 8 ;
 }
 
-function isBitString(text){
+export function is10BitString(text){
+    return isBitString(text) && text.length == 10 ;
+}
+
+export function isBitString(text){
     return text.match((/^[0-1]*$/))
 }
+
+
 
 

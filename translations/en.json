@@ -58,6 +58,7 @@
     "RSAEXP_P4": "IMPORT KEYS: import public keys of other users of the App.",
     "DECIMAL": "decimal", 
     "BINARY": "binary", 
+    "AS_STRING": "as a string",
     "RSA_DECBIN": "(decimal or binary number)", 
     "RSA_IMP": "import key",
     "RSA_GEN": "generate / use own keys", 
@@ -143,7 +144,21 @@
     "VIG_ALERT": "Please use only letters a-z (A-Z) for the key!", 
     "BACK_ANA": "Back to analysis", 
     "VALUE_TOO_LARGE": "Message value too large!", 
-    "ENCR": "encrypted message"
+    "ENCR": "encrypted message", 
+    "KEYS_UPDATED": "Your keys have been updated.", 
+    "KEYS_FOUND": "Private keys were found on this device.", 
+    "FIRST_TIME": "You seem to be using this device for the first time, generating a pair of dummy keys...", 
+    "NEW_USER1": "New user ", 
+    "NEW_USER2": " generated. \n Attention: If you can factor the number ", 
+    "NEW_USER3": ", then so can your opponent -> change your RSA-keys!", 
+    "NO_MESS": "No messages yet...", 
+    "VALID_KEY": "Please enter a valid key! (number)", 
+    "10_BIT":  "Please enter a 10-bit key!", 
+    "ONLY_BITS": "Please enter only binary digits (0 or 1)", 
+    "ENC_MES_BIN": "Encrypted message binary: ", 
+    "ENC_MES_STR": "Encrypted message as string: ", 
+    "NO_MESS_WO_CHAR": "You cannot send messages without any characters."
+
 
 
 }

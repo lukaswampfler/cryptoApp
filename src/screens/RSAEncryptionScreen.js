@@ -18,7 +18,7 @@ import {
 } from '../utils/InputTests'
 import RSA from '../utils/RSA'
 import RSAKeyInput from '../components/RSAKeyInput';
-import { smartExponentiation } from '../utils/RSAMath';
+import { isNotBinary, smartExponentiation } from '../utils/RSAMath';
 import { useTranslation } from 'react-i18next';
 
 
@@ -33,6 +33,7 @@ export default function RSAEncryptionScreen({ route, navigation }) {
     const myContext = useContext(AppContext);
     const [isEncrypted , setIsEncrypted] = useState(false);
     const [secret, setSecret] = useState(null);
+    const [mess, setMess] = useState("") 
 
 
     const {t} = useTranslation();
@@ -93,15 +94,30 @@ export default function RSAEncryptionScreen({ route, navigation }) {
 
     const toggleRSAInputSwitch = (value) => {
         //To handle switch toggle
+        if(myContext.RSAInputSwitchisDecimal){
+            setMess(Number(mess).toString(2)) 
+            setSecret(Number(secret).toString(2)) 
+        } else {
+            setMess(parseInt(mess, 2).toString())
+            setSecret(parseInt(secret, 2).toString())
+            let ciphers = myContext.ciphers;
+            ciphers.currentMessage = secret;
+            myContext.setCiphers(ciphers)
+        }
         myContext.setRSAInputSwitchisDecimal(value);
+        
+        
         //State changes according to switch
+        //values.m = 1
+
     };
 
+    
     
 
     // Submission function 
     const RSASubmit = values => {
-        let m = values.m
+        let m = mess
         if (!myContext.RSAInputSwitchisDecimal) {// binary input
             m = '0b' + values.m;
         }
@@ -110,18 +126,23 @@ export default function RSAEncryptionScreen({ route, navigation }) {
         if (!myContext.RSAInputSwitchisDecimal)  decimalValue = parseInt(rsa.m.substr(2), 2)  // remove '0b' in front
         // create warning if message larger than modulus
         if (myContext.RSAInputSwitchisDecimal && (BigInt(rsa.m) > BigInt(rsa.n)) || (!myContext.RSAInputSwitchisDecimal && (decimalValue > BigInt(rsa.n)))) {
+            
             alert(`${t("VALUE_TOO_LARGE")}`)
             setSecret('')
             return;
         }
         let ciphers = myContext.ciphers;
-        ciphers.rsa = rsa;
-        console.log("RSA inputs: ", rsa.m, rsa.exp, rsa.n)
-        console.log(smartExponentiation(BigInt(rsa.m), BigInt(rsa.exp), BigInt(rsa.n), myContext.useBigIntegerLibrary).toString())
-        const encryptedMessage = smartExponentiation(BigInt(rsa.m), BigInt(rsa.exp), BigInt(rsa.n), myContext.useBigIntegerLibrary).toString();
-        ciphers.rsa['encrypted'] = encryptedMessage;
-        ciphers.rsa['isEncrypted'] = true;
+        //ciphers.rsa = rsa;
+        //ciphers.rsa['encrypted'] = encryptedMessage;
+        //ciphers.rsa['isEncrypted'] = true;
         ciphers.currentMethod = 'RSA';
+        console.log("RSA inputs: ", rsa.m, rsa.exp, rsa.n)
+        
+        //console.log(smartExponentiation(BigInt(rsa.m), BigInt(rsa.exp), BigInt(rsa.n), myContext.useBigIntegerLibrary).toString())
+        const encryptedMessage = smartExponentiation(BigInt(rsa.m), BigInt(rsa.exp), BigInt(rsa.n), myContext.useBigIntegerLibrary).toString();
+        
+        
+        
         if(myContext.RSAInputSwitchisDecimal){
             ciphers.currentMessage = encryptedMessage;
         } else {
@@ -150,7 +171,34 @@ export default function RSAEncryptionScreen({ route, navigation }) {
             onSubmit: RSASubmit
         });
 
+    const changeMess = (value)=>{
+        if(myContext.RSAInputSwitchisDecimal && !isValidRSAMessage(value)){
+            alert("This is not a number!")
+        } else if (!myContext.RSAInputSwitchisDecimal && !isValidBinaryRSAMessage(value)){
+            alert("This is not a binary number!")
+        } else {
+            setMess(value)
+        }
+        
+        
+    }
 
+
+    const isValidRSAMessage = (text) => {
+        const isDecimalNumber = text.match(/^[1-9][0-9]*$/);
+        if (!isDecimalNumber) { // not a number
+            return false
+        }
+        return true;
+    }
+
+    const isValidBinaryRSAMessage = (text) => {
+        const isBinaryNumber = text.match(/^[1][0-1]*$/);
+        if (!isBinaryNumber) { // not a number
+            return false
+        }
+        return true;
+    }
 
     // do the encryption
     /*const handleRSAEncryption = () => {
@@ -221,11 +269,13 @@ export default function RSAEncryptionScreen({ route, navigation }) {
                         keyboardAppearance='dark'
                         returnKeyType='next'
                         returnKeyLabel='next'
-                        onChangeText={handleChange('m')}
+                        //onChangeText={handleChange('m')}
+                        onChangeText = {changeMess}
                         onBlur={handleBlur('m')}
-                        error={errors.m}
+                        //error={errors.m}
                         touched={touched.m}
-                        value={values.m}
+                        //value={values.m}
+                        value = {mess}
                     />
                     <View style={{
                         flex: 1,
@@ -252,11 +302,12 @@ export default function RSAEncryptionScreen({ route, navigation }) {
                 <RSAKeyInput values={values} errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur} navigation={navigation} route={route} />
                 <View style={{
                     flexDirection: 'row',
-                    justifyContent: 'space-between',
+                    justifyContent: 'center',
                     marginTop: 10,
                     marginBottom: 10,
+                    width: '100%'
                 }}>
-                    <Button label={`${t('ENC_DEC')}`} onPress={handleSubmit}  />
+                    <Button width='100%' label={`${t('ENC_DEC')}`} onPress={handleSubmit}  />
                 </View>
               </View>  
             </View>
@@ -273,7 +324,7 @@ export default function RSAEncryptionScreen({ route, navigation }) {
             </View>
             }
 
-            <View style={{
+           {/*} <View style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 margin: 20
@@ -287,10 +338,10 @@ export default function RSAEncryptionScreen({ route, navigation }) {
                     keyboardAppearance='dark'
                     defaultValue={getRSAOutputValue()}
                 />
-               {/*} <Button label={`${t('SM')}`} onPress={() => { navigation.navigate('UsersList', { toSend: true, toImportKey: false }) }} width={100} />*/}
-                {/*} <ShareButton message={myContext.ciphers.rsa.isEncrypted ? myContext.ciphers.rsa.encrypted.toString() : 'No Encryption done yet'} />*/}
+            </View>*/}
             </View>
-            </View>
+
+
            {/*} <View style={{
                 flexDirection: 'row',
                 justifyContent: 'space-around', width: 150,
