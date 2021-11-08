@@ -146,7 +146,7 @@ export default function CaesarScreen({ navigation }) {
                     multiline={true}
                     editable = {isEncrypting}
                     textAlignVertical='top'
-                    placeholder='Enter plain text message'
+                    //placeholder='Enter plain text message'
                     autoCapitalize='none'
                     autoCorrect={false}
                     style={{ height: 80, borderColor: 'gray', borderWidth: 1 , borderRadius: 8, padding: 4}}
@@ -168,14 +168,14 @@ export default function CaesarScreen({ navigation }) {
 <View style = {{flexDirection: 'row', justifyContent: 'space-between'}}>
                 <View  style = {{flexDirection: 'column', marginTop: 20, marginLeft: 10, marginRight: 10, marginBottom: 10}}>
                 <Text style={{
-                    fontSize: 20
+                    fontSize: 20, marginBottom: 5
                 }}> 
                 {`${t('CAES_KEY')}`} </Text>
                 <View style = {{ marginTop: 5, width : '100%', backgroundColor:  BACKGROUND_COLOR,  borderRadius: 8}}>
                 <NumInput
                     //icon='pinterest'
                     width='100%'
-                    placeholder='Enter Caesar key'
+                    //placeholder='Enter Caesar key'
                     autoCapitalize='none'
                     keyboardType='number-pad'
                     keyboardAppearance='dark'
@@ -190,8 +190,10 @@ export default function CaesarScreen({ navigation }) {
                   <View style={{
                     flexDirection: 'column',
                     justifyContent: 'space-around',
+                    alignItems: 'center',
                     marginTop: 10,
                     marginBottom: 10,
+                    marginRight: 10
                 }}>
                 <Text style={{ marginTop: 20 }}> {isEncrypting?  `${t('ENC')}`: `${t('DEC')}`} </Text>
                 
@@ -204,6 +206,10 @@ export default function CaesarScreen({ navigation }) {
 </View>
 
 <Line />
+
+            
+
+
 <View style = {{marginTop: 20, marginLeft: 10, marginRight: 10, marginBottom: 10}}>
 <Text style={{
     fontSize: 20
@@ -225,7 +231,6 @@ export default function CaesarScreen({ navigation }) {
                         editable = {!isEncrypting}
                         multiline={true}
                         textAlignVertical='top'
-                        placeholder='secret message'
                         autoCapitalize='none'
                         autoCorrect={false}
                         style={{ height: 80, borderColor: 'gray', borderWidth: 1,  borderRadius: 8, padding: 4 }}

@@ -170,7 +170,6 @@ export default function VigenereScreen({ route, navigation }) {
                     editable = {isEncrypting}
                     multiline={true}
                     textAlignVertical='top'
-                    placeholder='plain text message'
                     autoCapitalize='none'
                     autoCorrect={false}
                     style={{ height: 80, borderColor: 'gray', borderWidth: 1 , borderRadius: 8, padding: 4}}
@@ -187,66 +186,48 @@ export default function VigenereScreen({ route, navigation }) {
                 </View>
 
                 
+              
+              
+
                 <Line/>
+<View style = {{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <View  style = {{flexDirection: 'column', marginTop: 20, marginLeft: 10, marginRight: 10, marginBottom: 10}}>
                 <Text style={{
-                    fontSize: 20, marginBottom: 10, marginTop: 10
+                    fontSize: 20, marginBottom: 5
                 }}> 
-                {`${t('VIG_KEY')}`}  </Text>
-
-            <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center'
-                }}>
-               {/*<View style={{
-                    flexDirection: 'column',
-                    justifyContent: 'space-around',
-                    marginTop: 10,
-                    marginBottom: 10,
-                    width: '35%'
-                }}>*/}
-                
-                
-
+                {`${t('VIG_KEY')}`} </Text>
+                <View style = {{ marginTop: 5, width : '100%', backgroundColor:  BACKGROUND_COLOR,  borderRadius: 8}}>
                 <NumInput
                     //icon='pinterest'
-                    bgColor = {BACKGROUND_COLOR}
-                    width='35%'
-                    placeholder=''
+                    width='100%'
                     autoCapitalize='none'
-                    keyboardType='default'
+                    keyboardType='number-pad'
                     keyboardAppearance='dark'
                     returnKeyType='next'
                     returnKeyLabel='next'
                     //onChangeText={formikKey.handleChange('key')}
-                    onChangeText={changeKey}
-                    onBlur={formikKey.handleBlur('key')}
-                    //error={formikKey.errors.key}
-                    touched={formikKey.touched.key}
-                    //value={formikKey.values.key} 
-                    value={key}
-                    />
-                    
-                   {/*</View> */}
-                   <View style={{
+                    onChangeText= {changeKey}
+                    value = {key}/>
+                    </View>
+                  </View> 
+
+                  <View style={{
                     flexDirection: 'column',
+                    justifyContent: 'space-around',
                     alignItems: 'center',
-                    justifyContent: 'space-between',
                     marginTop: 10,
                     marginBottom: 10,
-                    width: '30%'
+                    marginRight: 10
                 }}>
-                <Text style={{ marginTop: 20, marginBottom: 10 }}> {isEncrypting?  `${t('ENC')}`: `${t('DEC')}`} </Text>
+                <Text style={{ marginTop: 20 }}> {isEncrypting?  `${t('ENC')}`: `${t('DEC')}`} </Text>
                 
                 <GreySwitch onValueChange={toggleEncryptionSwitch} value={isEncrypting}/>
 
 
-                </View>
-                
-                </View>
-              
+                </View>          
 
-              
+
+</View>             
 
 <Line/>
 
@@ -264,7 +245,6 @@ export default function VigenereScreen({ route, navigation }) {
                         editable = {!isEncrypting}
                         multiline={true}
                         textAlignVertical='top'
-                        placeholder='secret message'
                         autoCapitalize='none'
                         autoCorrect={false}
                         style={{ height: 80, borderColor: 'gray', borderWidth: 1,  borderRadius: 8, padding: 4 }}
