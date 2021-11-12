@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, Text, View, TextInput, Switch } from 'react-native';
+import { SafeAreaView, ScrollView, Text, View, TextInput, Dimensions } from 'react-native';
 import { Divider } from 'react-native-elements';
 import AppContext from '../components/AppContext';
 import NumInput from '../components/NumInput';
@@ -8,6 +8,10 @@ import Title from '../components/Title';
 import { IntroModal } from '../utils/Modals';
 import GreySwitch from '../components/GreySwitch';
 import Line from '../components/Line';
+
+import memoize from "memoize-one";
+
+const screenWidth = 0.9 * Dimensions.get("window").width;
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup'
@@ -23,17 +27,94 @@ import { useTranslation } from 'react-i18next';
 
 
 
+export const isValidNumber = (text) => {
+    const isDecimalNumber = text.match(/^[1-9][0-9]*$/);
+    if (!isDecimalNumber) { // not a number
+        return false
+    }
+    return true;
+}
+
+
+const isValidBinaryRSAMessage = (text) => {
+    const isBinaryNumber = text.match(/^[1][0-1]*$/);
+    if (!isBinaryNumber) { // not a number
+        return false
+    }
+    return true;
+}
 
 
 
-
-
-export default function RSAEncryptionScreen({ route, navigation }) {
+export default function RSAEncryptionScreen({ navigation, route }) {
     // get the context
     const myContext = useContext(AppContext);
+
+
+    
+
+    
+
+// get initial values for Form: exponent ...
+const getExpInitialValue = () => {
+    if (route.params === undefined) {
+        return myContext.ciphers.rsa.exp;
+    } else if (route.params.user !== undefined) {  // importing other users public key
+        return route.params.user.publicKey.exponent;
+    } else if (route.params.usePersonalKey ) {
+        return route.params.key.exp.toString();
+    } else if (route.params.usePrivateKey){
+        return route.params.privateKey.exp.toString();
+    } else if (myContext.publicKey.exp !== undefined && route.params.usePublicKey) {
+        console.log("using public key as initial value", myContext.publicKey)
+        return myContext.publicKey.exp.toString();
+    } 
+    else {
+        return '';
+    };
+}
+//... and modulus ....
+const getModInitialValue = () => {
+    //console.log("getModInitialValues: ", route.params)
+    if (route.params === undefined) {
+        return myContext.ciphers.rsa.n;
+    } else if (route.params.user !== undefined) {
+        //console.log("getmodInitialValues: ", route.params.user);
+        return route.params.user.publicKey.modulus;
+    } else if (route.params.usePersonalKey ) {
+        return route.params.key.mod.toString();
+    } else if (route.params.usePrivateKey){
+        return route.params.privateKey.mod.toString();
+    } else if (myContext.publicKey.mod !== undefined && route.params.usePublicKey) {
+        return myContext.privateKey.mod.toString();
+    } else {
+        return '';
+    };
+}
+//... and the message
+const getMessageInitialValue = () => {
+   if (route.params!== undefined && route.params.fromRiddles){
+        return route.params.message
+    } else {
+    let m = myContext.ciphers.rsa.m;
+    if (m.indexOf('0b') == 0) {
+        return m.slice(2);
+    }
+    return m;
+}
+}
+
+
     const [isEncrypted , setIsEncrypted] = useState(false);
     const [secret, setSecret] = useState(null);
-    const [mess, setMess] = useState("") 
+    const [mess, setMess] = useState(getMessageInitialValue()) 
+    const [exp, setExp] = useState(getExpInitialValue())
+    const [mod, setMod] = useState(getModInitialValue()) 
+
+
+    
+
+    //const modulus = setModulusFromKeyScreen(route)
 
 
     const {t} = useTranslation();
@@ -42,55 +123,20 @@ export default function RSAEncryptionScreen({ route, navigation }) {
         console.log("route params in RSA encryption: ", route.params);
     }, [])
 
-    
-    // get initial values for Form: exponent ...
-    const getExpInitialValue = () => {
-        if (route.params === undefined) {
-            return myContext.ciphers.rsa.exp;
-        } else if (route.params.user !== undefined) {  // importing other users public key
-            return route.params.user.publicKey.exponent;
-        } else if (route.params.usePersonalKey ) {
-            return route.params.key.exp.toString();
-        } else if (route.params.usePrivateKey){
-            return route.params.privateKey.exp.toString();
-        } else if (myContext.publicKey.exp !== undefined && route.params.usePublicKey) {
-            console.log("using public key as initial value", myContext.publicKey)
-            return myContext.publicKey.exp.toString();
-        } 
-        else {
-            return '';
-        };
-    }
-    //... and modulus ....
-    const getModInitialValues = () => {
-        //console.log("getModInitialValues: ", route.params)
-        if (route.params === undefined) {
-            return myContext.ciphers.rsa.n;
-        } else if (route.params.user !== undefined) {
-            //console.log("getmodInitialValues: ", route.params.user);
-            return route.params.user.publicKey.modulus;
-        } else if (route.params.usePersonalKey ) {
-            return route.params.key.mod.toString();
-        } else if (route.params.usePrivateKey){
-            return route.params.privateKey.mod.toString();
-        } else if (myContext.publicKey.mod !== undefined && route.params.usePublicKey) {
-            return myContext.privateKey.mod.toString();
-        } else {
-            return '';
-        };
-    }
-    //... and the message
-    const getMessageInitialValue = () => {
-       if (route.params!== undefined && route.params.fromRiddles){
-            return route.params.message
-        } else {
-        let m = myContext.ciphers.rsa.m;
-        if (m.indexOf('0b') == 0) {
-            return m.slice(2);
+    useEffect(() =>{
+        console.log("route.params.mod Effect run...")
+        if(route.params?.mod){
+            setMod(route.params?.mod)
         }
-        return m;
-    }
-    }
+    }, [route.params?.mod])
+    
+    useEffect(() =>{
+        if(route.params?.exp){
+            setExp(route.params?.exp)
+        }
+    }, [route.params?.exp])
+
+
 
     const toggleRSAInputSwitch = (value) => {
         //To handle switch toggle
@@ -117,19 +163,24 @@ export default function RSAEncryptionScreen({ route, navigation }) {
 
     // Submission function 
     const RSASubmit = values => {
+        console.log("RSASubmit")
+        console.log("m, exp, n: ", mess, exp, mod)
         let m = mess
+        if(m.length == 0){
+            alert(`${t("PLS_MESS")}`)
+        }
         if (!myContext.RSAInputSwitchisDecimal) {// binary input
             m = '0b' + values.m;
         }
-        const rsa = { m: m, exp: values.exp, n: values.n };
+        const rsa = { m: m, exp: exp, n: mod };
         let decimalValue;
         if (!myContext.RSAInputSwitchisDecimal)  decimalValue = parseInt(rsa.m.substr(2), 2)  // remove '0b' in front
         // create warning if message larger than modulus
         if (myContext.RSAInputSwitchisDecimal && (BigInt(rsa.m) > BigInt(rsa.n)) || (!myContext.RSAInputSwitchisDecimal && (decimalValue > BigInt(rsa.n)))) {
             
             alert(`${t("VALUE_TOO_LARGE")}`)
-            setSecret('')
-            return;
+            //setSecret('')
+            //return;
         }
         let ciphers = myContext.ciphers;
         //ciphers.rsa = rsa;
@@ -167,38 +218,56 @@ export default function RSAEncryptionScreen({ route, navigation }) {
         touched } = useFormik({
             enableReinitialize: true,
             validationSchema: myContext.RSAInputSwitchisDecimal ? RSAEncryptionDecimalInputScheme : RSAEncryptionBinaryInputScheme,
-            initialValues: { m: getMessageInitialValue(), exp: getExpInitialValue(), n: getModInitialValues() },
+            initialValues: { m: getMessageInitialValue(), exp: getExpInitialValue(), n: getModInitialValue() },
             onSubmit: RSASubmit
         });
 
+    const setContextMessage = value => {
+        let ciphers = myContext.ciphers;
+        ciphers.rsa.m = value
+        myContext.setCiphers(ciphers)
+    }
+
+
     const changeMess = (value)=>{
-        if(myContext.RSAInputSwitchisDecimal && !isValidRSAMessage(value)){
+        if(value.length > 0){
+        if(myContext.RSAInputSwitchisDecimal && !isValidNumber(value)){
             alert("This is not a number!")
         } else if (!myContext.RSAInputSwitchisDecimal && !isValidBinaryRSAMessage(value)){
             alert("This is not a binary number!")
         } else {
             setMess(value)
+            setContextMessage(value)
+            
         }
-        
-        
+    } else {setMess(value)
+            setContextMessage(value)}
+    }
+
+    const changeExp = value => {
+        if(isValidNumber(value)){
+            setExp(value)
+        } else if (value.length > 0){
+            alert("Please enter a number!")
+        }else {
+            setExp('')
+        }
+    }
+
+    const changeMod = value => {
+        if( isValidNumber(value)){
+            setMod(value)
+        } else if (value.length > 0 ) {
+            alert("Please enter a number!")
+        } else {
+            setMod('')
+        }
     }
 
 
-    const isValidRSAMessage = (text) => {
-        const isDecimalNumber = text.match(/^[1-9][0-9]*$/);
-        if (!isDecimalNumber) { // not a number
-            return false
-        }
-        return true;
-    }
 
-    const isValidBinaryRSAMessage = (text) => {
-        const isBinaryNumber = text.match(/^[1][0-1]*$/);
-        if (!isBinaryNumber) { // not a number
-            return false
-        }
-        return true;
-    }
+
+    
 
     // do the encryption
     /*const handleRSAEncryption = () => {
@@ -263,7 +332,7 @@ export default function RSAEncryptionScreen({ route, navigation }) {
                     <NumInput
                         //icon='new-message'
                         width={245}
-                        placeholder='Enter message'
+                        //placeholder='Enter message'
                         autoCapitalize='none'
                         keyboardType='number-pad'
                         keyboardAppearance='dark'
@@ -299,7 +368,113 @@ export default function RSAEncryptionScreen({ route, navigation }) {
 <View style ={{margin: 10}}>
 
                 <Text style={{ fontSize: 20 }}>{`${t('KEY')}`}</Text>
-                <RSAKeyInput values={values} errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur} navigation={navigation} route={route} />
+
+
+                <View
+      style={{
+        flex: 1,
+      }}
+    >
+ <View style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 20
+      }}>
+ {/*<View style={{
+          marginLeft: 10,
+        }}>*/}
+          <Button label={`${t('RSA_GEN')}`}  onPress={() => {
+            console.log("navigating to RSAKey with message: ", myContext.ciphers.rsa.m)
+            //const ciphers = myContext.ciphers;
+            //ciphers.rsa.m = values.m; // setting the message
+            //myContext.setCiphers(ciphers);
+            navigation.navigate('RSAKey');
+            myContext.setRSAIsEncrypted(false);
+          }} width = {.45*screenWidth} />
+      {/*}  </View>*/}
+
+       {/*} <View style={{
+          marginLeft: 10,
+        }}>*/}
+          <Button label={`${t('RSA_IMP')}`}  width={.45*screenWidth} onPress={() => { 
+            myContext.setRSAIsEncrypted(false);
+            navigation.navigate('UsersList', { toSend: false, toImportKey: true }) }} />
+       {/*} </View>*/}
+
+
+      </View>
+
+<View style = {{
+  flexDirection: 'row', 
+  justifyContent: 'space-between'}}
+>
+
+      
+      <View style={{
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        marginTop: 10,
+        marginBottom: 10,
+        marginRight: 5
+      }}><Text> Exponent </Text>
+
+        <NumInput
+          //icon='pinterest'
+          width={.45*screenWidth}
+          //placeholder='Enter exponent'
+          autoCapitalize='none'
+          keyboardType='number-pad'
+          keyboardAppearance='dark'
+          returnKeyType='next'
+          returnKeyLabel='next'
+          //onChangeText={handleChange('exp')}
+          onChangeText={changeExp}
+          //onBlur={handleBlur('exp')}
+          //error={errors.exp}
+          //touched={touched.exp}
+          //value={values.exp} 
+          value={exp}
+          />
+       
+      </View>
+
+      
+      <View style={{
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        marginTop: 10,
+        marginBottom: 10,
+      }}>
+  <Text> Modulus </Text>
+        <NumInput
+          //icon='pinterest'
+          width={.45*screenWidth}
+          //placeholder='Enter modulus n'
+          autoCapitalize='none'
+          keyboardType='number-pad'
+          keyboardAppearance='dark'
+          returnKeyType='next'
+          returnKeyLabel='next'
+          //onChangeText={handleChange('n')}
+          onChangeText={changeMod}
+          //onBlur={handleBlur('n')}
+          //error={errors.n}
+          //touched={touched.n}
+          //value={values.n} 
+          value = {mod}
+          />
+       {/*} <View style={{
+          marginLeft: 10,
+        }}>
+          <Button label='Import Key' onPress={() => { navigation.navigate('UsersList', { toSend: false, toImportKey: true }) }} width={130} />
+      </View>*/}
+      </View>
+</View>
+
+
+    </View>
+
+                {/*<RSAKeyInput valueExp={exp} valueMod={mod} changeExp = {changeExp} changeMod={changeMod} errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur} navigation={navigation} route={route} />*/}
                 <View style={{
                     flexDirection: 'row',
                     justifyContent: 'center',
@@ -307,14 +482,22 @@ export default function RSAEncryptionScreen({ route, navigation }) {
                     marginBottom: 10,
                     width: '100%'
                 }}>
-                    <Button width='100%' label={`${t('ENC_DEC')}`} onPress={handleSubmit}  />
+                    <Button width='100%' label={`${t('ENC_DEC')}`} onPress={RSASubmit}  />
                 </View>
               </View>  
             </View>
             <Line />
-            <View style ={{margin: 10}}>
+            <View style ={{margin: 10, }}>
+
+             <View style = {{flexDirection: 'row', justifyContent: 'space-between'}}>   
             <Text style={{ fontSize: 20 }}>Output</Text>
+            <Button label={`${t("AI")}`} onPress={() => {
+                //console.log("Button pressed")
+                setMess(secret)
+                setSecret('')
+                }}/>
             
+</View>
             {myContext.RSAIsEncrypted &&
           <View style={{ flex: 1 }}>
             <View style ={{flexDirection: 'row', justifyContent: 'flex-start', marginBottom: 10, marginTop: 10}}>

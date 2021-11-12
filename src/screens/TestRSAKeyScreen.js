@@ -31,7 +31,7 @@ const REQUIRED_ERROR_MESSAGE = 'this field is required';
 const NUM_DIGITS = 4; 
 
 
-export default function TestRSAKeyScreen({ navigation }) {
+export default function TestRSAKeyScreen({ navigation, route }) {
   const myContext = useContext(AppContext);
   const [p, setP] = useState(myContext.RSAKeyGenState.p);
   const [q, setQ] = useState(myContext.RSAKeyGenState.q);
@@ -49,6 +49,7 @@ export default function TestRSAKeyScreen({ navigation }) {
   const [savedPrimes, setSavedPrimes] = useState(null)
   const [savedExponent, setSavedExponent] = useState(null)
 
+  //const {changeMod} = route.params;
 
   const {t} = useTranslation();
 
@@ -195,6 +196,7 @@ useEffect(() => {
   if(isDefault){
     if(savedExponent){
       setPubExp(savedExponent)
+      setVerifiedPubExp(savedExponent)
     } else {
       setDefaultPubExp()
     }
@@ -232,12 +234,12 @@ const updatePersonalKeyText = () => {
 }
 
 
-const updateContextVariables = () => {
+/*const updateContextVariables = () => {
   const state = {p: pConfirmed, q: qConfirmed, 
   isDefault, isRandom, verifiedPubExp}
   console.log("state: ", state)
   myContext.setRSAKeyGenState(state);
-}
+}*/
 
 const changePubExp = pubExp => {
     setPubExp(pubExp);
@@ -339,7 +341,7 @@ const changePublicKey = () => {
     console.log(qConfirmed, pConfirmed)
     if(verifiedPubExp != ''){
       const modulus = BigInt(pConfirmed)*BigInt(qConfirmed)
-        myContext.setPublicKey({exp: verifiedPubExp, mod: modulus.toString()})
+        myContext.setPublicKey({exp: verifiedPubExp.toString(), mod: modulus.toString()})
         setPublicKey({exp: verifiedPubExp, mod: modulus.toString()})
     } else {
         myContext.setPublicKey({})
@@ -367,7 +369,7 @@ const setPrivateKey = () => {
             } 
         }
         console.log("new Private Key: ,exp ", Number(inverse), " mod: ", (pConfirmed*qConfirmed) );
-        myContext.setPrivateKey({ exp: Number(inverse), mod: (BigInt(pConfirmed)*BigInt(qConfirmed)).toString() });
+        myContext.setPrivateKey({ exp: Number(inverse).toString(), mod: (BigInt(pConfirmed)*BigInt(qConfirmed)).toString() });
     } else {
         myContext.setPrivateKey({})
     }
@@ -388,10 +390,6 @@ const checkAndUsePubExp = () => {
 }
 
 
-
-const showKeyModal = () => {
-
-}
 
 
   // checks if string represents a prime number
@@ -460,9 +458,7 @@ const showKeyModal = () => {
   const keyTitle = "RSA" + `${t('KEY')}`
   const title = `${t('RSA_KEY_GEN')}`
   const method = "Your personal Key Pair"
-  //let introText = ''
-  //const introText = "public Exponent: " + personalPublicKey.exp.toString() + "\nprivate Exponent: " + personalPrivateKey.exp.toString()
-
+  
   return (
     <View style={{ flex: 1 }}>
       <ExplanationModal text={keyText} title={keyTitle} />
@@ -489,7 +485,7 @@ const showKeyModal = () => {
                 </View>
 
           <View style={{ paddingHorizontal: 32, marginBottom: 16, marginTop: 20, width: '60%' }}>
-          <View style = {{width : '180%', backgroundColor: isRandom? null: '#ddd', borderRadius: 8}}>
+          <View style = {{width : '180%', backgroundColor: isRandom? '#fff': '#ddd', borderRadius: 8}}>
 
             <NumInput
               //icon='pinterest'
@@ -510,7 +506,7 @@ const showKeyModal = () => {
             </View>
           </View>
           <View style={{ paddingHorizontal: 32, marginBottom: 16, width: '60%'}}>
-          <View style = {{width : '180%', backgroundColor: isRandom? null: '#ddd', borderRadius: 8}}>
+          <View style = {{width : '180%', backgroundColor: isRandom? '#fff': '#ddd', borderRadius: 8}}>
             <NumInput
               //icon='pinterest-with-circle'
               width='100%'
@@ -676,7 +672,7 @@ const showKeyModal = () => {
                     margin: 10
                 }}> 
               {t('PUB_EXP')}</Text>
-<View style = {{width: '60%', backgroundColor: isDefault? null: '#ddd', marginLeft: 20, borderRadius: 8}}>
+<View style = {{width: '60%', backgroundColor: isDefault? '#fff': '#ddd', marginLeft: 20, borderRadius: 8}}>
 <NumInput 
                 //icon='key'
                 width = '100%'
@@ -763,7 +759,14 @@ const showKeyModal = () => {
             console.log("result: ", res)
             res = JSON.parse(res)
             console.log("modulus: ", res.modulus)
-            navigation.navigate("RSA", {key: {mod: res.modulus, exp: res.exponent}, usePersonalKey: true})})
+            navigation.navigate({
+              name: "RSA", 
+              params: {key: {mod: res.modulus, exp: res.exponent},
+              exp: res.exponent,
+              mod: res.modulus,
+              usePersonalKey: true, 
+              merge: true}
+          })})
           //console.log()
           //alert("exp: " + privateKey.exponent)}
         }}
@@ -773,7 +776,12 @@ const showKeyModal = () => {
          <Button style = {{width: '45%'}}label = {t('USE_OWN_PUB')}onPress={() => {
           getPublicKey().then( (res) => {
             console.log("result: ", res)
-            navigation.navigate("RSA", {key: {mod: res.modulus, exp: res.exponent}, usePersonalKey: true})
+            navigation.navigate({name: "RSA", 
+            params: {key: {mod: res.modulus, exp: res.exponent}, 
+            mod: res.modulus,
+            exp: res.exponent,
+            usePersonalKey: true,
+            merge: true}})
 
         })}}
          />

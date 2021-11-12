@@ -96,7 +96,7 @@ export default function PermutationScreen({ navigation }) {
                     width={280}
                     multiline={true}
                     textAlignVertical='top'
-                    placeholder='Enter plain text message'
+                    //placeholder='Enter plain text message'
                     autoCapitalize='none'
                     autoCorrect={false}
                     style={{ height: 80, borderColor: 'gray', borderWidth: 1 , borderRadius: 8, padding: 4}}

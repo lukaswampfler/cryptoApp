@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { View, Text, FlatList, Pressable, SafeAreaView, TouchableOpacity, Button } from 'react-native'
+import { View, Text, FlatList, ScrollView, SafeAreaView, TouchableOpacity, Button } from 'react-native'
 import Loading from './Loading'
 import { listMessages, listUsers, messagesByReceiver } from '../graphql/queries';
 //import { createUser } from '../graphql/mutations';
@@ -29,6 +29,7 @@ export default function MessageScreen({ navigation }) {
     const {t} = useTranslation();
 
     const MessageItem = ({ message, navigation }) => (
+       
         <View style={{
             width: '100%',
             flexDirection: 'row',
@@ -46,8 +47,12 @@ export default function MessageScreen({ navigation }) {
                 navigation.navigate("Riddles", 
                 {screen: "EncryptedMessageMethodChoice" , params: {message: message.text, fromRiddles: false, fromMessage: true, sender: message.sender.name}});
             }}>
-            <Text style={{ width: 200, fontSize: 16}} selectable={true} selectionColor='yellow' >
-                {message.text}  </Text>
+
+               
+            <Text style={{ width: 180, height: 40, fontSize: 16}} selectable={true} selectionColor='yellow' >
+                {message.text.substr(0,100)}  </Text>
+
+                
                 </TouchableOpacity>
            
             <View >
@@ -56,7 +61,7 @@ export default function MessageScreen({ navigation }) {
            
            </View>
     
-           <View style={{width:80, flexDirection: 'row-reverse'}}>
+           <View style={{width:60, flexDirection: 'row-reverse'}}>
            
             <MaterialCommunityIcons 
                 size = {32}
@@ -69,6 +74,7 @@ export default function MessageScreen({ navigation }) {
                   
             <Divider width={5} style={{margin: 7}}/>
         </View>
+      
     );
 
 
@@ -170,6 +176,7 @@ export default function MessageScreen({ navigation }) {
               keyExtractor={item => item.createdAt}
         /> : <Loading/> }*/}
                 <Title title={`${t('MES')}`}/>
+                {messages.length > 0 && <Text style={{marginBottom: 10}}> {t("CLICK")} </Text> }
                     {messages.length > 0 ?
                         <FlatList removeClippedSubviews={false}
                             data={messages}

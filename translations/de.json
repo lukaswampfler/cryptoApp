@@ -157,6 +157,8 @@
     "ONLY_BITS": "Bitte nur binäre Ziffern (0 oder 1) eingeben.", 
     "ENC_MES_BIN": "Verschlüsselte Nachricht binär: ", 
     "ENC_MES_STR": "Verschlüsselte Nachricht als String: ", 
-    "NO_MESS_WO_CHAR": "Jede Nachricht muss mindestens ein Zeichen haben."
+    "NO_MESS_WO_CHAR": "Jede Nachricht muss mindestens ein Zeichen haben.", 
+    "AI": "Als input", 
+    "PLS_MESS": "Bitte eine Nachricht eingeben!"
     
   }

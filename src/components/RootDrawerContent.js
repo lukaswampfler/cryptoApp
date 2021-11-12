@@ -67,7 +67,7 @@ export default function RootDrawerContent(props) {
           onPress={() => {
             props.navigation.closeDrawer()
             props.navigation.dispatch(StackActions.popToTop()); 
-            props.navigation.navigate("Riddles")
+            props.navigation.navigate("Riddles", {screen: "RiddleHome"})
           }}
         />
        {/*} <DrawerItem

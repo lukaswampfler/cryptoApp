@@ -95,8 +95,30 @@ export default function ButtonRow({ navigation, updatePersonalKeyText }) {
             margin: 10
         }}>
             <Button style={{ margin: 10 }} label={t('UP_PERS')} onPress={updateKeys} width='35%' />
-            <Button label={t('USE_PRI')} onPress={() => { navigation.navigate('RSA', { usePublicKey: false, usePrivateKey: true, user: undefined , privateKey: {exp: myContext.privateKey.exp, mod: myContext.privateKey.mod}}) }} width='30%' />
-            <Button label={t('USE_PUB')} onPress={() => { navigation.navigate('RSA', { usePublicKey: true, usePrivateKey: false, user: undefined , publicKey: {exp: myContext.publicKey.exp, mod: myContext.publicKey.mod }}) }} width= '30%' />
+            <Button label={t('USE_PRI')} onPress={() => { navigation.navigate({
+                name: 'RSA', 
+                params: { 
+                    usePublicKey: false, 
+                    usePrivateKey: true, 
+                    user: undefined , 
+                    privateKey: {exp: myContext.privateKey.exp, mod: myContext.privateKey.mod},
+                    exp: myContext.privateKey.exp, 
+                    mod: myContext.privateKey.mod,
+                    merge: true,
+            }}) }} 
+                width='30%' />
+            <Button label={t('USE_PUB')} onPress={() => { navigation.navigate({
+                name: 'RSA', 
+                params: { 
+                    usePublicKey: true, 
+                    usePrivateKey: false, 
+                    user: undefined , 
+                    publicKey: {exp: myContext.publicKey.exp, mod: myContext.publicKey.mod }, 
+                    exp: myContext.publicKey.exp, 
+                    mod: myContext.publicKey.mod,
+                    merge: true,
+                }}) }} width= '30%' 
+            />
         </View>
     );
 }

@@ -49,8 +49,10 @@ export default function SDESEncodingScreen({ navigation, route }) {
 
     useEffect(() => {
         console.log(route)
-        setText(getMessageInitialValue())
-        setEncoded(bitsStringFromBytes(encode(text)));
+        const message = getMessageInitialValue()
+        setText(message)
+        //console.log(bitsStringFromBytes(encode(getMessageInitialValue())))
+        setEncoded(bitsStringFromBytes(encode(message)));
     }, [])
 
 

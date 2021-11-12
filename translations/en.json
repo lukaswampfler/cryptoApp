@@ -69,7 +69,7 @@
     "PUB_EXP": "public exponent", 
     "CALC_KEY_PAIR": "calculated Key Pair", 
     "DEFAULT": "default", 
-    "CHOOSE_PUB_EXP": "choose public exponent",
+    "CHOOSE_PUB_EXP": "choose exponent",
     "USE_EXP": "use exponent",
     "UP_PERS": "update personal Keys", 
     "USE_PRI": "use private key", 
@@ -157,7 +157,9 @@
     "ONLY_BITS": "Please enter only binary digits (0 or 1)", 
     "ENC_MES_BIN": "Encrypted message binary: ", 
     "ENC_MES_STR": "Encrypted message as string: ", 
-    "NO_MESS_WO_CHAR": "You cannot send messages without any characters."
+    "NO_MESS_WO_CHAR": "You cannot send messages without any characters.", 
+    "AI": "as input", 
+    "PLS_MESS": "Please enter a message!"
 
 
 
