@@ -8,8 +8,13 @@ export const germanFreq = {'A' :  6.34 ,       'K' :  1.50  ,      'U' :  3.76,
 'R': 7.71, 'S': 6.41 , 'T': 6.43 }
 
 export function createFrequencyDict(s, dist = 1) {
+
+    //first: remove anything that is not upper or lower case alphabet, i.e. special chars and white space
+    s = s.replace(/[^a-zA-Z]/g, '')
+
+    // create dist parts of the string each containing each dist-th character (starting at char 0, dist, 2*dist, ...)
     const parts = createParts(s, dist);
-    //console.log("parts: ", parts, dist)
+    
     //let allDics = {};
     let allDics = [];
     let numAlpha;

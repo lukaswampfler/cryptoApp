@@ -23,7 +23,6 @@ const screenWidth = 0.9 * Dimensions.get("window").width;
 export const SLIDER_WIDTH = Dimensions.get('window').width +50
 export const ITEM_WIDTH = Math.round(SLIDER_WIDTH )
 
-//const mostFrequentLetter = 'e';
 
 export default function VigenereAnalysisScreen({ route, navigation }) {
     const [secret, setSecret] = useState('');
