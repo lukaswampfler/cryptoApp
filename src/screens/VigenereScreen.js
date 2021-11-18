@@ -201,7 +201,7 @@ export default function VigenereScreen({ route, navigation }) {
                     //icon='pinterest'
                     width='100%'
                     autoCapitalize='none'
-                    keyboardType='number-pad'
+                    keyboardType='default'
                     keyboardAppearance='dark'
                     returnKeyType='next'
                     returnKeyLabel='next'
