@@ -126,10 +126,10 @@ export default function HomeScreen({ navigation }) {
   async function checkForUser(users) {
     //console.log("inside check for User: ", users);
     //const users = await API.graphql({query:listUsers});
-    console.log("userName from Context: ", myContext.userName);
+    //console.log("userName from Context: ", myContext.userName);
     //console.log("users in checkForUser: ", users);
     const checkUsers = users.filter(user => (user.name === myContext.userName))
-    console.log("checkUsers: ", checkUsers)
+    //console.log("checkUsers: ", checkUsers)
     
     if (checkUsers.length === 0) {
 
@@ -195,7 +195,7 @@ export default function HomeScreen({ navigation }) {
 
 
   useEffect(() => {
-    console.log("User ID from context", myContext.userID);
+    //console.log("User ID from context", myContext.userID);
     fetchUsers();
   }, [])
 

@@ -271,7 +271,8 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
     </TouchableWithoutFeedback>
     <View style={{padding: 12}}>
     <Line/>
-    <Text width={100} style={{fontSize:20}}>  {t("THE")} {alphaShort.length} {t("MOST_FREQ")} </Text>
+    {/*{alphaShort.length}*/}
+    <Text width={100} style={{fontSize:20}}>  {t("THE")}  {t("MOST_FREQ")} </Text>
     
     
       <FlatList horizontal={true}
