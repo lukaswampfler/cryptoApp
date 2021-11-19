@@ -27,7 +27,7 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "ch.altekanti.encypher", 
-      "versionCode": 2
+      "versionCode": 3
     },
     "web": {
       "favicon": "./assets/favicon.png"
