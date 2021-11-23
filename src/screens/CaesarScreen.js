@@ -68,12 +68,16 @@ export default function CaesarScreen({ navigation }) {
 
 
     const sendMessage = () => {
-        let ciphers = myContext.ciphers;
-        ciphers.currentMethod = 'CAESAR';
-        ciphers.currentMessage = secret;
-        ciphers.caesar.secret = secret;
-        myContext.setCiphers(ciphers);
-        navigation.navigate('UsersList', { toSend: true, toImportKey: false })
+        if(secret.length > 0){
+            let ciphers = myContext.ciphers;
+            ciphers.currentMethod = 'CAESAR';
+            ciphers.currentMessage = secret;
+            ciphers.caesar.secret = secret;
+            myContext.setCiphers(ciphers);
+            navigation.navigate('UsersList', { toSend: true, toImportKey: false })
+        } else {
+            alert(`${t("NO_MESS_WO_CHAR")}`)
+        }
     }
 
     /*useEffect(() => {

@@ -9,7 +9,7 @@ import { IntroModal } from '../utils/Modals';
 import GreySwitch from '../components/GreySwitch';
 import Line from '../components/Line';
 
-import memoize from "memoize-one";
+//import memoize from "memoize-one";
 
 const screenWidth = 0.9 * Dimensions.get("window").width;
 
@@ -24,6 +24,7 @@ import RSA from '../utils/RSA'
 import RSAKeyInput from '../components/RSAKeyInput';
 import { isNotBinary, smartExponentiation } from '../utils/RSAMath';
 import { useTranslation } from 'react-i18next';
+import ClearButton from '../components/ClearButton';
 
 
 
@@ -106,7 +107,7 @@ const getMessageInitialValue = () => {
 
 
     const [isEncrypted , setIsEncrypted] = useState(false);
-    const [secret, setSecret] = useState(null);
+    const [secret, setSecret] = useState('');
     const [mess, setMess] = useState(getMessageInitialValue()) 
     const [exp, setExp] = useState(getExpInitialValue())
     const [mod, setMod] = useState(getModInitialValue()) 
@@ -136,6 +137,14 @@ const getMessageInitialValue = () => {
         }
     }, [route.params?.exp])
 
+
+    const sendMessage = () => { 
+        if(secret && secret.length > 0){
+            navigation.navigate('UsersList', { toSend: true, toImportKey: false }) 
+        } else {
+            alert(`${t("NO_MESS_WO_CHAR")}`)
+        }
+        }
 
 
     const toggleRSAInputSwitch = (value) => {
@@ -228,6 +237,10 @@ const getMessageInitialValue = () => {
         myContext.setCiphers(ciphers)
     }
 
+    const resetKey = (dummy) => {
+        changeExp('');
+        changeMod('');
+    }
 
     const changeMess = (value)=>{
         if(value.length > 0){
@@ -305,7 +318,9 @@ const getMessageInitialValue = () => {
         <ScrollView style={{
             flex: 1, margin: 0
         }}>
-            <Title title={`${t('RSA_TIT')}`}/>
+           
+                <Title title={`${t('RSA_TIT')}`}/>
+                
             <IntroModal text={introText} method={`${t('RSA_TIT')}`} />
             <View
                 style={{
@@ -315,13 +330,20 @@ const getMessageInitialValue = () => {
                     justifyContent: 'center', 
                 }}
             >
-
+            <View style={
+               {
+                width: '100%',
+               flexDirection: 'row', 
+               justifyContent: 'space-between'}}>
                 <Text style={{
                     fontSize: 20,
                     marginTop: 20, 
                     marginLeft: 10
                 }}> 
                 Input {`${t('RSA_DECBIN')}`} </Text>
+
+                    <ClearButton setInput={changeMess} setKey ={resetKey} defaultKey={''}/>
+                </View>
                 <View style={{
                     marginBottom: 16,
                     width: '100%',
@@ -544,9 +566,7 @@ const getMessageInitialValue = () => {
                     <Button  label={`${t('SI')}`} onPress={() => { myContext.setIntroVisible(true) }} />
                     </View>
                     <View style = {{margin: 20, width: '30%'}}>
-                    <Button label={`${t('SM')}`} onPress={() => { 
-                        navigation.navigate('UsersList', { toSend: true, toImportKey: false }) 
-                        }} />
+                    <Button label={`${t('SM')}`} onPress={sendMessage} />
                     </View>
                 </View>
 

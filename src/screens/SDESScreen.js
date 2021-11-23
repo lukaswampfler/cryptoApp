@@ -15,9 +15,10 @@ import * as Yup from 'yup'
 
 
 import { SDESKeyInputScheme, SDESK12InputScheme, SDESMessageInputScheme } from '../utils/InputTests';
-import { encryptSDESMessage, generateSDESKeys, decodeBinaryString, encodeEncrypted, is8BitString, is10BitString, isBitString } from '../utils/sdesMath';
+import { encryptSDESMessage, generateSDESKeys, decodeBinaryString, encodeEncrypted, is8BitString, is10BitString, isBitString, isBitStringMultipleOf8 } from '../utils/sdesMath';
 //import { sdesIntroText } from '../utils/introTexts';
 import { useTranslation } from 'react-i18next';
+import ClearButton from '../components/ClearButton';
 
 
 const INVALID_FORMAT_ERROR_MESSAGE = 'invalid format';
@@ -126,15 +127,33 @@ export default function SDESScreen({ route, navigation }) {
   }
 
   const encryptKey = () => {
-    myContext.setRSAInputSwitchisDecimal(false);
-    let ciphers = myContext.ciphers;
-    ciphers.rsa.m = formikKey.values.key
-    formikKey.handleSubmit(formikKey.values);
-    //console.log("encrypt Key: ", formikKey.values.key);
-    navigation.navigate("RSA")
+    if(key.length == 10){
+      myContext.setRSAInputSwitchisDecimal(false);
+      let ciphers = myContext.ciphers;
+      ciphers.rsa.m = key
+      formikKey.handleSubmit(formikKey.values);
+      //console.log("encrypt Key: ", formikKey.values.key);
+      navigation.navigate("RSA")
+  } else {
+    alert(`${t("10_BIT")}`)
+  }
 
   }
 
+  const resetKey = (dummy) => { // used for ClearButton
+    changeKey('')
+    changeK1('')
+    changeK2('')
+  }
+
+
+  const changeMessage = text => {
+    if(!isBitString(text)){
+      alert(`${t("ONLY_BITS")}`)
+    } else {
+    setMessage(text)
+  }
+  }
 
   const changeKey = text => {
     if(!isBitString(text)){
@@ -182,8 +201,10 @@ export default function SDESScreen({ route, navigation }) {
     formikMessage.handleSubmit(formikMessage.values)
     
     */
-
-    if (!is8BitString(k1) || !is8BitString(k2)){return
+    if (!isBitStringMultipleOf8(message)){
+      alert(`${t("MULT_8_BIT")}`)
+    } else if (!is8BitString(k1) || !is8BitString(k2)){
+      alert(`${t("8_BIT")}`)
     } else {
 
    let ciphers = myContext.ciphers;
@@ -193,13 +214,15 @@ export default function SDESScreen({ route, navigation }) {
         ciphers.sdes.key10 = formikKey.values.key;
       }
       setKeyEntered(true);
-      const keys = generateSDESKeys(formikKey.values.key);
+      const keys = {k1: k1, k2: k2};
       ciphers.sdes.keys = keys
-      ciphers.sdes.message = formikMessage.values.message;
-      setMessage(formikMessage.values.message);
+      ciphers.sdes.message = message
+      //ciphers.sdes.message = formikMessage.values.message;
+      //setMessage(formikMessage.values.message);
       //console.log("message", values.message);
       //console.log("keys: ", myContext.ciphers.sdes.keys);
-      const encrypted = encryptSDESMessage(formikMessage.values.message, keys)
+      //const encrypted = encryptSDESMessage(formikMessage.values.message, keys)
+      const encrypted = encryptSDESMessage(message, keys)
       const decryptionKeys = { k1: keys.k2, k2: keys.k1 }
       ciphers.sdes.encryptedMessage = encrypted;
       const encryptedAsText = decodeBinaryString(encrypted);
@@ -304,12 +327,20 @@ export default function SDESScreen({ route, navigation }) {
                 }}
             >
 
+            <View style={
+               {
+                width: '100%',
+               flexDirection: 'row', 
+               justifyContent: 'space-between'}}>
                 <Text style={{
                     fontSize: 20,
                     marginTop: 20, 
                     marginLeft: 10
                 }}> 
                 {t('SDES_INPUT')} </Text>
+
+                <ClearButton setInput={changeMessage} setKey={resetKey} defaultKey={''}/>
+              </View>
                 <View style={{
                     paddingHorizontal: 32,
                     marginBottom: 16,
@@ -327,11 +358,13 @@ export default function SDESScreen({ route, navigation }) {
                         keyboardAppearance='dark'
                         returnKeyType='next'
                         returnKeyLabel='next'
-                        onChangeText={formikMessage.handleChange('message')}
-                        onBlur={formikMessage.handleBlur('message')}
-                        error={formikMessage.errors.message}
-                        touched={formikMessage.touched.message}
-                        value={formikMessage.values.message}
+                        onChangeText={changeMessage}
+                        value = {message}
+                        //onChangeText={formikMessage.handleChange('message')}
+                        //onBlur={formikMessage.handleBlur('message')}
+                        //error={formikMessage.errors.message}
+                        //touched={formikMessage.touched.message}
+                        //value={formikMessage.values.message}
                     />
                     
                     <View style ={{width: '45%'}}>

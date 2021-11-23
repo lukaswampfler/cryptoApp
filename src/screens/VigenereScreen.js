@@ -79,11 +79,15 @@ export default function VigenereScreen({ route, navigation }) {
 
 
     const sendMessage = () => {
-        let ciphers = myContext.ciphers;
-        ciphers.currentMethod = 'VIGENERE';
-        ciphers.currentMessage = secret;
-        myContext.setCiphers(ciphers);
-        navigation.navigate('UsersList', { toSend: true, toImportKey: false })
+        if (secret.length > 0){
+            let ciphers = myContext.ciphers;
+            ciphers.currentMethod = 'VIGENERE';
+            ciphers.currentMessage = secret;
+            myContext.setCiphers(ciphers);
+            navigation.navigate('UsersList', { toSend: true, toImportKey: false })
+        } else {
+            alert(`${t("NO_MESS_WO_CHAR")}`)
+        }
     }
 
     /*const decrypt = () => {

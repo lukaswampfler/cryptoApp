@@ -87,6 +87,7 @@ export function smartExponentiation(base, exp, m, useBigIntegerLibrary = false) 
     // calculates the power base**exp mod m efficiently
     // takes three inputs: all of them are BigInts
     // 1) calculate binary rep of exponent, but in REVERSED ORDER
+    console.log(base, exp, m, useBigIntegerLibrary )
     var binExponent = '';
     while (exp > 0) {
         if(!useBigIntegerLibrary){

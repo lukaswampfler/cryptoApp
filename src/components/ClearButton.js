@@ -4,7 +4,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function ClearButton({setInput, setKey, defaultKey, ...props}){
     return(
-        <View style = {{margin: 20}}>
+        <View style = {{margin: 20, marginBottom: 10}}>
             <MaterialCommunityIcons 
             size = {32}
             color = '#888'

@@ -154,6 +154,8 @@
     "NO_MESS": "No messages yet...", 
     "VALID_KEY": "Please enter a valid key! (number)", 
     "10_BIT":  "Please enter a 10-bit key!", 
+    "8_BIT": "Please enter two 8-bit keys!", 
+    "MULT_8_BIT": "Length of message needs to be a multiple of 8!",
     "ONLY_BITS": "Please enter only binary digits (0 or 1)", 
     "ENC_MES_BIN": "Encrypted message binary: ", 
     "ENC_MES_STR": "Encrypted message as string: ", 

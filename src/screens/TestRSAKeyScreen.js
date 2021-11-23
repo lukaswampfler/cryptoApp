@@ -669,7 +669,7 @@ const checkAndUsePubExp = () => {
 <View style = {{width: '60%', flexDirection: 'column', justifyContent: 'flex-start'}}>
 <Text style={{
                     fontSize: 20,
-                    margin: 10
+                    margin: 10, marginLeft: 20
                 }}> 
               {t('PUB_EXP')}</Text>
 <View style = {{width: '60%', backgroundColor: isDefault? '#fff': '#ddd', marginLeft: 20, borderRadius: 8}}>
@@ -736,8 +736,8 @@ const checkAndUsePubExp = () => {
         }}>
           <Button label='show explanation' onPress={() => { myContext.setExplVisible(true) }} />
     </View>*/}
-    <View style ={{flexDirection: 'row', justifyContent: 'space-around', marginBottom: 10, marginTop: 10}}>   
-    <View style = {{margin: 10, width: '40%'}}>
+    <View style ={{flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10, marginTop: 10}}>   
+    <View style = {{margin: 10, width: '45%'}}>
                 <Text style={{
                     fontSize: 20,
                     marginTop: 0, 
@@ -745,7 +745,7 @@ const checkAndUsePubExp = () => {
                 }}> 
                 {t('PERS_KEY_PAIR')} </Text>
                 </View>
-<Button style ={{width: '30%'}} label={t('SHOW_PERS')} onPress = {() => {myContext.setIntroVisible(true)}}/>
+<Button style ={{width: '30%', marginRight: 20}} label={t('SHOW_PERS')} onPress = {() => {myContext.setIntroVisible(true)}}/>
 </View>
 
               {/*}  <Text>Exponent: <Text style ={{fontWeight: 'bold'}} > public: {personalPublicKey.exp} </Text> <Text style ={{fontWeight: 'bold'}} > private: {personalPrivateKey.exp} </Text> 
