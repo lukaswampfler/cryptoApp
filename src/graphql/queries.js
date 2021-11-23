@@ -11,15 +11,7 @@ export const getMessage = /* GraphQL */ `
         id
         name
         publicKeyID
-        privateKeyID
         publicKey {
-          id
-          exponent
-          modulus
-          createdAt
-          updatedAt
-        }
-        privateKey {
           id
           exponent
           modulus
@@ -33,15 +25,7 @@ export const getMessage = /* GraphQL */ `
         id
         name
         publicKeyID
-        privateKeyID
         publicKey {
-          id
-          exponent
-          modulus
-          createdAt
-          updatedAt
-        }
-        privateKey {
           id
           exponent
           modulus
@@ -74,7 +58,6 @@ export const listMessages = /* GraphQL */ `
           id
           name
           publicKeyID
-          privateKeyID
           createdAt
           updatedAt
         }
@@ -82,7 +65,6 @@ export const listMessages = /* GraphQL */ `
           id
           name
           publicKeyID
-          privateKeyID
           createdAt
           updatedAt
         }
@@ -102,7 +84,6 @@ export const getUser = /* GraphQL */ `
       id
       name
       publicKeyID
-      privateKeyID
       publicKey {
         id
         exponent
@@ -126,7 +107,6 @@ export const listUsers = /* GraphQL */ `
         id
         name
         publicKeyID
-        privateKeyID
         publicKey {
           id
           exponent
@@ -166,7 +146,6 @@ export const messagesByReceiver = /* GraphQL */ `
           id
           name
           publicKeyID
-          privateKeyID
           createdAt
           updatedAt
         }
@@ -174,7 +153,6 @@ export const messagesByReceiver = /* GraphQL */ `
           id
           name
           publicKeyID
-          privateKeyID
           createdAt
           updatedAt
         }
@@ -213,7 +191,6 @@ export const messagesBySent = /* GraphQL */ `
           id
           name
           publicKeyID
-          privateKeyID
           createdAt
           updatedAt
         }
@@ -221,11 +198,6 @@ export const messagesBySent = /* GraphQL */ `
           id
           name
           publicKeyID
-          publicKey{
-            exponent
-            modulus
-          }
-          privateKeyID
           createdAt
           updatedAt
         }

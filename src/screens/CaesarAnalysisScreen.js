@@ -54,7 +54,7 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
     
 
     const changeKey = key => {
-        if(!isNaN(parseInt(key, 10))){
+        if(!isNaN(parseInt(key, 10) || key.length == 0)){
             const decyph = caesarEncrypt(secret, key);
             setKey(key)
             setDecypheredMessage(decyph)
@@ -114,7 +114,7 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
 
 
     return (
-        <View style = {{margin: 10}}>
+        <ScrollView style = {{margin: 10}}>
             <TouchableWithoutFeedback onPress = {Keyboard.dismiss} accessible={false}>
                 <View>
                     <Title title={title}/>
@@ -165,14 +165,12 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
             />)}
  </View> 
 </TouchableWithoutFeedback>
-{showDecyphered && <View style ={{height: '4%'}}>
+{showDecyphered && <View style ={{height: '8%'}}>
 <Text >
-{t("DIFF_1")}{getMaxKey(freqDict)}{t("DIFF_2")}{getDifference('e', getMaxKey(freqDict))}
-
+{t("DIFF_1")}{getMaxKey(freqDict)}{ t("DIFF_2") }{getDifference('e', getMaxKey(freqDict))}
   </Text>  
-
-
-    </View>}
+</View>
+}
 
 <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', margin: 10, marginRight: 40}}>
 <View style={{marginTop: 10, marginLeft: 10, marginBottom: 5, marginRight: 10, width: '50%'}}>
@@ -248,7 +246,7 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
 
 
 
-</View>
+</ScrollView>
 
 
     );

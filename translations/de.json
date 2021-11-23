@@ -136,7 +136,7 @@
     "GERMAN": "Deutsch", 
     "ENCODING_HELP": "Du kannst einen Text bestehend aus Latin1-Zeichen (d.h. keine Emojis) eingeben. Dieser wird anschliessend ASCII-codiert.", 
     "ENCODING_TITLE": "Eine Nachricht kodieren", 
-    "DIFF_1": "Der Unterschied vom Buchstaben 'e' zum häufigsten Buchstaben ",
+    "DIFF_1": "Der Unterschied von 'e' zum häufigsten Buchstaben ",
     "DIFF_2": " beträgt: ", 
     "FRAG": "Die folgenden Fragmente wurden mehr als einmal gefunden (Abstände rechts):", 
     "DIST": "Abstand: ", 
