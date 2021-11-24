@@ -209,9 +209,9 @@ export default function SDESScreen({ route, navigation }) {
 
    let ciphers = myContext.ciphers;
       if (ciphers.sdes === undefined) {
-        ciphers.sdes = { key: formikKey.values.key };
+        ciphers.sdes = { key: key };
       } else {
-        ciphers.sdes.key10 = formikKey.values.key;
+        ciphers.sdes.key10 = key;
       }
       setKeyEntered(true);
       const keys = {k1: k1, k2: k2};

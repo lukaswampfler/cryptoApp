@@ -67,7 +67,7 @@ const getExpInitialValue = () => {
     } else if (route.params.usePrivateKey){
         return route.params.privateKey.exp.toString();
     } else if (myContext.publicKey.exp !== undefined && route.params.usePublicKey) {
-        console.log("using public key as initial value", myContext.publicKey)
+        //console.log("using public key as initial value", myContext.publicKey)
         return myContext.publicKey.exp.toString();
     } 
     else {
@@ -200,7 +200,7 @@ const getMessageInitialValue = () => {
         
         //console.log(smartExponentiation(BigInt(rsa.m), BigInt(rsa.exp), BigInt(rsa.n), myContext.useBigIntegerLibrary).toString())
         const encryptedMessage = smartExponentiation(BigInt(rsa.m), BigInt(rsa.exp), BigInt(rsa.n), myContext.useBigIntegerLibrary).toString();
-        
+        console.log("encrypted: ", encryptedMessage)
         
         
         if(myContext.RSAInputSwitchisDecimal){

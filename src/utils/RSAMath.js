@@ -87,7 +87,15 @@ export function smartExponentiation(base, exp, m, useBigIntegerLibrary = false) 
     // calculates the power base**exp mod m efficiently
     // takes three inputs: all of them are BigInts
     // 1) calculate binary rep of exponent, but in REVERSED ORDER
-    console.log(base, exp, m, useBigIntegerLibrary )
+    
+    if(useBigIntegerLibrary){
+        base = BigInt(base)
+        exp = BigInt(exp)
+        m = BigInt(m)
+    }
+    console.log("smartExp: ", base, exp, m, useBigIntegerLibrary )
+    if(useBigIntegerLibrary) console.log("square: ", BigInt(base).pow(2))
+    else console.log("square: ", base*base)
     var binExponent = '';
     while (exp > 0) {
         if(!useBigIntegerLibrary){
@@ -98,14 +106,25 @@ export function smartExponentiation(base, exp, m, useBigIntegerLibrary = false) 
             exp = exp.divide(2);
         }
     }
-    console.log(binExponent);
+    // ---- so far the same result for android and iOS. -----
+    // console.log(binExponent);
     // 2) calculate squares, include in result if needed (ie if corresponding bit equals 1)
     var res = BigInt(1);
     for (let i = 0; i < binExponent.length; i++) {
         if (binExponent.charAt(i) == '1') {
-            res = (res * base) % m;
+            if(!useBigIntegerLibrary) {res = BigInt((res * base)) % m;}
+            else {res = BigInt(res).multiply(BigInt(base)).divmod(m).remainder;}
+            //console.log("res: ", res)
         }
-        base = (base * base) % m;
+        if(!useBigIntegerLibrary) {base = BigInt((base * base)) % m;
+            //console.log(base*base)
+        } else {
+            base = BigInt(base).pow(2).divmod(m).remainder;
+            //console.log(base*base)
+
+        }
+
+        console.log("base: ", base)
     }
     return res.toString();
 }
