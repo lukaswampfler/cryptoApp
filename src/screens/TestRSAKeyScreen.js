@@ -484,7 +484,7 @@ const checkAndUsePubExp = () => {
                 {`${t('PRIMES')}`} </Text>
                 </View>
 
-          <View style={{ paddingHorizontal: 32, marginBottom: 16, marginTop: 20, width: '60%' }}>
+          <View style={{ paddingHorizontal: 32, marginBottom: 16, marginTop: 20, width: '70%' }}>
           <View style = {{width : '180%', backgroundColor: isRandom? '#fff': '#ddd', borderRadius: 8}}>
 
             <NumInput
@@ -505,7 +505,7 @@ const checkAndUsePubExp = () => {
             />
             </View>
           </View>
-          <View style={{ paddingHorizontal: 32, marginBottom: 16, width: '60%'}}>
+          <View style={{ paddingHorizontal: 32, marginBottom: 16, width: '70%'}}>
           <View style = {{width : '180%', backgroundColor: isRandom? '#fff': '#ddd', borderRadius: 8}}>
             <NumInput
               //icon='pinterest-with-circle'
@@ -602,13 +602,13 @@ const checkAndUsePubExp = () => {
             
             </View>
 
-      {(pConfirmed && qConfirmed) &&   <View style ={{margin: 10}}>
+      {(pConfirmed && qConfirmed)?   <View style ={{margin: 10}}>
 
                   <Text>You are using the two prime numbers: p: {pConfirmed}, q: {qConfirmed}
           </Text>
          <Text>Their product is equal to n =  {(BigInt(pConfirmed) * BigInt(qConfirmed)).toString()}
-         </Text> 
-</View>}
+         </Text>
+</View> : null}
 
 <Line />
 {/*

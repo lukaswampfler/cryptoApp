@@ -39,34 +39,22 @@ export default function HomeScreen({ navigation }) {
 
 
   async function updateKeys(isNewUser, publicKeyID = null) {
-
     const keys = generateDummyKeys(myContext.useBigIntegerLibrary);
-
-    // first generate public (and private key -> not necessary, but need to change GraphQL-schema)
+    // first generate public key
     const publicKeyInput = {exponent: keys.public.exp, modulus: keys.public.mod} 
     const privateKeyInput = {exponent: keys.private.exp, modulus: keys.private.mod}
      // save public key on server
     const newPublicKey = await API.graphql({ query: createKey, variables: { input: publicKeyInput} });
-    const newPrivateKey = await API.graphql({ query: createKey, variables: { input: publicKeyInput } }); // comment: this is not the real private key!!
-
-    
-    
     // save private key on device
     const saveKeyPromise = await SecureStore.setItemAsync("privateKey", JSON.stringify(privateKeyInput));
     let userPromise
-
-
     if (isNewUser){
       //user has to be generated as well as keys
-
-      //create new user
-      const userInput = { name: myContext.userName, publicKeyID: newPublicKey.data.createKey.id, privateKeyID: newPrivateKey.data.createKey.id }
+      const userInput = { name: myContext.userName, publicKeyID: newPublicKey.data.createKey.id }
       userPromise = await API.graphql({ query: createUser, variables: { input: userInput } });
       const userData = userPromise.data.createUser;
       setUserID(userData.id);
       myContext.setPublicKeyID(userData.publicKeyID);
-      myContext.setPrivateKeyID(userData.privateKeyID);
-
     } else {
       //update public Key of current user
       const updateInput = {
@@ -76,15 +64,13 @@ export default function HomeScreen({ navigation }) {
       }
       userPromise = await API.graphql({query: updateKey, variables: {input: updateInput} })
       }
-
-    Promise.all([userPromise, saveKeyPromise]).then(values => {
+      
+      Promise.all([userPromise, saveKeyPromise]).then(values => {
       if (isNewUser) {
         alert(`${t("NEW_USER1")}` + userPromise.data.createUser.name + `${t("NEW_USER2")}`+ publicKeyInput.modulus + `${t("NEW_USER3")}`)
-        //alert("New user " + userPromise.data.createUser.name + " generated. \n Attention: If you can factor the number " + publicKeyInput.modulus + ", then so can your opponent -> change your RSA-keys!")
       } else {
         alert("Your keys were updated with a small modulus of " + publicKeyInput.modulus + "\nPlease consider updating your keys again.")
       }
-  
   })
 }
 
@@ -173,18 +159,16 @@ export default function HomeScreen({ navigation }) {
       const userData = checkUsers[0]
       setUserID(userData.id);
       
-      //TODO: now check if private key is stored on device - if not - create keyPair with 
-
       let result = await SecureStore.getItemAsync("privateKey");
       if(!result){  //i.e. user exists on database, but no key saved on current device
-        alert(`${t("KEYS_FOUND")}`)
+        alert(`${t("FIRST_TIME")}`)
         updateKeys(false, userData.publicKeyID)
       } else {
         alert(`${t("KEYS_FOUND")}`)
       }
 
       myContext.setPublicKeyID(userData.publicKeyID);
-      myContext.setPrivateKeyID(userData.privateKeyID);
+      //myContext.setPrivateKeyID(userData.privateKeyID);
 
 
 

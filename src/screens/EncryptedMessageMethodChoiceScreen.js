@@ -25,7 +25,13 @@ export default function EncryptedMessageMethodChoiceScreen({ route, navigation }
     const [selectedMethod, setSelectedMethod] = useState('rsa');
 
     
-    const {message} = route.params;
+    const {message, key} = route.params;
+
+
+
+    /*if(route.params.exponent){
+        const {exponent} = route.params;
+    }*/
 
 
     useEffect(() => {
@@ -49,7 +55,7 @@ export default function EncryptedMessageMethodChoiceScreen({ route, navigation }
         >
             <TouchableOpacity onPress={()=> navigateToScreen(item)}>
             <Text style={{fontSize: 20 , width: 250 }}  >
-                {item.toUpperCase()}  </Text>
+                {item.toUpperCase()}  </Text>   
             
           
             </TouchableOpacity>
@@ -61,7 +67,7 @@ export default function EncryptedMessageMethodChoiceScreen({ route, navigation }
         if (method == 'rsa') {
             console.log("navigating to RSA...")
             navigation.navigate("Methods", 
-            {screen: 'RSA', params: {message: message, fromRiddles: true}});
+            {screen: 'RSA', params: {message: message, fromRiddles: true, mod: key.public.mod.toString()}});
         } else if (method == 'sdes') {
             if(!isBitStringMultipleOf8(message)){
                 navigation.navigate("Methods", {screen: "SDESEncoding", params: {message: message}})

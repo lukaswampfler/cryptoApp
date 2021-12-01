@@ -200,6 +200,10 @@ export const messagesBySent = /* GraphQL */ `
           publicKeyID
           createdAt
           updatedAt
+          publicKey {
+            exponent
+            modulus
+          }
         }
         text
         sent

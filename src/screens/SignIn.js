@@ -31,14 +31,14 @@ export default function SignIn({ navigation, updateAuthState }) {
       myContext.setUserName(userName)
       updateAuthState('loggedIn');
     } catch (error) {
+      setErrorMessage(error.message)
       myContext.setIntroVisible(true);
       console.log('Error signing in...', error);
-      setErrorMessage(error.message)
     }
   }
 
 
-  const introText = "Here comes the introduction to the Error";
+  //const introText = "Here comes the introduction to the Error";
   const method = "Error!"
 
   //const title = "Sign in to your encypher - account"

@@ -38,12 +38,13 @@ export default function SDESEncodingScreen({ navigation, route }) {
     }
 
     const useMessage = () => {
-        //const bitString = bitsStringFromBytes(encoded);
         const bitString = encoded;
         let ciphers = myContext.ciphers;
         ciphers.sdes.message = bitString;
         myContext.setCiphers(ciphers);
-        navigation.navigate('SDES', { message: bitString })
+        navigation.navigate({name: 'SDES', 
+            params: { message: bitString }, 
+            merge: true})
     }
 
 

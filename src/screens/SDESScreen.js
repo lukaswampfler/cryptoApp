@@ -26,13 +26,29 @@ const REQUIRED_ERROR_MESSAGE = 'this field is required';
 
 
 
+
+
+
+
 export default function SDESScreen({ route, navigation }) {
+
+
+  const getMessageInitialValue = () => {
+    console.log("getMessageInitialValue: ", route.params)
+    if (route.params !== undefined) {
+      console.log("have params", typeof route.params.message)
+      return route.params.message;
+    } else {
+       return '';
+    }
+  }
+
   const myContext = useContext(AppContext);
 
   const [isEncrypted, setIsEncrypted] = useState(false);
   //const [isDecrypted, setIsDecrypted] = useState(false);
   const [keyEntered, setKeyEntered] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState(getMessageInitialValue());
   const [encryptedMessage, setEncryptedMessage] = useState('');
   const [decryptedMessage, setDecryptedMessage] = useState('');
   const [isMessageBinary, setIsMessageBinary] = useState(false);
@@ -41,6 +57,8 @@ export default function SDESScreen({ route, navigation }) {
   const [key, setKey] = useState('')
 
   const {t} = useTranslation();
+
+
 
 
   useEffect(() => {
@@ -55,6 +73,12 @@ export default function SDESScreen({ route, navigation }) {
   }, [message]);
 
 
+
+  useEffect(() =>{
+      if(route.params?.message){ // ? : Optional Chaining -> no need to check if attribute params exists
+        setMessage(route.params?.message)
+    }
+}, [route.params?.message])
 
   const toggleIsBinary = () => {
     setIsMessageBinary(!isMessageBinary);
@@ -91,13 +115,7 @@ export default function SDESScreen({ route, navigation }) {
   }
 
 
-  const getMessageInitialValue = () => {
-    if (route === undefined) {
-      return '';
-    } else {
-       return route.params.message;
-    }
-  }
+  
 
   const getKeyInitialValue = () => {
     let ciphers = myContext.ciphers;

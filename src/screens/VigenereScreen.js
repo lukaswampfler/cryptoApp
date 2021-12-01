@@ -186,7 +186,7 @@ export default function VigenereScreen({ route, navigation }) {
                     value={text}
                 />
                 </View>
-                <ClearButton setInput = {isEncrypting? changeText: changeSecret} setKey = {setKey} defaultKey = ''/>
+                <ClearButton setInput = {isEncrypting? changeText: changeSecret} setKey = {setKey} defaultKey = {''}/>
                 </View>
 
                 

@@ -402,33 +402,14 @@ export default function App() {
     <AppContext.Provider value={userSettings}>
       <NavigationContainer>
         {isUserLoggedIn === 'initializing' && <Initializing />}
-       {/*}
-       {isUserLoggedIn === 'loggedIn' && (
-          <HomeTab.Navigator updateAuthState={updateAuthState}>
-            <HomeTab.Screen name="HomeScreen" component={HomeScreen} />
-            <HomeTab.Screen name="Methods" component={MethodNavigator} />
-            <HomeTab.Screen name="Analysis" component={AnalysisNavigator} />
-            <HomeTab.Screen name="Messages" component={MessageScreen} options={{ title: "Your Messages" }} />
-          </HomeTab.Navigator>
-        )}
-       */}
         {isUserLoggedIn === 'loggedIn' && (
           <RootDrawerNavigator updateAuthState={updateAuthState} signOut = {signOut} />
         )}
-         {/*{isUserLoggedIn === 'loggedIn' && (
-                <RootDrawer.Navigator initialRouteName="Home">
-                <RootDrawer.Screen name="Home" component={HomeScreen} />
-                <RootDrawer.Screen name="Messages" component={MessageScreen} />
-              </RootDrawer.Navigator>
-        )}*/}
         {isUserLoggedIn === 'loggedOut' && (
           <AuthenticationNavigator updateAuthState={updateAuthState} />
         )}
-
-
       </NavigationContainer>
     </AppContext.Provider>
-
   );
 }
 

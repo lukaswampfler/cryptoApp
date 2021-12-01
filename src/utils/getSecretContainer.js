@@ -3,7 +3,6 @@ import { Platform} from 'react-native';
 import { caesarEncrypt } from './caesarMath';
 import { vigenereEncrypt } from './vigenereMath';
 import { encryptPermutation, randomTransposition, shuffleAlphabet } from './permutationMath';
-import * as dataEng from '../data/jeopardy_questions_eng.json';
 import {getRandomKeys, encryptSDESMessage, encode, bitsStringFromBytes, getRandomBitString} from './sdesMath';
 import { smartExponentiation } from './RSAMath';
 

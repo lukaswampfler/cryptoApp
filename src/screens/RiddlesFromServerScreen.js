@@ -14,18 +14,13 @@ import { useTranslation } from 'react-i18next';
 
 
 
-
-
-
-
-
-
-
 export default function RiddlesFromServerScreen({ navigation }) {
 
     const {t} = useTranslation();
 
     const title = `${t("INTERCEPTED_TIT")}`;
+
+    
 
     const MessageItem = ({ message }) => (
         <View style={{
@@ -49,8 +44,7 @@ export default function RiddlesFromServerScreen({ navigation }) {
     async function fetchMessages() {
         try {
             const riddlesData = await API.graphql({ query: messagesBySent, variables: { sent: "true", sortDirection: 'DESC', limit: 5 } })
-            //const riddlesData = await API.graphql(graphqlOperation(listMessages, {limit: 2, sortDirection: 'DESC'}))
-            console.log("riddlesData: ", riddlesData.data.messagesBySent.items);
+            //console.log("riddlesData: ", riddlesData.data.messagesBySent.items);
             setRiddles(riddlesData.data.messagesBySent.items)
         } catch (err) { console.log('error fetching messages: ', err) }
     }
