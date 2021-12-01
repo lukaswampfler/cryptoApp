@@ -132,6 +132,8 @@
     "SDES_HELP": "ENCODE MESSSAGE: change to the screen where you can write your message and it will be (ASCII-)coded and directly used as input for SDES. Alternatively, you can use any sequence of bits of length 8, 16, 24, ... as input.\nThe key for S-DES is a bit-String of length 10.\nCALCULATE K1, K2: the two keys (each length 8) will be calculated.\nRSA ENCRYPT 10-BIT KEY: in a real scenario, the key of the symmetric method would be encrypted using an asymmetric method (i.e. RSA)", 
     "USE_PRIMES": "use my primes", 
     "ALERT_PRIME_ENTER": "Please enter values for p and q!", 
+    "ALERT_PRIME_ENTER2": "Please enter prime numbers for p and q!", 
+    "NOT_EQUAL": "p and q must not be equal!",
     "ALERT_EXP": "Please enter a value for the exponent and p and q!", 
     "GERMAN": "German", 
     "ENCODING_HELP": "You can enter any text consisting of Latin1-characters (i.e. no emojis). This text will be subsequently ASCII coded.", 

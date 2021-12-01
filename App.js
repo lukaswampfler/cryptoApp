@@ -17,8 +17,8 @@ import config from './src/aws-exports';
 
 
 
-//import RSAKeyScreen from './src/screens/RSAKeyScreen';
-import TestRSAKeyScreen from './src/screens/TestRSAKeyScreen';
+import RSAKeyScreen from './src/screens/RSAKeyScreen';
+//import TestRSAKeyScreen from './src/screens/TestRSAKeyScreen';
 import RSAEncryptionScreen from './src/screens/RSAEncryptionScreen';
 //import TestRSAEncryptionScreen from './src/screens/TestRSAEncryptionScreen';
 
@@ -128,7 +128,7 @@ const MethodNavigator = props => {
       />
       <MethodStack.Screen
         name="RSAKey"
-        component={TestRSAKeyScreen}
+        component={RSAKeyScreen}
         options={{ title: 'RSA Key Generation' }}
       />
       <MethodStack.Screen
