@@ -321,7 +321,7 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
 
     </TouchableWithoutFeedback>
     <View style = {{height: '50%'}}>
-    { showBars && <View style ={{marginBottom: 10, marginTop: 5}}><Text style ={{fontSize: 16}}>Likely key word: {likelyKeyWord} </Text></View>}
+    { showBars && <View style ={{marginBottom: 10, marginTop: 5}}><Text style ={{fontSize: 16}}>{t("LIK_KEY")}: {likelyKeyWord} </Text></View>}
     { showBars ?
                         <FlatList removeClippedSubviews={false}
                             data={data}

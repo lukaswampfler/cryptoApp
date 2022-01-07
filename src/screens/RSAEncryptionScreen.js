@@ -22,7 +22,7 @@ import {
 } from '../utils/InputTests'
 import RSA from '../utils/RSA'
 import RSAKeyInput from '../components/RSAKeyInput';
-import { isNotBinary, smartExponentiation } from '../utils/RSAMath';
+import { smartExponentiation } from '../utils/RSAMath';
 import { useTranslation } from 'react-i18next';
 import ClearButton from '../components/ClearButton';
 

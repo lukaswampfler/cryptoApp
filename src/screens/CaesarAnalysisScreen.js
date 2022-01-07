@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, Dimensions, TextInput, TouchableWithoutFeedback, ScrollView, Keyboard } from 'react-native';
 import Button from '../components/Button';
-import { caesarEncrypt, isInteger } from '../utils/caesarMath';
+import { caesarEncrypt} from '../utils/caesarMath';
 import AppContext from '../components/AppContext';
 import Title from '../components/Title';
 import {MaterialCommunityIcons} from '@expo/vector-icons'
@@ -25,21 +25,13 @@ const screenWidth = 0.9 * Dimensions.get("window").width;
 
 export default function CaesarAnalysisScreen({ route, navigation }) {
 
-    const myContext = useContext(AppContext);
+    //const myContext = useContext(AppContext);
     const [secret, setSecret] = useState('');
     const [key, setKey] = useState("0");
-    const [decypheredMessage, setDecypheredMessage] =useState('')
+    const [decypheredMessage, setDecypheredMessage] = useState('')
     const [showDecyphered, setShowDecyphered] = useState(false)
 
-    const {t} = useTranslation();
-
-    const changeText = text => {
-        setSecret(text);
-        setDecypheredMessage(caesarEncrypt(text, key))
-    }
-
     useEffect(() => {
-        //console.log(route.params)
         if (route.params){
             setSecret(route.params.message)
             setDecypheredMessage(route.params.message)
@@ -51,7 +43,13 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
         setShowDecyphered(secret.length > 0 && !(isNaN(parseInt(key, 10))))
     }, [secret, key])
 
-    
+    const {t} = useTranslation();
+
+    const changeText = text => {
+        setSecret(text);
+        setDecypheredMessage(caesarEncrypt(text, key))
+    }
+
 
     const changeKey = key => {
         if(!isNaN(parseInt(key, 10) || key.length == 0)){

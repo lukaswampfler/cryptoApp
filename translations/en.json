@@ -1,5 +1,4 @@
 {
-    "LAN": "Sprache",
     "PRESS": "Press",
     "selectLanguage": "Select your Language",
     "HOME": "Home", 
@@ -163,7 +162,9 @@
     "ENC_MES_STR": "Encrypted message as string: ", 
     "NO_MESS_WO_CHAR": "You cannot send messages without any characters.", 
     "AI": "as input", 
-    "PLS_MESS": "Please enter a message!"
+    "PLS_MESS": "Please enter a message!",
+    "LIK_KEY": "Likely key word", 
+    "LAN": "Sprache"
 
 
 

@@ -8,7 +8,7 @@ import { Divider } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/core';
 
 import AppContext from '../components/AppContext';
-import { listMessages, messagesBySent } from '../graphql/queries';
+import { listMessages, messagesBySent, messagesBySentTest } from '../graphql/queries';
 import { API, graphqlOperation } from 'aws-amplify'
 import { useTranslation } from 'react-i18next';
 
@@ -17,7 +17,6 @@ import { useTranslation } from 'react-i18next';
 export default function RiddlesFromServerScreen({ navigation }) {
 
     const {t} = useTranslation();
-
     const title = `${t("INTERCEPTED_TIT")}`;
 
     
@@ -30,10 +29,10 @@ export default function RiddlesFromServerScreen({ navigation }) {
             marginBottom: 5,
         }}
         >
-            <TouchableOpacity onPress = {() => navigation.navigate("EncryptedMessageMethodChoice", {message: message.text, fromRiddles: false})} >
+            <TouchableOpacity onPress = {() => navigation.navigate("EncryptedMessageMethodChoice", {message: message.text, fromRiddles: false, key: {public: {mod: message.receiver.publicKey.modulus, exp: message.receiver.publicKey.exponent}}})} >
             <Text style={{ width: 250 , fontSize: 20}} selectable={true} selectionColor='yellow' >
-                {message.text}  </Text>
-               {message.method == 'RSA' && <Text> exponent <Text selectable={true}>{message.receiver.publicKey.exponent} </Text> modulus:  <Text selectable = {true}>{message.receiver.publicKey.modulus}</Text></Text>}
+                {message.text.substr(0,200)}  </Text>
+              {message.method == 'RSA' && <Text> exponent <Text selectable={true}>{message.receiver.publicKey.exponent} </Text> modulus:  <Text selectable = {true}>{message.receiver.publicKey.modulus}</Text></Text>}
                </TouchableOpacity>
             <Divider width={5} />
         </View>
@@ -43,9 +42,15 @@ export default function RiddlesFromServerScreen({ navigation }) {
 
     async function fetchMessages() {
         try {
-            const riddlesData = await API.graphql({ query: messagesBySent, variables: { sent: "true", sortDirection: 'DESC', limit: 5 } })
-            //console.log("riddlesData: ", riddlesData.data.messagesBySent.items);
-            setRiddles(riddlesData.data.messagesBySent.items)
+            //const riddlesData = await API.graphql({ query: messagesBySent, variables: { sent: "true", sortDirection: 'DESC', limit: 5 } })
+            
+
+            const riddlesData = await API.graphql({ query: listMessages, variables: {limit: 5 } })
+            const riddlesDataSortTest = await API.graphql({query: listMessages })
+            console.log("sorted", riddlesDataSortTest.data.listMessages.items.sort((a, b)=> a.createdAt-b.createdAt))
+            console.log("riddlesData: ", riddlesData.data.listMessages.items);
+            console.log("First receiver", riddlesData.data.listMessages.items[0].receiver.publicKey)
+            setRiddles(riddlesData.data.listMessages.items)
         } catch (err) { console.log('error fetching messages: ', err) }
     }
 

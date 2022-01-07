@@ -83,7 +83,7 @@ function decomposeOdd(n) {
     return { exponent: BigInt(j), odd: d };
 }
 
-export function smartExponentiation(base, exp, m, useBigIntegerLibrary = false) {
+export function smartExponentiation(base, exp, m, useBigIntegerLibrary) {
     // calculates the power base**exp mod m efficiently
     // takes three inputs: all of them are BigInts
     // 1) calculate binary rep of exponent, but in REVERSED ORDER
@@ -109,22 +109,16 @@ export function smartExponentiation(base, exp, m, useBigIntegerLibrary = false) 
     // ---- so far the same result for android and iOS. -----
     // console.log(binExponent);
     // 2) calculate squares, include in result if needed (ie if corresponding bit equals 1)
-    var res = BigInt(1);
+    let res = BigInt(1);
     for (let i = 0; i < binExponent.length; i++) {
         if (binExponent.charAt(i) == '1') {
             if(!useBigIntegerLibrary) {res = BigInt((res * base)) % m;}
             else {res = BigInt(res).multiply(BigInt(base)).divmod(m).remainder;}
-            //console.log("res: ", res)
         }
         if(!useBigIntegerLibrary) {base = BigInt((base * base)) % m;
-            //console.log(base*base)
         } else {
             base = BigInt(base).pow(2).divmod(m).remainder;
-            //console.log(base*base)
-
         }
-
-        console.log("base: ", base)
     }
     return res.toString();
 }
@@ -196,18 +190,13 @@ export function calculateKeyPair(p, q, useBigIntegerLibrary) {
             
  }
 
- export function generateDummyKeys(useBigInt) {
-     console.log("in generatedummyKeys")
+ export function generateDummyKeys(useBigIntegerLibrary) {
     const p = 11; 
     const q = 17; 
-    const keys = calculateKeyPair(p, q, useBigInt)
+    const keys = calculateKeyPair(p, q, useBigIntegerLibrary)
     console.log("In generateDummyKeys: ", keys.private.exp, keys.public.exp)
     return keys
   }
-        
-
-  export function isNotBinary(text){
-      return true;
-  }
+    
 
 

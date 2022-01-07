@@ -29,14 +29,16 @@ export function shuffleAlphabet(text){
 }
 
 export function encryptPermutation(text, key){
-    text = text.toLowerCase()
+    //text = text.toLowerCase()
     let secret = '';
+
     let encryptionDictionary = {}
     for (let ind = 0 ; ind < alphabet.length; ind++){
         encryptionDictionary[alphabet.charAt(ind)] = key.charAt(ind);
+        encryptionDictionary[alphabet.charAt(ind).toUpperCase()] = key.charAt(ind).toUpperCase();
     }
     //console.log("key: ", key);
-    //console.log("dict: ", encryptionDictionary);
+    console.log("dict: ", encryptionDictionary);
     for (let ind = 0 ; ind < text.length; ind++){
         let char = text.charAt(ind);
         if (isAlpha(char)){
@@ -132,8 +134,8 @@ function unique(text){
 }
 
 function isAlpha(char){
-    const num = char.charCodeAt(0)
-    return ( num >= 'a'.charCodeAt(0) && num <= 'z'.charCodeAt(0));
+    const foundAlpha = char.match(/^[a-z]$/i) // match returns array if found or null if not found
+    return !(foundAlpha === null)
 }
 
 function getRandomInt(max){

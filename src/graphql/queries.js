@@ -67,6 +67,13 @@ export const listMessages = /* GraphQL */ `
           publicKeyID
           createdAt
           updatedAt
+          publicKey {
+          id
+          exponent
+          modulus
+          createdAt
+          updatedAt
+        }
         }
         text
         sent
@@ -114,6 +121,35 @@ export const listUsers = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getKey = /* GraphQL */ `
+  query GetKey($id: ID!) {
+    getKey(id: $id) {
+      id
+      exponent
+      modulus
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listKeys = /* GraphQL */ `
+  query ListKeys(
+    $filter: ModelKeyFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listKeys(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        exponent
+        modulus
         createdAt
         updatedAt
       }
@@ -200,10 +236,51 @@ export const messagesBySent = /* GraphQL */ `
           publicKeyID
           createdAt
           updatedAt
-          publicKey {
-            exponent
-            modulus
-          }
+        }
+        text
+        sent
+        method
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const messagesBySentTest = /* GraphQL */ `
+  query MessagesBySentTest(
+    $id: ID
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelMessageFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    messagesBySentTest(
+      id: $id
+      createdAt: $createdAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        senderID
+        receiverID
+        sender {
+          id
+          name
+          publicKeyID
+          createdAt
+          updatedAt
+        }
+        receiver {
+          id
+          name
+          publicKeyID
+          createdAt
+          updatedAt
         }
         text
         sent

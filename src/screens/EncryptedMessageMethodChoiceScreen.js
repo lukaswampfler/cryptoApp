@@ -64,6 +64,7 @@ export default function EncryptedMessageMethodChoiceScreen({ route, navigation }
 
 
     function navigateToScreen(method){
+        console.log(key)
         if (method == 'rsa') {
             console.log("navigating to RSA...")
             navigation.navigate("Methods", 

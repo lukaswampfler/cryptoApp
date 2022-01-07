@@ -1,5 +1,4 @@
 {
-    "LAN": "Language",
     "PRESS": "Drücke", 
     "selectLanguage": "Wähle die Sprache aus",
     "HOME": "Start", 
@@ -163,6 +162,8 @@
     "ENC_MES_STR": "Verschlüsselte Nachricht als String: ", 
     "NO_MESS_WO_CHAR": "Jede Nachricht muss mindestens ein Zeichen haben.", 
     "AI": "Als input", 
-    "PLS_MESS": "Bitte eine Nachricht eingeben!"
+    "PLS_MESS": "Bitte eine Nachricht eingeben!", 
+    "LIK_KEY": "Wahrscheinliches Schlüsselwort", 
+    "LAN": "Language"
     
   }

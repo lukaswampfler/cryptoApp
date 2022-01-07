@@ -9,11 +9,6 @@ type Message
     name: "messagesBySent"
     fields: ["sent", "createdAt"]
     queryField: "messagesBySent"
-  )
-  @key(
-    name: "messagesBySentTest"
-    fields: ["id", "createdAt"]
-    queryField: "messagesBySentTest"
   ) {
   id: ID!
   senderID: ID!
@@ -33,7 +28,7 @@ type User @model {
   publicKey: Key @connection(fields: ["publicKeyID"])
 }
 
-type Key @model {
+type Key @model(queries: null) {
   id: ID!
   exponent: String!
   modulus: String!

@@ -8,6 +8,7 @@ import Title from '../components/Title';
 import { IntroModal } from '../utils/Modals';
 import Line from '../components/Line';
 import GreySwitch from '../components/GreySwitch';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
 import { useFormik } from 'formik';
@@ -16,7 +17,6 @@ import * as Yup from 'yup'
 
 import { SDESKeyInputScheme, SDESK12InputScheme, SDESMessageInputScheme } from '../utils/InputTests';
 import { encryptSDESMessage, generateSDESKeys, decodeBinaryString, encodeEncrypted, is8BitString, is10BitString, isBitString, isBitStringMultipleOf8 } from '../utils/sdesMath';
-//import { sdesIntroText } from '../utils/introTexts';
 import { useTranslation } from 'react-i18next';
 import ClearButton from '../components/ClearButton';
 
@@ -243,16 +243,18 @@ export default function SDESScreen({ route, navigation }) {
       const encrypted = encryptSDESMessage(message, keys)
       const decryptionKeys = { k1: keys.k2, k2: keys.k1 }
       ciphers.sdes.encryptedMessage = encrypted;
-      const encryptedAsText = decodeBinaryString(encrypted);
-      const encryptedEncoded = encodeEncrypted(encryptedAsText);
-      console.log("encrypted encoded", encryptedEncoded);
-      console.log("decryption keys: ", decryptionKeys);
-      console.log("Encrypted decrypted", encryptSDESMessage(encryptedEncoded, decryptionKeys))
-      const decrypted = encryptSDESMessage(encodeEncrypted(decodeBinaryString(encrypted)), decryptionKeys);
+      //const encryptedAsText = decodeBinaryString(encrypted);
+      //const encryptedEncoded = encodeEncrypted(encryptedAsText);
+      //console.log("encrypted encoded", encryptedEncoded);
+      //console.log("decryption keys: ", decryptionKeys);
+      //console.log("Encrypted decrypted", encryptSDESMessage(encryptedEncoded, decryptionKeys))
+      
+      // comment for now...
+      //const decrypted = encryptSDESMessage(encodeEncrypted(decodeBinaryString(encrypted)), decryptionKeys);
       myContext.setCiphers(ciphers);
       setIsEncrypted(true);
       setEncryptedMessage(encrypted);
-      setDecryptedMessage(decodeBinaryString(decrypted));
+      //setDecryptedMessage(decodeBinaryString(decrypted));
     }
     
   }
@@ -356,8 +358,7 @@ export default function SDESScreen({ route, navigation }) {
                     marginLeft: 10
                 }}> 
                 {t('SDES_INPUT')} </Text>
-
-                <ClearButton setInput={changeMessage} setKey={resetKey} defaultKey={''}/>
+<ClearButton setInput={changeMessage} setKey={resetKey} defaultKey={''}/>
               </View>
                 <View style={{
                     paddingHorizontal: 32,
@@ -378,11 +379,6 @@ export default function SDESScreen({ route, navigation }) {
                         returnKeyLabel='next'
                         onChangeText={changeMessage}
                         value = {message}
-                        //onChangeText={formikMessage.handleChange('message')}
-                        //onBlur={formikMessage.handleBlur('message')}
-                        //error={formikMessage.errors.message}
-                        //touched={formikMessage.touched.message}
-                        //value={formikMessage.values.message}
                     />
                     
                     <View style ={{width: '45%'}}>
@@ -451,14 +447,22 @@ export default function SDESScreen({ route, navigation }) {
             returnKeyLabel='next'
             onChangeText={changeK1}
             value = {k1}
-            //onChangeText={formikK12.handleChange('k1')}
-            //onBlur={formikK12.handleBlur('k1')}
-            //error={formikK12.errors.k1}
-            //touched={formikK12.touched.k1}
-            //value={formikK12.values.k1}
           />
+       </View>
 
-       </View>   
+       <View style = {{margin: 0, marginBottom: 0, marginLeft: -50, marginRight: 20, marginTop: 10}}>
+            <MaterialCommunityIcons 
+            size = {32}
+            color = '#333'
+            name = 'arrow-left-right' 
+            onPress ={() => { 
+              const dummy = k1;
+              setK1(k2);
+              setK2(dummy);
+                }} 
+                />
+        </View>
+
        <View style ={{flexDirection: 'row', alignItems: 'center'}}>
     <Text style ={{fontSize: 16, fontWeight: '500'}}> k2:  </Text> 
         <NumInput
@@ -472,11 +476,6 @@ export default function SDESScreen({ route, navigation }) {
           returnKeyLabel='next'
           onChangeText={changeK2}
           value = {k2}
-          //onChangeText={formikK12.handleChange('k2')}
-          //onBlur={formikK12.handleBlur('k2')}
-          //error={formikK12.errors.k2}
-          //touched={formikK12.touched.k2}
-          //value={formikK12.values.k2}
         />
 </View>
 

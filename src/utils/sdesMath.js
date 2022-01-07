@@ -1,7 +1,6 @@
 export function generateSDESKeys(key) {
     let p10 = [2, 4, 1, 6, 3, 9, 0, 8, 7, 5];
     let p8 = [5, 2, 6, 3, 7, 4, 9, 8];
-    //key = key.split('');
     let keyList = applyPermutation(key, p10);
     let { first, second } = generateTwoParts(keyList);
     let shifted1 = shift(first).concat(shift(second));
@@ -27,40 +26,19 @@ function applyRound(s, key) {
     const EP = [3, 0, 1, 2, 1, 2, 3, 0];
     const afterEP = applyPermutation(s, EP);
     const afterXOR = xor(afterEP, key);
-    
     let { first, second } = generateTwoParts(afterXOR);
     first = applySub(first, 0);
     second = applySub(second, 1);
     const afterP4 = applyPermutation(first.concat(second), [1, 3, 2, 0]);
     return afterP4;
 }
-export function applyPermutation(s, perm) {
+function applyPermutation(s, perm) {
     // can be used with strings or arrays of strings (chars), returns array of numbers or of strings (chars)
-    //QUESTIONS: wrong input type with typescript?
-    //if (Math.max(...perm) >= s.length || Math.min(...perm) < 0) return undefined
-    /*let permuted = []
-    let array: number[] | string[];
-    if (typeof s == 'string') {array = Array.from(s);}
-    else {array = s;}
-
-    for (let i = 0; i < perm.length; i++){
-        permuted.push(array[perm[i]])
-    }
-    return permuted*/
     const permuted = perm.reduce((a, e) => Array.isArray(s) ? a.concat(s[e]) : a.concat(s.charAt(e)), []);
     return permuted.join('');
 }
-// not necessary
-function checkPermutation(candidate) {
-    const l = candidate.length;
-    for (let i = 0; i < l; i++) {
-        if (!candidate.includes(i)) {
-            return false;
-        }
-    }
-    return true;
-}
-export function xor(s1, s2) {
+
+function xor(s1, s2) {
     // QUESTION: How to check for correct length etc with Types?
     //if ((s1.length != s2.length ) || (typeof s1 != typeof s2)) return undefined;
     let res = [];
@@ -74,12 +52,7 @@ export function xor(s1, s2) {
     }
     return res;
 }
-export function swap(array) {
-    // QUESTION: wrong length?
-    //if (array.length%2 != 0) return undefined;
-    let { first, second } = generateTwoParts(array);
-    return second.concat(first);
-}
+
 
 export function applySub(s, n) {
     // works with (binary) String arrays of length 4
@@ -94,8 +67,8 @@ export function applySub(s, n) {
         return undefined;
     }
     let [first, second, third, last] = s;
-    const row = toNumber([first, last]);
-    const column = toNumber([second, third]);
+    const row = parseInt(first+last, 2) // converts binary string into decimal number
+    const column = parseInt(second+third, 2)
     const res = toBinary(S[row][column]).split('');
     return res.length < 2 ? ['0'].concat(res) : res;
 }
@@ -126,43 +99,31 @@ export function encryptSDESMessage(bitString, keys) {
     const IPInverse = [3, 0, 2, 4, 6, 1, 7, 5]
 
     for (let i = 0; i < chunks.length; i++) {
+        //console.log("INPUT: ", chunks[i])
         const chunk = applyPermutation(chunks[i], IP);
+        //console.log("after IP: ", chunk)
         const part1 = chunk.substr(0, 4);
         const part2 = chunk.substr(4, 4);
         const part2AfterRound1 = applyRound(part2, keys.k1);
-
-        const inputRound2Part1 = part2;
+        //console.log("after round 1: ", part2AfterRound1)
+        
+        //perform swap
+        const inputRound2Part1 = part2
         const inputRound2Part2 = xor(part1, part2AfterRound1);
+        //console.log("xor inputs: ", part1, part2AfterRound1)
+        //console.log("input round 2: ", inputRound2Part2)
         const part2AfterRound2 = applyRound(inputRound2Part2, keys.k2);
+        //console.log("after round 2: ", part2AfterRound2)
         const lastInput = xor(inputRound2Part1, part2AfterRound2).concat(inputRound2Part2);
+        //console.log("xor inputs: ", inputRound2Part1, part2AfterRound2)
+        //console.log("before IPInverse, two parts:  ", xor(inputRound2Part1, part2AfterRound2), inputRound2Part2)
         encryptedChunks[i] = applyPermutation(lastInput, IPInverse)
     }
     return encryptedChunks.join('');
 }
 
-
-
-function toNumber(s) {
-    // works only with string arrays representing binary representations of numbers
-    let exp = 0;
-    let res = 0;
-    const l = s.length;
-    for (let i = s.length - 1; i >= 0; i--) {
-        if (s[i] == '1') {
-            res += Math.pow(2, exp);
-        }
-        exp++;
-    }
-    return res;
-}
 function toBinary(n) {
-    let res = '';
-    if (n == 0) return '0'
-    while (n != 0) {
-        res = n % 2 + res;
-        n = Math.floor(n / 2);
-    }
-    return res;
+    return n.toString(2)
 }
 
 function stringToBytes(text) {
@@ -204,7 +165,7 @@ function bytesToString(byteArray) {
         console.log(byte, num)
         if (num < 32) {// replace non printable characters
             num += 256
-        } else if (num <= 159 && num >= 127){
+        } else if (num <= 160 && num >= 127){
             num += 192
         } else if (num == 173 ){num = 295}
         result += String.fromCharCode(num);

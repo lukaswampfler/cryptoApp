@@ -103,15 +103,13 @@ export default LanguagePicker;
 
 
 export const LP2 = () => {
-  const { i18n, t } = useTranslation();
+  const { i18n} = useTranslation();
   const [isEnglish, setIsEnglish] = useState(true);
 
   const myContext = useContext(AppContext)
 
-
   useEffect( () => {
     const eng = i18n.language == 'en' 
-    //console.log(eng);
     setIsEnglish(eng);
   }, [])
 
@@ -120,31 +118,18 @@ export const LP2 = () => {
     else myContext.setAppLanguage('de')
   }, [isEnglish])
 
-  //const [isEnglish, setIsEnglish] = useState(i18n.language);
-  const selectedLanguageName = i18n.language;
-
   const changeLanguage = () => {
-    const result =  isEnglish? i18n.changeLanguage('de') : i18n.changeLanguage('en') ;
+    const result =  isEnglish ? i18n.changeLanguage('de') : i18n.changeLanguage('en') ;
     setIsEnglish(!isEnglish);
-    console.log("englisch: "+ isEnglish);
-    console.log("from myContext: ", myContext.appLanguage);
     return result; 
   }
   return (
     <View style={{margin: 10}}>
-    <Pressable
-      
-      onPress={() => {changeLanguage()}}
-    >
-      <Text
-        style={{fontSize: 24}}
-      >
-        {isEnglish? 'en' : 'de'}
-      </Text>
-    </Pressable>
+      <Pressable onPress={() => {changeLanguage()}}>
+        <Text style={{fontSize: 24}}> {isEnglish? 'en' : 'de'}</Text>
+      </Pressable>
     </View>
   );
-
 }
 
 
