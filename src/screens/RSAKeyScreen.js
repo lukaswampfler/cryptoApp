@@ -5,7 +5,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import AppContext from '../components/AppContext';
 
 
-import { isPrime, generatePrime , extendedEuclid} from '../utils/RSAMath';
+import { isPrime, generatePrime , extendedEuclid, factorize} from '../utils/RSAMath';
 import NumInput from '../components/NumInput';
 import Button from '../components/Button';
 import { IntroModal } from '../utils/Modals';
@@ -48,6 +48,7 @@ export default function RSAKeyScreen({ navigation, route }) {
   const [introText, setIntroText] = useState("")
   const [savedPrimes, setSavedPrimes] = useState(null)
   const [savedExponent, setSavedExponent] = useState(null)
+  const [mod, setMod] = useState("")
 
   //const {changeMod} = route.params;
 
@@ -56,8 +57,6 @@ export default function RSAKeyScreen({ navigation, route }) {
   async function getValueFor(key) {
     let result = await SecureStore.getItemAsync(key);
     if (result) {
-      //alert("🔐 Here's your value 🔐 \n" + result);
-      //console.log("🔐 Here's your value 🔐 \n" + result)
       return result;
     } else {
       alert('No values stored under that key.');
@@ -88,10 +87,7 @@ export default function RSAKeyScreen({ navigation, route }) {
     })
 
     getPublicKey().then((res) => {
-      //personalPublicKey = {mod: res.modulus, exp: res.exponent}
       setPersonalPublicKey({mod: res.modulus, exp: res.exponent})
-      
-      
     })
     getValueFor("privateKey").then( (res) => {
       res = JSON.parse(res)
@@ -123,6 +119,7 @@ export default function RSAKeyScreen({ navigation, route }) {
   , [exp])
 
   useEffect( () => {
+    console.log("pConfirmed useEffect.")
     setDefaultPubExp();
     if(isDefault){
         changePublicKey(); // change publicKey in Context and as state variable
@@ -173,15 +170,18 @@ useEffect(() => {
   console.log("isRandom - useEffect")
   if(isRandom){
     if(savedPrimes){
-    setPConfirmed(savedPrimes.p)
-    setQConfirmed(savedPrimes.q)
-    setP(savedPrimes.p)
-    setQ(savedPrimes.q)
-    if(isDefault){setPubExp(savedExponent)}
-    //
-  }
+      console.log("have saved primes...")
+      setPConfirmed(savedPrimes.p) // Problem hier.
+      setQConfirmed(savedPrimes.q)
+      setP(savedPrimes.p)
+      setQ(savedPrimes.q)
+      if(isDefault){
+        setPubExp(savedExponent)
+      }
+    }
   } 
   else {
+    console.log("setting saved primes to ", p, q);
     setSavedPrimes({p: p, q: q})
     setSavedExponent(pubExp)
     setP(null)
@@ -332,7 +332,9 @@ const checkAndUsePrimes = () => {
 // 4) use my primes - button should be using this function: 
 
 
-
+const changeMod = (m) => {
+    setMod(m.toString())
+}
 
 
 const changePublicKey = () => {
@@ -433,6 +435,11 @@ const checkAndUsePubExp = () => {
     exp: Yup.number().min(1).max(10).required('Required'),
   });
   
+
+  const getFactors = () => {
+    const {fac1, fac2} = factorize(mod, myContext.useBigIntegerLibrary);
+    alert("The factors are: " +  fac1 + ", " +  fac2)
+  }
   
    /*const formikExponent = useFormik({
       validationSchema: ExpInputScheme,
@@ -601,67 +608,14 @@ const checkAndUsePubExp = () => {
 
       {(pConfirmed && qConfirmed)?   <View style ={{margin: 10}}>
 
-                  <Text>You are using the two prime numbers: p: {pConfirmed}, q: {qConfirmed}
+                  <Text>{t("USE_PRIME")} p: {pConfirmed}, q: {qConfirmed}
           </Text>
-         <Text>Their product is equal to n =  {(BigInt(pConfirmed) * BigInt(qConfirmed)).toString()}
+         <Text>{t("PROD")} n =  {(BigInt(pConfirmed) * BigInt(qConfirmed)).toString()}
          </Text>
 </View> : null}
 
 <Line />
-{/*
-<View style ={{ flexDirection: 'column'}}>
 
- <View style ={{flexDirection: 'row', justifyContent: 'space-around'}}>   
- <View style = {{margin: 10}}>
-                <Text style={{
-                    fontSize: 20,
-                    marginTop: 0, 
-                    marginLeft: 10
-                }}> 
-              {t('PUB_EXP')}</Text>
-                </View>
-<View style={{
-                        flex: 1,
-                        //backgroundColor: '#fff',
-                        flexDirection: 'column', 
-                        alignItems: 'center', 
-                        width: '35%'
-                    }}>
-                        <Text>
-                            {isDefault ? `${t('DEFAULT')}` : `${t('CHOOSE_PUB_EXP')}`}
-                        </Text>
-                        <GreySwitch
-                            style={{ marginTop: 5 }}
-                            onValueChange={togglePubExpSwitch}
-                            value={isDefault}
-                        />
-
-</View>       
-</View>          
-
-<View style ={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <NumInput 
-                //icon='key'
-                width = {180}
-                editable = {!isDefault}
-                //placeholder='public exponent e '
-                keyboardType='number-pad'
-                keyboardAppearance='dark'
-                returnKeyType='next'
-                returnKeyLabel='next'
-                autoCompleteType='off'
-                onChangeText={changePubExp}
-                //onBlur={formikPublicExponent.handleBlur('e')}
-                //error={formikPublicExponent.errors.e}
-                //touched={formikPublicExponent.touched.e}
-                value = {pubExp}
-                />
-{!isDefault && <Button label ={t('USE_EXP')} onPress = {checkAndUsePubExp}/>}
-
-</View>
-</View>
-
-<Line/>*/}
 <View style ={{ flexDirection: 'row', justifyContent: 'center', height: 120}}>
 <View style = {{width: '60%', flexDirection: 'column', justifyContent: 'flex-start'}}>
 <Text style={{
@@ -784,9 +738,50 @@ const checkAndUsePubExp = () => {
          />
          </View>
       </View>
+
+      <Line/>
+
+      <View style ={{ flexDirection: 'row', justifyContent: 'center', height: 120}}>
+<View style = {{width: '60%', flexDirection: 'column', justifyContent: 'flex-start'}}>
+<Text style={{
+                    fontSize: 20,
+                    margin: 10, marginLeft: 20
+                }}> 
+              {t('MOD')}</Text>
+              
+<View style = {{width: '60%', backgroundColor: isDefault? '#fff': '#ddd', marginLeft: 20, borderRadius: 8}}>
+<NumInput 
+                //icon='key'
+                width = '100%'
+                editable = {true}
+                //placeholder='public exponent e '
+                keyboardType='number-pad'
+                keyboardAppearance='dark'
+                returnKeyType='next'
+                returnKeyLabel='next'
+                autoCompleteType='off'
+                onChangeText={changeMod}
+                //onBlur={formikPublicExponent.handleBlur('e')}
+                //error={formikPublicExponent.errors.e}
+                //touched={formikPublicExponent.touched.e}
+                value = {mod}
+                />
+      </View>
+  </View>
+
+  <View style = {{margin: 5,width: '40%'}}>
+ 
+  <Button label={t("FAC")} onPress={getFactors} width={'90%'} /> 
+  </View>
+
+ </View> 
+
+
       </ScrollView>
       {/*</SafeAreaView>*/}
     </View>
+
+
 
 
   );

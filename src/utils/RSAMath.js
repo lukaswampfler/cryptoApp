@@ -199,4 +199,32 @@ export function calculateKeyPair(p, q, useBigIntegerLibrary) {
   }
     
 
+  export function factorize(n, useBigIntegerLibrary){
+      // finds two factors of a given number n//
+      //TODO: use BigIntegerLibrary if numbers too large
+      n = BigInt(n);
+      if (useBigIntegerLibrary){
+        if(n.isEven()){
+            return {fac1: "2", fac2: n.divide(2).toString()}
+            } else {
+                let cand = BigInt(3)
+                while (cand.multiply(cand) <= n){
+                    if (n.isDivisible(cand)){
+                        return {fac1: cand.toString(), fac2: n.divide(cand).toString()} 
+                    }
+                    cand.add(BigInt(2))
+                }}
+        } else {
+            if(n % BigInt(2)=== 0n) return {fac1: "2", fac2: (n/BigInt(2)).toString()}
+            else {
+                let cand = BigInt(3)
+                while (cand * cand <= n){
+                    if(n % cand === 0n) return {fac1: cand.toString(), fac2: (n / cand).toString()}
+                    cand += BigInt(2)
+                }
+        }
+      }
+      return {fac1: "1", fac2: n.toString()}
+      
+  }
 

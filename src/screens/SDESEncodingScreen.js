@@ -12,6 +12,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup'
 import { sdesEncodingIntroText } from '../utils/introTexts';
 import { useTranslation } from 'react-i18next';
+import ClearButton from '../components/ClearButton';
 
 
 export default function SDESEncodingScreen({ navigation, route }) {
@@ -72,13 +73,16 @@ export default function SDESEncodingScreen({ navigation, route }) {
             <ScrollView style={{ flex: 1 , margin: 10}}>
                 <Title title = {title}/>
                 <ExplanationModal text={introText} title={method} />
-                <View style = {{margin: 10}}>
+                <View style = {{margin: 10, flexDirection: 'row', width: '100%'}}>
                 <Text style={{
                     fontSize: 20,
                     marginTop: 20, 
                     marginLeft: 10
                 }}> 
                {t('ENTER_MES')} </Text>
+               <View style={{marginLeft: 50}}>
+               <ClearButton setInput={changeText} setKey= {setEncoded} defaultKey={""} />
+               </View>
                 </View>
                 <View style={{
                     flexDirection: 'row',

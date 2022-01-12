@@ -67,8 +67,14 @@ export default function EncryptedMessageMethodChoiceScreen({ route, navigation }
         console.log(key)
         if (method == 'rsa') {
             console.log("navigating to RSA...")
+            let params;
+            if(route.params.fromMessage){
+                params = {message: message, fromRiddles: false, fromMessage:true};
+            } else if (route.params.fromRiddles){
+                params = {message: message, fromRiddles: true, mod: key.public.mod.toString()};
+            }
             navigation.navigate("Methods", 
-            {screen: 'RSA', params: {message: message, fromRiddles: true, mod: key.public.mod.toString()}});
+            {screen: 'RSA', params: params});
         } else if (method == 'sdes') {
             if(!isBitStringMultipleOf8(message)){
                 navigation.navigate("Methods", {screen: "SDESEncoding", params: {message: message}})
@@ -115,7 +121,7 @@ export default function EncryptedMessageMethodChoiceScreen({ route, navigation }
             {/*<View style ={{marginLeft: 15}}> 
           <Text style ={{fontSize: 18, fontWeight: '300'}}> Encrypted message: </Text>
     </View>*/}
-    <ScrollView style={{height: 200}}>
+    <ScrollView style={{height: 100}}>
           <View style ={{margin: 15, marginTop: 0}}>
           <Text style={{fontWeight: 'bold'}}> {message} </Text>
         </View>

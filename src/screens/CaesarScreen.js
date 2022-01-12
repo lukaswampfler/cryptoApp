@@ -1,22 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, Text, View, TextInput, Modal, TouchableOpacity } from 'react-native';
+import {ScrollView, Text, View, TextInput, Modal, TouchableOpacity } from 'react-native';
 import AppContext from '../components/AppContext';
 import Button from '../components/Button';
 import NumInput from '../components/NumInput';
 import Title from '../components/Title';
 import { IntroModal } from '../utils/Modals';
 import { caesarEncrypt, isInteger } from '../utils/caesarMath';
-import { useFormik } from 'formik';
 import ClearButton from '../components/ClearButton';
 import GreySwitch from '../components/GreySwitch';
 import Line from '../components/Line';
 
-import { CaesarKeyInputScheme } from '../utils/InputTests';
-import { caesarIntroText } from '../utils/introTexts';
-
 import { useTranslation } from 'react-i18next';
 
-import styles from './styles'
 
 
 
@@ -35,12 +30,16 @@ export default function CaesarScreen({ navigation }) {
     const changeText = newText => {
         setText(newText);
         if(isEncrypting) updateTextAndSecret(newText, '', key);
-        //setSecret(caesarEncrypt(text, key));
     }
 
     const changeKey = newKey =>{
-        if(isInteger(newKey)){
-           setKey(newKey);
+        if (newKey == '' || newKey == '-'){
+            console.log("newkey empty of -")
+            if(isEncrypting) setSecret('')
+            else setText('')
+            setKey(newKey)
+        } else if(isInteger(newKey)){
+           setKey(newKey.toString());
            updateTextAndSecret(text, secret, newKey)
         } else {
             setSecret('')
@@ -80,53 +79,24 @@ export default function CaesarScreen({ navigation }) {
         }
     }
 
-    /*useEffect(() => {
-        const message = myContext.ciphers.caesar.message;
-        if (typeof message != undefined) setText(message)
-        //console.log("message in useEffect: ", text)
-    }, [])*/
+
 
     useEffect(() => {
         let ciphers = myContext.ciphers;
         ciphers.caesar.message = text;
         myContext.setCiphers(ciphers);
-        //console.log("message in useEffect changed: ", text)
     }, [text])
 
 
     useEffect(() => {
-        setSecret(caesarEncrypt(text, key));
-        //formikKey.handleSubmit();
-        //formikKey.values.key = key
-        //TODO: hier sollte key überprüft werden und allenfalls error ausgegeben werden. (resp. error verschwinden wenn eingabe korrekt)
-        //console.log("message in useEffect changed: ", text)
+        //setSecret(caesarEncrypt(text, key));
+        updateTextAndSecret(text, secret, key)
     }, [key])
 
-
-    /*const formikKey = useFormik({
-        validationSchema: CaesarKeyInputScheme,
-        initialValues: {
-            key: '0'
-        },
-        onSubmit: values => {
-            let ciphers = myContext.ciphers;
-            if (ciphers.caesar === undefined) {
-                ciphers.caesar = { key: values.key };
-            } else {
-                ciphers.caesar.key = values.key;
-            }
-            myContext.setCiphers(ciphers);
-            setKey(parseInt(values.key));
-            //console.log("Do the caesar encryption .... using key: ", values.key);
-            setSecret(caesarEncrypt(text, values.key));
-        }
-    });
-    */
 
 
     const caesarIntroText = `Input: ${t('CAESEXP_P1')}` +  `\n\n${t('KEY')}: ${t('CAESEXP_P2')}`
     const introText = caesarIntroText;
-    //const method = "The Caesar cipher"
 
     return (
 
@@ -163,7 +133,7 @@ export default function CaesarScreen({ navigation }) {
                     value={text}
                 />
                 </View>
-            <ClearButton setInput={setText} setKey = {setKey} defaultKey = {0}/>
+            <ClearButton setInput={setText} setKey = {setKey} defaultKey = {''}/>
                 </View>
 
 <View style ={{marginTop: 10}}>

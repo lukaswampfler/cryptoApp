@@ -29,7 +29,7 @@ export default function RiddlesFromServerScreen({ navigation }) {
             marginBottom: 5,
         }}
         >
-            <TouchableOpacity onPress = {() => navigation.navigate("EncryptedMessageMethodChoice", {message: message.text, fromRiddles: false, key: {public: {mod: message.receiver.publicKey.modulus, exp: message.receiver.publicKey.exponent}}})} >
+            <TouchableOpacity onPress = {() => navigation.navigate("EncryptedMessageMethodChoice", {message: message.text, fromRiddles: true, key: {public: {mod: message.receiver.publicKey.modulus, exp: message.receiver.publicKey.exponent}}})} >
             <Text style={{ width: 250 , fontSize: 20}} selectable={true} selectionColor='yellow' >
                 {message.text.substr(0,200)}  </Text>
               {message.method == 'RSA' && <Text> exponent <Text selectable={true}>{message.receiver.publicKey.exponent} </Text> modulus:  <Text selectable = {true}>{message.receiver.publicKey.modulus}</Text></Text>}
@@ -47,9 +47,9 @@ export default function RiddlesFromServerScreen({ navigation }) {
 
             const riddlesData = await API.graphql({ query: listMessages, variables: {limit: 5 } })
             const riddlesDataSortTest = await API.graphql({query: listMessages })
-            console.log("sorted", riddlesDataSortTest.data.listMessages.items.sort((a, b)=> a.createdAt-b.createdAt))
-            console.log("riddlesData: ", riddlesData.data.listMessages.items);
-            console.log("First receiver", riddlesData.data.listMessages.items[0].receiver.publicKey)
+            //console.log("sorted", riddlesDataSortTest.data.listMessages.items.sort((a, b)=> a.createdAt-b.createdAt))
+            //console.log("riddlesData: ", riddlesData.data.listMessages.items);
+            //console.log("First receiver", riddlesData.data.listMessages.items[0].receiver.publicKey)
             setRiddles(riddlesData.data.listMessages.items)
         } catch (err) { console.log('error fetching messages: ', err) }
     }

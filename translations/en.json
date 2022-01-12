@@ -164,7 +164,11 @@
     "AI": "as input", 
     "PLS_MESS": "Please enter a message!",
     "LIK_KEY": "Likely key word", 
-    "LAN": "Sprache"
+    "LAN": "Sprache", 
+    "MOD": "Modulus", 
+    "FAC": "factorize", 
+    "USE_PRIME": "You are using the prime numbers:", 
+    "PROD": "Their product is equal to"
 
 
 

@@ -94,7 +94,7 @@ const getModInitialValue = () => {
 }
 //... and the message
 const getMessageInitialValue = () => {
-   if (route.params!== undefined && route.params.fromRiddles){
+   if (route.params!== undefined && (route.params.fromRiddles|| route.params.fromMessage)){
         return route.params.message
     } else {
     let m = myContext.ciphers.rsa.m;
@@ -127,7 +127,7 @@ const getMessageInitialValue = () => {
     useEffect(() =>{
         console.log("route.params.mod Effect run...")
         if(route.params?.mod){
-            setMod(route.params?.mod)
+            setMod(route.params.mod)
         }
     }, [route.params?.mod])
     
@@ -277,7 +277,10 @@ const getMessageInitialValue = () => {
         }
     }
 
-
+const resetMessAndSecret = value => { // used for ClearButton
+    setMess(value)
+    setSecret(value)
+}
 
 
     
@@ -342,7 +345,7 @@ const getMessageInitialValue = () => {
                 }}> 
                 Input {`${t('RSA_DECBIN')}`} </Text>
 
-                    <ClearButton setInput={changeMess} setKey ={resetKey} defaultKey={''}/>
+                    <ClearButton setInput={resetMessAndSecret} setKey ={resetKey} defaultKey={''} />
                 </View>
                 <View style={{
                     marginBottom: 16,
@@ -467,7 +470,7 @@ const getMessageInitialValue = () => {
         marginTop: 10,
         marginBottom: 10,
       }}>
-  <Text> Modulus </Text>
+  <Text> {t('MOD')} </Text>
         <NumInput
           //icon='pinterest'
           width={.45*screenWidth}

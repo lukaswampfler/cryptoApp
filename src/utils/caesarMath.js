@@ -4,35 +4,32 @@ export function caesarEncrypt(text, key) {
     }
     // transform key s.t. it lies in the range 0 <= key <= 25
     key = parseInt(key)
-    key = key % 26;
+    key = key % 26; // may still be < 0
     if (key < 0) key += 26;
+    console.log(key)
 
     if (typeof text == "string") {
-        
         let geheim = '';
-
         for (let index = 0; index < text.length; index++) {
             const zeichen = text.charAt(index);
             const zahl = zeichen.charCodeAt(0);
+            let neuesZeichen;
+            let diff = key; // difference between clear and cipher text alphabet
             // lower case alphabet
-            if (zeichen >= 'a' && zeichen <= 'z') {
+            if (zeichen >= 'a' && zeichen <= 'z') {    
                 //wrap around
                 if (zahl + key > 'z'.charCodeAt(0) ) {
-                    var neuesZeichen = String.fromCharCode(zahl + key -  26); 
+                    diff -= 26;
                 }
-                else {
-                    var neuesZeichen = String.fromCharCode(zahl + key);
-                }
+                neuesZeichen = String.fromCharCode(zahl + diff);
             }
             else if (zeichen >= 'A' && zeichen <= 'Z') {
                 // upper case alphabet
                 // wrap around
                 if (zahl + key > 'Z'.charCodeAt(0) ) {
-                    var neuesZeichen = String.fromCharCode(zahl + key -  26);
+                    diff -= 26;
                 }
-                else {
-                    var neuesZeichen = String.fromCharCode(zahl + key);
-                }
+                neuesZeichen = String.fromCharCode(zahl + diff);
                 
             }
             else{ // non alphabetic 
@@ -56,5 +53,6 @@ export function isInteger(s){
     for (let ind = start; ind < s.length; ind++){
         result = result && (s.charAt(ind) >= '0' && s.charAt(ind) <= '9')
     }
-    return result
+    //return result
+    return !isNaN(parseInt(s, 10))
 }

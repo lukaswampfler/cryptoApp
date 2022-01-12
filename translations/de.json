@@ -164,6 +164,10 @@
     "AI": "Als input", 
     "PLS_MESS": "Bitte eine Nachricht eingeben!", 
     "LIK_KEY": "Wahrscheinliches Schlüsselwort", 
-    "LAN": "Language"
+    "LAN": "Language", 
+    "MOD": "Modul", 
+    "FAC": "faktorisieren", 
+    "USE_PRIME": "Primzahlen:", 
+    "PROD": "Produkt"
     
   }
