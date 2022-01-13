@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Text, View, TouchableOpacity, Modal } from 'react-native';
-import AppContext from '../components/AppContext';
+import AppContext from './AppContext';
 import styles from '../screens/styles'
 
 

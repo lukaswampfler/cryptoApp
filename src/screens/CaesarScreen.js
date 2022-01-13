@@ -4,7 +4,7 @@ import AppContext from '../components/AppContext';
 import Button from '../components/Button';
 import NumInput from '../components/NumInput';
 import Title from '../components/Title';
-import { IntroModal } from '../utils/Modals';
+import { IntroModal } from '../components/Modals';
 import { caesarEncrypt, isInteger } from '../utils/caesarMath';
 import ClearButton from '../components/ClearButton';
 import GreySwitch from '../components/GreySwitch';
@@ -34,7 +34,6 @@ export default function CaesarScreen({ navigation }) {
 
     const changeKey = newKey =>{
         if (newKey == '' || newKey == '-'){
-            console.log("newkey empty of -")
             if(isEncrypting) setSecret('')
             else setText('')
             setKey(newKey)
@@ -89,7 +88,6 @@ export default function CaesarScreen({ navigation }) {
 
 
     useEffect(() => {
-        //setSecret(caesarEncrypt(text, key));
         updateTextAndSecret(text, secret, key)
     }, [key])
 

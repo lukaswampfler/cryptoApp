@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Platform, View, Text, FlatList, Pressable, SafeAreaView, TouchableOpacity } from 'react-native'
 import Title from '../components/Title';
 import Button from '../components/Button';
-import { IntroModal } from '../utils/Modals';
+import { IntroModal } from '../components/Modals';
 import styles from './styles'
 //import { riddlesHomeIntroText } from '../utils/introTexts';
 import { useNavigation } from '@react-navigation/core';

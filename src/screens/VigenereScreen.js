@@ -12,7 +12,7 @@ import {useNavigation} from '@react-navigation/native';
 
 
 import { VigenereKeyInputScheme } from '../utils/InputTests';
-import { IntroModal } from '../utils/Modals';
+import { IntroModal } from '../components/Modals';
 import ClearButton from '../components/ClearButton';
 
 import styles from './styles'

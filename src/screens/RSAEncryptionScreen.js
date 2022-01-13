@@ -5,7 +5,7 @@ import AppContext from '../components/AppContext';
 import NumInput from '../components/NumInput';
 import Button from '../components/Button';
 import Title from '../components/Title';
-import { IntroModal } from '../utils/Modals';
+import { IntroModal } from '../components/Modals';
 import GreySwitch from '../components/GreySwitch';
 import Line from '../components/Line';
 

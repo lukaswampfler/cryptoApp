@@ -5,7 +5,7 @@ import AppContext from '../components/AppContext';
 import Button from '../components/Button';
 import NumInput from '../components/NumInput';
 import Title from '../components/Title';
-import { IntroModal } from '../utils/Modals';
+import { IntroModal } from '../components/Modals';
 import Line from '../components/Line';
 import GreySwitch from '../components/GreySwitch';
 import { MaterialCommunityIcons } from '@expo/vector-icons';

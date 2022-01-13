@@ -6,7 +6,7 @@ import Button from '../components/Button';
 import NumInput from '../components/NumInput';
 import Title from '../components/Title';
 import { encode, decode, bitsStringFromBytes } from '../utils/sdesMath';
-import { ExplanationModal } from '../utils/Modals';
+import { ExplanationModal } from '../components/Modals';
 import Line from '../components/Line';
 import { useFormik } from 'formik';
 import * as Yup from 'yup'
