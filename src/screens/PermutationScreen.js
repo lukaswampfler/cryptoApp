@@ -5,7 +5,7 @@ import { Table, TableWrapper, Row, Rows, Col } from 'react-native-table-componen
 import AppContext from '../components/AppContext';
 import Button from '../components/Button';
 import Title from '../components/Title';
-import { IntroModal } from '../components/Modals';
+import { IntroModal } from '../utils/Modals';
 import ClearButton from '../components/ClearButton';
 //import { permutationIntroText } from '../utils/introTexts';
 import Line from '../components/Line';

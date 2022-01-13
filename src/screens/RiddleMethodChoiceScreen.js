@@ -2,7 +2,7 @@ import React, {  useState, useEffect, useContext, useCallback } from 'react'
 import { StyleSheet, Platform, View, Text, FlatList, Pressable, SafeAreaView, TouchableOpacity } from 'react-native'
 import Title from '../components/Title';
 import Button from '../components/Button';
-import { IntroModal } from '../components/Modals';
+import { IntroModal } from '../utils/Modals';
 import styles, { PINK } from './styles'
 import { Chevron } from 'react-native-shapes';
 import { Ionicons } from '@expo/vector-icons';

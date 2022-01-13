@@ -11,7 +11,7 @@ import {BarChart} from "react-native-chart-kit";
 import { alphabet, createDecryptionDict, getMostFrequent, partialDecryption, createInverseDict, removeSpecialChars } from '../utils/permutationMath';
 import { FlatList } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native';
-import { IntroModal } from '../components/Modals';
+import { IntroModal } from '../utils/Modals';
 import ClearButton from '../components/ClearButton';
 import Line from '../components/Line';
 import { useTranslation } from 'react-i18next';

@@ -8,13 +8,13 @@ import AppContext from '../components/AppContext';
 import { isPrime, generatePrime , extendedEuclid, factorize} from '../utils/RSAMath';
 import NumInput from '../components/NumInput';
 import Button from '../components/Button';
-import { IntroModal } from '../components/Modals';
+import { IntroModal } from '../utils/Modals';
 import { isFunction, useFormik } from 'formik';
 import * as Yup from 'yup';
 import RandomPrimeRow from '../components/RandomPrimeRow';
 import PublicExponentRow from '../components/PublicExponentRow'
 import ButtonRow from '../components/ButtonRow';
-import { ExplanationModal } from '../components/Modals';
+import { ExplanationModal } from '../utils/Modals';
 import Title from '../components/Title';
 import GreySwitch from '../components/GreySwitch';
 import { isInteger } from '../utils/caesarMath';

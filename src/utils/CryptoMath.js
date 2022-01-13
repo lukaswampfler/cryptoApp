@@ -55,4 +55,6 @@ export function preprocessForEncoding(s) {
     //console.log(s);
     return s;
 }
+/*let s = 'ß'
 
+console.log(preprocessForEncoding(s));*/ 

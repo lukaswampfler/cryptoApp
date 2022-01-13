@@ -11,7 +11,7 @@ import * as Yup from 'yup';
 import RandomPrimeRow from '../components/RandomPrimeRow';
 import PublicExponentRow from '../components/PublicExponentRow'
 import ButtonRow from '../components/ButtonRow';
-import { ExplanationModal } from '../components/Modals';
+import { ExplanationModal } from '../utils/Modals';
 import Title from '../components/Title';
 
 //import {RSAPrimeInputScheme} from '../components/PublicExponentRow';

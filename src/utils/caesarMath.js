@@ -4,8 +4,9 @@ export function caesarEncrypt(text, key) {
     }
     // transform key s.t. it lies in the range 0 <= key <= 25
     key = parseInt(key)
-    key = key % 26; // key may still be < 0
+    key = key % 26; // may still be < 0
     if (key < 0) key += 26;
+    console.log(key)
 
     if (typeof text == "string") {
         let geheim = '';
@@ -43,6 +44,7 @@ export function caesarEncrypt(text, key) {
     }
         
 }
+
 
 export function isInteger(s){
     let result = true;

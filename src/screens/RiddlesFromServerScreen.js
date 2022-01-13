@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Platform, View, Text, FlatList, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native'
 import Title from '../components/Title';
 import Button from '../components/Button';
+import { IntroModal } from '../utils/Modals';
 import styles from './styles'
 import { Divider } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/core';

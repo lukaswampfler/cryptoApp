@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import AppTextInput from '../components/AppTextInput';
 import AppButton from '../components/AppButton';
 import AppContext from '../components/AppContext';
-import { IntroModal } from '../components/Modals';
+import { IntroModal } from '../utils/Modals';
 import Title from '../components/Title';
 import { useTranslation } from 'react-i18next';
 
