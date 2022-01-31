@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, Text, View, TextInput, Dimensions } from 'react-native';
-import { Divider } from 'react-native-elements';
+import { ScrollView, Text, View, Dimensions } from 'react-native';
 import AppContext from '../components/AppContext';
 import NumInput from '../components/NumInput';
 import Button from '../components/Button';
@@ -9,12 +8,10 @@ import { IntroModal } from '../utils/Modals';
 import GreySwitch from '../components/GreySwitch';
 import Line from '../components/Line';
 
-//import memoize from "memoize-one";
-
 const screenWidth = 0.9 * Dimensions.get("window").width;
 
 import { useFormik } from 'formik';
-import * as Yup from 'yup'
+
 
 import {
     RSAEncryptionDecimalInputScheme,
@@ -58,14 +55,17 @@ export default function RSAEncryptionScreen({ navigation, route }) {
 
 // get initial values for Form: exponent ...
 const getExpInitialValue = () => {
+    console.log(route.params.usePersonalKey)
     if (route.params === undefined) {
         return myContext.ciphers.rsa.exp;
     } else if (route.params.user !== undefined) {  // importing other users public key
         return route.params.user.publicKey.exponent;
     } else if (route.params.usePersonalKey ) {
+        console.log("use personal key")
         return route.params.key.exp.toString();
     } else if (route.params.usePrivateKey){
-        return route.params.privateKey.exp.toString();
+        
+        return route.params.key.exp.toString();
     } else if (myContext.publicKey.exp !== undefined && route.params.usePublicKey) {
         //console.log("using public key as initial value", myContext.publicKey)
         return myContext.publicKey.exp.toString();
@@ -85,7 +85,7 @@ const getModInitialValue = () => {
     } else if (route.params.usePersonalKey ) {
         return route.params.key.mod.toString();
     } else if (route.params.usePrivateKey){
-        return route.params.privateKey.mod.toString();
+        return route.params.key.mod.toString();
     } else if (myContext.publicKey.mod !== undefined && route.params.usePublicKey) {
         return myContext.privateKey.mod.toString();
     } else {
@@ -111,12 +111,6 @@ const getMessageInitialValue = () => {
     const [mess, setMess] = useState(getMessageInitialValue()) 
     const [exp, setExp] = useState(getExpInitialValue())
     const [mod, setMod] = useState(getModInitialValue()) 
-
-
-    
-
-    //const modulus = setModulusFromKeyScreen(route)
-
 
     const {t} = useTranslation();
 

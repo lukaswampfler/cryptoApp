@@ -12,13 +12,20 @@ export function extendedEuclid(e, f, useBigIntegerLibrary) {
         } else {
             q = x3 / y3; // BigInt-Division is integer division
         }
+        // check here.
+        if (useBigIntegerLibrary){
+            [x1, x2, x3, y1, y2, y3] = [y1, y2, y3, x1.subtract(q.multiply(y1)) , x2.subtract(q.multiply(y2)), x3.subtract(q.multiply(y3))];
+        }else {
+            [x1, x2, x3, y1, y2, y3] = [y1, y2, y3, x1 - q * y1, x2 - q * y2, x3 - q * y3];
+        }
         
-        [x1, x2, x3, y1, y2, y3] = [y1, y2, y3, x1 - q * y1, x2 - q * y2, x3 - q * y3];
     }
     if (y3 === BigInt(0)){
         return { 'inverse': undefined, 'gcd': x3 };
     }
     else {
+        console.log(BigInt(y2), y3, typeof BigInt(y3))
+        
         return { 'inverse': y2, 'gcd': y3 };
     }
 }
@@ -36,10 +43,10 @@ export function isPrime(n, useBigIntegerLibrary) {
     } 
     //console.log("so far, so good.")
     if (n <= BigInt(1)){
-        console.log("isPrime returning false")
+        //console.log("isPrime returning false")
         return false; 
     } else if (n === BigInt(2)){
-        console.log("isPrime returning true")
+        //console.log("isPrime returning true")
         return true;
     } else if ( n % BigInt(2) === BigInt(0) ){ // even number larger than 2
         console.log("isPrime returning false")
@@ -49,14 +56,14 @@ export function isPrime(n, useBigIntegerLibrary) {
         let nNumber = Number(n); // check for odd divisors of a small n -> type number
         for (let divisor = 3; divisor <= Math.pow(nNumber, 0.5); divisor += 2) {
             if (nNumber % divisor == 0){
-                console.log("isPrime returning false")
+                //console.log("isPrime returning false")
                 return false;
             }
         }
-        console.log("isPrime returning true")
+        //console.log("isPrime returning true")
         return true;
     } else {
-        console.log("in isPrime before miller rabin")
+        //console.log("in isPrime before miller rabin")
         return millerRabin(n, MILLER_RABIN_ITERATIONS, useBigIntegerLibrary); // use Miller Rabin for larger numbers 
     }
     
@@ -67,7 +74,7 @@ export function generatePrime(exp, useBigIntegerLibrary) {
     let min = exp < 1 ? 1 : Math.pow(10, exp-1);
     let max = 10 * min;
     let cand = BigInt(Math.floor(Math.max(2, min + Math.random() * (max - min))));
-    console.log(cand, useBigIntegerLibrary);
+    //console.log(cand, useBigIntegerLibrary);
     while (!isPrime(cand, useBigIntegerLibrary)){
         cand++;
     }
@@ -93,9 +100,9 @@ export function smartExponentiation(base, exp, m, useBigIntegerLibrary) {
         exp = BigInt(exp)
         m = BigInt(m)
     }
-    console.log("smartExp: ", base, exp, m, useBigIntegerLibrary )
-    if(useBigIntegerLibrary) console.log("square: ", BigInt(base).pow(2))
-    else console.log("square: ", base*base)
+    //console.log("smartExp: ", base, exp, m, useBigIntegerLibrary )
+    //if(useBigIntegerLibrary) console.log("square: ", BigInt(base).pow(2))
+    //else console.log("square: ", base*base)
     var binExponent = '';
     while (exp > 0) {
         if(!useBigIntegerLibrary){
@@ -140,7 +147,7 @@ function conditionMillerRabin(base, n, odd, exp, useBigIntegerLibrary) {
     }
 }
 function millerRabin(n, millerRabinIterations, useBigIntegerLibrary) {
-    console.log("inside Miller Rabin")
+    //console.log("inside Miller Rabin")
     // extract properties of return value
     const { exponent, odd } = decomposeOdd(n);
     const listOfResults = [];
@@ -168,24 +175,36 @@ function calculatePubExp(phi){
 }
 
 export function calculateKeyPair(p, q, useBigIntegerLibrary) {
-    const phi = (BigInt(p) - BigInt(1)) * (BigInt(q) - BigInt(1));
-    const n = (BigInt(p) * BigInt(q)).toString();
-    console.log("p: ", p, "q: ", q, "n: ", n);
+    let phi, n; 
+    if(useBigIntegerLibrary){
+        const num1 = BigInt(p).subtract(1);
+        const num2 = BigInt(q).subtract(1);
+        n = num1.multiply(num2);
+        phi = BigInt(p).multiply(BigInt(q))
+    } else {
+        phi = (BigInt(p) - BigInt(1)) * (BigInt(q) - BigInt(1));
+        n = (BigInt(p) * BigInt(q)).toString();
+    }
+    
+    //console.log("p: ", p, "q: ", q, "n: ", n);
     const expPublic = phi > Math.pow(2, 16) ?  (Math.pow(2, 16) + 1).toString() : calculatePubExp(Number(phi))
     
     let { inverse, gcd } = extendedEuclid(BigInt(expPublic), phi, useBigIntegerLibrary);
-
+    console.log("After Ext Euclid: ", inverse, phi)
     if (inverse === undefined) {
         console.log("Not possible to determine private Key: " + "public" + pubKey.exp + "phi: " + phi);
     } else if (gcd != BigInt(1)) {
         console.log("GCD not equal to 1");
     } else {
-        if (inverse < 0){
-            inverse += phi;
-        }
+        if(useBigIntegerLibrary && inverse.lesser(0)){
+                inverse.add(phi)
+                console.log("added phi, new inverse: ", inverse, phi)
+            } else if (!useBigIntegerLibrary && inverse < 0) {
+                inverse += phi;
+            }
     } 
     const keys = {private: {exp: inverse.toString(), mod: n}, public: {exp: expPublic, mod: n}}
-    console.log("RSA generated keys: ", keys)
+    //console.log("RSA generated keys: ", keys)
     return keys;
             
  }
@@ -194,14 +213,13 @@ export function calculateKeyPair(p, q, useBigIntegerLibrary) {
     const p = 11; 
     const q = 17; 
     const keys = calculateKeyPair(p, q, useBigIntegerLibrary)
-    console.log("In generateDummyKeys: ", keys.private.exp, keys.public.exp)
+    //console.log("In generateDummyKeys: ", keys.private.exp, keys.public.exp)
     return keys
   }
     
 
   export function factorize(n, useBigIntegerLibrary){
-      // finds two factors of a given number n//
-      //TODO: use BigIntegerLibrary if numbers too large
+      // finds two factors of a given number n
       n = BigInt(n);
       if (useBigIntegerLibrary){
         if(n.isEven()){
@@ -215,11 +233,11 @@ export function calculateKeyPair(p, q, useBigIntegerLibrary) {
                     cand.add(BigInt(2))
                 }}
         } else {
-            if(n % BigInt(2)=== 0n) return {fac1: "2", fac2: (n/BigInt(2)).toString()}
+            if(n % BigInt(2) === BigInt(0)) return {fac1: "2", fac2: (n/BigInt(2)).toString()}
             else {
                 let cand = BigInt(3)
                 while (cand * cand <= n){
-                    if(n % cand === 0n) return {fac1: cand.toString(), fac2: (n / cand).toString()}
+                    if(n % cand === BigInt(0)) return {fac1: cand.toString(), fac2: (n / cand).toString()}
                     cand += BigInt(2)
                 }
         }

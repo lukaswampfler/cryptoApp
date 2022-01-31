@@ -1,30 +1,22 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
-import { ScrollView, Text, View, TextInput, Switch, Modal } from 'react-native';
+import { ScrollView, Text, View, TextInput } from 'react-native';
 import AppContext from '../components/AppContext';
 import Button from '../components/Button';
 import NumInput from '../components/NumInput';
 import Title from '../components/Title';
 import { vigenereEncrypt, vigenereDecrypt, isAlphabetic } from '../utils/vigenereMath';
-import { useFormik } from 'formik';
 import Line from '../components/Line';
 
 import {useNavigation} from '@react-navigation/native';
 
-
-import { VigenereKeyInputScheme } from '../utils/InputTests';
 import { IntroModal } from '../utils/Modals';
 import ClearButton from '../components/ClearButton';
-
-import styles from './styles'
 import GreySwitch from '../components/GreySwitch';
+
 import { useTranslation } from 'react-i18next';
 
 
 const BACKGROUND_COLOR = '#ddd'
-
-
-
-
 
 
 export default function VigenereScreen({ route, navigation }) {
@@ -61,7 +53,7 @@ export default function VigenereScreen({ route, navigation }) {
 
     const changeKey = newKey => {
         if(isAlphabetic(newKey)){
-            setKey(newKey)
+            setKey(newKey.toLowerCase())
             updateTextAndSecret(text, secret, newKey)
 
         } else {
@@ -89,13 +81,6 @@ export default function VigenereScreen({ route, navigation }) {
             alert(`${t("NO_MESS_WO_CHAR")}`)
         }
     }
-
-    /*const decrypt = () => {
-        //console.log("formikKey.values: ", formikKey.values);
-        const currentKey = formikKey.values.key
-        setKey(currentKey);
-        setText(vigenereDecrypt(secret, cfromAnalysisurrentKey)); 
-    }*/
 
     useEffect(() => {
         
@@ -128,31 +113,9 @@ export default function VigenereScreen({ route, navigation }) {
     }, [text])
 
 
-    const formikKey = useFormik({
-        validationSchema: VigenereKeyInputScheme,
-        innerRef: ref,
-        initialValues: {
-            key: ''
-        },
-        onSubmit: values => {
-            let ciphers = myContext.ciphers;
-            const keyLower = values.key.toLowerCase()
-            if (ciphers.vigenere === undefined) {
-                ciphers.vigenere = { key: keyLower };
-            } else {
-                ciphers.vigenere.key = keyLower;
-            }
-            myContext.setCiphers(ciphers);
-            setKey(keyLower);
-            setSecret(vigenereEncrypt(text, keyLower));
-        }
-    });
-
-
     const vigenereIntroText = `Input: ${t('CAESEXP_P1')}` +  `\n\n${t('KEY')}: ${t('VIGEXP_P2')}`
 
     const introText = vigenereIntroText
-    const method = `${t('VIG_TIT')}`
 
     return (
 
@@ -202,14 +165,12 @@ export default function VigenereScreen({ route, navigation }) {
                 {`${t('VIG_KEY')}`} </Text>
                 <View style = {{ marginTop: 5, width : '100%', backgroundColor:  BACKGROUND_COLOR,  borderRadius: 8}}>
                 <NumInput
-                    //icon='pinterest'
                     width='100%'
                     autoCapitalize='none'
                     keyboardType='default'
                     keyboardAppearance='dark'
                     returnKeyType='next'
                     returnKeyLabel='next'
-                    //onChangeText={formikKey.handleChange('key')}
                     onChangeText= {changeKey}
                     value = {key}/>
                     </View>
@@ -263,13 +224,11 @@ export default function VigenereScreen({ route, navigation }) {
                     {hasBackButton && <Button width={120} label={t("BACK_ANA")}
                     
                     onPress = {() => {
-                        //console.log("navigating back")
                         //navigation.navigate("Analysis", {screen: "VigenereAnalysis", params: {message: secret}})
                         // better: like this, Vigenere Screen is empty when called from MethodsHome
                         nav.reset({
                             index: 0,
                             routes: [{name: 'Analysis', params: {screen: "VigenereAnalysis", params: {message: secret}}}],
-                            
                           });
 
                         

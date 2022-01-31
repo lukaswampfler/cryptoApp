@@ -1,13 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, Text, View, TextInput, Modal, TouchableOpacity, StyleSheet } from 'react-native';
-import { Divider } from 'react-native-elements';
+import { ScrollView, Text, View, TextInput, StyleSheet } from 'react-native';
 import { Table, TableWrapper, Row, Rows, Col } from 'react-native-table-component';
 import AppContext from '../components/AppContext';
 import Button from '../components/Button';
 import Title from '../components/Title';
 import { IntroModal } from '../utils/Modals';
 import ClearButton from '../components/ClearButton';
-//import { permutationIntroText } from '../utils/introTexts';
 import Line from '../components/Line';
 
 import { alphabet, randomTransposition, shuffleAlphabet, encryptPermutation} from '../utils/permutationMath';
@@ -18,6 +16,7 @@ export default function PermutationScreen({ navigation }) {
     const [text, setText] = useState('');
     const [secret, setSecret] = useState('');
     const [key, setKey] = useState(alphabet);
+    //keyTable for scrollable presentation on screen
     const [keyTable, setKeyTable] = useState({
         tableTitle: ['clear', 'secret' ], 
         tableData: [alphabet.split(""), key.split("")]
@@ -30,17 +29,13 @@ export default function PermutationScreen({ navigation }) {
 
     const permutationIntroText = `${t('PERMEXP_P1')}\n\n` + `\n\n TRANSPOSITION: ` + `${t('PERMEXP_P2')}`  + `\n\n${t('SHUFFLE')}: ` + `${t('PERMEXP_P3')}` + `\n\n${t('ID')}: `+ `${t('PERMEXP_P4')}` + `\n\n${t('PERMEXP_P5')}`
     const introText = permutationIntroText;
-    const method = "The Permutation cipher"
 
     useEffect(() => {
         setKeyTable({tableData: [alphabet.split(""), key.split("")], ...key} )
-
-        console.log(" key table : ", keyTable);
     }, [key])
 
 
     const changeText = (text) => {
-        // TODO: text anpassen: Umlaute ersetzen, scharfes s, etc.
         setText(text);
         setSecret(encryptPermutation(text, key))
     }
@@ -52,22 +47,15 @@ export default function PermutationScreen({ navigation }) {
     }
 
     const transposeKey = () => {
-        console.log("before transposition: ", key)
         const newKey = randomTransposition(key)
         setKey(newKey);
-        console.log("new key after transposition: ", key)
         setSecret(encryptPermutation(text, newKey))
     }
 
     const shuffleKey = () => {
         const newKey = shuffleAlphabet(alphabet)
         setKey(newKey);
-        //console.log("new key after shuffle: ", key)
         setSecret(encryptPermutation(text, newKey))
-    }
-
-    const encrypt = () => {
-        setSecret(encryptPermutation(text, key))
     }
 
     const sendMessage = () => {
@@ -100,7 +88,6 @@ export default function PermutationScreen({ navigation }) {
                     width={280}
                     multiline={true}
                     textAlignVertical='top'
-                    //placeholder='Enter plain text message'
                     autoCapitalize='none'
                     autoCorrect={false}
                     style={{ height: 80, borderColor: 'gray', borderWidth: 1 , borderRadius: 8, padding: 4}}
@@ -116,21 +103,11 @@ export default function PermutationScreen({ navigation }) {
 <ClearButton setInput={changeText} setKey = {setKey} defaultKey = {alphabet}/>
 
                 </View>
-{/*<Divider style={{ width: "100%", margin: 10 }} />*/}
 <Line />
 
                 
  <Text style={{ marginTop: 10, marginBottom: 20 }}> <Text style ={{fontSize: 20}}>  {`${t('KEY')}`} </Text>{`${t('PER_KEY_DETAILS')}`}</Text>
 
-                {/*<View style={styles.container}>
-                    <Table borderStyle={{borderWidth: 1}}>
-                        <TableWrapper style={styles.wrapper}>
-                           {/*} <Col data={keyTable.tableTitle} style={styles.title} heightArr={[28,28]} textStyle={styles.text}/>
-                            <Rows data={keyTable.tableData} flexArr={Array(alphabet.length).fill(1)} style={styles.row} textStyle={styles.text}/>
-                        </TableWrapper>
-                    </Table>
-                </View>
-            */}
 
                 <ScrollView horizontal={true}>
                 <View>
@@ -171,17 +148,6 @@ export default function PermutationScreen({ navigation }) {
                     <Button label={`${t('SHUFFLE')}`} onPress={shuffleKey} />
                 </View>
 
-
-
-                {/*<View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-around',
-                    marginTop: 10,
-                    marginBottom: 10,
-                }}>
-                    <Button label='use this key' onPress={encrypt} />
-                  
-            </View>*/}
             <Line />
 
                 <View style={{

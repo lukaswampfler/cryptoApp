@@ -2,9 +2,7 @@ import { createFrequencyDict } from "./frequencyAnalysis";
 
 export const alphabet = 'abcdefghijklmnopqrstuvwxyz';
 
-
-function transpose(text, i, j){
-    if (i >= text.length || j >= text.length) return text; 
+function transpose(text, i, j){ 
     const maxIndex = Math.max(i, j)
     const minIndex = Math.min(i, j)
     const newText = text.substring(0, minIndex) + text.charAt(maxIndex) + text.substring(minIndex+1 , maxIndex) + text.charAt(minIndex) + text.substring(maxIndex+1);
@@ -12,12 +10,12 @@ function transpose(text, i, j){
 }
 
 export function randomTransposition(text){
+    //ind1, ind2 will be less than text.length
     const ind1 = getRandomInt(text.length)
     let ind2 = ind1
     while (ind2 == ind1){
         ind2 = getRandomInt(text.length)
     }
-    //console.log("transposition: ", ind1, ind2)
     return transpose(text, ind1 ,ind2)
     
 }
@@ -29,16 +27,12 @@ export function shuffleAlphabet(text){
 }
 
 export function encryptPermutation(text, key){
-    //text = text.toLowerCase()
     let secret = '';
-
     let encryptionDictionary = {}
     for (let ind = 0 ; ind < alphabet.length; ind++){
         encryptionDictionary[alphabet.charAt(ind)] = key.charAt(ind);
         encryptionDictionary[alphabet.charAt(ind).toUpperCase()] = key.charAt(ind).toUpperCase();
     }
-    //console.log("key: ", key);
-    console.log("dict: ", encryptionDictionary);
     for (let ind = 0 ; ind < text.length; ind++){
         let char = text.charAt(ind);
         if (isAlpha(char)){
@@ -46,8 +40,6 @@ export function encryptPermutation(text, key){
         } else {
             secret = secret + char; 
         }
-        
-        //encryptionDictionary[alphabet.charAt(ind)] = key.charAt(ind);
     }
     return secret;
 }
@@ -56,15 +48,6 @@ export function encryptPermutation(text, key){
 export function getMostFrequent(text, num = 10){
     let res = {}
     const uni = unique((text.toUpperCase()));
-    /*if (uni.length <= num){
-        for (let ind = 0; ind < uni.length; ind++){
-            res[uni.charAt(ind)] = 1
-        }
-    } else { // more than num distinct characters - choose most frequent ones.
-        const frequencyDict = createFrequencyDict(text);
-        res = pickHighest(frequencyDict[0], num);
-        
-    }*/
     const frequencyDict = createFrequencyDict(text);
     res = pickHighest(frequencyDict[0], Math.min(uni.length, num));
     return res;
@@ -81,15 +64,11 @@ export function createDecryptionDict(alphaClear, alphaSecret){
             decryptionDict[alphaSecret[ind].toLowerCase()] = alphaClear[ind].toLowerCase();
             trueIndex++;     
         }
-        //there could be an issue here .... -> check if alphaSecret[ind] === undefined
-        //decryptionDict[alphaSecret[ind].toLowerCase()] = alphaClear[ind].toLowerCase();
     }
-    //console.log("decryptionDict: ", decryptionDict)
     return decryptionDict;
 }
 
 export function createInverseDict(alphaClear, alphaSecret){
-    //console.log("clear, secret: ", alphaClear, alphaSecret)
     return createDecryptionDict(alphaSecret, alphaClear);
 }
 
@@ -101,20 +80,14 @@ export function partialDecryption(text, decryptionDict){
             secret += decryptionDict[text.charAt(ind)]
         } else {
             secret += '*'
-            // alternatively: secret += text.charAt(i)
-            // plus eintrag in Dokument, dass dieser Teil nicht entschlüsselt ist.
         }
     }
-    
     return secret; 
 }
 
 
-
-
 function  pickHighest (dict, num = 1) {
     const result = {};
-    //console.log("length of keys: ", Object.keys(dict).length)
     if(num > Object.keys(dict).length){
        return false;
     };
@@ -138,10 +111,9 @@ function isAlpha(char){
     return !(foundAlpha === null)
 }
 
-function getRandomInt(max){
-    return Math.floor(Math.random()*max);
+export function getRandomInt(max){
+    return Math.floor(Math.random()*Number(max));
 }
-
 
 
 function shuffleArray(array) {

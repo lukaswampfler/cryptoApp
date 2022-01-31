@@ -42,17 +42,11 @@ export function caesarEncrypt(text, key) {
     else{
         return '';
     }
-        
 }
 
 
 export function isInteger(s){
-    let result = true;
-    let start = 0;
-    if (s.charAt(0) == '-') start = 1;
-    for (let ind = start; ind < s.length; ind++){
-        result = result && (s.charAt(ind) >= '0' && s.charAt(ind) <= '9')
-    }
-    //return result
-    return !isNaN(parseInt(s, 10))
+    //return !isNaN(parseInt(s, 10)) //das geht nicht zB s = 4ç% -> wird als int geparsed
+    let re = /^-?\d*$/
+    return re.test(s)
 }

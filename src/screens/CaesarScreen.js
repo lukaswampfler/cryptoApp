@@ -34,7 +34,6 @@ export default function CaesarScreen({ navigation }) {
 
     const changeKey = newKey =>{
         if (newKey == '' || newKey == '-'){
-            console.log("newkey empty of -")
             if(isEncrypting) setSecret('')
             else setText('')
             setKey(newKey)
@@ -42,9 +41,10 @@ export default function CaesarScreen({ navigation }) {
            setKey(newKey.toString());
            updateTextAndSecret(text, secret, newKey)
         } else {
-            setSecret('')
+            //setSecret('')
             alert(`${t("VALID_KEY")}`)
             updateTextAndSecret('', '', newKey)
+            
         }
     }
 
@@ -88,10 +88,9 @@ export default function CaesarScreen({ navigation }) {
     }, [text])
 
 
-    useEffect(() => {
-        //setSecret(caesarEncrypt(text, key));
+    /*useEffect(() => {
         updateTextAndSecret(text, secret, key)
-    }, [key])
+    }, [key])*/
 
 
 
@@ -155,7 +154,6 @@ export default function CaesarScreen({ navigation }) {
                     keyboardAppearance='dark'
                     returnKeyType='next'
                     returnKeyLabel='next'
-                    //onChangeText={formikKey.handleChange('key')}
                     onChangeText= {changeKey}
                     value = {key}/>
                     </View>

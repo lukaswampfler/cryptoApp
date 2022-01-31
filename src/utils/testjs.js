@@ -101,10 +101,15 @@ function calculatePubExp(phi){
     return cand.toString()
 }
 
-for(let c = 0; c< 256; c++){
+/*for(let c = 0; c< 256; c++){
     let code = c
     if (code<32) {code+= 256}
     else if (127 <= code && code <= 160) {code+= 192}
     else if (code == 173) {code = 295}
     console.log(c, String.fromCharCode(code))
-}
+}*/
+
+let s= "abdchjkldsfAvhjavd0lc"
+let re = /^[a-zA-Z]*$/
+
+console.log(re.test(s))

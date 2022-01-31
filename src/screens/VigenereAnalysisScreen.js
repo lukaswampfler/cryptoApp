@@ -11,10 +11,9 @@ import {
     BarChart
   } from "react-native-chart-kit";
 
-//import data from '../data/data'
 
 
-import { createFrequencyDict, sortDictionaryByKey, calculateKeyCharacter , kasiskiTest, germanFreq, createData, getFirstLetter, factorize} from '../utils/frequencyAnalysis';
+import { createFrequencyDict, calculateKeyCharacter , kasiskiTest, createData} from '../utils/frequencyAnalysis';
 //import CarouselCards from '../components/CarouselCards';
 import { useTranslation } from 'react-i18next';
 
@@ -26,13 +25,9 @@ export const ITEM_WIDTH = Math.round(SLIDER_WIDTH )
 
 export default function VigenereAnalysisScreen({ route, navigation }) {
     const [secret, setSecret] = useState('');
-    const [kasiskiLength, setKasiskiLength] = useState(0)
     const [chosenLength, setChosenLength] = useState("0")
     const [data, setData] = useState([])
-    //const [analysisDone, setAnalysisDone] = useState(false)
     const [mostFrequentLetter, setMostFrequentLetter] = useState('e')
-    const [factors, setFactors] = useState([])
-    const [factorsCalculated, setFactorsCalculated] = useState(false);
     const [likelyKeyWord, setLikelyKeyWord] = useState('')
     const [showBars, setShowBars] = useState(false)
     const [repeatedParts, setRepeatedParts] = useState([]);
@@ -95,17 +90,6 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
         }
     }, [])
 
-    useEffect(() => {
-        setFactors(factorize(kasiskiLength));
-        setFactorsCalculated(true);
-        //console.log("factors: ", kasiskiLength)
-    }, [kasiskiLength])
-
-
-    /*useEffect( () => {
-        console.log("Data: ", data)
-    }
-        , [data])*/
 
     useEffect(() => {
         const showBars = secret.length > 0 && chosenLength > 0 && chosenLength <= secret.length
@@ -152,10 +136,8 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
         //likelyLength = kasiskiTest(secret);
         if (secret.length > 0 ){
         toggleShowFragments()
-        console.log("secret", secret);
         const fragmentList = kasiskiTest(secret)
         if(fragmentList.length > 0){
-            console.log(fragmentList)
             setRepeatedParts(fragmentList.slice(0, NUM_FRAGMENTS));
         }else{
             setRepeatedParts([])
@@ -172,7 +154,6 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
     }
 
     const goToVigenereDecryption = () => {
-        //console.log("Navigating to Vigenere Decryption...")
         navigation.navigate("Methods", {screen: "VIGENERE", params: {message: secret, key: likelyKeyWord, fromAnalysis: true}})
     }
 

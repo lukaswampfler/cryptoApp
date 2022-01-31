@@ -3,12 +3,14 @@ import { Text, View, TouchableOpacity, Modal } from 'react-native';
 import AppContext from '../components/AppContext';
 import styles from '../screens/styles'
 
-
+import { useTranslation } from 'react-i18next';
 
 
 
 
 export function IntroModal({ text, method , transparent = false}) {
+
+    const {t} = useTranslation();
     const myContext = useContext(AppContext);
 
 
@@ -37,7 +39,7 @@ export function IntroModal({ text, method , transparent = false}) {
                     onPress={() => {
                         myContext.setIntroVisible(!myContext.introVisible);
                     }}>
-                    <Text style={styles.actionText}>Close</Text>
+                    <Text style={styles.actionText}>{t('CLOSE')}</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -72,6 +74,7 @@ export function IntroModal({ text, method , transparent = false}) {
 
 
 export function ExplanationModal({ text, title }) {
+    const {t} = useTranslation();
     const myContext = useContext(AppContext);
 
 
@@ -100,7 +103,7 @@ export function ExplanationModal({ text, title }) {
                     onPress={() => {
                         myContext.setExplVisible(!myContext.explVisible);
                     }}>
-                    <Text style={styles.actionText}>Close</Text>
+                    <Text style={styles.actionText}>{t('CLOSE')}</Text>
                 </TouchableOpacity>
             </View>
         </View>

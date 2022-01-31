@@ -5,7 +5,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import AppContext from '../components/AppContext';
 
 
-import { isPrime, generatePrime , extendedEuclid, factorize} from '../utils/RSAMath';
+import { isPrime, generatePrime , extendedEuclid, factorize, smartExponentiation} from '../utils/RSAMath';
 import NumInput from '../components/NumInput';
 import Button from '../components/Button';
 import { IntroModal } from '../utils/Modals';
@@ -25,6 +25,7 @@ import * as SecureStore from 'expo-secure-store';
 import API from '@aws-amplify/api';
 import { getUser } from '../graphql/queries';
 import { useTranslation } from 'react-i18next';
+import { getRandomInt } from '../utils/permutationMath';
 
 const NOPRIME_MESSAGE = 'not a prime number'
 const REQUIRED_ERROR_MESSAGE = 'this field is required';
@@ -69,7 +70,7 @@ export default function RSAKeyScreen({ navigation, route }) {
       query: getUser, 
       variables: {id: myContext.userID}
     })
-    console.log(result.data.getUser.publicKey)
+    //console.log(result.data.getUser.publicKey)
     return result.data.getUser.publicKey;
   }
 
@@ -79,11 +80,12 @@ export default function RSAKeyScreen({ navigation, route }) {
     const promisePublic = getPublicKey();
     const promisePrivate = getValueFor("privateKey");
     Promise.all([promisePublic, promisePrivate]).then((values) =>{
-      console.log(values)
+      //console.log(values)
       const publicKey = values[0]
       const privateKey = JSON.parse(values[1])
       introText += "public Exponent: " + publicKey.exponent.toString() + "\nprivate Exponent: " + privateKey.exponent.toString()+ "\nModulus: " + publicKey.modulus.toString()
       setIntroText(introText)
+      testForCorrectnessOfKeys(publicKey.exponent, privateKey.exponent, publicKey.modulus);
     })
 
     getPublicKey().then((res) => {
@@ -93,8 +95,9 @@ export default function RSAKeyScreen({ navigation, route }) {
       res = JSON.parse(res)
       //personalPrivateKey={mod: res.modulus, exp: res.exponent}
       setPersonalPrivateKey({mod: res.modulus, exp: res.exponent})
-      
     })
+
+    
   }, [])
 
 
@@ -125,13 +128,7 @@ export default function RSAKeyScreen({ navigation, route }) {
         changePublicKey(); // change publicKey in Context and as state variable
         //setPrivateKey();
     } 
-    // should publicKey be changed when !isDefault?
-    /*else {
-      let publicKey = myContext.publicKey
-      publicKey.mod = pConfirmed * qConfirmed;
-      myContext.setPublicKey(publicKey);
-    }*/
-    console.log("publicKey updated: ", publicKey);
+    //console.log("publicKey updated: ", publicKey);
     myContext.setPrimes({p: pConfirmed, q: qConfirmed})
     
 
@@ -139,38 +136,35 @@ export default function RSAKeyScreen({ navigation, route }) {
 
 
   useEffect( () => {
-    console.log("in verified public Exponent: p: ", pConfirmed, " q: ", qConfirmed)
+    //console.log("in verified public Exponent: p: ", pConfirmed, " q: ", qConfirmed)
     changePublicKey();
     //setPrivateKey();
 }, [verifiedPubExp])
 
-//useEffect(() => {console.log("P: ", p, "Q: ", q)}, [p, q])
 
 
 useEffect(() =>{
     setPrivateKey();
-}
-, [publicKey])
+}, [publicKey])
 
 
-useEffect(()=> {
+{/*useEffect(()=> {
   console.log("pConfirmed, qConfirmed, exp: ", pConfirmed, qConfirmed, exp)
-}, [pConfirmed])
+}, [pConfirmed])*/}
 
 
 useEffect(() => {
   const state = {p: pConfirmed, q: qConfirmed, 
     isDefault, isRandom, verifiedPubExp}
     myContext.setRSAKeyGenState(state)
-    console.log("RSAKeyGenState changed: ", state);
-}
-  , [pConfirmed, qConfirmed, isRandom, isDefault, verifiedPubExp])
+    //console.log("RSAKeyGenState changed: ", state);
+}, [pConfirmed, qConfirmed, isRandom, isDefault, verifiedPubExp])
 
 useEffect(() => {
-  console.log("isRandom - useEffect")
+  //console.log("isRandom - useEffect")
   if(isRandom){
     if(savedPrimes){
-      console.log("have saved primes...")
+      //console.log("have saved primes...")
       setPConfirmed(savedPrimes.p) // Problem hier.
       setQConfirmed(savedPrimes.q)
       setP(savedPrimes.p)
@@ -181,7 +175,7 @@ useEffect(() => {
     }
   } 
   else {
-    console.log("setting saved primes to ", p, q);
+    //console.log("setting saved primes to ", p, q);
     setSavedPrimes({p: p, q: q})
     setSavedExponent(pubExp)
     setP(null)
@@ -192,7 +186,7 @@ useEffect(() => {
 }, [isRandom])
 
 useEffect(() => {
-  console.log(isDefault, pubExp)
+  //console.log(isDefault, pubExp)
   if(isDefault){
     if(savedExponent){
       setPubExp(savedExponent)
@@ -207,25 +201,11 @@ useEffect(() => {
 }, [isDefault])
 
 
-/*useFocusEffect(
-    useCallback(() => {
-      setP(myContext.RSAKeyGenState.p)
-
-      return () => {
-
-          updateContextVariables();
-        // Do something when the screen is unfocused
-        // Useful for cleanup functions
-      };
-    }, [])
-  );*/
-
 const updatePersonalKeyText = () => {
   let introText = ''
   const promisePublic = getPublicKey();
   const promisePrivate = getValueFor("privateKey");
-  Promise.all([promisePublic, promisePrivate]).then((values) =>{
-    //console.log(values)
+  Promise.all([promisePublic, promisePrivate]).then((values) => {
     const publicKey = values[0]
     const privateKey = JSON.parse(values[1])
     introText += "public Exponent: " + publicKey.exponent.toString() + "\nprivate Exponent: " + privateKey.exponent.toString()+ "\nModulus: " + publicKey.modulus.toString()
@@ -234,12 +214,17 @@ const updatePersonalKeyText = () => {
 }
 
 
-/*const updateContextVariables = () => {
-  const state = {p: pConfirmed, q: qConfirmed, 
-  isDefault, isRandom, verifiedPubExp}
-  console.log("state: ", state)
-  myContext.setRSAKeyGenState(state);
-}*/
+const testForCorrectnessOfKeys = (publicExp, privateExp, mod) => {
+  let start = 1;
+  while(start < 2){
+    start = getRandomInt(BigInt(mod));
+  }
+  const medium = smartExponentiation(BigInt(start), BigInt(publicExp), BigInt(mod), myContext.useBigIntegerLibrary);
+  const stop = smartExponentiation(BigInt(medium), BigInt(privateExp), BigInt(mod), myContext.useBigIntegerLibrary);
+  if (start != stop){
+    alert(`${t("KEY_MISMATCH")}`)
+  }  
+}
 
 const changePubExp = pubExp => {
     setPubExp(pubExp);
@@ -341,36 +326,58 @@ const changePublicKey = () => {
     console.log("verified public exp: ", verifiedPubExp)
     console.log(qConfirmed, pConfirmed)
     if(verifiedPubExp != ''){
-      const modulus = BigInt(pConfirmed)*BigInt(qConfirmed)
+      let modulus;
+      if (myContext.useBigIntegerLibrary){
+        modulus = BigInt(pConfirmed).multiply(BigInt(qConfirmed))
+      } else {
+        modulus = BigInt(pConfirmed)*BigInt(qConfirmed)
+      }
         myContext.setPublicKey({exp: verifiedPubExp.toString(), mod: modulus.toString()})
         setPublicKey({exp: verifiedPubExp, mod: modulus.toString()})
     } else {
         myContext.setPublicKey({})
         setPublicKey({})
     }
-    // 
-    //console.log("new public key: ", {exp: verifiedPubExp, mod: pConfirmed*qConfirmed})
 }
 
 const setPrivateKey = () => {
     console.log(verifiedPubExp)
-    const phi = (BigInt(pConfirmed)-BigInt(1))*(BigInt(qConfirmed)-BigInt(1))
+    let phi, n
+    if (myContext.useBigIntegerLibrary){
+      const num1 = BigInt(pConfirmed).subtract(BigInt(1))
+      const num2 = BigInt(qConfirmed).subtract(BigInt(1))
+      phi = num1.multiply(num2)
+      n = BigInt(pConfirmed).multiply(BigInt(qConfirmed))
+    } else {
+      phi = (BigInt(pConfirmed)-BigInt(1))*(BigInt(qConfirmed)-BigInt(1))
+      n = BigInt(pConfirmed)*BigInt(qConfirmed)
+    }
     if(verifiedPubExp && verifiedPubExp != ''){
-
-        //console.log("p-1*q-1: ",(p-1)*(q-1) )
         let { inverse, gcd } = extendedEuclid(BigInt(parseInt(verifiedPubExp)), phi, myContext.useBigIntegerLibrary);
+        console.log("AFTER EXT EUCLID: ", inverse, gcd)
         if (inverse === undefined) {
             alert("Not possible to determine private Key: " + "public" + verifiedPubExp + "phi: " + phi);
-        } else if (gcd != BigInt(1)) {
+        } /*else if (BigInt(gcd) != BigInt(1)) {
+            console.log(gcd)
             console.log("GCD not equal to 1");
-        } else {
-            if (inverse < 0){
-                //if (typeof(inverse) == 'bigint') console.log("inverse is bigint")
-                inverse += BigInt(phi);
-            } 
-        }
-        console.log("new Private Key: ,exp ", Number(inverse), " mod: ", (pConfirmed*qConfirmed) );
-        myContext.setPrivateKey({ exp: Number(inverse).toString(), mod: (BigInt(pConfirmed)*BigInt(qConfirmed)).toString() });
+        } */else {
+          console.log("ELSE", inverse)
+          if(myContext.useBigIntegerLibrary && inverse.lesser(BigInt(0))){
+                  inverse = inverse.add(phi)
+                  console.log("added phi, new inverse: ", inverse, phi)
+          } else if (!myContext.useBigIntegerLibrary && inverse < 0) {
+                  inverse += phi;
+          }
+      } 
+      if(myContext.useBigIntegerLibrary){
+        myContext.setPrivateKey({ exp: inverse.toString(), mod: n.toString() });
+        console.log("new Private Key: ,exp ", inverse.toString(), " mod: ", n.toString());
+      } else {
+        myContext.setPrivateKey({ exp: inverse.toString(), mod: n.toString() });
+        console.log("new Private Key: ,exp ", inverse.toString(), " mod: ", n.toString() );
+      }
+        
+        
     } else {
         myContext.setPrivateKey({})
     }
@@ -412,28 +419,6 @@ const checkAndUsePubExp = () => {
     });
   }
 
-  Yup.addMethod(Yup.string, 'isValidPrime', isValidPrime);
-
-  const RSAPrimeInputScheme = Yup.object().shape({
-    p: Yup.string().isValidPrime().required('Required'),
-    q: Yup.string().isValidPrime().notOneOf([Yup.ref('p')], 'q must be different from p').required('Required'),
-  });
-  const formikPrimes = useFormik({
-    validationSchema: RSAPrimeInputScheme,
-    initialValues: {
-      p: '',
-      q: ''
-    },
-    onSubmit: values => {
-      myContext.setPrimes({ p: values.p, q: values.q })
-      setP(values.p)
-      setQ(values.q)
-    }
-  });
-
-  const ExpInputScheme = Yup.object().shape({
-    exp: Yup.number().min(1).max(10).required('Required'),
-  });
   
 
   const getFactors = () => {
@@ -441,6 +426,14 @@ const checkAndUsePubExp = () => {
     alert("The factors are: " +  fac1 + ", " +  fac2)
   }
   
+  const calculateProduct = (p, q) => {
+    if (myContext.useBigIntegerLibrary){
+      return BigInt(p).multiply(BigInt(q)).toString()
+    } else {
+      return (BigInt(p) * BigInt(q)).toString()
+    }
+  }
+
    /*const formikExponent = useFormik({
       validationSchema: ExpInputScheme,
       initialValues: { exp: NUM_DIGITS },
@@ -588,12 +581,6 @@ const checkAndUsePubExp = () => {
                 { label: '9', value: 9 }, 
                 { label: '10', value: 10 } 
             ]}
-           /* Icon={() => {
-                return (
-                <View style ={{margin: 10, marginTop: 20}}>
-                <Chevron size={1.5} color="gray" />
-                </View>);
-              }}*/
         />
 
 
@@ -610,7 +597,7 @@ const checkAndUsePubExp = () => {
 
                   <Text>{t("USE_PRIME")} p: {pConfirmed}, q: {qConfirmed}
           </Text>
-         <Text>{t("PROD")} n =  {(BigInt(pConfirmed) * BigInt(qConfirmed)).toString()}
+         <Text>{t("PROD")} n =  {calculateProduct(pConfirmed, qConfirmed)}
          </Text>
 </View> : null}
 
@@ -712,11 +699,12 @@ const checkAndUsePubExp = () => {
             console.log("modulus: ", res.modulus)
             navigation.navigate({
               name: "RSA", 
-              params: {key: {mod: res.modulus, exp: res.exponent},
-              exp: res.exponent,
-              mod: res.modulus,
-              usePersonalKey: true, 
-              merge: true}
+              params: {key: 
+                {mod: res.modulus, exp: res.exponent},
+                exp: res.exponent,
+                mod: res.modulus,
+                usePersonalKey: true, 
+                merge: true}
           })})
           //console.log()
           //alert("exp: " + privateKey.exponent)}

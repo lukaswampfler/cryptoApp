@@ -40,7 +40,7 @@
     "KEY": "Key", 
     "VIG_KEY": "Key (letters a-z)", 
     "CAES_KEY": "Key (number)", 
-    "PER_KEY_DETAILS": "All the letters of the alphabet (above) are permuted in some way (below)", 
+    "PER_KEY_DETAILS": "All the letters of the alphabet (above) correspond to the permuted secret alphabet (below).", 
     "ID": "Identity", 
     "SHUFFLE": "Shuffle", 
     "PERMEXP_P1": "The key for the permutation method is any reordering of the letters a-z", 
@@ -168,7 +168,10 @@
     "MOD": "Modulus", 
     "FAC": "factorize", 
     "USE_PRIME": "You are using the prime numbers:", 
-    "PROD": "Their product is equal to"
+    "PROD": "Their product is equal to", 
+    "CLOSE": "close", 
+    "KEY_MISMATCH": "Attention: Key mismatch! Please use a new key pair."
+
 
 
 

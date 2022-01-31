@@ -81,7 +81,6 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
     const changeText = (secret) => {
         const cleanedText = removeSpecialChars(secret);
         const mostFrequentLetters = getMostFrequent(cleanedText, alphaShort.length);
-        //console.log("most frequent: ", mostFrequentLetters);
         const newAlphaData = Object.keys(mostFrequentLetters)
         
         setAlphaSecret(extend(newAlphaData, MAX_NUM_LETTERS - newAlphaData.length));
@@ -172,7 +171,6 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
     // data for barChart.
     const freqDict = createFrequencyDict(secret)["0"];
     const sorted = sortDictionaryByKey(freqDict)
-    //console.log("Frequencies", sorted);
 
     
     const data = {
@@ -186,19 +184,15 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
         }
 
         const knownSecretLetters = alphaSecret.join('').toLowerCase().substring(0, alphaShort.length);
-        console.log("known secret: ", knownSecretLetters)
+        
         const decryptionDict = createDecryptionDict(alphaShort, alphaSecret) ;
-        //console.log("known clear", knownClearLetters);
-        //console.log("inverse: ", inverseDict)
-            return ( knownSecretLetters.includes(char) ? 
+        return ( knownSecretLetters.includes(char) ? 
            <Text style={{  fontSize: 20}}> {decryptionDict[char]} </Text> :
             <Text style={{ padding: 5, fontSize: 20, backgroundColor: '#bbb'}}> {char} </Text> 
                 )
         })
     
-      //const title = "Analyzing the Permutation Cipher"
       const title = `${t('PERM_ANA_TIT')}`
-      //const introText = "Here comes the introduction to the Permutation analysis...";
       const introText = `${t('PERM_HELP')}`
       const method = `${t('PERM_ANA_TIT_LONG')}`
 
@@ -247,11 +241,9 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
 
 <View style = {{marginBottom: 20}}>
             
-                   {/*} <Button label='Analyze Text' onPress={handleAnalysis} width={240} />*/}
                     {secretHasAlpha && 
                     <View style ={{marginTop: 10, flexDirection: 'row', justifyContent: 'space-between'}}>
                     <Button label={!showBarChart? `${t("SHOW_CHART")}`: `${t("HIDE_CHART")}`} onPress={changeChartStatus} width={150} />
-                    {/*<Button label={'sort secret letters'} onPress={() => {alert("Button pressed!")}} width={150} />*/}
                     </View>}
 </View>
 {(showBarChart) && (<BarChart
@@ -302,12 +294,9 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
         <Text width={100} style={{fontSize:20}}>{t("MOST_FREQ_SEC")}</Text>
         <Line/>
         </View>
-        {/*<Text width={100} style={{fontSize:18}}> partially decrypted String</Text>
-        <Text width={100} style={{fontSize:16}}> {decypheredMessage}</Text>
-        <Divider/>*/}
+       
          <View>
          <View style ={{height: 60}}><Text width={100} style={{fontSize:20, marginBottom: 5, marginTop:5}}> Output ({t("DEC_MES")}) <Text style={{fontSize: 16}}>{t("KN")} <Text style={{backgroundColor: '#bbb'}}>{t("UNKN")} </Text></Text></Text></View>
-         {/*<View><Text style={{fontSize: 16}}>known <Text style={{backgroundColor: '#bbb'}}>unknown </Text></Text></View>*/}
         <ScrollView style= {{height: '30%', marginTop: 5}}><Text >{textList}</Text></ScrollView></View>
 
 
@@ -318,7 +307,6 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
                     marginTop: 20
                 }}>
                     <Button  label={t("SI")} onPress={() => { myContext.setIntroVisible(true) }} width= '80%' />
-                   {/*} <Button label = 'send message' onPress = {sendMessage} />*/}
                 </View>
 
       </View>

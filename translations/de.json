@@ -40,7 +40,7 @@
     "KEY": "Schlüssel", 
     "VIG_KEY": "Schlüssel (a-z)", 
     "CAES_KEY": "Schlüssel (ganze Zahl)", 
-    "PER_KEY_DETAILS": "Die Buchstaben des Klartextalphabets (oben) sind in einer beliebigen Reihenfolge (unten)", 
+    "PER_KEY_DETAILS": "Die Buchstaben des Klartextalphabets (oben) entsprechen dem Geheimtextalphabet (unten)", 
     "ID": "IDENTITÄT", 
     "SHUFFLE": "MISCHEN", 
     "PERMEXP_P1": "Der Schlüssel für das Permutationsverfahren ist eine beliebige Anordnung der 26 Buchstaben a-z", 
@@ -168,6 +168,8 @@
     "MOD": "Modul", 
     "FAC": "faktorisieren", 
     "USE_PRIME": "Primzahlen:", 
-    "PROD": "Produkt"
+    "PROD": "Produkt", 
+    "CLOSE": "Schliessen", 
+    "KEY_MISMATCH": "Achtung: die Schlüssel passen nicht zueinander! Bitte neues Schlüsselpaar verwenden."
     
   }
