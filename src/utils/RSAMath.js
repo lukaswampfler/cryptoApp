@@ -1,8 +1,6 @@
 import { gcd } from '../utils/CryptoMath';
 
 export function extendedEuclid(e, f, useBigIntegerLibrary) {
-    //alert("ext. euclid, e: " + e + " f: " + f);
-    //console.log("ext. euclid, e: " + e + " f: " + f);
     // uses extended euclid for calculation of decryption exponent d
     let x1 = BigInt(1), x2 = BigInt(0), x3 = BigInt(f), y1 = BigInt(0), y2 = BigInt(1), y3 = BigInt(e);
     let q = BigInt(1);
@@ -23,58 +21,41 @@ export function extendedEuclid(e, f, useBigIntegerLibrary) {
     if (y3 === BigInt(0)){
         return { 'inverse': undefined, 'gcd': x3 };
     }
-    else {
-        console.log(BigInt(y2), y3, typeof BigInt(y3))
-        
+    else {        
         return { 'inverse': y2, 'gcd': y3 };
     }
 }
 // primality test
 export function isPrime(n, useBigIntegerLibrary) {
-    //n = Number(n);
-    //n = BigInt(n)
-    //console.log("Number n in isPrime: ", n)
-    //console.log("n is BigInt: ", typeof BigInt(n))
     // returns true if n is probably prime
     const MILLER_RABIN_ITERATIONS = 20;
-    if(useBigIntegerLibrary){
-        //console.log("before isProbablePrime call")
+    if(useBigIntegerLibrary){ // use builtin primality test
         return BigInt(n).isProbablePrime(MILLER_RABIN_ITERATIONS);
     } 
-    //console.log("so far, so good.")
     if (n <= BigInt(1)){
-        //console.log("isPrime returning false")
         return false; 
     } else if (n === BigInt(2)){
-        //console.log("isPrime returning true")
         return true;
     } else if ( n % BigInt(2) === BigInt(0) ){ // even number larger than 2
-        console.log("isPrime returning false")
         return false;
     } else if (n < 10000) {
-        console.log("number smaller than 10000")
         let nNumber = Number(n); // check for odd divisors of a small n -> type number
         for (let divisor = 3; divisor <= Math.pow(nNumber, 0.5); divisor += 2) {
             if (nNumber % divisor == 0){
-                //console.log("isPrime returning false")
                 return false;
             }
         }
-        //console.log("isPrime returning true")
         return true;
     } else {
-        //console.log("in isPrime before miller rabin")
         return millerRabin(n, MILLER_RABIN_ITERATIONS, useBigIntegerLibrary); // use Miller Rabin for larger numbers 
     }
     
 }
 export function generatePrime(exp, useBigIntegerLibrary) {
-    console.log("exp in generatePrime: ", exp);
     // returns a prime number (as string)
     let min = exp < 1 ? 1 : Math.pow(10, exp-1);
     let max = 10 * min;
     let cand = BigInt(Math.floor(Math.max(2, min + Math.random() * (max - min))));
-    //console.log(cand, useBigIntegerLibrary);
     while (!isPrime(cand, useBigIntegerLibrary)){
         cand++;
     }
@@ -93,16 +74,13 @@ function decomposeOdd(n) {
 export function smartExponentiation(base, exp, m, useBigIntegerLibrary) {
     // calculates the power base**exp mod m efficiently
     // takes three inputs: all of them are BigInts
+
     // 1) calculate binary rep of exponent, but in REVERSED ORDER
-    
     if(useBigIntegerLibrary){
         base = BigInt(base)
         exp = BigInt(exp)
         m = BigInt(m)
     }
-    //console.log("smartExp: ", base, exp, m, useBigIntegerLibrary )
-    //if(useBigIntegerLibrary) console.log("square: ", BigInt(base).pow(2))
-    //else console.log("square: ", base*base)
     var binExponent = '';
     while (exp > 0) {
         if(!useBigIntegerLibrary){
@@ -113,8 +91,6 @@ export function smartExponentiation(base, exp, m, useBigIntegerLibrary) {
             exp = exp.divide(2);
         }
     }
-    // ---- so far the same result for android and iOS. -----
-    // console.log(binExponent);
     // 2) calculate squares, include in result if needed (ie if corresponding bit equals 1)
     let res = BigInt(1);
     for (let i = 0; i < binExponent.length; i++) {
@@ -147,7 +123,6 @@ function conditionMillerRabin(base, n, odd, exp, useBigIntegerLibrary) {
     }
 }
 function millerRabin(n, millerRabinIterations, useBigIntegerLibrary) {
-    //console.log("inside Miller Rabin")
     // extract properties of return value
     const { exponent, odd } = decomposeOdd(n);
     const listOfResults = [];
@@ -166,7 +141,7 @@ function millerRabin(n, millerRabinIterations, useBigIntegerLibrary) {
 }
 
 
-function calculatePubExp(phi){
+export function calculatePubExp(phi){
     let cand = 2;
         while (gcd(cand, phi) > 1){
           cand += 1
@@ -179,41 +154,34 @@ export function calculateKeyPair(p, q, useBigIntegerLibrary) {
     if(useBigIntegerLibrary){
         const num1 = BigInt(p).subtract(1);
         const num2 = BigInt(q).subtract(1);
-        n = num1.multiply(num2);
-        phi = BigInt(p).multiply(BigInt(q))
+        phi = num1.multiply(num2);
+        n = BigInt(p).multiply(BigInt(q))
     } else {
         phi = (BigInt(p) - BigInt(1)) * (BigInt(q) - BigInt(1));
         n = (BigInt(p) * BigInt(q)).toString();
     }
-    
-    //console.log("p: ", p, "q: ", q, "n: ", n);
     const expPublic = phi > Math.pow(2, 16) ?  (Math.pow(2, 16) + 1).toString() : calculatePubExp(Number(phi))
-    
     let { inverse, gcd } = extendedEuclid(BigInt(expPublic), phi, useBigIntegerLibrary);
-    console.log("After Ext Euclid: ", inverse, phi)
     if (inverse === undefined) {
         console.log("Not possible to determine private Key: " + "public" + pubKey.exp + "phi: " + phi);
+    } else if ((useBigIntegerLibrary && inverse.lesser(0)) || (!useBigIntegerLibrary && inverse < 0)) {
+        if (useBigIntegerLibrary){
+                inverse = inverse.add(phi)
+        } else {
+            inverse += phi;
+        }
     } else if (gcd != BigInt(1)) {
         console.log("GCD not equal to 1");
-    } else {
-        if(useBigIntegerLibrary && inverse.lesser(0)){
-                inverse.add(phi)
-                console.log("added phi, new inverse: ", inverse, phi)
-            } else if (!useBigIntegerLibrary && inverse < 0) {
-                inverse += phi;
-            }
     } 
     const keys = {private: {exp: inverse.toString(), mod: n}, public: {exp: expPublic, mod: n}}
-    //console.log("RSA generated keys: ", keys)
     return keys;
             
  }
 
  export function generateDummyKeys(useBigIntegerLibrary) {
-    const p = 11; 
-    const q = 17; 
+    const p = "11"; 
+    const q = "17"; 
     const keys = calculateKeyPair(p, q, useBigIntegerLibrary)
-    //console.log("In generateDummyKeys: ", keys.private.exp, keys.public.exp)
     return keys
   }
     
@@ -224,14 +192,14 @@ export function calculateKeyPair(p, q, useBigIntegerLibrary) {
       if (useBigIntegerLibrary){
         if(n.isEven()){
             return {fac1: "2", fac2: n.divide(2).toString()}
-            } else {
+        } else {
                 let cand = BigInt(3)
-                while (cand.multiply(cand) <= n){
-                    if (n.isDivisible(cand)){
+                while ((cand.multiply(cand)).leq(n)){
+                    if (n.isDivisibleBy(cand)){
                         return {fac1: cand.toString(), fac2: n.divide(cand).toString()} 
                     }
-                    cand.add(BigInt(2))
-                }}
+                    cand = cand.add(BigInt(2))
+            }}
         } else {
             if(n % BigInt(2) === BigInt(0)) return {fac1: "2", fac2: (n/BigInt(2)).toString()}
             else {

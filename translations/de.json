@@ -68,7 +68,7 @@
     "PUB_EXP": "öffentlicher Exponent", 
     "CALC_KEY_PAIR": "erstelltes Schlüsselpaar", 
     "DEFAULT": "Standardwert", 
-    "CHOOSE_PUB_EXP": "öffentlichen Schlüssel wählen",
+    "CHOOSE_PUB_EXP": "wähle öff. Schlüssel",
     "USE_EXP": "Exponent verwenden",
     "UP_PERS": "UPdate meine Schlüssel", 
     "USE_PRI": "priv. Schl. verw.", 

@@ -361,6 +361,10 @@ export default function App() {
     //setUserLoggedIn('loggedOut');
   }, []);
 
+  /*useEffect(() => {
+    delete global.BigInt
+  } , [])*/
+
   //TO TEST
   //useEffect(() => {console.log(isUserLoggedIn)}, [isUserLoggedIn])
 
@@ -388,7 +392,7 @@ export default function App() {
 
 
 
-
+// in useEffect not global.BigInt - Attribut löschen (mit delete BigInt?)
 
   if (typeof BigInt === 'undefined') {
     global.BigInt = require('big-integer');

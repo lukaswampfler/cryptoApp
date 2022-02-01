@@ -55,19 +55,17 @@ export default function RSAEncryptionScreen({ navigation, route }) {
 
 // get initial values for Form: exponent ...
 const getExpInitialValue = () => {
-    console.log(route.params.usePersonalKey)
+    //console.log(route.params)
     if (route.params === undefined) {
         return myContext.ciphers.rsa.exp;
     } else if (route.params.user !== undefined) {  // importing other users public key
         return route.params.user.publicKey.exponent;
     } else if (route.params.usePersonalKey ) {
-        console.log("use personal key")
         return route.params.key.exp.toString();
     } else if (route.params.usePrivateKey){
         
         return route.params.key.exp.toString();
     } else if (myContext.publicKey.exp !== undefined && route.params.usePublicKey) {
-        //console.log("using public key as initial value", myContext.publicKey)
         return myContext.publicKey.exp.toString();
     } 
     else {
@@ -76,11 +74,9 @@ const getExpInitialValue = () => {
 }
 //... and modulus ....
 const getModInitialValue = () => {
-    //console.log("getModInitialValues: ", route.params)
     if (route.params === undefined) {
         return myContext.ciphers.rsa.n;
     } else if (route.params.user !== undefined) {
-        //console.log("getmodInitialValues: ", route.params.user);
         return route.params.user.publicKey.modulus;
     } else if (route.params.usePersonalKey ) {
         return route.params.key.mod.toString();
@@ -105,8 +101,6 @@ const getMessageInitialValue = () => {
 }
 }
 
-
-    const [isEncrypted , setIsEncrypted] = useState(false);
     const [secret, setSecret] = useState('');
     const [mess, setMess] = useState(getMessageInitialValue()) 
     const [exp, setExp] = useState(getExpInitialValue())
@@ -114,12 +108,9 @@ const getMessageInitialValue = () => {
 
     const {t} = useTranslation();
 
-    useEffect(() => {
-        console.log("route params in RSA encryption: ", route.params);
-    }, [])
+
 
     useEffect(() =>{
-        console.log("route.params.mod Effect run...")
         if(route.params?.mod){
             setMod(route.params.mod)
         }
@@ -154,10 +145,6 @@ const getMessageInitialValue = () => {
             myContext.setCiphers(ciphers)
         }
         myContext.setRSAInputSwitchisDecimal(value);
-        
-        
-        //State changes according to switch
-        //values.m = 1
 
     };
 
@@ -166,8 +153,6 @@ const getMessageInitialValue = () => {
 
     // Submission function 
     const RSASubmit = values => {
-        console.log("RSASubmit")
-        console.log("m, exp, n: ", mess, exp, mod)
         let m = mess
         if(m.length == 0){
             alert(`${t("PLS_MESS")}`)
@@ -180,22 +165,12 @@ const getMessageInitialValue = () => {
         if (!myContext.RSAInputSwitchisDecimal)  decimalValue = parseInt(rsa.m.substr(2), 2)  // remove '0b' in front
         // create warning if message larger than modulus
         if (myContext.RSAInputSwitchisDecimal && (BigInt(rsa.m) > BigInt(rsa.n)) || (!myContext.RSAInputSwitchisDecimal && (decimalValue > BigInt(rsa.n)))) {
-            
             alert(`${t("VALUE_TOO_LARGE")}`)
-            //setSecret('')
-            //return;
         }
         let ciphers = myContext.ciphers;
-        //ciphers.rsa = rsa;
-        //ciphers.rsa['encrypted'] = encryptedMessage;
-        //ciphers.rsa['isEncrypted'] = true;
         ciphers.currentMethod = 'RSA';
-        console.log("RSA inputs: ", rsa.m, rsa.exp, rsa.n)
         
-        //console.log(smartExponentiation(BigInt(rsa.m), BigInt(rsa.exp), BigInt(rsa.n), myContext.useBigIntegerLibrary).toString())
         const encryptedMessage = smartExponentiation(BigInt(rsa.m), BigInt(rsa.exp), BigInt(rsa.n), myContext.useBigIntegerLibrary).toString();
-        console.log("encrypted: ", encryptedMessage)
-        
         
         if(myContext.RSAInputSwitchisDecimal){
             ciphers.currentMessage = encryptedMessage;
@@ -207,7 +182,6 @@ const getMessageInitialValue = () => {
         if(myContext.RSAInputSwitchisDecimal) setSecret(encryptedMessage);
         else setSecret(Number(encryptedMessage).toString(2));
         
-        setIsEncrypted(true);
         myContext.setRSAIsEncrypted(true)
     }
 
@@ -279,22 +253,6 @@ const resetMessAndSecret = value => { // used for ClearButton
 
     
 
-    // do the encryption
-    /*const handleRSAEncryption = () => {
-        const { m, exp, n } = myContext.ciphers.rsa;
-        if (m >= n) {
-            alert("Message value too large!")
-        }
-        let ciphers = myContext.ciphers;
-        console.log(m, exp, n);
-        ciphers.rsa['encrypted'] = smartExponentiation(m, exp, n, myContext.useBigIntegerLibrary).toString();
-        myContext.setCiphers(ciphers);
-
-        //const rsa = new RSA(m, exp, n); -> this is not working, causes an infinite loop -> max stack depth reached.
-
-    }
-    */
-
     // Output-Value
     const getRSAOutputValue = () => {
         if (myContext.ciphers.rsa.isEncrypted) {
@@ -304,14 +262,10 @@ const resetMessAndSecret = value => { // used for ClearButton
 
     const rsaIntroText = `Input: ${t('RSAEXP_P2')}\n\n` + `${t('KEY')}: ${t('RSAEXP_P1')}\n\n`  + `${t('RSAEXP_P3')}\n\n` + `${t('RSAEXP_P4')}`
     const introText = rsaIntroText;
-    //const method = "The RSA cipher"
 
 
 
     return (
-        /*<View style={{flex:1,
-        backgroundColor: '#eee',}}>   
-       <SafeAreaView>*/
         <ScrollView style={{
             flex: 1, margin: 0
         }}>
@@ -322,8 +276,6 @@ const resetMessAndSecret = value => { // used for ClearButton
             <View
                 style={{
                     flex: 1,
-                    //backgroundColor: '#fff',
-                    //alignItems: 'center',
                     justifyContent: 'center', 
                 }}
             >
@@ -349,36 +301,24 @@ const resetMessAndSecret = value => { // used for ClearButton
                     margin: 10
                 }}>
                     <NumInput
-                        //icon='new-message'
                         width={245}
-                        //placeholder='Enter message'
                         autoCapitalize='none'
                         keyboardType='number-pad'
                         keyboardAppearance='dark'
                         returnKeyType='next'
                         returnKeyLabel='next'
-                        //onChangeText={handleChange('m')}
                         onChangeText = {changeMess}
-                        onBlur={handleBlur('m')}
-                        //error={errors.m}
-                        touched={touched.m}
-                        //value={values.m}
                         value = {mess}
                     />
                     <View style={{
                         flex: 1,
-                        //backgroundColor: '#fff',
                         alignItems: 'center',
                         justifyContent: 'center'
                     }}>
                         <Text>
                             {myContext.RSAInputSwitchisDecimal ? `${t('DECIMAL')}` : `${t('BINARY')}`}
                         </Text>
-                       {/*} <Switch
-                            style={{ marginTop: 5 }}
-                            onValueChange={toggleRSAInputSwitch}
-                            value={myContext.RSAInputSwitchisDecimal}
-                />*/}
+                      
                         <GreySwitch style={{marginTop: 5}} onValueChange={toggleRSAInputSwitch} value={myContext.RSAInputSwitchisDecimal}/>
                     </View>
                 </View>
@@ -399,26 +339,15 @@ const resetMessAndSecret = value => { // used for ClearButton
         justifyContent: 'space-between',
         marginTop: 20
       }}>
- {/*<View style={{
-          marginLeft: 10,
-        }}>*/}
+
           <Button label={`${t('RSA_GEN')}`}  onPress={() => {
-            console.log("navigating to RSAKey with message: ", myContext.ciphers.rsa.m)
-            //const ciphers = myContext.ciphers;
-            //ciphers.rsa.m = values.m; // setting the message
-            //myContext.setCiphers(ciphers);
             navigation.navigate('RSAKey');
             myContext.setRSAIsEncrypted(false);
           }} width = {.45*screenWidth} />
-      {/*}  </View>*/}
-
-       {/*} <View style={{
-          marginLeft: 10,
-        }}>*/}
+      
           <Button label={`${t('RSA_IMP')}`}  width={.45*screenWidth} onPress={() => { 
             myContext.setRSAIsEncrypted(false);
             navigation.navigate('UsersList', { toSend: false, toImportKey: true }) }} />
-       {/*} </View>*/}
 
 
       </View>
@@ -438,20 +367,13 @@ const resetMessAndSecret = value => { // used for ClearButton
       }}><Text> Exponent </Text>
 
         <NumInput
-          //icon='pinterest'
           width={.45*screenWidth}
-          //placeholder='Enter exponent'
           autoCapitalize='none'
           keyboardType='number-pad'
           keyboardAppearance='dark'
           returnKeyType='next'
           returnKeyLabel='next'
-          //onChangeText={handleChange('exp')}
           onChangeText={changeExp}
-          //onBlur={handleBlur('exp')}
-          //error={errors.exp}
-          //touched={touched.exp}
-          //value={values.exp} 
           value={exp}
           />
        
@@ -466,34 +388,22 @@ const resetMessAndSecret = value => { // used for ClearButton
       }}>
   <Text> {t('MOD')} </Text>
         <NumInput
-          //icon='pinterest'
           width={.45*screenWidth}
-          //placeholder='Enter modulus n'
           autoCapitalize='none'
           keyboardType='number-pad'
           keyboardAppearance='dark'
           returnKeyType='next'
           returnKeyLabel='next'
-          //onChangeText={handleChange('n')}
           onChangeText={changeMod}
-          //onBlur={handleBlur('n')}
-          //error={errors.n}
-          //touched={touched.n}
-          //value={values.n} 
           value = {mod}
           />
-       {/*} <View style={{
-          marginLeft: 10,
-        }}>
-          <Button label='Import Key' onPress={() => { navigation.navigate('UsersList', { toSend: false, toImportKey: true }) }} width={130} />
-      </View>*/}
+       
       </View>
 </View>
 
 
     </View>
 
-                {/*<RSAKeyInput valueExp={exp} valueMod={mod} changeExp = {changeExp} changeMod={changeMod} errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur} navigation={navigation} route={route} />*/}
                 <View style={{
                     flexDirection: 'row',
                     justifyContent: 'center',
@@ -511,7 +421,6 @@ const resetMessAndSecret = value => { // used for ClearButton
              <View style = {{flexDirection: 'row', justifyContent: 'space-between'}}>   
             <Text style={{ fontSize: 20 }}>Output</Text>
             <Button label={`${t("AI")}`} onPress={() => {
-                //console.log("Button pressed")
                 setMess(secret)
                 setSecret('')
                 }}/>
@@ -526,34 +435,11 @@ const resetMessAndSecret = value => { // used for ClearButton
             </View>
             }
 
-           {/*} <View style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                margin: 20
-            }}>
-                <NumInput
-                    //icon='new-message'
-                    width={245}
-                    placeholder='Encrypted message'
-                    autoCapitalize='none'
-                    keyboardType='number-pad'
-                    keyboardAppearance='dark'
-                    defaultValue={getRSAOutputValue()}
-                />
-            </View>*/}
+          
             </View>
 
 
-           {/*} <View style={{
-                flexDirection: 'row',
-                justifyContent: 'space-around', width: 150,
-                marginTop: 30,
-                marginLeft: 20
-            }}>
-                <Button label={`${t('SI')}`} onPress={() => { 
-                    //console.log(route.params)
-                    myContext.setIntroVisible(true) }} />
-                </View>*/}
+          
             <View style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
@@ -569,6 +455,5 @@ const resetMessAndSecret = value => { // used for ClearButton
 
 
         </ScrollView>
-        //{/*</View>*/}
     );
 }

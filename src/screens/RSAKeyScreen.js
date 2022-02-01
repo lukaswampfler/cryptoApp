@@ -5,7 +5,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import AppContext from '../components/AppContext';
 
 
-import { isPrime, generatePrime , extendedEuclid, factorize, smartExponentiation} from '../utils/RSAMath';
+import { isPrime, generatePrime , extendedEuclid, factorize, smartExponentiation, calculatePubExp} from '../utils/RSAMath';
 import NumInput from '../components/NumInput';
 import Button from '../components/Button';
 import { IntroModal } from '../utils/Modals';
@@ -26,6 +26,7 @@ import API from '@aws-amplify/api';
 import { getUser } from '../graphql/queries';
 import { useTranslation } from 'react-i18next';
 import { getRandomInt } from '../utils/permutationMath';
+import { ServerContainer } from '@react-navigation/native';
 
 const NOPRIME_MESSAGE = 'not a prime number'
 const REQUIRED_ERROR_MESSAGE = 'this field is required';
@@ -186,14 +187,13 @@ useEffect(() => {
 }, [isRandom])
 
 useEffect(() => {
-  //console.log(isDefault, pubExp)
   if(isDefault){
-    if(savedExponent){
+    /*if(savedExponent){
       setPubExp(savedExponent)
       setVerifiedPubExp(savedExponent)
-    } else {
+    } else {*/
       setDefaultPubExp()
-    }
+    //}
   } else {
     setSavedExponent(pubExp)
     setPubExp(null)
@@ -247,7 +247,22 @@ const toggleRandomSwitch = () => {
 
   const setDefaultPubExp = () => {
     if(pConfirmed && qConfirmed){
-      const phi = (pConfirmed-1) * (qConfirmed-1);
+      let phi, n; 
+      if(myContext.useBigIntegerLibrary){
+        const num1 = BigInt(pConfirmed).subtract(1);
+        const num2 = BigInt(qConfirmed).subtract(1);
+        phi = num1.multiply(num2);
+        n = BigInt(pConfirmed).multiply(BigInt(qConfirmed))
+    } else {
+        phi = (BigInt(pConfirmed) - BigInt(1)) * (BigInt(qConfirmed) - BigInt(1));
+        n = (BigInt(pConfirmed) * BigInt(qConfirmed)).toString();
+    }
+    
+    const expPublic = phi > Math.pow(2, 16) ?  (Math.pow(2, 16) + 1).toString() : calculatePubExp(Number(phi))
+    setPubExp(expPublic)
+    setVerifiedPubExp(expPublic)
+
+     /* const phi = (pConfirmed-1) * (qConfirmed-1);
       const pow16 = Math.pow(2, 16)
       if( phi > pow16){
           setPubExp((pow16 + 1).toString());
@@ -259,22 +274,12 @@ const toggleRandomSwitch = () => {
         }
           setPubExp(cand.toString())
           setVerifiedPubExp(cand);
-      }
+      }*/
     } else {setPubExp(null)}
 }
 
 const togglePubExpSwitch = () => {
-    //console.log("toggle pubExp switch, value ob isDefault: ", isDefault)
-    //console.log("value of pubExp", pubExp);
-    //console.log(p, q, Math.pow(2, 16), (p-1) * (q-1))
- /* if(!isDefault){ // isDefault is set to be true NOW
-    setDefaultPubExp();
-  } else {
-      setPubExp('')
-      setVerifiedPubExp('')
-}*/
-
-  setIsDefault(!isDefault);
+    setIsDefault(!isDefault);
 }
 
 const checkPrime = value => {
@@ -290,6 +295,7 @@ const checkPrime = value => {
 }
 
 const checkAndUsePrimes = () => {
+  console.log("checkAndUsePrimes")
   if(p && q){
   if (checkPrime(p) && checkPrime(q)){
     if(p == q) {
@@ -318,7 +324,10 @@ const checkAndUsePrimes = () => {
 
 
 const changeMod = (m) => {
+  if(isInteger(m)){
     setMod(m.toString())
+    console.log("Mod changed to ", m)
+  }
 }
 
 
@@ -341,11 +350,15 @@ const changePublicKey = () => {
 }
 
 const setPrivateKey = () => {
-    console.log(verifiedPubExp)
+    console.log("verified pub Exp", verifiedPubExp, pConfirmed, qConfirmed)
+    console.log("useBigIntegerLibrary", myContext.useBigIntegerLibrary)
     let phi, n
     if (myContext.useBigIntegerLibrary){
+      console.log("Android")
       const num1 = BigInt(pConfirmed).subtract(BigInt(1))
+      console.log("num1 calculated")
       const num2 = BigInt(qConfirmed).subtract(BigInt(1))
+      console.log("num1, num2", num1, num2)
       phi = num1.multiply(num2)
       n = BigInt(pConfirmed).multiply(BigInt(qConfirmed))
     } else {
@@ -353,6 +366,7 @@ const setPrivateKey = () => {
       n = BigInt(pConfirmed)*BigInt(qConfirmed)
     }
     if(verifiedPubExp && verifiedPubExp != ''){
+        console.log("calling extended Euclid", verifiedPubExp, phi)
         let { inverse, gcd } = extendedEuclid(BigInt(parseInt(verifiedPubExp)), phi, myContext.useBigIntegerLibrary);
         console.log("AFTER EXT EUCLID: ", inverse, gcd)
         if (inverse === undefined) {
@@ -371,10 +385,10 @@ const setPrivateKey = () => {
       } 
       if(myContext.useBigIntegerLibrary){
         myContext.setPrivateKey({ exp: inverse.toString(), mod: n.toString() });
-        console.log("new Private Key: ,exp ", inverse.toString(), " mod: ", n.toString());
+        console.log("new Private Key Android: ,exp ", inverse.toString(), " mod: ", n.toString());
       } else {
         myContext.setPrivateKey({ exp: inverse.toString(), mod: n.toString() });
-        console.log("new Private Key: ,exp ", inverse.toString(), " mod: ", n.toString() );
+        console.log("new Private Key IOS: ,exp ", inverse.toString(), " mod: ", n.toString() );
       }
         
         
@@ -434,22 +448,6 @@ const checkAndUsePubExp = () => {
     }
   }
 
-   /*const formikExponent = useFormik({
-      validationSchema: ExpInputScheme,
-      initialValues: { exp: NUM_DIGITS },
-      onSubmit: values => {
-        myContext.setExp(values.exp)
-        const p = generatePrime(values.exp, myContext.useBigIntegerLibrary);
-        const q = generatePrime(values.exp, myContext.useBigIntegerLibrary);
-        myContext.setPrimes({p: p, q: q});
-        setP(p);
-        setQ(q);
-        
-      }
-    });*/
-  
-
-      
 
   const keyText = "Here comes the introduction to the RSA key generation...";
   const keyTitle = "RSA" + `${t('KEY')}`
@@ -463,7 +461,6 @@ const checkAndUsePubExp = () => {
       <IntroModal text={introText} method={method} />
       <ScrollView style={{ flex: 1, margin: 10 }}>
 
-        {/*new here!*/} 
         <View style ={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
         
         
@@ -485,7 +482,6 @@ const checkAndUsePubExp = () => {
           <View style = {{width : '180%', backgroundColor: isRandom? '#fff': '#ddd', borderRadius: 8}}>
 
             <NumInput
-              //icon='pinterest'
               editable={!isRandom}
               width='100%'
               placeholder='p'
@@ -495,9 +491,6 @@ const checkAndUsePubExp = () => {
               returnKeyType='next'
               returnKeyLabel='next'
               onChangeText={changeP}
-              //onBlur={formikPrimes.handleBlur('p')}
-              //error={formikPrimes.errors.p}
-              //touched={formikPrimes.touched.p}
               value = {p}
             />
             </View>
@@ -505,9 +498,7 @@ const checkAndUsePubExp = () => {
           <View style={{ paddingHorizontal: 32, marginBottom: 16, width: '70%'}}>
           <View style = {{width : '180%', backgroundColor: isRandom? '#fff': '#ddd', borderRadius: 8}}>
             <NumInput
-              //icon='pinterest-with-circle'
               width='100%'
-              //backgroundColor= {isRandom? '#FFF': '#AAA'}
               editable={!isRandom}
               placeholder='q'
               autoCapitalize='none'
@@ -517,9 +508,6 @@ const checkAndUsePubExp = () => {
               returnKeyLabel='next'
               autoCompleteType='off'
               onChangeText={changeQ}
-              //onBlur={formikPrimes.handleBlur('q')}
-              //error={formikPrimes.errors.q}
-              //touched={formikPrimes.touched.q}
               value = {q}
             />
             </View>
@@ -546,28 +534,13 @@ const checkAndUsePubExp = () => {
                         </View>
                         
      {isRandom ? 
-       /* <View
-       style={{
-         width: '30%',
-         flexDirection: 'row',
-         alignItems: 'center',
-         height: 48,
-         borderRadius: 8,
-         borderColor: '#223e4b',
-         borderWidth: StyleSheet.hairlineWidth,
-         padding: 8
-       }}
-    > */
-      /*} <Button label='Random' onPress={formikExponent.handleSubmit} width={80} />*/
      <View style={{marginTop: 5}}>   
-  <Text> {t('DEC_DIG')}
-      </Text>
+      <Text> {t('DEC_DIG')} </Text>
   
-<RNPickerSelect style={pickerSelectStyles}
+    <RNPickerSelect style={pickerSelectStyles}
             useNativeAndroidPickerStyle={false}
             onValueChange={(value) => setExp(value)}
             InputAccessoryView={() => null}
-            //placeholder={{label :"Select number of digits", value: ''}}
             placeholder={{}}
             items={[
                 { label: '1', value: 1},
@@ -582,13 +555,13 @@ const checkAndUsePubExp = () => {
                 { label: '10', value: 10 } 
             ]}
         />
-
-
-      </View> : 
+      </View> 
+      : 
       <View style={{marginTop: 20, width: '100%'}}>
       <Button label={t("USE_PRIMES")} onPress={checkAndUsePrimes} width={'80%'} /> 
       </View>
       }
+
         </View>
             
             </View>
@@ -622,15 +595,12 @@ const checkAndUsePubExp = () => {
                 returnKeyLabel='next'
                 autoCompleteType='off'
                 onChangeText={changePubExp}
-                //onBlur={formikPublicExponent.handleBlur('e')}
-                //error={formikPublicExponent.errors.e}
-                //touched={formikPublicExponent.touched.e}
                 value = {pubExp}
                 />
       </View>
   </View>
 
-  <View style = {{margin: 5,width: '40%', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center'}}>
+  <View style = {{margin: 5,width: '40%',  flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center'}}>
   <Text>
                             {isDefault ? `${t('DEFAULT')}` : `${t('CHOOSE_PUB_EXP')}`}
                         </Text>
@@ -667,13 +637,7 @@ const checkAndUsePubExp = () => {
 
       
       <Line/>
-       {/*} <View style={{
-          flexDirection: 'center',
-          justifyContent: 'center', width: 150,
-          marginTop: 100
-        }}>
-          <Button label='show explanation' onPress={() => { myContext.setExplVisible(true) }} />
-    </View>*/}
+      
     <View style ={{flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10, marginTop: 10}}>   
     <View style = {{margin: 10, width: '45%'}}>
                 <Text style={{
@@ -686,10 +650,7 @@ const checkAndUsePubExp = () => {
 <Button style ={{width: '30%', marginRight: 20}} label={t('SHOW_PERS')} onPress = {() => {myContext.setIntroVisible(true)}}/>
 </View>
 
-              {/*}  <Text>Exponent: <Text style ={{fontWeight: 'bold'}} > public: {personalPublicKey.exp} </Text> <Text style ={{fontWeight: 'bold'}} > private: {personalPrivateKey.exp} </Text> 
-          </Text>
-          <Text>Modulus: <Text style = {{fontWeight: 'bold'}}>  {personalPublicKey.mod} </Text>
-              </Text>*/}
+          
     <View style = {{flexDirection: 'row', justifyContent: 'space-between'}}>
       <View style ={{width: '45%'}}>
         <Button style = {{width: '45%'}} label = {t('USE_OWN_PRI')} onPress={() => {
@@ -706,8 +667,7 @@ const checkAndUsePubExp = () => {
                 usePersonalKey: true, 
                 merge: true}
           })})
-          //console.log()
-          //alert("exp: " + privateKey.exponent)}
+         
         }}
          />
          </View>
@@ -739,25 +699,20 @@ const checkAndUsePubExp = () => {
               
 <View style = {{width: '60%', backgroundColor: isDefault? '#fff': '#ddd', marginLeft: 20, borderRadius: 8}}>
 <NumInput 
-                //icon='key'
                 width = '100%'
                 editable = {true}
-                //placeholder='public exponent e '
                 keyboardType='number-pad'
                 keyboardAppearance='dark'
                 returnKeyType='next'
                 returnKeyLabel='next'
                 autoCompleteType='off'
                 onChangeText={changeMod}
-                //onBlur={formikPublicExponent.handleBlur('e')}
-                //error={formikPublicExponent.errors.e}
-                //touched={formikPublicExponent.touched.e}
                 value = {mod}
                 />
       </View>
   </View>
 
-  <View style = {{margin: 5,width: '40%'}}>
+  <View style = {{margin: 5,width: '42%'}}>
  
   <Button label={t("FAC")} onPress={getFactors} width={'90%'} /> 
   </View>
@@ -766,7 +721,6 @@ const checkAndUsePubExp = () => {
 
 
       </ScrollView>
-      {/*</SafeAreaView>*/}
     </View>
 
 
