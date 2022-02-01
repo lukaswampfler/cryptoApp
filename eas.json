@@ -15,7 +15,7 @@
   "submit": {
     "production": {"android": {
       "serviceAccountKeyPath": "/Users/lukas_wampfler/Downloads/pc-api-6801261377401643713-203-7ec67c7310fa.json",
-      "track": "internal"
-    }}
+      "track": "internal" }
+  }
   }
 }
