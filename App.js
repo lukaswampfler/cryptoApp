@@ -291,6 +291,8 @@ export default function App() {
 
   const [appLanguage, setAppLanguage] = useState('de');
 
+  const [messages, setMessages] = useState([])
+
 
   const userSettings = {
     userName: userName,
@@ -314,6 +316,7 @@ export default function App() {
     RSAKeyGenState: RSAKeyGenState,
     appLanguage: appLanguage,
     RSAIsEncrypted: RSAIsEncrypted,
+    messages: messages,
     setUserName,
     setUserID,
     setPassword,
@@ -334,7 +337,8 @@ export default function App() {
     setIsLastRiddle,
     setRSAKeyGenState,
     setAppLanguage, 
-    setRSAIsEncrypted
+    setRSAIsEncrypted, 
+    setMessages
   };
 
 

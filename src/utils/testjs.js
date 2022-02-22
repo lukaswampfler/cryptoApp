@@ -113,3 +113,5 @@ let s= "abdchjkldsfAvhjavd0lc"
 let re = /^[a-zA-Z]*$/
 
 console.log(re.test(s))
+
+console.log(BigInt('10111111111111111111111111111', 2))

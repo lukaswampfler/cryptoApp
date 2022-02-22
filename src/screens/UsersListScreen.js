@@ -35,7 +35,7 @@ export default function UsersListScreen({ route, navigation }) {
       const usersData = await API.graphql({ query: listUsers })
       const users = usersData.data.listUsers.items
       setUsers(users)
-      console.log(users)
+      //console.log(users)
     } catch (err) { console.log('error fetching users: ', err) }
   }
 
@@ -48,7 +48,7 @@ export default function UsersListScreen({ route, navigation }) {
         method: myContext.ciphers.currentMethod,
         sent: "true"
       }
-      console.log(messageDetails)
+      //console.log(messageDetails)
       const messageData = await API.graphql({ query: createMessage, variables: { input: messageDetails } });
       alert('Message ' + messageDetails.text +' sent successfully to ' + receiver.name);
       navigation.goBack();

@@ -1,8 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, Dimensions, TextInput, TouchableWithoutFeedback, ScrollView, Keyboard } from 'react-native';
-import Button from '../components/Button';
 import { caesarEncrypt} from '../utils/caesarMath';
-import AppContext from '../components/AppContext';
 import Title from '../components/Title';
 import {MaterialCommunityIcons} from '@expo/vector-icons'
 
@@ -88,8 +86,6 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
     for (let ind = 0; ind < keys.length; ind++){
         keys[ind] = keys[ind] + ":" + (ind+1).toString()
     }
-    
-    console.log("keys:", Object.values(sorted))
     const data = {
         labels: keys,
         datasets: [{ data: Object.values(sorted) }]

@@ -121,13 +121,7 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
     const changeChosenLength = value => {
         
         setChosenLength(value);
-        //let frequencyDictionaries = createFrequencyDict(secret, value)
-        //setData(createData(frequencyDictionaries, mostFrequentLetter));
         
-        //console.log("data: ", data)
-        
-
-
     }
 
     const handleAnalysis = () => {

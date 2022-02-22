@@ -199,13 +199,11 @@ const setContainer = () => {
     )
     } 
     setClearText(secretContainer.clear)
-    //myContext.setSecretContainer(secretContainer);
     }
 
     let details;
 
 
-    //const title = "I challenge you to decrypt the message below!";
     const title = `${t("CHALLENGE_TIT")}`
     /*if (details.isRandom){
         console.log("getting 10 random messages from server, render them in Flatlist")
@@ -286,7 +284,7 @@ const setContainer = () => {
 
             {(method == 'rsa' && key) && <View style = {{marginLeft: 15, marginTop: 5, marginRight: 10}}>
              <Text style= {{fontWeight: 'bold'}} selectable>
-                public exponent: {key.public.exp}, modulus:  {key.public.mod} 
+             {`${t('PUB_EXP')}: `} {key.public.exp}, {`${t('MOD')}: `}  {key.public.mod} 
             </Text>
             </View>}
             {/*<View style ={{margin: 10}}>

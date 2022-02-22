@@ -21,14 +21,6 @@ import { useTranslation } from 'react-i18next';
 import ClearButton from '../components/ClearButton';
 
 
-const INVALID_FORMAT_ERROR_MESSAGE = 'invalid format';
-const REQUIRED_ERROR_MESSAGE = 'this field is required';
-
-
-
-
-
-
 
 export default function SDESScreen({ route, navigation }) {
 
@@ -46,7 +38,6 @@ export default function SDESScreen({ route, navigation }) {
   const myContext = useContext(AppContext);
 
   const [isEncrypted, setIsEncrypted] = useState(false);
-  //const [isDecrypted, setIsDecrypted] = useState(false);
   const [keyEntered, setKeyEntered] = useState(false);
   const [message, setMessage] = useState(getMessageInitialValue());
   const [encryptedMessage, setEncryptedMessage] = useState('');
@@ -63,9 +54,6 @@ export default function SDESScreen({ route, navigation }) {
 
   useEffect(() => {
     console.log("route params", route);
-    /*if (route != undefined) {
-      setMessage(route.params.message)
-    }*/
   }, [])
 
   useEffect(() => {
@@ -96,25 +84,6 @@ export default function SDESScreen({ route, navigation }) {
     navigation.navigate('UsersList', { toSend: true, toImportKey: false })
   }
 }
-
-
-  const getK1InitialValue = () => {
-    if (myContext.ciphers.sdes.keys === undefined) {
-      return '';
-    } else {
-      return myContext.ciphers.sdes.keys.k1;
-    }
-
-  }
-  const getK2InitialValue = () => {
-    if (myContext.ciphers.sdes.k2 === undefined) {
-      return '';
-    } else {
-      return myContext.ciphers.sdes.k2;
-    }
-  }
-
-
   
 
   const getKeyInitialValue = () => {
@@ -132,7 +101,6 @@ export default function SDESScreen({ route, navigation }) {
   }
 
   const getK1K2InitialValues = () => {
-    //alert("getting k1 k2 initial values" + getKeyInitialValue())
     let ciphers = myContext.ciphers;
       if (ciphers.sdes === undefined) {
         return {k1: '', k2: ''};
@@ -149,8 +117,8 @@ export default function SDESScreen({ route, navigation }) {
       myContext.setRSAInputSwitchisDecimal(false);
       let ciphers = myContext.ciphers;
       ciphers.rsa.m = key
-      formikKey.handleSubmit(formikKey.values);
-      //console.log("encrypt Key: ", formikKey.values.key);
+      // TODO: is the next line necessary?
+      //formikKey.handleSubmit(formikKey.values);
       navigation.navigate("RSA")
   } else {
     alert(`${t("10_BIT")}`)
@@ -207,18 +175,10 @@ export default function SDESScreen({ route, navigation }) {
   } else {
     alert(`${t("10_BIT")}`)
   }
-    //console.log(myContext.ciphers);
   }
 
 
   const handleEncryption = () => {
-
-
-    /*used to be: 
-    formikKey.handleSubmit(formikKey.values)
-    formikMessage.handleSubmit(formikMessage.values)
-    
-    */
     if (!isBitStringMultipleOf8(message)){
       alert(`${t("MULT_8_BIT")}`)
     } else if (!is8BitString(k1) || !is8BitString(k2)){
@@ -235,26 +195,12 @@ export default function SDESScreen({ route, navigation }) {
       const keys = {k1: k1, k2: k2};
       ciphers.sdes.keys = keys
       ciphers.sdes.message = message
-      //ciphers.sdes.message = formikMessage.values.message;
-      //setMessage(formikMessage.values.message);
-      //console.log("message", values.message);
-      //console.log("keys: ", myContext.ciphers.sdes.keys);
-      //const encrypted = encryptSDESMessage(formikMessage.values.message, keys)
       const encrypted = encryptSDESMessage(message, keys)
       const decryptionKeys = { k1: keys.k2, k2: keys.k1 }
       ciphers.sdes.encryptedMessage = encrypted;
-      //const encryptedAsText = decodeBinaryString(encrypted);
-      //const encryptedEncoded = encodeEncrypted(encryptedAsText);
-      //console.log("encrypted encoded", encryptedEncoded);
-      //console.log("decryption keys: ", decryptionKeys);
-      //console.log("Encrypted decrypted", encryptSDESMessage(encryptedEncoded, decryptionKeys))
-      
-      // comment for now...
-      //const decrypted = encryptSDESMessage(encodeEncrypted(decodeBinaryString(encrypted)), decryptionKeys);
       myContext.setCiphers(ciphers);
       setIsEncrypted(true);
       setEncryptedMessage(encrypted);
-      //setDecryptedMessage(decodeBinaryString(decrypted));
     }
     
   }
@@ -341,8 +287,6 @@ export default function SDESScreen({ route, navigation }) {
         <View
                 style={{
                     flex: 1,
-                    //backgroundColor: '#fff',
-                    //alignItems: 'center',
                     justifyContent: 'center', 
                 }}
             >
@@ -369,9 +313,7 @@ export default function SDESScreen({ route, navigation }) {
                     margin: 20
                 }}>
                     <NumInput
-                        //icon='new-message'
                         width='40%'
-                        placeholder='Enter message'
                         autoCapitalize='none'
                         keyboardType='number-pad'
                         keyboardAppearance='dark'
@@ -388,7 +330,6 @@ export default function SDESScreen({ route, navigation }) {
                 </View>
 
                 </View>
-               {/*} <Divider  style={{ width: "100%", margin: 10 }} />*/}
                 <Line />
                 <View style ={{margin: 10}}>
 
@@ -397,20 +338,13 @@ export default function SDESScreen({ route, navigation }) {
         <Text style = {{fontSize: 16, fontWeight: '500'}}> {t('K10')} </Text>
         
          <NumInput
-            //icon='pinterest'
             width='40%'
-            placeholder='Enter 10-bit key'
             autoCapitalize='none'
             keyboardType='number-pad'
             keyboardAppearance='dark'
             returnKeyType='next'
             returnKeyLabel='next'
-            //onChangeText={formikKey.handleChange('key')}
             onChangeText = {changeKey}
-            onBlur={formikKey.handleBlur('key')}
-            //error={formikKey.errors.key}
-            touched={formikKey.touched.key}
-            //value={formikKey.values.key}
             value = {key}
           />
           </View>
@@ -421,7 +355,6 @@ export default function SDESScreen({ route, navigation }) {
     marginBottom: 10,
 }}>
              <Button label={t('K12')} 
-             //onPress={formikKey.handleSubmit}  
              onPress = {calculateK1K2}
              width = '40%'/>
              <Button label={t('RSA_ENC')} onPress={encryptKey} width = '50%'/>
@@ -437,9 +370,7 @@ export default function SDESScreen({ route, navigation }) {
   <View style ={{flexDirection: 'row', alignItems: 'center'}}>
     <Text style ={{fontSize: 16, fontWeight: '500'}}> k1:  </Text> 
              <NumInput
-            //icon='pinterest'
             width='50%'
-            placeholder='Enter k1'
             autoCapitalize='none'
             keyboardType='number-pad'
             keyboardAppearance='dark'
@@ -466,9 +397,7 @@ export default function SDESScreen({ route, navigation }) {
        <View style ={{flexDirection: 'row', alignItems: 'center'}}>
     <Text style ={{fontSize: 16, fontWeight: '500'}}> k2:  </Text> 
         <NumInput
-          //icon='pinterest'
           width='50%'
-          placeholder='Enter k2'
           autoCapitalize='none'
           keyboardType='number-pad'
           keyboardAppearance='dark'
@@ -483,12 +412,10 @@ export default function SDESScreen({ route, navigation }) {
 </View> 
        
         
-       {/*} <Button label='Use k1, k2' onPress={formikK12.handleSubmit} />*/}
        
         <View style ={{flexDirection: 'row', justifyContent: 'center'}}>
         <Button label={t('ENC')} onPress={handleEncryption} width = '50%'/>
         </View>
-        {/*<Divider style={{ width: "100%", margin: 10 }} />*/}
         <View style ={{marginTop: 10}}>
         <Line/>
         </View>
@@ -518,20 +445,7 @@ export default function SDESScreen({ route, navigation }) {
             <Text style={{ fontSize: 16 }} selectable> {decodeBinaryString(myContext.ciphers.sdes.encryptedMessage)} </Text>
             </View>
           }
-            {/*<Text style={{ fontSize: 20 }}>encrypted message encoded </Text>
-            <Text style={{ fontSize: 20 }} selectable> {encodeEncrypted(decodeBinaryString(myContext.ciphers.sdes.encryptedMessage))} </Text>
-            <Text style={{ fontSize: 20 }}>Message decrypted </Text>
-        <Text style={{ fontSize: 20 }} selectable> {decryptedMessage} </Text>*/}
 <View style ={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
-{/*<Switch
-                            style={{ marginTop: 5 }}
-                            onValueChange={toggleIsBinary}
-                            value={isMessageBinary}
-                        
-/>*/}
-
-
-{/*<Button label= {isMessageBinary? `${t('SBM')}` : `${t('SM')}`} onPress={sendMessage} width = '45%'/>*/}
 
 </View>
 

@@ -41,8 +41,8 @@
     "VIG_KEY": "Key (letters a-z)", 
     "CAES_KEY": "Key (number)", 
     "PER_KEY_DETAILS": "All the letters of the alphabet (above) correspond to the permuted secret alphabet (below).", 
-    "ID": "Identity", 
-    "SHUFFLE": "Shuffle", 
+    "ID": "IDENTITY", 
+    "SHUFFLE": "SHUFFLE", 
     "PERMEXP_P1": "The key for the permutation method is any reordering of the letters a-z", 
     "PERMEXP_P2": "changes the position of two random letters in the secret alphabet", 
     "PERMEXP_P3": "random ordering of the whole secret alphabet", 
@@ -165,12 +165,16 @@
     "PLS_MESS": "Please enter a message!",
     "LIK_KEY": "Likely key word", 
     "LAN": "Sprache", 
-    "MOD": "Modulus", 
+    "MOD": "modulus", 
     "FAC": "factorize", 
     "USE_PRIME": "You are using the prime numbers:", 
     "PROD": "Their product is equal to", 
     "CLOSE": "close", 
-    "KEY_MISMATCH": "Attention: Key mismatch! Please use a new key pair."
+    "KEY_MISMATCH": "Attention: Key mismatch! Please use a new key pair.", 
+    "NO_RIDDLES": "No riddles yet ...", 
+    "EXP": "exponent", 
+    "PLS_EXPMOD": "Please enter exponent and modulus!", 
+    "RSA_WARNING": "Please use only integers for RSA input."
 
 
 

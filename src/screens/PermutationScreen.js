@@ -27,7 +27,7 @@ export default function PermutationScreen({ navigation }) {
     const myContext = useContext(AppContext);
 
 
-    const permutationIntroText = `${t('PERMEXP_P1')}\n\n` + `\n\n TRANSPOSITION: ` + `${t('PERMEXP_P2')}`  + `\n\n${t('SHUFFLE')}: ` + `${t('PERMEXP_P3')}` + `\n\n${t('ID')}: `+ `${t('PERMEXP_P4')}` + `\n\n${t('PERMEXP_P5')}`
+    const permutationIntroText = `${t('PERMEXP_P1')}\n\n` + `\n\nTRANSPOSITION: ` + `${t('PERMEXP_P2')}`  + `\n\n${t('SHUFFLE')}: ` + `${t('PERMEXP_P3')}` + `\n\n${t('ID')}: `+ `${t('PERMEXP_P4')}` + `\n\n${t('PERMEXP_P5')}`
     const introText = permutationIntroText;
 
     useEffect(() => {

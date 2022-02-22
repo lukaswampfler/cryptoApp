@@ -116,23 +116,13 @@ export function kasiskiTest(secret, minLength = 3, maxLength = 6) {
     let s = secret.toLowerCase().replace(/\s/g, '').replace(/[^a-z]/g, ''); // remove all whitespace and non-Ascii from secret
     // find substrings which occur more than once in secret text along with their difference in position.
     let result = testForEqualParts(s, minLength, maxLength);
-    //const gcd = gcdArray(Object.values(posDiff));
     return result
-    //return [{fragment: 'abc', posDiff:  24} , {fragment: 'cde', posDiff:  25}] 
-    /*if (minLength == 2) return 1; 
-    else if (posDiff.length == 0) {
-        return kasiskiTest(secret, 2, 2);
-    }
-    else if (gcd == 1)
-        console.log(posDiff)
-        return kasiskiTest(secret, minLength + 1, maxLength + 1);
-    return gcd;*/
 
 }
 
 
 function testForEqualParts(s, minLength, maxLength){
-    //const NUM_DIFFERENT_PARTS = 5
+    //finds equal fragments in string s of length between minLength and maxLength, returns list of Objects with fragment and difference in position
     let result = []
     for (let len = maxLength; len >= minLength; len--) {
         for (let start = 0; start < s.length - len; start = start + len) {
@@ -157,14 +147,14 @@ export function factorize(num){
     let result = []
     for (let cand = 2; cand <= num; cand ++){
         const remainder = num % cand; 
-        console.log("remainder: ", num, cand, remainder);
+        //console.log("remainder: ", num, cand, remainder);
         if (remainder == 0) {
             result.push(cand)
             num = Math.floor(num/cand);
         }
 
     }
-    console.log(result);
+    //console.log(result);
     return result;
 }
 

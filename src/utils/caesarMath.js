@@ -6,7 +6,6 @@ export function caesarEncrypt(text, key) {
     key = parseInt(key)
     key = key % 26; // may still be < 0
     if (key < 0) key += 26;
-    console.log(key)
 
     if (typeof text == "string") {
         let geheim = '';

@@ -7,6 +7,7 @@ import styles from './styles'
 import AppContext from '../components/AppContext';
 import { isBitStringMultipleOf8 } from '../utils/sdesMath';
 import { useTranslation } from 'react-i18next';
+import { isInteger } from '../utils/caesarMath';
 
 
 
@@ -21,9 +22,6 @@ export default function EncryptedMessageMethodChoiceScreen({ route, navigation }
     const myContext = useContext(AppContext);
 
     const {t} = useTranslation();
-
-    const [selectedMethod, setSelectedMethod] = useState('rsa');
-
     
     const {message, key} = route.params;
 
@@ -66,6 +64,8 @@ export default function EncryptedMessageMethodChoiceScreen({ route, navigation }
     function navigateToScreen(method){
         console.log(key)
         if (method == 'rsa') {
+            if (!isInteger(message)) alert(`${t("RSA_WARNING")}`)
+            else {
             console.log("navigating to RSA...")
             let params;
             if(route.params.fromMessage){
@@ -75,7 +75,7 @@ export default function EncryptedMessageMethodChoiceScreen({ route, navigation }
             }
             navigation.navigate("Methods", 
             {screen: 'RSA', params: params});
-        } else if (method == 'sdes') {
+        } } else if (method == 'sdes') {
             if(!isBitStringMultipleOf8(message)){
                 navigation.navigate("Methods", {screen: "SDESEncoding", params: {message: message}})
             } else {navigation.navigate("Methods", 
@@ -96,31 +96,13 @@ export default function EncryptedMessageMethodChoiceScreen({ route, navigation }
 
     }
 
-    function pressSelectButton() {
-        console.log("Method chosen: ", selectedMethod);
-        if (selectedMethod == 'rsa') {
-            console.log("navigating to RSA");
-        } else if (selectedMethod == 'sdes') {
-            console.log("navigating to SDES");
-        } else if (selectedMethod == 'caesar') {
-            console.log("navigating to caesar");
-        } else if (selectedMethod == 'vigenere') {
-            console.log("navigating to Vigenere");
-        } else if (selectedMethod == 'permutation') {
-            console.log("navigating to Permutation");
-        } 
-    }
 
-    //const title = "Choice of method: "
     const title = `${t("SEC")}`
     const title2 =  `${t("TRY")}`
 
     return (
         <SafeAreaView style={styles.container}>
             <Title title ={title}/>
-            {/*<View style ={{marginLeft: 15}}> 
-          <Text style ={{fontSize: 18, fontWeight: '300'}}> Encrypted message: </Text>
-    </View>*/}
     <ScrollView style={{height: 100}}>
           <View style ={{margin: 15, marginTop: 0}}>
           <Text style={{fontWeight: 'bold'}}> {message} </Text>

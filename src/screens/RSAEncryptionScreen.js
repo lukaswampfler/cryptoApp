@@ -10,15 +10,6 @@ import Line from '../components/Line';
 
 const screenWidth = 0.9 * Dimensions.get("window").width;
 
-import { useFormik } from 'formik';
-
-
-import {
-    RSAEncryptionDecimalInputScheme,
-    RSAEncryptionBinaryInputScheme
-} from '../utils/InputTests'
-import RSA from '../utils/RSA'
-import RSAKeyInput from '../components/RSAKeyInput';
 import { smartExponentiation } from '../utils/RSAMath';
 import { useTranslation } from 'react-i18next';
 import ClearButton from '../components/ClearButton';
@@ -44,14 +35,11 @@ const isValidBinaryRSAMessage = (text) => {
 
 
 
-export default function RSAEncryptionScreen({ navigation, route }) {
+export default function RSAEncryptionScreen({ route, navigation }) {
+
+
     // get the context
-    const myContext = useContext(AppContext);
-
-
-    
-
-    
+    const myContext = useContext(AppContext); 
 
 // get initial values for Form: exponent ...
 const getExpInitialValue = () => {
@@ -88,10 +76,14 @@ const getModInitialValue = () => {
         return '';
     };
 }
-//... and the message
-const getMessageInitialValue = () => {
+
+    //... and the message
+    const getMessageInitialValue = () => {
+    console.log("getMessageInitialValue", route.params)
    if (route.params!== undefined && (route.params.fromRiddles|| route.params.fromMessage)){
         return route.params.message
+    } else if (route.params!==undefined && route.params.fromHome){ 
+        return ''
     } else {
     let m = myContext.ciphers.rsa.m;
     if (m.indexOf('0b') == 0) {
@@ -101,14 +93,12 @@ const getMessageInitialValue = () => {
 }
 }
 
-    const [secret, setSecret] = useState('');
-    const [mess, setMess] = useState(getMessageInitialValue()) 
-    const [exp, setExp] = useState(getExpInitialValue())
-    const [mod, setMod] = useState(getModInitialValue()) 
+const [secret, setSecret] = useState('');
+const [mess, setMess] = useState(getMessageInitialValue()) 
+const [exp, setExp] = useState(getExpInitialValue())
+const [mod, setMod] = useState(getModInitialValue()) 
 
-    const {t} = useTranslation();
-
-
+const {t} = useTranslation();
 
     useEffect(() =>{
         if(route.params?.mod){
@@ -122,6 +112,9 @@ const getMessageInitialValue = () => {
         }
     }, [route.params?.exp])
 
+    useEffect(() => {
+        if (route.params?.fromHome) myContext.setRSAInputSwitchisDecimal(true)
+    }, [])
 
     const sendMessage = () => { 
         if(secret && secret.length > 0){
@@ -134,16 +127,16 @@ const getMessageInitialValue = () => {
 
     const toggleRSAInputSwitch = (value) => {
         //To handle switch toggle
-        if(myContext.RSAInputSwitchisDecimal){
+        if(mess.length > 0 && myContext.RSAInputSwitchisDecimal){
             setMess(Number(mess).toString(2)) 
             setSecret(Number(secret).toString(2)) 
-        } else {
+        } else if (mess.length > 0){
             setMess(parseInt(mess, 2).toString())
             setSecret(parseInt(secret, 2).toString())
             let ciphers = myContext.ciphers;
             ciphers.currentMessage = secret;
             myContext.setCiphers(ciphers)
-        }
+        } else setSecret('')
         myContext.setRSAInputSwitchisDecimal(value);
 
     };
@@ -152,13 +145,17 @@ const getMessageInitialValue = () => {
     
 
     // Submission function 
-    const RSASubmit = values => {
+    const RSASubmit = () => {
         let m = mess
         if(m.length == 0){
             alert(`${t("PLS_MESS")}`)
+            return
+        } else if (exp.length == 0 || mod.length == 0){
+            alert(`${t("PLS_EXPMOD")}`)
+            return
         }
         if (!myContext.RSAInputSwitchisDecimal) {// binary input
-            m = '0b' + values.m;
+            m = '0b' + m;
         }
         const rsa = { m: m, exp: exp, n: mod };
         let decimalValue;
@@ -187,7 +184,7 @@ const getMessageInitialValue = () => {
 
 
     // use formik hook to get hold of form values, errors, etc.
-    const { handleChange,
+    /*const { handleChange,
         handleSubmit,
         handleBlur,
         values,
@@ -198,6 +195,7 @@ const getMessageInitialValue = () => {
             initialValues: { m: getMessageInitialValue(), exp: getExpInitialValue(), n: getModInitialValue() },
             onSubmit: RSASubmit
         });
+*/
 
     const setContextMessage = value => {
         let ciphers = myContext.ciphers;
@@ -251,17 +249,8 @@ const resetMessAndSecret = value => { // used for ClearButton
 }
 
 
-    
-
-    // Output-Value
-    const getRSAOutputValue = () => {
-        if (myContext.ciphers.rsa.isEncrypted) {
-            return myContext.RSAInputSwitchisDecimal ? myContext.ciphers.rsa.encrypted : BigInt(myContext.ciphers.rsa.encrypted).toString(2);
-        } else return '';
-    }
-
-    const rsaIntroText = `Input: ${t('RSAEXP_P2')}\n\n` + `${t('KEY')}: ${t('RSAEXP_P1')}\n\n`  + `${t('RSAEXP_P3')}\n\n` + `${t('RSAEXP_P4')}`
-    const introText = rsaIntroText;
+const rsaIntroText = `Input: ${t('RSAEXP_P2')}\n\n` + `${t('KEY')}: ${t('RSAEXP_P1')}\n\n`  + `${t('RSAEXP_P3')}\n\n` + `${t('RSAEXP_P4')}`
+const introText = rsaIntroText;
 
 
 
@@ -364,7 +353,7 @@ const resetMessAndSecret = value => { // used for ClearButton
         marginTop: 10,
         marginBottom: 10,
         marginRight: 5
-      }}><Text> Exponent </Text>
+      }}><Text> {`${t('EXP')}`} </Text>
 
         <NumInput
           width={.45*screenWidth}
@@ -428,7 +417,7 @@ const resetMessAndSecret = value => { // used for ClearButton
 </View>
             {myContext.RSAIsEncrypted &&
           <View style={{ flex: 1 }}>
-            <View style ={{flexDirection: 'row', justifyContent: 'flex-start', marginBottom: 10, marginTop: 10}}>
+            <View style ={{flexDirection: 'column', justifyContent: 'flex-start', margin: 10}}>
             <Text style={{ fontSize: 16, fontWeight: '500' }}> {t("ENCR")}: </Text>
             <Text style={{ fontSize: 16 }} selectable> {secret} </Text>
             </View>

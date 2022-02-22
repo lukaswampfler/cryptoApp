@@ -18,29 +18,19 @@ import { useTranslation } from 'react-i18next';
 
 const screenWidth = 0.9 * Dimensions.get("window").width;
 
-//const alphaShort = 'ENIRSTADHULCGMO'.split('');
-
-
-
 
 export default function PermutationAnalysisScreen({ route,  navigation }) {
 
 
     const myContext = useContext(AppContext);
     const [secret, setSecret] = useState('');
-    //const [key, setKey] = useState(alphabet);
-    const [decypheredMessage, setDecypheredMessage] =useState('');
     const [secretHasAlpha, setSecretHasAlpha] = useState(false);
-    const [isDecyphered, setIsDecyphered] = useState(false);
     const [alphaSecret, setAlphaSecret]= useState([]);
     const [alphaSecretWithIndex, setAlphaSecretWithIndex] = useState([]);
     const [showBarChart, setShowBarChart] = useState(false);
-    const [inverseDict, setInverseDict] = useState({})
-    const [mostFrequentGerman, setMostFrequentGerman] = useState() 
 
     const {t} = useTranslation();
 
-    //const alphaShort = 'ENIRSTADHULC'.split('');
     const alphaShort = `${t("MOST_FREQ_LETTERS")}`.toUpperCase().split('');
     const MAX_NUM_LETTERS = 15;
     const alphaShortExtended = extend(alphaShort, MAX_NUM_LETTERS - alphaShort.length)
@@ -91,12 +81,7 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
         setDecypheredMessage(partialDecryption(secret, decryptionDict))
     }
 
-    /*const handleAnalysis = () => {
-        //console.log(alphaShort, alphaSecret);
-        const decryptionDict = createDecryptionDict(alphaShort, alphaSecret) 
-        //console.log(secret);
-        setDecypheredMessage(partialDecryption(secret, decryptionDict))
-    }*/
+    
 
     const renderItem = ({ item, index }) => (
         <Text> {item}</Text>  
@@ -141,23 +126,13 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
     }
 
     const reorderItems = ({ fromIndex, toIndex }) => {
-      console.log(fromIndex, toIndex);  
       const newData = alphaSecret.slice(); // copy of alphaSecret
-      //TODO: hier liegt das Problem.
-      //console.log("newData before: ", newData);
-      // problematisch: newData may contain undefined
-      if (newData.includes(undefined)){console.log(newData)}
-      // to insert the dragged point
-      //newData.splice(toIndex, 0, newData.splice(fromIndex, 1)[0]);
-      // better: switch the two entries instead of just setting fromIndex to its place.-> To be tested!
       const removedElement = newData.splice(toIndex, 1, newData[fromIndex])[0]
       newData.splice(fromIndex, 1, removedElement)
-      //console.log("newData after: ", newData)
       setAlphaSecret(newData);
     }
 
 
-    //TODO: setze chartConfig in eine Konfig-Datei -> auch in CaesarAnalysis und VigenereAnalysis
     const chartConfig = {
         backgroundGradientFrom: "#1E2923",
         backgroundGradientFromOpacity: 0,
@@ -198,7 +173,7 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
 
 
     return (
-        //first: ScrollView
+        <ScrollView>
         <DraxProvider>  
          <TouchableWithoutFeedback onPress = {Keyboard.dismiss} accessible={false}>
           
@@ -256,14 +231,13 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
                 height={240}
                 yAxisSuffix="%"
                 chartConfig={chartConfig}
-                verticalLabelRotation={90}
+                verticalLabelRotation={0}
             />)}
 
     </View>
     </TouchableWithoutFeedback>
     <View style={{padding: 12}}>
     <Line/>
-    {/*{alphaShort.length}*/}
     <Text width={100} style={{fontSize:20}}>  {t("THE")}  {t("MOST_FREQ")} </Text>
     
     
@@ -313,6 +287,7 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
 }
 
  </DraxProvider>
+ </ScrollView>
         
     );
 

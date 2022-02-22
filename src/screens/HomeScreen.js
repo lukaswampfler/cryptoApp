@@ -4,6 +4,7 @@ import Loading from './Loading'
 import Title from '../components/Title';
 import { listMessages, listUsers, messagesByReceiver } from '../graphql/queries';
 import { createUser, createKey, updateKey } from '../graphql/mutations';
+import { onCreateMessageByReceiverID } from '../graphql/subscriptions'
 
 import { API, Auth, graphqlOperation } from 'aws-amplify'
 import * as SecureStore from 'expo-secure-store';
@@ -25,18 +26,7 @@ export default function HomeScreen({ navigation }) {
   const myContext = useContext(AppContext);
   const [userID, setUserID] = useState(null);
   const [users, setUsers] = useState(null);
-  const [choice, setChoice] = useState('methods');
-
-  /*async function signOut() {
-    try {
-      await Auth.signOut();
-      myContext.setUserLoggedIn('loggedOut');
-      console.log("sign out succesful")
-    } catch (error) {
-      console.log('error signing out: ', error);
-    }
-  }*/
-
+  const [messages, setMessages] = useState([]);
 
   async function updateKeys(isNewUser, publicKeyID = null) {
     const keys = generateDummyKeys(myContext.useBigIntegerLibrary);
@@ -75,22 +65,7 @@ export default function HomeScreen({ navigation }) {
 }
 
     
-    
 
-
-  function pressSelectButton() {
-    console.log("Your choice: ", choice);
-    if (choice == 'methods') {
-      navigation.navigate("Methods");
-
-    } else if (choice == 'analysis') {
-      navigation.navigate("Analysis");
-    } else if (choice == 'messages') {
-      navigation.navigate("Messages");
-    } else if (choice == 'riddles') {
-      navigation.navigate("Riddles");
-    } 
-  }
 
   async function fetchUsers() {
     try {
@@ -100,29 +75,22 @@ export default function HomeScreen({ navigation }) {
     } catch (err) { console.log('error fetching users: ', err) }
   }
 
-  /*async function generateAndStoreNewKeys(isCreating) {
-    const keys = generateDummyKeys(myContext.useBigIntegerLibrary)
-    //updateKeys(keys, isCreating)
-
-  }*/
+  async function fetchMessages() {
+    try {
+        const messagesData = await API.graphql({ query: messagesByReceiver, variables: { receiverID: userID, limit: 20 } })
+        setMessages(messagesData.data.messagesByReceiver.items)
+        myContext.setMessages(messages)
+    } catch (err) { console.log('error fetching messages: ', err) }
+}
  
 
 
   //check if user with userName aleady exists in database: if not -> create new User.
   async function checkForUser(users) {
-    //console.log("inside check for User: ", users);
-    //const users = await API.graphql({query:listUsers});
-    //console.log("userName from Context: ", myContext.userName);
-    //console.log("users in checkForUser: ", users);
-    const checkUsers = users.filter(user => (user.name === myContext.userName))
-    //console.log("checkUsers: ", checkUsers)
     
+    const checkUsers = users.filter(user => (user.name === myContext.userName))    
     if (checkUsers.length === 0) {
-
-
       updateKeys(true)
-
-      //const keys = generateDummyKeys(myContext.useBigIntegerLibrary)
 
 
 /*
@@ -168,18 +136,38 @@ export default function HomeScreen({ navigation }) {
       }
 
       myContext.setPublicKeyID(userData.publicKeyID);
-      //myContext.setPrivateKeyID(userData.privateKeyID);
-
-
-
+      
     }
 
 
   }
 
+  function subscribe() {
+    console.log("subscribe, ID from context: ", userID)
+    const sub = API.graphql({
+        query: onCreateMessageByReceiverID,
+        variables: {
+            receiverID: userID
+        },
+    }).subscribe({
+        error: err => console.log("error caught in subscribe: ", err),
+        next: messageData => {
+            //console.log("user id: ", userID);
+            //console.log("messageData", messageData.value)
+            alert("Received new message from " + messageData.value.data.onCreateMessageByReceiverID.sender.name)
+            //updateLatestMessage(messageData.value.data.onCreateMessageByReceiverID.text)
+            //const newMessagesData = [...messages, messageData.value.data.onCreateMessageByReceiverID]
+            //setMessages(newMessagesData);
+            //TODO: update messages.
+        }
+    })
+
+    return sub
+}
+
+
 
   useEffect(() => {
-    //console.log("User ID from context", myContext.userID);
     fetchUsers();
   }, [])
 
@@ -189,8 +177,15 @@ export default function HomeScreen({ navigation }) {
     }
   }, [users])
 
+
   useEffect(() => {
     myContext.setUserID(userID);
+    if (userID) {
+      //console.log("subscription run in HomeScreen.")
+      //fetchMessages()
+      const subscription = subscribe()
+      return () => { subscription.unsubscribe() }
+    }
   }, [userID])
 
   const { t } = useTranslation();
@@ -209,38 +204,7 @@ export default function HomeScreen({ navigation }) {
       <Text style ={{margin: 5, fontSize: 15}}><Text style={{fontWeight: 'bold'}}>{`${t('LAN')}`}: </Text> {`${t('LAN_TEXT')}`}</Text>
 
 </ScrollView>
-      {/*
-      <View style={styles.homeScreen}>
-       {/* <Button onPress={signOut} title="Sign Out" />
-        {userID ? <Text>userID: {userID}</Text> : <Text> no userID set </Text>}*/}
-       {/*} <Text style={{ fontSize: 18, marginBottom: 50 }}> What would you like to do?  </Text>
-        {(Platform.OS === 'android')
-          && <View style={{ backgroundColor: '#DDD', height: 50 }}>
-            <Picker style={{ flex: 1, width: 250 }}
-              selectedValue={choice}
-              onValueChange={(itemValue, itemIndex) =>
-                setChoice(itemValue)}
-              prompt="Please choose"
-            >
-              <Picker.Item label="Encryption Methods" value="methods" />
-              <Picker.Item label="Cryptoanalysis" value="analysis" />
-              <Picker.Item label="My Messages" value="messages" />
-              <Picker.Item label="Riddles" value="riddles" />
-            </Picker>
-          </View>}
-        {Boolean(Platform.OS === 'ios') &&
-          <Picker
-            selectedValue={choice}
-            onValueChange={(itemValue, itemIndex) =>
-              setChoice(itemValue)}
-          >
-            <Picker.Item label="Encryption Methods" value="methods" />
-            <Picker.Item label="Cryptoanalysis" value="analysis" />
-            <Picker.Item label="Messages" value="messages" />
-            <Picker.Item label="Riddles" value="riddles" />
-          </Picker>}
-        <Button onPress={pressSelectButton} title="Select" />
-            </View>*/}
+      
     </SafeAreaView >
   )
 }

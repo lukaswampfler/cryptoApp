@@ -170,6 +170,10 @@
     "USE_PRIME": "Primzahlen:", 
     "PROD": "Produkt", 
     "CLOSE": "Schliessen", 
-    "KEY_MISMATCH": "Achtung: die Schlüssel passen nicht zueinander! Bitte neues Schlüsselpaar verwenden."
+    "KEY_MISMATCH": "Achtung: die Schlüssel passen nicht zueinander! Bitte neues Schlüsselpaar verwenden.", 
+    "NO_RIDDLES": "Noch keine Rätsel vorhanden ...", 
+    "EXP": "Exponent", 
+    "PLS_EXPMOD": "Bitte Exponent und Modul eingeben!", 
+    "RSA_WARNING": "Bitte verwende die RSA-Methode mit einem ganzzahligen Input."
     
   }
