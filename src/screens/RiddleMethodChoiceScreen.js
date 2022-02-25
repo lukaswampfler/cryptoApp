@@ -1,27 +1,17 @@
 import React, {  useState, useEffect, useContext, useCallback } from 'react'
-import { StyleSheet, Platform, View, Text, FlatList, Pressable, SafeAreaView, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, SafeAreaView } from 'react-native'
 import Title from '../components/Title';
 import Button from '../components/Button';
 import { IntroModal } from '../utils/Modals';
-import styles, { PINK } from './styles'
-import { Chevron } from 'react-native-shapes';
-import { Ionicons } from '@expo/vector-icons';
 import RNPickerSelect from 'react-native-picker-select';
 
 import AppContext from '../components/AppContext';
-import { TabRouter } from '@react-navigation/native';
-import { riddlesMethodChoiceIntroText } from '../utils/introTexts'; 
+
 import { useTranslation } from 'react-i18next';
-
-
 
 const methods = ['rsa', 'sdes', 'caesar', 'vigenere', 'permutation' ]
 
-
 const options = ["secret with known cipher", "secret with unknown cipher", "random message from server"]
-
-
-
 
 export default function RiddleMethodChoiceScreen({ navigation }) {
 
@@ -42,48 +32,32 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
         console.log(selectedMethod)
     },[selectedMethod])
 
-    useEffect(() => {forceUpdate()}, [myContext.appLanguage])
+    useEffect(() => {
+        forceUpdate()
+        alert("Language changed.")
+    }, [myContext.appLanguage])
     
-    //const method = "Your choice"
     const method = `${t("CHOICE")}`
 
     const intro =  `${t("RIDDLE_CHOICE_DETAILS_P1")}\n\n${t("RIDDLE_CHOICE_DETAILS_P2")}\n\n${t("RIDDLE_CHOICE_DETAILS_P3")}`
     
-
     const languageDisabled = selectedMethod == null || ['rsa', 'sdes'].includes(selectedMethod);
     
     const enabledWithLanguage = (selectedMethod && selectedLevel && selectedLanguage) &&  (selectedMethod.length != 0 && selectedLevel.length != 0 && selectedLanguage.length!= 0) 
     const enabledWithoutLanguage = (selectedMethod && selectedLevel) &&  (['rsa', 'sdes'].includes(selectedMethod)) ;
     const buttonEnabled =   enabledWithLanguage || enabledWithoutLanguage;
     
-
-    //console.log("enabled: ", enabled)
-    //console.log(selectedMethod, selectedLevel, selectedLanguage)
     
     return (
         <SafeAreaView style={{margin: 0}}>
             <Title title ={titleMethod}/>
             <IntroModal text={intro} method={method} />
-            {/*<View style = {{marginBottom: 10}}>
-    <Text style = {{fontSize: 16}}>Method</Text>
-    </View>*/}
-            {/*<Picker
-            selectedValue={selectedMethod}
-            onValueChange={(itemValue, itemIndex) =>
-            setSelectedMethod(itemValue)}
-            >    
-             <Picker.Item label="Caesar" value="caesar" />
-            <Picker.Item label="Vigenère" value="vigenere" />
-            <Picker.Item label="Permutation" value="permutation" />
-            <Picker.Item label="S-DES" value="sdes" />
-            <Picker.Item label="RSA" value="rsa" />
-            </Picker>*/}
+     
     
     <View style = {{margin: 15, borderColor: 'green'}}>
             <RNPickerSelect
             onValueChange={(value) => setSelectedMethod(value)}
             placeholder={{}}
-            //placeholder={{label :`${t('SEL_METH')}`, value: null}}
             style={{ ...pickerSelectStyles }}
             InputAccessoryView={() => null}
             items={[
@@ -93,9 +67,6 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
                 { label: 'S-DES', value: 'sdes' }, 
                 { label: 'RSA', value: 'rsa' }, 
             ]}
-            /*Icon={() => {
-                return <Chevron size={1.5} color="gray" />;
-              }}*/
         />
         </View>
 
@@ -105,7 +76,6 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
             <RNPickerSelect
             onValueChange={(value) => setSelectedLevel(value)}
             placeholder={{}}
-            //placeholder={{label :"Select the difficulty", value: null}}
             style={{ ...pickerSelectStyles }}
             InputAccessoryView={() => null}
             items={[
@@ -113,9 +83,6 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
                 { label: 'Hard', value: 'hard' },
                 { label: 'Extreme', value: 'extreme' },
             ]}
-            /*Icon={() => {
-                return <Chevron size={1.5} color="gray" />;
-              }}*/
         />
         </View>
 
@@ -129,16 +96,12 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
     onValueChange={(value) => setSelectedLanguage(value)}
     disabled = {languageDisabled}
     placeholder={{}}
-    //placeholder={{label :"Select your language", value: null}}
     style={{ ...pickerSelectStyles }}
     InputAccessoryView={() => null}
     items={[
-        { label: 'German', value: 'german' },
-        { label: 'English', value: 'english' },
+        { label: `${t('GERMAN')}`, value: 'german' },
+        { label: `${t('ENGLISH')}`, value: 'english' },
     ]}
-    /*Icon={() => {
-                return <Chevron size={1.5} color="gray" />;
-              }}*/
 />
 </View>
 </View>

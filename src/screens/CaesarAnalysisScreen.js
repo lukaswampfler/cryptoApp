@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Dimensions, TextInput, TouchableWithoutFeedback, ScrollView, Keyboard } from 'react-native';
 import { caesarEncrypt} from '../utils/caesarMath';
 import Title from '../components/Title';
@@ -23,7 +23,6 @@ const screenWidth = 0.9 * Dimensions.get("window").width;
 
 export default function CaesarAnalysisScreen({ route, navigation }) {
 
-    //const myContext = useContext(AppContext);
     const [secret, setSecret] = useState('');
     const [key, setKey] = useState("0");
     const [decypheredMessage, setDecypheredMessage] = useState('')
@@ -55,10 +54,7 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
             setKey(key)
             setDecypheredMessage(decyph)
             console.log("change Key: ", key, decypheredMessage)
-            //setIsDecyphered(true); 
-    } else {
-        console.log("key not integer")
-            //setIsDecyphered(false);
+        } else {
             alert(`${t("VALID_KEY")}`)
             setDecypheredMessage("")
             setKey("")
@@ -77,12 +73,9 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
 
 
     const freqDict = createFrequencyDict(secret)["0"];
-    //const mostFrequentSecretLetter = secret? '' : getMaxKey(freqDict)
-    
-    //const diffCand = 'e'.charCodeAt(0)-mostFrequentSecretLetter.charCodeAt(0)
-    //const diff =  diffCand > 0     const sorted = sortDictionaryByKey(freqDict)
     const sorted = sortDictionaryByKey(freqDict)
     const keys = Object.keys(sorted)
+    
     for (let ind = 0; ind < keys.length; ind++){
         keys[ind] = keys[ind] + ":" + (ind+1).toString()
     }
@@ -133,7 +126,6 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
                 returnKeyLabel='next'
                 onChangeText={changeText}
                 value = {secret}
-                //onBlur={() => { }}
             />
             <ClearButton setInput={changeText} setKey= {changeKey} defaultKey={"0"} additionalFunction = {() => {setShowDifference(false)}} />
             </View>
@@ -181,7 +173,6 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
             name = 'minus' 
             onPress ={() => { 
                 addKey(-1);
-                //console.log("Icon pressed")
             }} />
         </View>
 
@@ -194,20 +185,10 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
                 keyboardAppearance='dark'
                 returnKeyType='next'
                 returnKeyLabel='next'
-                //onChangeText={formikKey.handleChange('key')}
                 onChangeText= {changeKey}
                 
         />
-      {/*}  <TextInput
-                width='15%'
-                keyboardType='number-pad'
-                keyboardAppearance='dark'
-                returnKeyType='next'
-                returnKeyLabel='next'
-                onChangeText={changeKey}
-                value = {key + ''}
-                //onBlur={() => { }}
-            />*/}
+   
     <View style = {{margin: 20}}>
     <MaterialCommunityIcons 
             size = {32}
@@ -222,8 +203,7 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
 </View>
 
 <Line/>
-{/*}
-<TouchableWithoutFeedback onPress = {Keyboard.dismiss} accessible={false}></TouchableWithoutFeedback>*/}
+
 <View>
 {showDecyphered &&
 <View style ={{marginTop: 20}}> 
@@ -241,10 +221,6 @@ export default function CaesarAnalysisScreen({ route, navigation }) {
 
 
 </ScrollView>
-
-
-    );
-
-
+);
 
 }

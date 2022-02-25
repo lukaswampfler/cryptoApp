@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react'
-import { Platform, View, ScrollView, Text, TouchableOpacity, Switch, SafeAreaView, Dimensions } from 'react-native'
-import { useFocusEffect } from '@react-navigation/native';
+import React, { useState, useEffect, useContext } from 'react'
+import { View, ScrollView, Text, TouchableOpacity, SafeAreaView, Dimensions } from 'react-native'
 import Title from '../components/Title';
 import Button from '../components/Button';
 import GreySwitch from '../components/GreySwitch';
@@ -8,9 +7,6 @@ import GreySwitch from '../components/GreySwitch';
 import getSecretContainer from '../utils/getSecretContainer';
 import { calculateKeyPair, generatePrime } from '../utils/RSAMath';
 import AppContext from '../components/AppContext';
-//import { getRandomKeys } from '../utils/sdesMath';
-//import { TextInput } from 'react-native-gesture-handler';
-//import { encryptPermutation } from '../utils/permutationMath';
 import { useTranslation } from 'react-i18next';
 
 const choose = (array) => {
@@ -23,7 +19,6 @@ const choose = (array) => {
 
 export default function RiddleDisplayScreen({ route,  navigation }) {
 
-    const WIDTH = Dimensions.get('window').width;
     const HEIGHT = Dimensions.get('window').height;
     
     const myContext = useContext(AppContext);
@@ -35,34 +30,18 @@ export default function RiddleDisplayScreen({ route,  navigation }) {
     const [language, setLanguage] = useState(null);
     const [level, setLevel] = useState(null); 
     const [key, setKey] = useState(null);
-    const [enterSolution, setEnterSolution] = useState(false);
     const [clearText, setClearText] = useState('')
     const [showSolution, setShowSolution] = useState(false);
-    const [lastRiddle, setLastRiddle] = useState({})
     const [displayShowLastRiddle, setDisplayShowLastRiddle] = useState(true);
 
 
-    const {t} = useTranslation();    //let secretContainer = {message: secretMessage, method: 'keine', secret: 'secret'}; 
+    const {t} = useTranslation();    
 
     let secretContainer = {secret: 'encrypted message', method: 'unknown'};
-
-
-    const toggleEnterSolution = () => {
-        setEnterSolution(!enterSolution);
-    }
-
 
     const checkSolution = () => {
         alert(clearText)
     }
-
-    /*const changeLastRiddle = () => {
-        console.log("change last riddle is run...")
-        console.log("encryptedMessage: ", encryptedMessage )
-        let newLast = {encrypted: encryptedMessage, method: method, clearText: clearText, key: key}
-        setLastRiddle(newLast);
-        myContext.setLastRiddle(newLast);
-    }*/
 
     const showLastRiddle = () => {
         console.log("in showLastRiddle: ", myContext.lastRiddle)
@@ -76,16 +55,13 @@ export default function RiddleDisplayScreen({ route,  navigation }) {
             setLevel(myContext.lastRiddle.level)
             setLanguage(myContext.lastRiddle.language)
             setDisplayShowLastRiddle(false);
-        
     }
 
 
     const showKey = () => {
         if (method == 'rsa'){
-            //console.log(key.private)
             alert("private exponent: "+ Number(key.private.exp))
         } else if (method == 'sdes') {
-            //console.log(key)
             alert('k1: ' + key.key1 + '\nk2: ' + key.key2)
         } else {
             console.log(key)
@@ -105,35 +81,21 @@ export default function RiddleDisplayScreen({ route,  navigation }) {
             }
     }
 
-// just to test.
-/*    useEffect(() => {
-        console.log("encrypted message changed: ...", encryptedMessage)
-        //let newLast = {encrypted: encryptedMessage, method: method, clearText: clearText, key: key}
-        //setLastRiddle(newLast);
-        //myContext.setLastRiddle(newLast);
-    }, [encryptedMessage])*/
-
 
     async function getResponse(languageShort){
         const API = 'https://' + languageShort + '.wikipedia.org/w/api.php?action=query&generator=random&grnnamespace=0&prop=extracts&exchars=1000&explaintext&utf8=&format=json';
-
         try {
-            
-        const body = { method: 'GET', dataType: 'json'};
-        const myRequest = new Request(API, body);
-        
-        const response = await fetch(myRequest)
-        const json = await response.json();
-        //console.log(json);
-        const pageInfo = json["query"]["pages"]
-        const pageIDs = Object.keys(pageInfo)
-        const extract = pageInfo[pageIDs[0]]  // first page
-        return extract['extract'];
-
+           const body = { method: 'GET', dataType: 'json'};
+            const myRequest = new Request(API, body);
+            const response = await fetch(myRequest)
+            const json = await response.json();
+            const pageInfo = json["query"]["pages"]
+            const pageIDs = Object.keys(pageInfo)
+            const extract = pageInfo[pageIDs[0]]  // first page
+            return extract['extract'];
         } catch (error){
             console.log(error)
         }
-
 }
 
 const setContainer = () => {
@@ -154,11 +116,9 @@ const setContainer = () => {
             while ( q == p){
                 q = generatePrime(maxExp, myContext.useBigIntegerLibrary);
             }
-            //console.log("p: ", p, "q: ", q)
             const keyPair  = calculateKeyPair(p, q, myContext.useBigIntegerLibrary);
             key = keyPair;
-            //console.log("keyPair: ", keyPair)
-            //key = keyPair.public;
+     
 
         }
         details.rsaKey = key;
@@ -173,16 +133,8 @@ const setContainer = () => {
         secretContainer = getSecretContainer(details);
         setEncryptedMessage(secretContainer.secret)
         setMethod(secretContainer.method)
-        //console.log("secret SDES-Container: ", secretContainer);
         setKey(secretContainer.key);
-        //details.sdesKey = getRandomKeys();
-        /*if (details.level == 'easy'){
-            
-        } else if (details.level == 'hard'){
-
-        } else if (details.level == 'extreme'){
-
-        }*/
+        
 
     } else if(!details.isRandom) {
         // get random wikipedia article
@@ -205,10 +157,7 @@ const setContainer = () => {
 
 
     const title = `${t("CHALLENGE_TIT")}`
-    /*if (details.isRandom){
-        console.log("getting 10 random messages from server, render them in Flatlist")
-        details.method = 'random';
-    }*/
+    
 
     useEffect( () => {
         console.log(HEIGHT);
@@ -220,12 +169,9 @@ const setContainer = () => {
         setAllowHints(details.allowHints);
         // generate message for undefined method
         if (details.method == undefined){   
-            //alert("We are choosing method, level and language (if sensible)")
             const methodsChoice = ['rsa', 'sdes', 'caesar', 'vigenere', 'permutation' ]
-            //const methodsChoice = ['rsa']
             const method = choose(methodsChoice);
             const level = choose(['easy', 'hard', 'extreme']);
-            //console.log("we chose for you: ", method, level);
             details.method = method;
             details.level = level;
             setMethod(method);
@@ -244,33 +190,15 @@ const setContainer = () => {
 }, []);
 
 
-/*useFocusEffect(
-    useCallback(() => {
-      // Do something when the screen is focused
-
-      return () => {
-
-          changeLastRiddle();
-        // Do something when the screen is unfocused
-        // Useful for cleanup functions
-      };
-    }, [])
-  );*/
 
 
     
     return (
         <SafeAreaView style={{margin: 0}}>
-            
             <View style = {{margin: 10}}>
             <Title title ={title}/>
             </View>
-          {/*} {secretMessage && <View style = {{marginLeft: 15, marginTop: 5, marginRight: 10}}>
-             <Text style= {{fontWeight: 'bold'}} selectable>
-                {secretMessage}
-            </Text>
-    </View>}*/}
-    <ScrollView style={{height: ['rsa', 'sdes'].includes(method)? 100 : 150}}>
+            <ScrollView style={{height: ['rsa', 'sdes'].includes(method)? 100 : 150}}>
             {encryptedMessage && <View style = {{marginLeft: 15, marginTop: 5, marginRight: 10}}>
                 <TouchableOpacity style = {{marginRight: 40, backgroundColor: '#ddd'}} 
                 onPress = {() =>{  navigation.navigate("EncryptedMessageMethodChoice", {message: encryptedMessage, method, level, clearText, key, fromRiddles: true})}}>
@@ -287,9 +215,7 @@ const setContainer = () => {
              {`${t('PUB_EXP')}: `} {key.public.exp}, {`${t('MOD')}: `}  {key.public.mod} 
             </Text>
             </View>}
-            {/*<View style ={{margin: 10}}>
-            {!(details.method == undefined) && <Text> You selected the {details.method} cipher</Text>}
-</View>*/}
+            
 
 <View style = {{margin: 10}}>
     <Text style = {{fontSize: 16, fontWeight: '500'}}> {t("CLICK")} </Text>
@@ -297,17 +223,10 @@ const setContainer = () => {
 
             <View style ={{margin: 20}}>
             {allowHints? <Button label={t("HINT")} onPress={() => { 
-                //console.log(details)
                 setAllowHints(false);
-                //alert((method=='rsa'? 'Try factorizing the modulus!': 'Method: ' + method))
                 }} /> : <Text > {method}  {level}  {language} </Text>}
             </View>
             <View style ={{margin: 20}}>
-           {/*} <Switch
-                            style={{ marginTop: 5 }}
-                            onValueChange={toggleShowSolution}
-                            value={showSolution}
-            />*/}
                 <GreySwitch onValueChange={toggleShowSolution} value={showSolution}/>
             </View>
             {showSolution && <View style ={{ margin: 20, flexDirection: 'row', justifyContent: 'space-around'}}>
@@ -320,7 +239,5 @@ const setContainer = () => {
                 </View>
              </View>
           </SafeAreaView>  
-
     );
-
 }

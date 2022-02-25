@@ -10,7 +10,6 @@ import { createFrequencyDict, sortDictionaryByKey, onlyNonAlpha } from '../utils
 import {BarChart} from "react-native-chart-kit";
 import { alphabet, createDecryptionDict, getMostFrequent, partialDecryption, createInverseDict, removeSpecialChars } from '../utils/permutationMath';
 import { FlatList } from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-native';
 import { IntroModal } from '../utils/Modals';
 import ClearButton from '../components/ClearButton';
 import Line from '../components/Line';
@@ -20,7 +19,6 @@ const screenWidth = 0.9 * Dimensions.get("window").width;
 
 
 export default function PermutationAnalysisScreen({ route,  navigation }) {
-
 
     const myContext = useContext(AppContext);
     const [secret, setSecret] = useState('');
@@ -40,7 +38,6 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
 
       console.log(alphaShortExtended, alphaShortExtendedWithIndex)
       if (route.params){
-        /* was: setSecret(route.params.message) */
           changeText(route.params.message)
       }
   }, [])

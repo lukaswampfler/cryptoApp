@@ -6,23 +6,13 @@ import styles from './styles'
 
 import { useTranslation } from 'react-i18next';
 
-
-
 const methods = ['caesar', 'vigenere', 'permutation', 'rsa', 'sdes']
-
-
-
-
 
 export default function MethodsHomeScreen({ navigation }) {
 
     const {t} = useTranslation();
 
-    const [selectedMethod, setSelectedMethod] = useState('rsa');
-
-
-    const renderItem = ({ item }) => (
-        
+    const renderItem = ({ item }) => (    
         <View style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -32,9 +22,7 @@ export default function MethodsHomeScreen({ navigation }) {
         >
             <TouchableOpacity onPress={()=> navigateToScreen(item)}>
             <Text style={{fontSize: 20 , width: 250 }}  >
-                {item.toUpperCase()}  </Text>
-            
-          
+                {item.toUpperCase()}  </Text>       
             </TouchableOpacity>
         </View>
     );
@@ -69,11 +57,5 @@ export default function MethodsHomeScreen({ navigation }) {
                         /> 
 
         </SafeAreaView>
-
-
-
     )
-
-
-
 }

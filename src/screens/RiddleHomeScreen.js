@@ -1,27 +1,14 @@
-import React, { useState, useEffect, useContext } from 'react'
-import { Platform, View, Text, FlatList, Pressable, SafeAreaView, TouchableOpacity } from 'react-native'
+import React, { useContext } from 'react'
+import {  View, Text, FlatList, SafeAreaView, TouchableOpacity } from 'react-native'
 import Title from '../components/Title';
 import Button from '../components/Button';
 import { IntroModal } from '../utils/Modals';
 import styles from './styles'
-//import { riddlesHomeIntroText } from '../utils/introTexts';
-import { useNavigation } from '@react-navigation/core';
 
 import AppContext from '../components/AppContext';
 import { useTranslation } from 'react-i18next';
 
-
-
 const methods = ['rsa', 'sdes', 'caesar', 'vigenere', 'permutation' ]
-
-
-
-
-
-
-
-
-
 
 export default function RiddleHomeScreen({ navigation }) {
 
@@ -74,7 +61,6 @@ export default function RiddleHomeScreen({ navigation }) {
     const riddlesHomeIntroText = 
     `${t('SECGIVEN')}`.toUpperCase() + ': ' + `${t('SECGIVENEXP')}` + `\n\n`  + `${t('SECUNKNOWN')}`.toUpperCase() + ': ' +  `${t('SECUNKNOWNEXP')}` + `\n\n`   + `${t('RANDOMMESS')}`.toUpperCase() +  ': ' + `${t('RANDOMMESSEXP')}`
 
-    const method = "Solving riddles"
     const introText = riddlesHomeIntroText;
 
     return (

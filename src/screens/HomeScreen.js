@@ -1,25 +1,21 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Platform, View, Text, FlatList, Pressable, SafeAreaView, TouchableOpacity, ScrollView } from 'react-native'
-import Loading from './Loading'
+import { Text, SafeAreaView, ScrollView } from 'react-native'
+
 import Title from '../components/Title';
-import { listMessages, listUsers, messagesByReceiver } from '../graphql/queries';
+import { listUsers, messagesByReceiver } from '../graphql/queries';
 import { createUser, createKey, updateKey } from '../graphql/mutations';
 import { onCreateMessageByReceiverID } from '../graphql/subscriptions'
 
-import { API, Auth, graphqlOperation } from 'aws-amplify'
+import { API } from 'aws-amplify'
 import * as SecureStore from 'expo-secure-store';
 
 
 import styles from './styles'
 
-//import { onCreateMessageByReceiverID } from '../graphql/subscriptions'
-
 import AppContext from '../components/AppContext';
 
 import { useTranslation } from "react-i18next";
-//import LanguagePicker from '../components/LanguagePicker';
 import { generateDummyKeys } from '../utils/RSAMath';
-//import LanguageSelector from '../components/LanguagePicker';
 
 export default function HomeScreen({ navigation }) {
 
@@ -92,36 +88,6 @@ export default function HomeScreen({ navigation }) {
     if (checkUsers.length === 0) {
       updateKeys(true)
 
-
-/*
-      // first generate public (and private key -> not necessary, but need to change GraphQL-schema)
-      const publicKeyInput = {exponent: keys.public.exp, modulus: keys.public.mod} 
-      const privateKeyInput = {exponent: keys.private.exp, modulus: keys.private.mod}
-      const newPublicKey = await API.graphql({ query: createKey, variables: { input: publicKeyInput} });
-      const newPrivateKey = await API.graphql({ query: createKey, variables: { input: publicKeyInput } }); // comment: this is not the real private key!!
-
-      // now create new user
-      const userInput = { name: myContext.userName, publicKeyID: newPublicKey.data.createKey.id, privateKeyID: newPrivateKey.data.createKey.id }
-      const userPromise = await API.graphql({ query: createUser, variables: { input: userInput } });
-      const userData = userPromise.data.createUser;
-      setUserID(userData.id);
-      myContext.setPublicKeyID(userData.publicKeyID);
-      myContext.setPrivateKeyID(userData.privateKeyID);
-      //alert("New user " + newUser.data.createUser.name + " successfully generated.")
-      const saveKeyPromise = await SecureStore.setItemAsync("privateKey", JSON.stringify(privateKeyInput));
-
-
-      Promise.all([userPromise, saveKeyPromise]).then(values => {alert("New user " + newUserPromise.data.createUser.name + " generated. \n Attention: If you can factor the number " + publicKeyInput.modulus + ", then so can your opponent -> change your RSA-keys!")})
-      //alert("New user " + newUserPromise.data.createUser.name + " generated. \n Attention: If you can factor the number " + publicKeyInput.modulus + ", then so can your opponent -> change your RSA-keys!")
-
-      */
-      //TODO: 
-      // 1) replace this by call to generateAndStoreNewKeys()
-      // 2) private key needs to be stored on device - asyncStorage
-      // 3) in else -> check if "privateKey"- entry already exists in Storage - if not: create and store new pair - call to generateNewKeys()
-
-      //generateAndStoreNewKeys(true)
-
     } else {
       console.log("User " + myContext.userName + " already exists");
       const userData = checkUsers[0]
@@ -152,13 +118,7 @@ export default function HomeScreen({ navigation }) {
     }).subscribe({
         error: err => console.log("error caught in subscribe: ", err),
         next: messageData => {
-            //console.log("user id: ", userID);
-            //console.log("messageData", messageData.value)
             alert("Received new message from " + messageData.value.data.onCreateMessageByReceiverID.sender.name)
-            //updateLatestMessage(messageData.value.data.onCreateMessageByReceiverID.text)
-            //const newMessagesData = [...messages, messageData.value.data.onCreateMessageByReceiverID]
-            //setMessages(newMessagesData);
-            //TODO: update messages.
         }
     })
 
@@ -181,8 +141,6 @@ export default function HomeScreen({ navigation }) {
   useEffect(() => {
     myContext.setUserID(userID);
     if (userID) {
-      //console.log("subscription run in HomeScreen.")
-      //fetchMessages()
       const subscription = subscribe()
       return () => { subscription.unsubscribe() }
     }

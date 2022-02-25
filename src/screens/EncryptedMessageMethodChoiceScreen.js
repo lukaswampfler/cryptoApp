@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react'
-import { ScrollView, View, Text, FlatList, Pressable, SafeAreaView, TouchableOpacity, Button } from 'react-native'
+import React, { useEffect, useContext } from 'react'
+import { ScrollView, View, Text, FlatList, SafeAreaView, TouchableOpacity} from 'react-native'
 import Title from '../components/Title';
 
 import styles from './styles'
@@ -25,11 +25,6 @@ export default function EncryptedMessageMethodChoiceScreen({ route, navigation }
     
     const {message, key} = route.params;
 
-
-
-    /*if(route.params.exponent){
-        const {exponent} = route.params;
-    }*/
 
 
     useEffect(() => {
@@ -119,11 +114,6 @@ export default function EncryptedMessageMethodChoiceScreen({ route, navigation }
                         /> 
 
         </SafeAreaView>
-
-
-
     )
-
-
 
 }

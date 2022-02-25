@@ -174,7 +174,8 @@
     "NO_RIDDLES": "No riddles yet ...", 
     "EXP": "exponent", 
     "PLS_EXPMOD": "Please enter exponent and modulus!", 
-    "RSA_WARNING": "Please use only integers for RSA input."
+    "RSA_WARNING": "Please use only integers for RSA input.", 
+    "ENGLISH": "English"
 
 
 

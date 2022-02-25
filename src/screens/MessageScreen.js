@@ -1,8 +1,6 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react'
-import { View, Text, FlatList, ScrollView, SafeAreaView, TouchableOpacity, Button } from 'react-native'
-import { listMessages, listUsers, messagesByReceiver } from '../graphql/queries';
-import { useFocusEffect , useIsFocused} from '@react-navigation/native';
-//import { createUser } from '../graphql/mutations';
+import React, { useState, useEffect, useContext } from 'react'
+import { View, Text, FlatList, SafeAreaView, TouchableOpacity } from 'react-native'
+import { messagesByReceiver } from '../graphql/queries';
 import { Divider } from 'react-native-elements';
 import { API } from 'aws-amplify'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -16,15 +14,11 @@ import AppContext from '../components/AppContext';
 import { useTranslation } from 'react-i18next';
 
 
-
-
 export default function MessageScreen({ navigation }) {
 
     const myContext = useContext(AppContext);
 
     const [messages, setMessages] = useState([]);
-
-    //const [latestMessage, updateLatestMessage] = useState(null);
 
     const {t} = useTranslation();
 
@@ -43,7 +37,6 @@ export default function MessageScreen({ navigation }) {
     
             <TouchableOpacity 
             onPress = {() => {
-                //alert("touched")
                 navigation.navigate("Riddles", 
                 {screen: "EncryptedMessageMethodChoice" , params: {message: message.text, fromRiddles: false, fromMessage: true, sender: message.sender.name}});
             }}>
@@ -61,18 +54,19 @@ export default function MessageScreen({ navigation }) {
            
            </View>
     
-           <View style={{width:60, flexDirection: 'row-reverse'}}>
+        <View style={{width:60, flexDirection: 'row-reverse'}}>
            
             <MaterialCommunityIcons 
                 size = {32}
                 color = '#888'
                 name = 'delete' 
                 onPress ={() => { 
-                    console.log("Delete message with id: ", message.id)
-                    deleteMessages(message.id)}} />
-                    </View>
+                    deleteMessages(message.id)}
+                    } 
+            />
+        </View>
                   
-            <Divider width={5} style={{margin: 7}}/>
+        <Divider width={5} style={{margin: 7}}/>
         </View>
       
     );
@@ -80,7 +74,6 @@ export default function MessageScreen({ navigation }) {
 
 
     function subscribe() {
-        //console.log("subscribe, ID from context: ", myContext.userID)
         const sub = API.graphql({
             query: onCreateMessageByReceiverID,
             variables: {
@@ -89,22 +82,13 @@ export default function MessageScreen({ navigation }) {
         }).subscribe({
             error: err => console.log("error caught in subscribe: ", err),
             next: messageData => {
-                //console.log("In MessageScreen, subscribe");
-                //console.log("messageData", messageData.value.data.onCreateMessageByReceiverID)
-                //alert("Received new message from " + messageData.value.data.onCreateMessageByReceiverID.sender.name)
-                //(messageData.value.data.onCreateMessageByReceiverID.text)
-                //console.log("Messages", messages)
                 let newMessagesData;
                 if (messages.length > 0){
                     newMessagesData = [...messages, messageData.value.data.onCreateMessageByReceiverID]
                 } else {
                     newMessagesData = [messageData.value.data.onCreateMessageByReceiverID]
                 }
-                
-                //console.log(newMessagesData.length)
                 setMessages(newMessagesData);
-                //myContext.setMessages(newMessagesData)
-                //TODO: update messages.
             }
         })
 
@@ -116,69 +100,33 @@ export default function MessageScreen({ navigation }) {
         try {
             const messagesData = await API.graphql({ query: messagesByReceiver, variables: { receiverID: myContext.userID, limit: 20 } })
             setMessages(messagesData.data.messagesByReceiver.items)
-            //console.log("messages after fetch: ", messagesData.data.messagesByReceiver.items)
         } catch (err) { console.log('error fetching messages: ', err) }
     }
 
     async function deleteMessages(id) {
         try {
-            //console.log("deleting message with id ", id);
             const messagesData = await API.graphql({ query: deleteMessage, variables: {input: {id: id}  } })
             const newMessages = messages.filter(entry => entry.id != id)
-            //console.log(messagesData)
             setMessages(newMessages)
-            //console.log("messages after delete: ", newMessages)
-            //myContext.setMessages(messagesData.data.deleteMessage)
-            //console.log(myContext.messages)
-
         } catch (err) { console.log('error deleting messages: ', err) }
     }
 
-    // try moving alert
-    /*useFocusEffect(
-        useCallback(() => {
-            fetchMessages()
-        })
-    );*/
 
 
     useEffect(() => {
-        console.log("useEffect run")
-        //alert("useEffect run in MessageScreen")
-        //console.log("running fetch messages effect in MessageScreen");
         fetchMessages();
-        //console.log("messages: ", messages)
-        /*const subscription = subscribe()
-
-        return () => { subscription.unsubscribe() }*/
-        //console.log(messages);
     }, [])
     
     useEffect(() => {
-        //console.log("running subscription effect....");
-        //console.log("before subscribe: ", myContext.userID)
         const subscription = subscribe()
 
-        return () => { subscription.unsubscribe() } // return wird ausgeführt beim unmounten.
+        return () => { subscription.unsubscribe() } 
     }, [messages])
     
-    
-    
-
-
-
 
     const renderItem = ({ item }) => (
         <MessageItem message={item} navigation={navigation} />
     );
-
-
-
-
-
-
-
-
 
 
     return (
@@ -192,19 +140,9 @@ export default function MessageScreen({ navigation }) {
                             renderItem={renderItem}
                             keyExtractor={item => item.createdAt}
                         /> :
-
-                        <Text> {t("NO_MESS")} </Text> }
-
-              
+                        <Text> {t("NO_MESS")} </Text> }       
             </View>
         </SafeAreaView>
-
-
-
     )
-
-
-
-
 }
 

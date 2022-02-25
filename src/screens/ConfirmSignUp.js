@@ -30,7 +30,6 @@ export default function ConfirmSignUp({ navigation }) {
     <SafeAreaView style={styles.safeAreaContainer}>
       <Title title ={title}/>
       <View style={styles.container}>
-        {/*<Text style={styles.title}>Confirm Sign Up</Text>*/}
         <AppTextInput
           value={username}
           onChangeText={text => setUsername(text)}

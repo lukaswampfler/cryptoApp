@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react'
-import { Platform, View, Text, FlatList, Pressable, SafeAreaView, TouchableOpacity, Button } from 'react-native'
+import React, { useState, useContext } from 'react'
+import { View, Text, FlatList, SafeAreaView, TouchableOpacity } from 'react-native'
 
 
 
@@ -15,8 +15,6 @@ const analysisMethods = ['caesar', 'vigenere', 'permutation']
 export default function AnalysisHomeScreen({ navigation }) {
 
     const {t} = useTranslation();
-
-    const myContext = useContext(AppContext);
 
     const [selectedMethod, setSelectedMethod] = useState('caesar');
 
@@ -66,55 +64,16 @@ export default function AnalysisHomeScreen({ navigation }) {
 
     }
 
-    //const title = "Which method do you want to analyze?"
-
     return (
         <SafeAreaView style={styles.container}>
             <Title title= {`${t('ANALYZE_TITLE')}`}/>
-            {/*<View style={{margin: 15}}>
-            <Text style={{ fontSize: 20 }}>   </Text>
-    </View>*/}
-           {/*} {(Platform.OS === 'android')
-                && <View style={{ backgroundColor: '#DDD', height: 50 }}>
-                    <Picker style={{ flex: 1, width: 250 }}
-                        selectedValue={selectedMethod}
-                        onValueChange={(itemValue, itemIndex) =>
-                            setSelectedMethod(itemValue)
-                        }
-                        prompt="Please choose">
-                        <Picker.Item label="Caesar" value="caesar" />
-                        <Picker.Item label="Vigenere" value="vigenere" />
-                        <Picker.Item label="Permutation" value="permutation" />
-                    </Picker>
-                </View>}
-            {Boolean(Platform.OS === 'ios') &&
-                <Picker
-                    selectedValue={selectedMethod}
-                    onValueChange={(itemValue, itemIndex) =>
-                        setSelectedMethod(itemValue)
-                    }
-                    mode = 'dialog'>
-                    <Picker.Item label="Caesar" value="caesar" />
-                    <Picker.Item label="Vigenere" value="vigenere" />
-                    <Picker.Item label="Permutation" value="permutation" />
-                </Picker>}
-
-
-                <Button onPress={pressSelectButton} title="Select" /> */}
 
             <FlatList removeClippedSubviews={false}
                             data={analysisMethods}
                             renderItem={renderItem}
                             keyExtractor={item => item}
                         /> 
-
         </SafeAreaView>
-
-
-
     )
-
-
-
 }
 

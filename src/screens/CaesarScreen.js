@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import {ScrollView, Text, View, TextInput, Modal, TouchableOpacity } from 'react-native';
+import {ScrollView, Text, View, TextInput} from 'react-native';
 import AppContext from '../components/AppContext';
 import Button from '../components/Button';
 import NumInput from '../components/NumInput';
@@ -18,6 +18,7 @@ import { useTranslation } from 'react-i18next';
 const BACKGROUND_COLOR = '#ddd'
 
 export default function CaesarScreen({ navigation }) {
+
     const myContext = useContext(AppContext);
 
     const [text, setText] = useState('');
@@ -41,10 +42,8 @@ export default function CaesarScreen({ navigation }) {
            setKey(newKey.toString());
            updateTextAndSecret(text, secret, newKey)
         } else {
-            //setSecret('')
             alert(`${t("VALID_KEY")}`)
             updateTextAndSecret('', '', newKey)
-            
         }
     }
 
@@ -88,12 +87,6 @@ export default function CaesarScreen({ navigation }) {
     }, [text])
 
 
-    /*useEffect(() => {
-        updateTextAndSecret(text, secret, key)
-    }, [key])*/
-
-
-
     const caesarIntroText = `Input: ${t('CAESEXP_P1')}` +  `\n\n${t('KEY')}: ${t('CAESEXP_P2')}`
     const introText = caesarIntroText;
 
@@ -119,7 +112,6 @@ export default function CaesarScreen({ navigation }) {
                     multiline={true}
                     editable = {isEncrypting}
                     textAlignVertical='top'
-                    //placeholder='Enter plain text message'
                     autoCapitalize='none'
                     autoCorrect={false}
                     style={{ height: 80, borderColor: 'gray', borderWidth: 1 , borderRadius: 8, padding: 4}}
@@ -146,9 +138,7 @@ export default function CaesarScreen({ navigation }) {
                 {`${t('CAES_KEY')}`} </Text>
                 <View style = {{ marginTop: 5, width : '100%', backgroundColor:  BACKGROUND_COLOR,  borderRadius: 8}}>
                 <NumInput
-                    //icon='pinterest'
                     width='100%'
-                    //placeholder='Enter Caesar key'
                     autoCapitalize='none'
                     keyboardType='number-pad'
                     keyboardAppearance='dark'
@@ -234,9 +224,5 @@ export default function CaesarScreen({ navigation }) {
             </ScrollView>
         </View>
     );
-
-
-
-
 }
 
