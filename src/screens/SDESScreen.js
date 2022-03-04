@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, Text, View, Switch } from 'react-native';
-import { Divider } from 'react-native-elements';
+import {  ScrollView, Text, View } from 'react-native';
 import AppContext from '../components/AppContext';
 import Button from '../components/Button';
 import NumInput from '../components/NumInput';
@@ -9,10 +8,6 @@ import { IntroModal } from '../utils/Modals';
 import Line from '../components/Line';
 import GreySwitch from '../components/GreySwitch';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-
-
-import { useFormik } from 'formik';
-import * as Yup from 'yup'
 
 
 import { SDESKeyInputScheme, SDESK12InputScheme, SDESMessageInputScheme } from '../utils/InputTests';
@@ -26,9 +21,7 @@ export default function SDESScreen({ route, navigation }) {
 
 
   const getMessageInitialValue = () => {
-    console.log("getMessageInitialValue: ", route.params)
     if (route.params !== undefined) {
-      console.log("have params", typeof route.params.message)
       return route.params.message;
     } else {
        return '';
@@ -117,8 +110,6 @@ export default function SDESScreen({ route, navigation }) {
       myContext.setRSAInputSwitchisDecimal(false);
       let ciphers = myContext.ciphers;
       ciphers.rsa.m = key
-      // TODO: is the next line necessary?
-      //formikKey.handleSubmit(formikKey.values);
       navigation.navigate("RSA")
   } else {
     alert(`${t("10_BIT")}`)
@@ -158,8 +149,7 @@ export default function SDESScreen({ route, navigation }) {
   }
 
   const calculateK1K2 = () => {
-
-    if(is10BitString(key)){
+  if(is10BitString(key)){
     let ciphers = myContext.ciphers;
     if (ciphers.sdes === undefined) {
       ciphers.sdes = { key: key };
@@ -205,79 +195,7 @@ export default function SDESScreen({ route, navigation }) {
     
   }
 
-  /*formikKey has properties: handleChange,
-      handleSubmit,
-      handleBlur,
-      values,
-      errors,
-      touched
-      */
 
-  const formikKey = useFormik({
-    enableReinitialize: true, 
-    validationSchema: SDESKeyInputScheme,
-    initialValues: {key: getKeyInitialValue()},
-    onSubmit: values => {
-      let ciphers = myContext.ciphers;
-      if (ciphers.sdes === undefined) {
-        ciphers.sdes = { key: values.key };
-      } else {
-        ciphers.sdes.key10 = values.key;
-      }
-      setKeyEntered(true);
-      const keys = generateSDESKeys(values.key)
-      ciphers.sdes.keys = keys;
-      setK1(keys.k1)
-      setK2(keys.k2)
-      myContext.setCiphers(ciphers);
-      console.log(myContext.ciphers);
-      // TODO: also create both keys and input them into the next form. AND: refactor into an own function
-    }
-  });
-
-  const formikK12 = useFormik({
-    enableReinitialize: true,
-    validationSchema: SDESK12InputScheme,
-    initialValues: getK1K2InitialValues(),
-    //initialValues: generateSDESKeys(myContext.ciphers.sdes.key10),
-    onSubmit: values => {
-      let ciphers = myContext.ciphers;
-      ciphers.sdes.keys = values;
-      myContext.setCiphers(ciphers);
-      console.log(values);
-    }
-  });
-
-  const formikMessage = useFormik({
-    enableReinitialize: true,
-    validationSchema: SDESMessageInputScheme,
-    initialValues: { message: getMessageInitialValue() },
-    onSubmit: values => {
-      let ciphers = myContext.ciphers;
-      ciphers.sdes.message = values.message;
-      setMessage(values.message);
-      console.log("message", values.message);
-      console.log("keys: ", myContext.ciphers.sdes.keys);
-      const encrypted = encryptSDESMessage(values.message, myContext.ciphers.sdes.keys)
-      const decryptionKeys = { k1: myContext.ciphers.sdes.keys.k2, k2: myContext.ciphers.sdes.keys.k1 }
-      ciphers.sdes.encryptedMessage = encrypted;
-      const encryptedAsText = decodeBinaryString(encrypted);
-      console.log("decoded", encryptedAsText);
-      const encryptedEncoded = encodeEncrypted(encryptedAsText);
-      console.log("encrypted encoded", encryptedEncoded);
-      console.log("decryption keys: ", decryptionKeys);
-      console.log("Encrypted decrypted", encryptSDESMessage(encryptedEncoded, decryptionKeys))
-      const decrypted = encryptSDESMessage(encodeEncrypted(decodeBinaryString(encrypted)), decryptionKeys);
-      myContext.setCiphers(ciphers);
-      setIsEncrypted(true);
-      setEncryptedMessage(encrypted);
-      setDecryptedMessage(decodeBinaryString(decrypted));
-    }
-  });
-
-
-  //const introText = sdesIntroText
-  //const method = "The S-DES cipher"
 
   return (
     <View style={{ flex: 1 }}>
@@ -433,7 +351,6 @@ export default function SDESScreen({ route, navigation }) {
    
         {isEncrypted ?
           <View style={{ flex: 1 }}>
-
             {isMessageBinary?
             <View style ={{flexDirection: 'column', justifyContent: 'flex-start'}}>
             <Text style={{ fontSize: 16, fontWeight: '500' }}>{t("ENC_MES_BIN")} </Text>

@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useState, useCallback } from 'react';
-import { SafeAreaView, ScrollView, Text, View , StyleSheet, Switch} from 'react-native';
-import { Divider } from 'react-native-elements';
+import React, { useContext, useEffect, useState } from 'react';
+import {  ScrollView, Text, View , StyleSheet} from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import AppContext from '../components/AppContext';
 
@@ -9,10 +8,6 @@ import { isPrime, generatePrime , extendedEuclid, factorize, smartExponentiation
 import NumInput from '../components/NumInput';
 import Button from '../components/Button';
 import { IntroModal } from '../utils/Modals';
-import { isFunction, useFormik } from 'formik';
-import * as Yup from 'yup';
-import RandomPrimeRow from '../components/RandomPrimeRow';
-import PublicExponentRow from '../components/PublicExponentRow'
 import ButtonRow from '../components/ButtonRow';
 import { ExplanationModal } from '../utils/Modals';
 import Title from '../components/Title';
@@ -26,7 +21,6 @@ import API from '@aws-amplify/api';
 import { getUser } from '../graphql/queries';
 import { useTranslation } from 'react-i18next';
 import { getRandomInt } from '../utils/permutationMath';
-import { ServerContainer } from '@react-navigation/native';
 
 const NOPRIME_MESSAGE = 'not a prime number'
 const REQUIRED_ERROR_MESSAGE = 'this field is required';
@@ -52,7 +46,6 @@ export default function RSAKeyScreen({ navigation, route }) {
   const [savedExponent, setSavedExponent] = useState(null)
   const [mod, setMod] = useState("")
 
-  //const {changeMod} = route.params;
 
   const {t} = useTranslation();
 
@@ -71,7 +64,6 @@ export default function RSAKeyScreen({ navigation, route }) {
       query: getUser, 
       variables: {id: myContext.userID}
     })
-    //console.log(result.data.getUser.publicKey)
     return result.data.getUser.publicKey;
   }
 
@@ -81,7 +73,6 @@ export default function RSAKeyScreen({ navigation, route }) {
     const promisePublic = getPublicKey();
     const promisePrivate = getValueFor("privateKey");
     Promise.all([promisePublic, promisePrivate]).then((values) =>{
-      //console.log(values)
       const publicKey = values[0]
       const privateKey = JSON.parse(values[1])
       introText += "public Exponent: " + publicKey.exponent.toString() + "\nprivate Exponent: " + privateKey.exponent.toString()+ "\nModulus: " + publicKey.modulus.toString()
@@ -94,7 +85,6 @@ export default function RSAKeyScreen({ navigation, route }) {
     })
     getValueFor("privateKey").then( (res) => {
       res = JSON.parse(res)
-      //personalPrivateKey={mod: res.modulus, exp: res.exponent}
       setPersonalPrivateKey({mod: res.modulus, exp: res.exponent})
     })
 
@@ -103,8 +93,6 @@ export default function RSAKeyScreen({ navigation, route }) {
 
 
   useEffect(() => {
-    console.log("exp in its own useEffect: ", exp);
-      //myContext.setPrimeExponent(exp);
       if (exp > 0) {
       const pCand = generatePrime(exp, myContext.useBigIntegerLibrary)
       setPConfirmed(pCand);
@@ -115,8 +103,6 @@ export default function RSAKeyScreen({ navigation, route }) {
       setQConfirmed(qCand);
       setP(pCand)
       setQ(qCand)
-      console.log("use Effect, p and q are set to ", pCand, qCand)
-      console.log("use Effect, exp ", exp)
     }
       
   }
@@ -127,9 +113,7 @@ export default function RSAKeyScreen({ navigation, route }) {
     setDefaultPubExp();
     if(isDefault){
         changePublicKey(); // change publicKey in Context and as state variable
-        //setPrivateKey();
     } 
-    //console.log("publicKey updated: ", publicKey);
     myContext.setPrimes({p: pConfirmed, q: qConfirmed})
     
 
@@ -137,9 +121,7 @@ export default function RSAKeyScreen({ navigation, route }) {
 
 
   useEffect( () => {
-    //console.log("in verified public Exponent: p: ", pConfirmed, " q: ", qConfirmed)
     changePublicKey();
-    //setPrivateKey();
 }, [verifiedPubExp])
 
 
@@ -149,24 +131,17 @@ useEffect(() =>{
 }, [publicKey])
 
 
-{/*useEffect(()=> {
-  console.log("pConfirmed, qConfirmed, exp: ", pConfirmed, qConfirmed, exp)
-}, [pConfirmed])*/}
-
 
 useEffect(() => {
   const state = {p: pConfirmed, q: qConfirmed, 
     isDefault, isRandom, verifiedPubExp}
     myContext.setRSAKeyGenState(state)
-    //console.log("RSAKeyGenState changed: ", state);
 }, [pConfirmed, qConfirmed, isRandom, isDefault, verifiedPubExp])
 
 useEffect(() => {
-  //console.log("isRandom - useEffect")
   if(isRandom){
     if(savedPrimes){
-      //console.log("have saved primes...")
-      setPConfirmed(savedPrimes.p) // Problem hier.
+      setPConfirmed(savedPrimes.p) 
       setQConfirmed(savedPrimes.q)
       setP(savedPrimes.p)
       setQ(savedPrimes.q)
@@ -176,7 +151,6 @@ useEffect(() => {
     }
   } 
   else {
-    //console.log("setting saved primes to ", p, q);
     setSavedPrimes({p: p, q: q})
     setSavedExponent(pubExp)
     setP(null)
@@ -188,12 +162,7 @@ useEffect(() => {
 
 useEffect(() => {
   if(isDefault){
-    /*if(savedExponent){
-      setPubExp(savedExponent)
-      setVerifiedPubExp(savedExponent)
-    } else {*/
       setDefaultPubExp()
-    //}
   } else {
     setSavedExponent(pubExp)
     setPubExp(null)
@@ -240,9 +209,6 @@ const changeQ = value => {
 
 const toggleRandomSwitch = () => {
   setIsRandom(!isRandom);
-  //setP(null)
-  //setQ(null)
-  //setPubExp(null)
 }
 
   const setDefaultPubExp = () => {
@@ -261,21 +227,9 @@ const toggleRandomSwitch = () => {
     const expPublic = phi > Math.pow(2, 16) ?  (Math.pow(2, 16) + 1).toString() : calculatePubExp(Number(phi))
     setPubExp(expPublic)
     setVerifiedPubExp(expPublic)
-
-     /* const phi = (pConfirmed-1) * (qConfirmed-1);
-      const pow16 = Math.pow(2, 16)
-      if( phi > pow16){
-          setPubExp((pow16 + 1).toString());
-          setVerifiedPubExp(pow16+1)
-      } else {
-        let cand = 2;
-        while (gcd(cand, phi) > 1){
-          cand = Math.floor(Math.random() * phi)
-        }
-          setPubExp(cand.toString())
-          setVerifiedPubExp(cand);
-      }*/
-    } else {setPubExp(null)}
+    } else {
+      setPubExp(null)
+    }
 }
 
 const togglePubExpSwitch = () => {
@@ -295,7 +249,6 @@ const checkPrime = value => {
 }
 
 const checkAndUsePrimes = () => {
-  console.log("checkAndUsePrimes")
   if(p && q){
   if (checkPrime(p) && checkPrime(q)){
     if(p == q) {
@@ -315,25 +268,15 @@ const checkAndUsePrimes = () => {
   alert(`${t("ALERT_PRIME_ENTER")}`)
 }}
 
-// TODO: 
-// 1) new state variables pConfirmed, qConfirmed
-// 2) these need to be set in useEffect for exp (above, lines 43)
-// 3) useEffect for [p, q] needs to be changed to [pConfirmed, qConfirmed]
-// 3b) maybe remove alerts from checkPrime (above)
-// 4) use my primes - button should be using this function: 
-
 
 const changeMod = (m) => {
   if(isInteger(m)){
     setMod(m.toString())
-    console.log("Mod changed to ", m)
   }
 }
 
 
 const changePublicKey = () => {
-    console.log("verified public exp: ", verifiedPubExp)
-    console.log(qConfirmed, pConfirmed)
     if(verifiedPubExp != ''){
       let modulus;
       if (myContext.useBigIntegerLibrary){
@@ -350,15 +293,10 @@ const changePublicKey = () => {
 }
 
 const setPrivateKey = () => {
-    console.log("verified pub Exp", verifiedPubExp, pConfirmed, qConfirmed)
-    console.log("useBigIntegerLibrary", myContext.useBigIntegerLibrary)
     let phi, n
     if (myContext.useBigIntegerLibrary){
-      console.log("Android")
       const num1 = BigInt(pConfirmed).subtract(BigInt(1))
-      console.log("num1 calculated")
       const num2 = BigInt(qConfirmed).subtract(BigInt(1))
-      console.log("num1, num2", num1, num2)
       phi = num1.multiply(num2)
       n = BigInt(pConfirmed).multiply(BigInt(qConfirmed))
     } else {
@@ -366,29 +304,20 @@ const setPrivateKey = () => {
       n = BigInt(pConfirmed)*BigInt(qConfirmed)
     }
     if(verifiedPubExp && verifiedPubExp != ''){
-        console.log("calling extended Euclid", verifiedPubExp, phi)
         let { inverse, gcd } = extendedEuclid(BigInt(parseInt(verifiedPubExp)), phi, myContext.useBigIntegerLibrary);
-        console.log("AFTER EXT EUCLID: ", inverse, gcd)
         if (inverse === undefined) {
             alert("Not possible to determine private Key: " + "public" + verifiedPubExp + "phi: " + phi);
-        } /*else if (BigInt(gcd) != BigInt(1)) {
-            console.log(gcd)
-            console.log("GCD not equal to 1");
-        } */else {
-          console.log("ELSE", inverse)
+        } else {
           if(myContext.useBigIntegerLibrary && inverse.lesser(BigInt(0))){
                   inverse = inverse.add(phi)
-                  console.log("added phi, new inverse: ", inverse, phi)
           } else if (!myContext.useBigIntegerLibrary && inverse < 0) {
                   inverse += phi;
           }
       } 
       if(myContext.useBigIntegerLibrary){
         myContext.setPrivateKey({ exp: inverse.toString(), mod: n.toString() });
-        console.log("new Private Key Android: ,exp ", inverse.toString(), " mod: ", n.toString());
       } else {
         myContext.setPrivateKey({ exp: inverse.toString(), mod: n.toString() });
-        console.log("new Private Key IOS: ,exp ", inverse.toString(), " mod: ", n.toString() );
       }
         
         
@@ -398,14 +327,12 @@ const setPrivateKey = () => {
 }
 
 const checkAndUsePubExp = () => {
-    //TODO: check condition on pubExp and then (in another function) calculate private key and 
   if(pConfirmed && qConfirmed && pubExp){
   const phi = (pConfirmed-1)*(qConfirmed-1)
   if (gcd(phi, parseInt(pubExp)) == 1){
       setVerifiedPubExp(pubExp);
    } else {
        alert("phi " + phi + " and e: " + pubExp + " are NOT relatively prime \n Please choose different value of e.")
-       // reset keys
    }
 }else {
   alert(`${t("ALERT_EXP")}`)} 
@@ -578,17 +505,15 @@ const checkAndUsePubExp = () => {
 
 <View style ={{ flexDirection: 'row', justifyContent: 'center', height: 120}}>
 <View style = {{width: '60%', flexDirection: 'column', justifyContent: 'flex-start'}}>
-<Text style={{
+              <Text style={{
                     fontSize: 20,
                     margin: 10, marginLeft: 20
                 }}> 
-              {t('PUB_EXP')}</Text>
-<View style = {{width: '60%', backgroundColor: isDefault? '#fff': '#ddd', marginLeft: 20, borderRadius: 8}}>
-<NumInput 
-                //icon='key'
+                {t('PUB_EXP')}</Text>
+      <View style = {{width: '60%', backgroundColor: isDefault? '#fff': '#ddd', marginLeft: 20, borderRadius: 8}}>
+                <NumInput 
                 width = '100%'
                 editable = {!isDefault}
-                //placeholder='public exponent e '
                 keyboardType='number-pad'
                 keyboardAppearance='dark'
                 returnKeyType='next'
@@ -615,9 +540,8 @@ const checkAndUsePubExp = () => {
 
  </View> 
 
-
-
 <Line/>
+
 <View style = {{margin: 10}}>
                 <Text style={{
                     fontSize: 20,
@@ -631,11 +555,8 @@ const checkAndUsePubExp = () => {
           <Text>Modulus: <Text style = {{fontWeight: 'bold'}}>  {myContext.publicKey.mod} </Text>
                 </Text>
 
-
-    
       <ButtonRow navigation={navigation} updatePersonalKeyText={updatePersonalKeyText}/>
 
-      
       <Line/>
       
     <View style ={{flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10, marginTop: 10}}>   
@@ -655,9 +576,7 @@ const checkAndUsePubExp = () => {
       <View style ={{width: '45%'}}>
         <Button style = {{width: '45%'}} label = {t('USE_OWN_PRI')} onPress={() => {
           getValueFor("privateKey").then( (res) => {
-            //console.log("result: ", res)
             res = JSON.parse(res)
-            //console.log("modulus: ", res.modulus)
             navigation.navigate({
               name: "RSA", 
               params: {key: 
@@ -674,7 +593,6 @@ const checkAndUsePubExp = () => {
          <View style = {{width: '45%'}}>
          <Button style = {{width: '45%'}}label = {t('USE_OWN_PUB')}onPress={() => {
           getPublicKey().then( (res) => {
-            //console.log("result: ", res)
             navigation.navigate({name: "RSA", 
             params: {key: {mod: res.modulus, exp: res.exponent}, 
             mod: res.modulus,
@@ -698,7 +616,7 @@ const checkAndUsePubExp = () => {
               {t('MOD')}</Text>
               
 <View style = {{width: '60%', backgroundColor: isDefault? '#fff': '#ddd', marginLeft: 20, borderRadius: 8}}>
-<NumInput 
+          <NumInput 
                 width = '100%'
                 editable = {true}
                 keyboardType='number-pad'

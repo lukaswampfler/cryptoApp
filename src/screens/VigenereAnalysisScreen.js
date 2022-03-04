@@ -2,8 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, Dimensions, TextInput, TouchableWithoutFeedback, FlatList, Keyboard, StyleSheet } from 'react-native';
 import Button from '../components/Button';
 import Title from '../components/Title';
-import AppContext from '../components/AppContext';
-import { Divider } from 'react-native-elements';
 
 import ClearButton from '../components/ClearButton';
 
@@ -14,7 +12,6 @@ import {
 
 
 import { createFrequencyDict, calculateKeyCharacter , kasiskiTest, createData} from '../utils/frequencyAnalysis';
-//import CarouselCards from '../components/CarouselCards';
 import { useTranslation } from 'react-i18next';
 
 const screenWidth = 0.9 * Dimensions.get("window").width;
@@ -45,10 +42,9 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
             backgroundGradientTo: "#080808",
             backgroundGradientToOpacity: 0,
             color: (opacity = 1) => `rgba(10, 10, 10, ${opacity})`,
-            strokeWidth: 2, // optional, default 3
+            strokeWidth: 2, 
             barPercentage: 0.15,
             decimalPlaces:0,
-            //useShadowColorFromDataset: false // optional
           };
         
         
@@ -70,7 +66,6 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
             
       <Text style={styles.header}>{data.title}</Text>
       <Text style ={styles.body}> most frequent letter in subset: {mostFreqInDict} </Text>
-      {/*<Text style ={styles.body}> most frequent letter in Alphabet: {mostFreqInAlph} </Text>*/}
       <Text style ={styles.body}> most likely corresponding letter in secret key: {calculateKeyCharacter(mostFreqInDict, mostFreqInAlph)} </Text>
     </View>
   );
@@ -94,14 +89,11 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
     useEffect(() => {
         const showBars = secret.length > 0 && chosenLength > 0 && chosenLength <= secret.length
         setShowBars(showBars);
-        //console.log(secret, chosenLength)
         if(chosenLength >= 0 && chosenLength <= secret.length){
             let frequencyDictionaries = createFrequencyDict(secret, parseInt(chosenLength))
-            //console.log("frequency Dictionaries: ", frequencyDictionaries)
             const newData = createData(frequencyDictionaries, mostFrequentLetter)
             setData(newData);
             let candKeyWord = '';
-            //console.log("newData", newData)
             for (let i = 0; i < newData.length; i++){
                 candKeyWord += calculateKeyCharacter(newData[i].mostFrequentInDictionary, mostFrequentLetter)
             }
@@ -127,7 +119,6 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
     const handleAnalysis = () => {
         const NUM_FRAGMENTS = 5
         //TODO: clean secret of whitespace, punctuation etc. - done in kasiskiTest
-        //likelyLength = kasiskiTest(secret);
         if (secret.length > 0 ){
         toggleShowFragments()
         const fragmentList = kasiskiTest(secret)
@@ -139,12 +130,6 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
         
         console.log("return from kasiski: ", repeatedParts);
     }
-        //console.log(likelyLength);
-        //setKasiskiLength(likelyLength);
-        //let frequencyDictionaries = createFrequencyDict(secret, likelyLength)
-        //setData(createData(frequencyDictionaries, mostFrequentLetter));
-        //analysisDone = true;
-        //setAnalysisDone(true);
     }
 
     const goToVigenereDecryption = () => {
@@ -167,28 +152,8 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
                 {item.fragment}  </Text>
         
             <Text selectable={false}>  {t("DIST")}{item.posDiff}</Text>
-            {/*<Divider width={'100%'} style={{margin: 7}}/>*/}
       </View>
     )
-
-
-
-    //const freqDict = createFrequencyDict(secret)["0"];
-    //const sorted = sortDictionaryByKey(freqDict)
-    
-    //const germanSorted = sortDictionaryByKey(germanFreq)x
-
-
-    /*const data = {
-        labels: Object.keys(sorted),
-        datasets: [{ data: Object.values(sorted) }]
-    };
-
-
-    const germanData = {
-        labels: Object.keys(germanSorted),
-        datasets : [{data: Object.values(germanSorted)}]
-    }*/
 
     
 
@@ -198,9 +163,8 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
         backgroundGradientTo: "#08130D",
         backgroundGradientToOpacity: 0,
         color: (opacity = 1) => `rgba(20, 20, 20, ${opacity})`,
-        strokeWidth: 2, // optional, default 3
+        strokeWidth: 2, 
         barPercentage: 0.2,
-        //useShadowColorFromDataset: false // optional
     };
 
     const title = `${t("VIG_ANA_TIT")}`
@@ -306,23 +270,6 @@ export default function VigenereAnalysisScreen({ route, navigation }) {
                         null}
 
     </View>
-              {/*  {(!onlyNonAlpha(secret)) && (<CarouselCards data= {data} />)} */}
-
-
-
-            {/*{(!onlyNonAlpha(secret)) && (<BarChart
-                style={{
-                    marginVertical: 8,
-                    borderRadius: 16
-                }}
-                data={data}
-                width={screenWidth}
-                height={240}
-                yAxisSuffix="%"
-                chartConfig={chartConfig}
-                verticalLabelRotation={90}
-            />)}*/}
-
             
         </View>
         

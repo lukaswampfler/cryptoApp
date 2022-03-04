@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useRef } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ScrollView, Text, View, TextInput } from 'react-native';
 import AppContext from '../components/AppContext';
 import Button from '../components/Button';
@@ -30,7 +30,6 @@ export default function VigenereScreen({ route, navigation }) {
     const [key, setKey] = useState('');
     const [isEncrypting, setIsEncrypting] = useState(true)
     const [hasBackButton, setHasBackButton] = useState(false);
-    const ref = useRef(key);
 
     const {t} = useTranslation();
 
@@ -251,9 +250,5 @@ export default function VigenereScreen({ route, navigation }) {
             </ScrollView>
         </View>
     );
-
-
-
-
 }
 

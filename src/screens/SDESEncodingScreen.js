@@ -1,16 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Dimensions, ScrollView, Text, View, TextInput } from 'react-native';
-import { Divider } from 'react-native-elements';
 import AppContext from '../components/AppContext';
 import Button from '../components/Button';
-import NumInput from '../components/NumInput';
 import Title from '../components/Title';
-import { encode, decode, bitsStringFromBytes } from '../utils/sdesMath';
+import { encode, bitsStringFromBytes } from '../utils/sdesMath';
 import { ExplanationModal } from '../utils/Modals';
 import Line from '../components/Line';
-import { useFormik } from 'formik';
-import * as Yup from 'yup'
-import { sdesEncodingIntroText } from '../utils/introTexts';
 import { useTranslation } from 'react-i18next';
 import ClearButton from '../components/ClearButton';
 
@@ -23,7 +18,6 @@ export default function SDESEncodingScreen({ navigation, route }) {
     const {t} = useTranslation();
 
     const screenWidth = 0.9 * Dimensions.get("window").width;
-
 
     const getMessageInitialValue = () => {
         if (route.params === undefined) {
@@ -53,7 +47,6 @@ export default function SDESEncodingScreen({ navigation, route }) {
         console.log(route)
         const message = getMessageInitialValue()
         setText(message)
-        //console.log(bitsStringFromBytes(encode(getMessageInitialValue())))
         setEncoded(bitsStringFromBytes(encode(message)));
     }, [])
 
@@ -67,8 +60,6 @@ export default function SDESEncodingScreen({ navigation, route }) {
     return (
 
         <View style={{ flex: 1 }}>
-
-
 
             <ScrollView style={{ flex: 1 , margin: 10}}>
                 <Title title = {title}/>
@@ -92,9 +83,7 @@ export default function SDESEncodingScreen({ navigation, route }) {
                     marginLeft: 20,
                 }}>
                     
-
-
-                    <TextInput
+               <TextInput
                         width={0.5*screenWidth}
                         multiline={true}
                         textAlignVertical='top'
@@ -142,17 +131,8 @@ export default function SDESEncodingScreen({ navigation, route }) {
                     <Button  label={`${t('SI')}`} onPress={() => { myContext.setExplVisible(true) }} width = '80%' />
                     </View>
 
-                {/*<View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'center', width: 150,
-                    marginTop: 100
-                }}>
-                    <Button label={t('SI')} onPress={() => { myContext.setExplVisible(true) }} />
-            </View>*/}
             </ScrollView>
         </View>
     );
-
-
 
 }

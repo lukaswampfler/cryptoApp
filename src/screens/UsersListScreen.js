@@ -1,20 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { SafeAreaView, TouchableOpacity, ScrollView, Text, View } from 'react-native';
-import { Divider } from 'react-native-elements';
-import Button from '../components/Button';
+import { SafeAreaView, TouchableOpacity, Text, View } from 'react-native';
 import Loading from './Loading'
 import { listUsers } from '../graphql/queries';
 import { createMessage } from '../graphql/mutations';
 
-import { API, Auth, graphqlOperation } from 'aws-amplify'
+import { API } from 'aws-amplify'
 
 import styles from './styles'
-
 import AppContext from '../components/AppContext';
-
 import { FlatList } from 'react-native-gesture-handler';
-
-
 
 const UserItem = ({ user, onPress }) => (
   <View style={styles.item}>
@@ -35,7 +29,6 @@ export default function UsersListScreen({ route, navigation }) {
       const usersData = await API.graphql({ query: listUsers })
       const users = usersData.data.listUsers.items
       setUsers(users)
-      //console.log(users)
     } catch (err) { console.log('error fetching users: ', err) }
   }
 
@@ -48,7 +41,6 @@ export default function UsersListScreen({ route, navigation }) {
         method: myContext.ciphers.currentMethod,
         sent: "true"
       }
-      //console.log(messageDetails)
       const messageData = await API.graphql({ query: createMessage, variables: { input: messageDetails } });
       alert('Message ' + messageDetails.text +' sent successfully to ' + receiver.name);
       navigation.goBack();
@@ -63,8 +55,6 @@ export default function UsersListScreen({ route, navigation }) {
 
 
   const renderItem = ({ item }) => (
-    //const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";
-    //const color = item.id === selectedId ? 'white' : 'black';
     <UserItem
       user={item}
       onPress={() => {
@@ -85,9 +75,7 @@ export default function UsersListScreen({ route, navigation }) {
         }
       }
       }
-      //onPress={() => setSelectedId(item.id)}
       backgroundColor="#6e3b6e"
-    //textColor={{ color }}
     />
   );
 

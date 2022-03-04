@@ -38,7 +38,6 @@ export default function SignUp({ navigation }) {
     <SafeAreaView style={styles.safeAreaContainer}>
      <Title title ={title}/>
       <View style={styles.container}>
-        {/*<Text style={styles.title}>Create a new account for CryptoApp</Text>*/}
         <AppTextInput
           value={username}
           onChangeText={text => setUsername(text)}

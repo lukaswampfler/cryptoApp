@@ -183,20 +183,6 @@ const {t} = useTranslation();
     }
 
 
-    // use formik hook to get hold of form values, errors, etc.
-    /*const { handleChange,
-        handleSubmit,
-        handleBlur,
-        values,
-        errors,
-        touched } = useFormik({
-            enableReinitialize: true,
-            validationSchema: myContext.RSAInputSwitchisDecimal ? RSAEncryptionDecimalInputScheme : RSAEncryptionBinaryInputScheme,
-            initialValues: { m: getMessageInitialValue(), exp: getExpInitialValue(), n: getModInitialValue() },
-            onSubmit: RSASubmit
-        });
-*/
-
     const setContextMessage = value => {
         let ciphers = myContext.ciphers;
         ciphers.rsa.m = value
@@ -258,8 +244,7 @@ const introText = rsaIntroText;
         <ScrollView style={{
             flex: 1, margin: 0
         }}>
-           
-                <Title title={`${t('RSA_TIT')}`}/>
+           <Title title={`${t('RSA_TIT')}`}/>
                 
             <IntroModal text={introText} method={`${t('RSA_TIT')}`} />
             <View
@@ -313,16 +298,12 @@ const introText = rsaIntroText;
                 </View>
 
                 <Line/>
-<View style ={{margin: 10}}>
+                
+                <View style ={{margin: 10}}>
+                    <Text style={{ fontSize: 20 }}>{`${t('KEY')}`}</Text>
 
-                <Text style={{ fontSize: 20 }}>{`${t('KEY')}`}</Text>
 
-
-                <View
-      style={{
-        flex: 1,
-      }}
-    >
+                <View style={{flex: 1,}}>
  <View style={{
         flexDirection: 'row',
         justifyContent: 'space-between',

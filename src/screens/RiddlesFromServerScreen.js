@@ -1,15 +1,11 @@
-import React, { useState, useEffect, useContext } from 'react'
-import { Platform, View, Text, FlatList, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native'
+import React, { useState, useEffect} from 'react'
+import {  View, Text, FlatList, TouchableOpacity, SafeAreaView} from 'react-native'
 import Title from '../components/Title';
-import Button from '../components/Button';
-import { IntroModal } from '../utils/Modals';
-import styles from './styles'
 import { Divider } from 'react-native-elements';
-import { useNavigation } from '@react-navigation/core';
 
-import AppContext from '../components/AppContext';
-import { listMessages, messagesBySent, messagesBySentTest } from '../graphql/queries';
-import { API, graphqlOperation } from 'aws-amplify'
+
+import { listMessages } from '../graphql/queries';
+import { API } from 'aws-amplify'
 import { useTranslation } from 'react-i18next';
 
 
@@ -43,7 +39,6 @@ export default function RiddlesFromServerScreen({ navigation }) {
     async function fetchMessages() {
         try {
             const riddlesData = await API.graphql({ query: listMessages, variables: {limit: 5 } })
-            const riddlesDataSortTest = await API.graphql({query: listMessages })
             setRiddles(riddlesData.data.listMessages.items)
         } catch (err) { console.log('error fetching messages: ', err) }
     }
@@ -71,24 +66,18 @@ export default function RiddlesFromServerScreen({ navigation }) {
                     margin: 20
                 }}>
                     {riddles ?
-                 
-                        <FlatList removeClippedSubviews={false}
+                    <FlatList removeClippedSubviews={false}
                             data={riddles}
                             renderItem={renderItem}
                             keyExtractor={(item, index) => item.id}
                         /> :
-                        <Text> {`${t('NO_RIDDLES')}`}</Text>
-                        
-}
-{riddles &&                <View style = {{margin: 10}}>
-    <Text style = {{fontSize: 16, fontWeight: '500'}}> {t("CLICK")} </Text>
-</View>  }
+                        <Text> {`${t('NO_RIDDLES')}`}</Text>}
+                {riddles && 
+                <View style = {{margin: 10}}>
+                    <Text style = {{fontSize: 16, fontWeight: '500'}}> {t("CLICK")} </Text>
+                </View>  }
 
                 </View>
-
            </SafeAreaView> 
     );
-
-
-
 }

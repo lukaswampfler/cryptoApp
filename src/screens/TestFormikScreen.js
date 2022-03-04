@@ -1,7 +1,6 @@
-import React, { useContext, useState } from 'react';
-import { SafeAreaView, ScrollView, Text, View, TextInput, StyleSheet, TouchableOpacity} from 'react-native';
-import {Divider} from 'react-native-elements';
-import AppContext from '../components/AppContext';
+import React, {useState } from 'react';
+import {  Text, View, TextInput, StyleSheet, TouchableOpacity} from 'react-native';
+
 import * as Yup from 'yup';
 
 import {useFormik} from 'formik';
