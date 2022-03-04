@@ -1,27 +1,17 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { ActivityIndicator, StyleSheet, View, ScrollView , Text, TouchableOpacity} from 'react-native';
 import AppContext from './src/components/AppContext';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import {
-  createDrawerNavigator,
-  DrawerContentScrollView,
-  DrawerItemList,
-  DrawerItem,
-} from '@react-navigation/drawer';
+import {createDrawerNavigator} from '@react-navigation/drawer';
 
 import Amplify, { Auth, API } from 'aws-amplify';
 import config from './src/aws-exports';
-//import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
 
 import RSAKeyScreen from './src/screens/RSAKeyScreen';
-//import TestRSAKeyScreen from './src/screens/TestRSAKeyScreen';
 import RSAEncryptionScreen from './src/screens/RSAEncryptionScreen';
-//import TestRSAEncryptionScreen from './src/screens/TestRSAEncryptionScreen';
-
 import UsersListScreen from './src/screens/UsersListScreen';
 import SignIn from './src/screens/SignIn';
 import SignUp from './src/screens/SignUp';
@@ -43,16 +33,10 @@ import PermutationScreen from './src/screens/PermutationScreen';
 import PermutationAnalysisScreen from './src/screens/PermutationAnalysisScreen';
 import RiddleHomeScreen from './src/screens/RiddleHomeScreen';
 import RiddlesFromServerScreen from './src/screens/RiddlesFromServerScreen';
-import { SafeAreaView } from 'react-native';
 import RiddleMethodChoiceScreen from './src/screens/RiddleMethodChoiceScreen';
 import RiddleDisplayScreen from './src/screens/RiddleDisplayScreen';
 import EncryptedMessageMethodChoiceScreen from './src/screens/EncryptedMessageMethodChoiceScreen';
-import SettingsScreen from './src/screens/SettingsScreen';
 import { LP2 } from './src/components/LanguagePicker';
-
-
-import Header from './src/components/Header';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 import { useTranslation } from 'react-i18next';
 import './i18n.config';
@@ -70,7 +54,6 @@ Amplify.configure({
 const RootDrawer = createDrawerNavigator();
 const AuthenticationStack = createStackNavigator();
 const AppStack = createStackNavigator();
-//const RSAStack = createStackNavigator();
 const MethodStack = createStackNavigator();
 const HomeTab = createBottomTabNavigator();
 const AnalysisStack = createStackNavigator();
@@ -99,18 +82,6 @@ const AuthenticationNavigator = props => {
 };
 
 
-
-/*const AppNavigator = props => {
-  return (
-    <AppStack.Navigator>
-      <AppStack.Screen name="Home Screen">
-        {screenProps => (
-          <HomeScreen {...screenProps} updateAuthState={props.updateAuthState} />
-        )}
-      </AppStack.Screen>
-    </AppStack.Navigator>
-  );
-};*/
 
 const MethodNavigator = props => {
   return (
@@ -231,13 +202,9 @@ const RootDrawerNavigator = props => {
             <RootDrawer.Screen name="Analysis" component={AnalysisNavigator} options={{headerTitle: '', title: "Cryptoanalysis", unmountOnBlur: true, headerRight: LP2, headerRightContainerStyle: {marginRight: 20}, headerStyle: {backgroundColor: '#eee'}, headerTintColor: '#000', headerTitleStyle: {fontWeight: 'bold',}}}/>
             <RootDrawer.Screen name="Messages" component={MessageScreen} options={{headerTitle: '', title: "My Messages", headerRight: LP2, headerRightContainerStyle: {marginRight: 20} , headerStyle: {backgroundColor: '#eee'}, headerTintColor: '#000', headerTitleStyle: {fontWeight: 'bold',}}} />
             <RootDrawer.Screen name="Riddles" component={RiddleNavigator} options={{headerTitle: '', title: "Riddles", unmountOnBlur: true , headerRight: LP2, headerRightContainerStyle: {marginRight: 20}, headerStyle: {backgroundColor: '#eee'}, headerTintColor: '#000', headerTitleStyle: {fontWeight: 'bold',}}} />
-           {/* <RootDrawer.Screen name="Settings" component={SettingsScreen} options={{headerTitle: '', title: "Settings", unmountOnBlur: true, headerRight: LP2, headerRightContainerStyle: {marginRight: 20} }} />*/}
     </RootDrawer.Navigator>
   );
 }
-
-
-
 
 
 const Initializing = () => {
@@ -247,8 +214,6 @@ const Initializing = () => {
     </View>
   );
 };
-
-
 
 
 
@@ -362,16 +327,9 @@ export default function App() {
     let token = Auth.currentSession().then(session => session.getIdToken().getJwtToken())
     console.log(token);
     checkAuthState();
-    //setUserLoggedIn('loggedOut');
   }, []);
 
-  /*useEffect(() => {
-    delete global.BigInt
-  } , [])*/
-
-  //TO TEST
-  //useEffect(() => {console.log(isUserLoggedIn)}, [isUserLoggedIn])
-
+  
   async function checkAuthState() {
     if (isFirstTime){
       setIsFirstTime(false)
@@ -380,7 +338,6 @@ export default function App() {
     try {
       const user = await Auth.currentAuthenticatedUser();
       console.log('User is signed in');
-      // TODO: check here!
       console.log('name', user.username, 'bla')
       if (user.username === ' ' || user.username === '' ) {
         setUserLoggedIn('loggedOut');
@@ -395,15 +352,10 @@ export default function App() {
   }
 
 
-
-// in useEffect not global.BigInt - Attribut löschen (mit delete BigInt?)
-
   if (typeof BigInt === 'undefined') {
     global.BigInt = require('big-integer');
     setUseBigIntegerLibrary(true);
   }
-
-  
 
 
   return (

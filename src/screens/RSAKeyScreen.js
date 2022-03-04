@@ -24,7 +24,6 @@ import { getRandomInt } from '../utils/permutationMath';
 
 const NOPRIME_MESSAGE = 'not a prime number'
 const REQUIRED_ERROR_MESSAGE = 'this field is required';
-const NUM_DIGITS = 4; 
 
 
 export default function RSAKeyScreen({ navigation, route }) {

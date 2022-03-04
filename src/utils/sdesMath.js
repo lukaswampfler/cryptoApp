@@ -39,8 +39,6 @@ function applyPermutation(s, perm) {
 }
 
 function xor(s1, s2) {
-    // QUESTION: How to check for correct length etc with Types?
-    //if ((s1.length != s2.length ) || (typeof s1 != typeof s2)) return undefined;
     let res = [];
     for (let i = 0; i < s1.length; i++) {
         if (typeof s1 == 'string' && typeof s2 == 'string') {
@@ -99,24 +97,16 @@ export function encryptSDESMessage(bitString, keys) {
     const IPInverse = [3, 0, 2, 4, 6, 1, 7, 5]
 
     for (let i = 0; i < chunks.length; i++) {
-        //console.log("INPUT: ", chunks[i])
         const chunk = applyPermutation(chunks[i], IP);
-        //console.log("after IP: ", chunk)
         const part1 = chunk.substr(0, 4);
         const part2 = chunk.substr(4, 4);
         const part2AfterRound1 = applyRound(part2, keys.k1);
-        //console.log("after round 1: ", part2AfterRound1)
         
         //perform swap
         const inputRound2Part1 = part2
         const inputRound2Part2 = xor(part1, part2AfterRound1);
-        //console.log("xor inputs: ", part1, part2AfterRound1)
-        //console.log("input round 2: ", inputRound2Part2)
         const part2AfterRound2 = applyRound(inputRound2Part2, keys.k2);
-        //console.log("after round 2: ", part2AfterRound2)
         const lastInput = xor(inputRound2Part1, part2AfterRound2).concat(inputRound2Part2);
-        //console.log("xor inputs: ", inputRound2Part1, part2AfterRound2)
-        //console.log("before IPInverse, two parts:  ", xor(inputRound2Part1, part2AfterRound2), inputRound2Part2)
         encryptedChunks[i] = applyPermutation(lastInput, IPInverse)
     }
     return encryptedChunks.join('');
@@ -169,7 +159,6 @@ function bytesToString(byteArray) {
             num += 192
         } else if (num == 173 ){num = 295}
         result += String.fromCharCode(num);
-        console.log(num , String.fromCharCode(num));
     }
     return result
 }
@@ -186,7 +175,6 @@ function binaryStringToBytesArray(binString) {
 }
 
 export function encode(text) {
-    console.log(text, stringToBytes(text));
     return stringToBytes(text);
 }
 

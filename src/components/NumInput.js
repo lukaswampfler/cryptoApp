@@ -23,7 +23,6 @@ export default function NumInput({ icon, error, touched, width, bgColor, ...othe
       </View>
       <View style={{ flex: 1 }}>
         <RNTextInput
-          //placeholderTextColor='rgba(62, 62, 62, 0.7)'
           {...otherProps}
         />
       </View>

@@ -49,8 +49,8 @@ export function isPrime(n, useBigIntegerLibrary) {
     } else {
         return millerRabin(n, MILLER_RABIN_ITERATIONS, useBigIntegerLibrary); // use Miller Rabin for larger numbers 
     }
-    
 }
+
 export function generatePrime(exp, useBigIntegerLibrary) {
     // returns a prime number (as string)
     let min = exp < 1 ? 1 : Math.pow(10, exp-1);

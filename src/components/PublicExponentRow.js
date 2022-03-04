@@ -15,12 +15,6 @@ const REQUIRED_ERROR_MESSAGE = 'this field is required';
 const NOCOPRIME_MESSAGE = 'gcd(e, phi) > 1';
 
 
-
-
-
-
-
-
 //export default function RandomPrimeRow({ width}) {
 export default function PublicExponentRow({ width}) {
     const myContext = useContext(AppContext);
@@ -34,7 +28,6 @@ export default function PublicExponentRow({ width}) {
         }
         
         const phi = (BigInt(myContext.primes.p) - BigInt(1)) * (BigInt(myContext.primes.q) - BigInt(1));
-        //const n = (BigInt(myContext.primes.p) * BigInt(myContext.primes.q)).toString();
         let { inverse, gcd } = extendedEuclid(BigInt(pubKey.exp), phi, myContext.useBigIntegerLibrary);
         if (inverse === undefined) {
             console.log("Not possible to determine private Key: " + "public" + pubKey.exp + "phi: " + phi);

@@ -34,6 +34,7 @@ export default function HomeScreen({ navigation }) {
     // save private key on device
     const saveKeyPromise = await SecureStore.setItemAsync("privateKey", JSON.stringify(privateKeyInput));
     let userPromise
+
     if (isNewUser){
       //user has to be generated as well as keys
       const userInput = { name: myContext.userName, publicKeyID: newPublicKey.data.createKey.id }
@@ -50,7 +51,6 @@ export default function HomeScreen({ navigation }) {
       }
       userPromise = await API.graphql({query: updateKey, variables: {input: updateInput} })
       }
-      
       Promise.all([userPromise, saveKeyPromise]).then(values => {
       if (isNewUser) {
         alert(`${t("NEW_USER1")}` + userPromise.data.createUser.name + `${t("NEW_USER2")}`+ publicKeyInput.modulus + `${t("NEW_USER3")}`)
@@ -71,23 +71,12 @@ export default function HomeScreen({ navigation }) {
     } catch (err) { console.log('error fetching users: ', err) }
   }
 
-  async function fetchMessages() {
-    try {
-        const messagesData = await API.graphql({ query: messagesByReceiver, variables: { receiverID: userID, limit: 20 } })
-        setMessages(messagesData.data.messagesByReceiver.items)
-        myContext.setMessages(messages)
-    } catch (err) { console.log('error fetching messages: ', err) }
-}
- 
-
 
   //check if user with userName aleady exists in database: if not -> create new User.
   async function checkForUser(users) {
-    
     const checkUsers = users.filter(user => (user.name === myContext.userName))    
     if (checkUsers.length === 0) {
       updateKeys(true)
-
     } else {
       console.log("User " + myContext.userName + " already exists");
       const userData = checkUsers[0]

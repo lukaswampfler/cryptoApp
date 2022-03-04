@@ -26,6 +26,9 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
     const [alphaSecret, setAlphaSecret]= useState([]);
     const [alphaSecretWithIndex, setAlphaSecretWithIndex] = useState([]);
     const [showBarChart, setShowBarChart] = useState(false);
+    const [inverseDict, setInverseDict] = useState({})
+    //const [decypheredMessage, setDecypheredMessage] =useState('');
+
 
     const {t} = useTranslation();
 
@@ -75,7 +78,7 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
         const decryptionDict = createDecryptionDict(alphaShort, newAlphaData) ;
         const newInverseDict = createInverseDict(alphaShort, newAlphaData)
         setInverseDict( newInverseDict);
-        setDecypheredMessage(partialDecryption(secret, decryptionDict))
+        //setDecypheredMessage(partialDecryption(secret, decryptionDict))
     }
 
     
@@ -158,8 +161,16 @@ export default function PermutationAnalysisScreen({ route,  navigation }) {
         const knownSecretLetters = alphaSecret.join('').toLowerCase().substring(0, alphaShort.length);
         
         const decryptionDict = createDecryptionDict(alphaShort, alphaSecret) ;
-        return ( knownSecretLetters.includes(char) ? 
-           <Text style={{  fontSize: 20}}> {decryptionDict[char]} </Text> :
+        let decryptedChar = ''
+        if (knownSecretLetters.includes(char.toLowerCase()) ){
+          if (char == char.toLowerCase()){
+            decryptedChar = decryptionDict[char]
+          } else {
+            decryptedChar = decryptionDict[char.toLowerCase()].toUpperCase()
+          }
+        }
+        return ( knownSecretLetters.includes(char.toLowerCase()) ? 
+           <Text style={{  fontSize: 20}}> {decryptedChar} </Text> :
             <Text style={{ padding: 5, fontSize: 20, backgroundColor: '#bbb'}}> {char} </Text> 
                 )
         })

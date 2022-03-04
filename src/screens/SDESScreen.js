@@ -10,8 +10,7 @@ import GreySwitch from '../components/GreySwitch';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
-import { SDESKeyInputScheme, SDESK12InputScheme, SDESMessageInputScheme } from '../utils/InputTests';
-import { encryptSDESMessage, generateSDESKeys, decodeBinaryString, encodeEncrypted, is8BitString, is10BitString, isBitString, isBitStringMultipleOf8 } from '../utils/sdesMath';
+import { encryptSDESMessage, generateSDESKeys, decodeBinaryString, is8BitString, is10BitString, isBitString, isBitStringMultipleOf8 } from '../utils/sdesMath';
 import { useTranslation } from 'react-i18next';
 import ClearButton from '../components/ClearButton';
 
@@ -220,7 +219,7 @@ export default function SDESScreen({ route, navigation }) {
                     marginLeft: 10
                 }}> 
                 {t('SDES_INPUT')} </Text>
-<ClearButton setInput={changeMessage} setKey={resetKey} defaultKey={''}/>
+        <ClearButton setInput={changeMessage} setKey={resetKey} defaultKey={''}/>
               </View>
                 <View style={{
                     paddingHorizontal: 32,

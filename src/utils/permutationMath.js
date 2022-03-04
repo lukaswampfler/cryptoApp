@@ -75,9 +75,14 @@ export function createInverseDict(alphaClear, alphaSecret){
 
 export function partialDecryption(text, decryptionDict){
     let secret = ''; 
+    let oldChar, newChar
     for (let ind = 0; ind < text.length; ind++){
-        if (text.charAt(ind) in decryptionDict){
-            secret += decryptionDict[text.charAt(ind)]
+        oldChar = text.charAt(ind)
+        if (oldChar.toLowerCase() in decryptionDict){
+            newChar = decryptionDict[oldChar.toLowerCase()]
+            if (oldChar == oldChar.toLowerCase()) secret += newChar
+            else secret += newChar.toUpperCase()
+            
         } else {
             secret += '*'
         }
