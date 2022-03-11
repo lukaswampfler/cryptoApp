@@ -79,7 +79,7 @@ const getModInitialValue = () => {
 
     //... and the message
     const getMessageInitialValue = () => {
-    console.log("getMessageInitialValue", route.params)
+    //console.log("getMessageInitialValue", route.params)
    if (route.params!== undefined && (route.params.fromRiddles|| route.params.fromMessage)){
         return route.params.message
     } else if (route.params!==undefined && route.params.fromHome){ 

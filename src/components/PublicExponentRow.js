@@ -4,8 +4,8 @@ import AppContext from '../components/AppContext';
 import Button from '../components/Button';
 import NumInput from '../components/NumInput';
 
-import {gcd} from '../utils/CryptoMath'
-import {extendedEuclid, isPrime} from '../utils/RSAMath'
+//import {gcd} from '../utils/CryptoMath'
+import {extendedEuclid, isPrime, gcd} from '../utils/RSAMath'
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';

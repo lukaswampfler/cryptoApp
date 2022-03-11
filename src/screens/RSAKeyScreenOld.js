@@ -5,7 +5,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import AppContext from '../components/AppContext';
 
 
-import { isPrime, generatePrime , extendedEuclid} from '../utils/RSAMath';
+import { gcd, isPrime, generatePrime , extendedEuclid} from '../utils/RSAMath';
 import NumInput from '../components/NumInput';
 import Button from '../components/Button';
 import { IntroModal } from '../utils/Modals';
@@ -18,7 +18,7 @@ import { ExplanationModal } from '../utils/Modals';
 import Title from '../components/Title';
 import GreySwitch from '../components/GreySwitch';
 import { isInteger } from '../utils/caesarMath';
-import { gcd } from '../utils/CryptoMath';
+//import { gcd } from '../utils/CryptoMath';
 import Line from '../components/Line';
 
 import * as SecureStore from 'expo-secure-store';

@@ -1,6 +1,6 @@
 
 
-export function gcd(a, b) {
+/*export function gcd(a, b) {
     if (b > a) {
         [a, b] = [b, a];
     }
@@ -8,7 +8,9 @@ export function gcd(a, b) {
         [a, b] = [b, a % b];
     }
     return a;
-}
+}*/
+
+
 export function gcdArray(a) {
     if (a.length == 0)
         return 1;

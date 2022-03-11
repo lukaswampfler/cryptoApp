@@ -4,7 +4,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import AppContext from '../components/AppContext';
 
 
-import { isPrime, generatePrime , extendedEuclid, factorize, smartExponentiation, calculatePubExp} from '../utils/RSAMath';
+import { isPrime, generatePrime , extendedEuclid, factorize, smartExponentiation, calculatePubExp, gcd} from '../utils/RSAMath';
 import NumInput from '../components/NumInput';
 import Button from '../components/Button';
 import { IntroModal } from '../utils/Modals';
@@ -13,7 +13,7 @@ import { ExplanationModal } from '../utils/Modals';
 import Title from '../components/Title';
 import GreySwitch from '../components/GreySwitch';
 import { isInteger } from '../utils/caesarMath';
-import { gcd } from '../utils/CryptoMath';
+//import { gcd } from '../utils/CryptoMath';
 import Line from '../components/Line';
 
 import * as SecureStore from 'expo-secure-store';
@@ -74,7 +74,7 @@ export default function RSAKeyScreen({ navigation, route }) {
     Promise.all([promisePublic, promisePrivate]).then((values) =>{
       const publicKey = values[0]
       const privateKey = JSON.parse(values[1])
-      introText += "public Exponent: " + publicKey.exponent.toString() + "\nprivate Exponent: " + privateKey.exponent.toString()+ "\nModulus: " + publicKey.modulus.toString()
+      introText += `${t("PUB_EXPO")} ` + publicKey.exponent.toString() + `\n${t("PRIV_EXPO")} ` + privateKey.exponent.toString()+ "\nModulus: " + publicKey.modulus.toString()
       setIntroText(introText)
       testForCorrectnessOfKeys(publicKey.exponent, privateKey.exponent, publicKey.modulus);
     })
@@ -108,7 +108,6 @@ export default function RSAKeyScreen({ navigation, route }) {
   , [exp])
 
   useEffect( () => {
-    console.log("pConfirmed useEffect.")
     setDefaultPubExp();
     if(isDefault){
         changePublicKey(); // change publicKey in Context and as state variable
@@ -176,7 +175,7 @@ const updatePersonalKeyText = () => {
   Promise.all([promisePublic, promisePrivate]).then((values) => {
     const publicKey = values[0]
     const privateKey = JSON.parse(values[1])
-    introText += "public Exponent: " + publicKey.exponent.toString() + "\nprivate Exponent: " + privateKey.exponent.toString()+ "\nModulus: " + publicKey.modulus.toString()
+    introText += `${t("PUB_EXPO")} ` + publicKey.exponent.toString() + `\n${t("PRIV_EXPO")} ` + privateKey.exponent.toString()+ "\nModulus: " + publicKey.modulus.toString()
     setIntroText(introText)
   })
 }
@@ -331,7 +330,7 @@ const checkAndUsePubExp = () => {
   if (gcd(phi, parseInt(pubExp)) == 1){
       setVerifiedPubExp(pubExp);
    } else {
-       alert("phi " + phi + " and e: " + pubExp + " are NOT relatively prime \n Please choose different value of e.")
+       alert("phi " + phi + ` ${t("AND")}`+" e: " + pubExp + `${t("NOT_REL_PRIME")}`)
    }
 }else {
   alert(`${t("ALERT_EXP")}`)} 
@@ -378,7 +377,7 @@ const checkAndUsePubExp = () => {
   const keyText = "Here comes the introduction to the RSA key generation...";
   const keyTitle = "RSA" + `${t('KEY')}`
   const title = `${t('RSA_KEY_GEN')}`
-  const method = "Your personal Key Pair"
+  const method = `${t('PERS_KEY')}`
   
   return (
     <View style={{ flex: 1 }}>

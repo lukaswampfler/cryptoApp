@@ -325,7 +325,6 @@ export default function App() {
 
   useEffect(() => {
     let token = Auth.currentSession().then(session => session.getIdToken().getJwtToken())
-    console.log(token);
     checkAuthState();
   }, []);
 
@@ -338,7 +337,7 @@ export default function App() {
     try {
       const user = await Auth.currentAuthenticatedUser();
       console.log('User is signed in');
-      console.log('name', user.username, 'bla')
+      console.log('name', user.username)
       if (user.username === ' ' || user.username === '' ) {
         setUserLoggedIn('loggedOut');
       } else {

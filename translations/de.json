@@ -175,6 +175,12 @@
     "EXP": "Exponent", 
     "PLS_EXPMOD": "Bitte Exponent und Modul eingeben!", 
     "RSA_WARNING": "Bitte verwende die RSA-Methode mit einem ganzzahligen Input.", 
-    "ENGLISH": "Englisch"
+    "ENGLISH": "Englisch",
+    "NOT_REL_PRIME": " sind NICHT teilerfremd. \n Bitte wähle einen anderen Wert für e.", 
+    "AND": "und", 
+    "PERS_KEY": "Dein persönliches Schlüsselpaar", 
+    "PRIV_EXPO": "privater Exponent:", 
+    "PUB_EXPO": "öffentlicher Exponent:"
+
     
   }

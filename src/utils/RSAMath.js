@@ -1,4 +1,16 @@
-import { gcd } from '../utils/CryptoMath';
+//import { gcd } from '../utils/CryptoMath';
+
+
+export function gcd(a, b) {
+    if (b > a) {
+        [a, b] = [b, a];
+    }
+    while (b > 0) {
+        [a, b] = [b, a % b];
+    }
+    return a;
+}
+
 
 export function extendedEuclid(e, f, useBigIntegerLibrary) {
     // uses extended euclid for calculation of decryption exponent d

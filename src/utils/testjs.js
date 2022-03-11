@@ -109,11 +109,34 @@ function calculatePubExp(phi){
     console.log(c, String.fromCharCode(code))
 }*/
 
-let s= "abdchjkldsfAvhjavd0lc"
-let re = /^[a-zA-Z]*$/
 
-console.log(re.test(s))
 
-console.log(BigInt('10111111111111111111111111111', 2))
+function extendedEuclid(e, f, useBigIntegerLibrary) {
+    // uses extended euclid for calculation of decryption exponent d
+    let x1 = BigInt(1), x2 = BigInt(0), x3 = BigInt(f), y1 = BigInt(0), y2 = BigInt(1), y3 = BigInt(e);
+    let q = BigInt(1);
+    while (y3 > 1) {
+        if (useBigIntegerLibrary){
+            q = BigInt(x3).divide(y3); // big-integer division without BigInt builtin type
+        } else {
+            q = x3 / y3; // BigInt-Division is integer division
+        }
+        // check here.
+        if (useBigIntegerLibrary){
+            [x1, x2, x3, y1, y2, y3] = [y1, y2, y3, x1.subtract(q.multiply(y1)) , x2.subtract(q.multiply(y2)), x3.subtract(q.multiply(y3))];
+        }else {
+            [x1, x2, x3, y1, y2, y3] = [y1, y2, y3, x1 - q * y1, x2 - q * y2, x3 - q * y3];
+        }
+        
+    }
+    if (y3 === BigInt(0)){
+        return { 'inverse': undefined, 'gcd': x3 };
+    }
+    else {        
+        return { 'inverse': y2, 'gcd': y3 };
+    }
+}
 
-console.log('abc'.toUpperCase())
+for (let e = 0; e < 10; e++){
+    console.log("e = ", e, extendedEuclid(e, 2, false))
+}

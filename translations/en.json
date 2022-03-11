@@ -175,7 +175,12 @@
     "EXP": "exponent", 
     "PLS_EXPMOD": "Please enter exponent and modulus!", 
     "RSA_WARNING": "Please use only integers for RSA input.", 
-    "ENGLISH": "English"
+    "ENGLISH": "English", 
+    "NOT_REL_PRIME": " are NOT relatively prime \n Please choose different value of e.", 
+    "AND": "and", 
+    "PERS_KEY": "Your personal Key Pair", 
+    "PRIV_EXPO": "private exponent:", 
+    "PUB_EXPO": "public exponent:"
 
 
 

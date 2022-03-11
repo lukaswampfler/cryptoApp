@@ -26,7 +26,7 @@ export function createFrequencyDict(s, dist = 1) {
         for (const k in d) {
             d[k] = Math.round(d[k] / numAlpha * 100);
         }
-        console.log(d)
+        //console.log(d)
         allDics.push(d);
     }
     return allDics;
@@ -79,7 +79,7 @@ export function getMaxKey(dict){
 }
 
 
-export function getFirstLetter(s){
+/*export function getFirstLetter(s){
     s = s.toLowerCase();
     let currentChar = ''
     for (let i = 0; i < s.length; i++){
@@ -87,7 +87,7 @@ export function getFirstLetter(s){
         if (currentChar>= 'a' && currentChar <= 'z') return currentChar;
     }
     return 'e';
-}
+}*/
 
 function createParts(s, dist = 1) {
     let parts = [];
@@ -111,7 +111,7 @@ export function onlyNonAlpha(s){
 }
 
 export function kasiskiTest(secret, minLength = 3, maxLength = 6) {
-    console.log("Kasiski Test, using: ", minLength, maxLength)
+    //console.log("Kasiski Test, using: ", minLength, maxLength)
     if (secret.length < 6) return 1; 
     let s = secret.toLowerCase().replace(/\s/g, '').replace(/[^a-z]/g, ''); // remove all whitespace and non-Ascii from secret
     // find substrings which occur more than once in secret text along with their difference in position.
@@ -143,7 +143,7 @@ function isSubstringOf(part, arrayOfWholes){
     return false; 
 }
 
-export function factorize(num){
+/*export function factorize(num){
     let result = []
     for (let cand = 2; cand <= num; cand ++){
         const remainder = num % cand; 
@@ -156,7 +156,7 @@ export function factorize(num){
     }
     //console.log(result);
     return result;
-}
+}*/
 
 export function getDifference(letter1, letter2){
     // calculates the difference in position between the two letters, will always be > 0.
