@@ -24,13 +24,14 @@ export default function RiddlesFromServerScreen({ navigation }) {
             borderBottomWidth: 1,
             marginBottom: 5,
         }}
-        >
+        > 
             <TouchableOpacity onPress = {() => navigation.navigate("EncryptedMessageMethodChoice", {message: message.text, fromRiddles: true, key: {public: {mod: message.receiver.publicKey.modulus, exp: message.receiver.publicKey.exponent}}})} >
             <Text style={{ width: 250 , fontSize: 20}} selectable={true} selectionColor='yellow' >
                 {message.text.substr(0,200)}  </Text>
               {message.method == 'RSA' && <Text> {`${t('EXP')}: `} <Text selectable={true}>{message.receiver.publicKey.exponent} </Text> {`${t('MOD')}: `}  <Text selectable = {true}>{message.receiver.publicKey.modulus}</Text></Text>}
                </TouchableOpacity>
             <Divider width={5} />
+            
         </View>
     );
 

@@ -34,7 +34,6 @@ export default function RiddleMethodChoiceScreen({ navigation }) {
 
     useEffect(() => {
         forceUpdate()
-        alert("Language changed.")
     }, [myContext.appLanguage])
     
     const method = `${t("CHOICE")}`

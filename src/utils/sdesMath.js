@@ -152,7 +152,6 @@ function bytesToString(byteArray) {
     let result = ''
     for (const byte of byteArray) {
         const num = parseInt(byte, 2);
-        //console.log(byte, num)
         if (num < 32) {// replace non printable characters
             num += 256
         } else if (num <= 160 && num >= 127){

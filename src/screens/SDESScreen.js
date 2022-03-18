@@ -56,7 +56,7 @@ export default function SDESScreen({ route, navigation }) {
 
   useEffect(() =>{
       if(route.params?.message){ // ? : Optional Chaining -> no need to check if attribute params exists
-        setMessage(route.params?.message)
+        setMessage(route.params.message)
     }
 }, [route.params?.message])
 
